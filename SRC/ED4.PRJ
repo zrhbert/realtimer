@@ -1,0 +1,68 @@
+               ; ED4.PRJ 30.11.94
+               ; ---------
+.C[-W-par -W-sig -W-aus -W-par -W-use]
+=              ; list of modules follows...
+pcstart.o      ; startup code
+;
+; Standard Modules
+;clipbrd
+desktop
+dialog
+disk
+;edit
+event
+gemain
+global
+;image
+initerm
+menu
+;meta
+;printer
+rcm
+resource
+;trash
+windows
+xrsrc
+;
+; RTM 4 Modules
+realtspc
+lists
+objects
+init_ed4
+dispobj
+;a3d
+;big
+;cmi
+;cmo
+;eff
+ec4
+ed4
+;gen
+;gmi
+koo
+;lfo
+;maa
+mae
+man
+msh
+;mtr
+;par
+;pow.c
+;pogli\deglitch.c
+;pogli\aux_io.c
+;pogli\pg_io.c
+;puf
+;spg
+;spo
+;sps
+syn
+tra
+var
+vdicall.o      ; vdi standard call
+libmidi.lib		; MidiShare Lib
+;dbllib20.lib	; Fast Floating Point Lib
+pcfltlib.lib   ; floating point lib
+pcstdlib.lib   ; standard lib
+pcextlib.lib   ; extended lib
+pctoslib.lib   ; TOS lib
+pcgemlib.lib   ; AES and VDI lib

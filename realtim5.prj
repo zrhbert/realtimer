@@ -1,0 +1,67 @@
+               ; REALTIM5.PRJ 04.11.2024
+               ; ---------
+.C[-W-par -W-sig -W-aus -W-par -W-use]
+=              ; list of modules follows...
+pcstart.o      ; startup code
+;
+; Standard Modules
+;src\clipbrd
+src\desktop
+src\dialog
+src\disk
+;src\edit
+src\event
+src\gemain
+src\global
+;src\image
+src\initerm
+src\menu
+;src\meta
+;src\printer
+src\rcm
+src\resource
+;src\trash
+src\windows
+src\xrsrc
+;
+; RTM 4 Modules
+src\realtspc
+src\lists
+src\objects
+src\init_rtm
+src\dispobj
+src\a3d
+;src\big
+src\cmi
+src\cmo
+;src\eff
+src\gen
+src\gmi
+src\koo
+src\lfo
+;src\maa
+src\mae
+src\man
+src\msh
+src\mtr
+src\par
+;src\pow.c
+;src\pogli\deglitch.c
+;src\pogli\aux_io.c
+;src\pogli\pg_io.c
+src\puf
+src\spg
+src\spo
+src\sps
+src\syn
+src\tra
+src\var
+vdicall.o      ; vdi standard call
+libmidi.lib		; MidiShare Lib
+;dbllib20.lib	; Fast Floating Point Lib
+pcfltlib.lib   ; floating point lib
+;pc881lib.lib   ; floating point lib
+pcstdlib.lib   ; standard lib
+pcextlib.lib   ; extended lib
+pctoslib.lib   ; TOS lib
+pcgemlib.lib   ; AES and VDI lib

@@ -1,0 +1,128 @@
+3DGRAFIC.TXT
+19.11.94
+
+Anforderungen and 3D Grafiksystem
+fr Realtimer 4.0, 4D Editor und Cybermove
+------------------------------------------
+
+- Ziele:
+	- Darstellung von simplen 3D Objekten
+		(Punkte, Linien, Polygonen)
+	- Umrechnung von 3D-Koordinaten auf 2D-Bildschirm-Koor
+	- Echtzeitf„higkeit (etwa zu 1024 Punkte pro Sekunde)
+	 
+- Anwendungsumgebung
+	- objektorientiertes C-Programm
+	- Perspektive wird interaktiv eingestellt
+	- Vorberechnung von Lookup-Tables muž nicht 
+		echtzeitf„hig sein
+	- mehrere Perspektiven mssen gleichzeitig auf einem
+		Bildschirm darstellbar sein 
+		(Speicherverbrauch beachten)
+	- 3D-Koordinatenraum: Float -100...+100
+		typedef struct pos_3d *POS_3DP;
+		typedef struct pos_3d {
+			FLOAT x,
+					y,
+					z;
+		} POS_3D;
+	- Bildschirmkoordinaten:
+		typedef struct point_2d *POINT_2DP;
+		typedef struct point_2d {
+			WORD	x,		/* Bildschirmkoordinaten */
+					y;
+		} POINT_2D;
+
+- Bereits existierende Funktionen:
+		/* Typ fr Projektionsfunktionen */
+		typedef VOID (ProjectFn)(DISPOBJP dispobj, 
+										POS_3DP point, POINT_2DP proj);
+
+LOCAL	BOOL SetWorkSpace (DISPOBJP dispobj, RECT *work)
+{
+	SPACESTATP  status = &dispobj->status->space;
+	WORD			*xwin   = status->xwin;
+	WORD			*ywin   = status->ywin;
+	LONG			koor;
+	LONG			width = (LONG)work->w,
+					height = (LONG)work->h;
+	BOOL			new_w = width != dispobj->work.w;
+	BOOL			new_h = height != dispobj->work.h;
+
+	/* Call the default function first */
+	SetWorkDispobj (dispobj, work);
+
+	status->xoffset = work->x + width*0.55;
+	status->yoffset = work->y + height*0.55;
+	
+	if (work->h > 200)
+		status->fontsize = 14;
+	else if (work->h < 100)
+		status->fontsize = 4;
+	else
+		status->fontsize = 6;
+	
+	if (new_w)
+		for (koor = -DMAXDOKOOR; koor < DMAXDOKOOR; koor++)
+			xwin[koor+DMAXDOKOOR]  = (koor * width * aspect_x / 20000L);
+	
+	if (new_h)
+		for (koor = -DMAXDOKOOR; koor < DMAXDOKOOR; koor++)
+			ywin[koor+DMAXDOKOOR]  = (koor * height * aspect_y / 20000L);
+	
+	return TRUE;
+} /* SetWorkDispobj */
+
+LOCAL  VOID Project3D (DISPOBJP dispobj, POS_3DP point, POINT_2DP proj)
+{
+	SPACESTATP	status = &dispobj->status->space;
+	WORD			xz, yz, *x = &proj->x, *y = &proj->y;
+	RECT			*work = &dispobj->work;
+	WORD			xmin = work->x;
+	WORD			ymin = work->y;
+	WORD			xmax = xmin + work->w;
+	WORD			ymax = ymin + work->h;
+	WORD			z = point->z + DMAXDOKOOR;
+	
+	/* Berechnung des X Wertes */
+
+	/* Verschiebung von X durch Z */
+	xz = point->x + status->xzoff[z];
+	
+	/* Tiefenverzerrung durch Z */
+	xz *= status->xpersp[z];
+	xz = xz >> 7;
+	
+	/* Darstellung nur des Innenraumes, Zoom*3 */
+	if (status->inside)
+		xz *= 3;
+
+	/* Umrechnen von xz und yz auf Objektgroesse */
+	*x = status->xoffset + status->xwin[xz+DMAXDOKOOR];
+
+	/* Clipping */
+	if (*x > xmax) *x = xmax;
+	else if (*x < xmin) *x = xmin;
+
+
+	/* Berechnung des Y Wertes */
+
+	/* Verschiebung von Y durch Z */
+	yz = point->y + status->yzoff[z];
+
+	/* Tiefenverzerrung durch Z */
+	yz *= status->ypersp[z];
+	yz = yz >> 7;
+
+	/* Darstellung nur des Innenraumes, Zoom*3 */
+	if (status->inside)
+		yz *= 3;
+
+	*y = status->yoffset + status->ywin[yz+DMAXDOKOOR];
+
+	if (*y > ymax) *y = ymax;
+	else if (*y < ymin) *y = ymin;
+
+} /* Project3D */
+
+

@@ -1,0 +1,22 @@
+Interface fr Display-Objekte
+18.11.93
+
+Neues Objekt herstellen:
+
+	CreateObj (window, type, subtype, mode)
+	Rck: dispobj-Pointer
+
+	z.B. mySpaceObj = CreateObj (myWindow, DISPOBJ_SPACE, 0, 0);
+	
+Werte setzen:
+
+	SetObj (object, type, index, pointer)
+	Rck: TRUE fr OK
+	
+	z.B.
+	ok = (myTextObj->set) (myTextObj, D_O_TEXT, 0, myString);
+	ok = (mySpaceObj->set) (mySpaceObj, D_O_3DKOOR, 0, &myKoor);
+	ok = (mySpaceObj->set) (mySpaceObj, D_O_3DKOOR, 1, &myKoor2);
+	ok = (mySpaceObj->set) (mySPaceObj, D_O_TEXT, 0, mySpaceName);
+	
+

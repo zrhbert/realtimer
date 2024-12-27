@@ -1,0 +1,59 @@
+4D Editor Programmdesign
+------------------------
+19.11.94
+
+Objects
+--------
+Sound-Object
+- Event
+	- Channel(-List)
+	(- Key-Event, at Distance)
+- Location
+	- Center X/Y/Z
+	(- Rotation X/Y/Z)
+	(- Size X/Y/Z)
+- Grafics
+	- Mono/Stereo/Quadro/Okto
+	(- Label)
+
+Play-Mode
+---------
+-  SMPTE Zeit in Koordinaten umrechnen, mit konstantem
+	Verh„ltnis koor/msec. (sp„ter flexibel)
+
+-  Checken ob ein Objekt in Reichweite ist:
+	(message an Objekt oder Berechnung im Editor?)
+	if (abs(obj->location->x - location->x) < MAXKOOR) ||
+		abs(obj->location->y - location->y) < MAXKOOR) ||
+		abs(obj->location->z - location->z) < MAXKOOR))
+
+-  Wenn Objekt in R., Obj in Liste aktiver Objekte bernehmen
+
+-  Audio-Koordinaten fr alle aktiven Objekte berechnen
+	(message an Objekt oder Berechnung im Editor?)
+	
+-  Objekte ausgeben
+	(message an Objekt oder Ausgabe durch Editor?)
+	
+-  Objekte anzeigen (nicht real time)
+	(message an Objekt oder Ausgabe durch Editor?)
+
+
+Record-Mode
+-----------
+- SMPTE-Zeit steuern (Slave oder intern)
+
+- Auf Edit key warten (`n` fr 'Neues Objekt', 
+	oder `c' fr `Copy letztes Objekt')
+
+- Objekt generieren auf Default Location 
+
+- Objekt aktivieren (anzeigen und ausgeben)
+
+- Koordinaten steuerbar ber default Device 
+	(Controller, Maus oder PG)
+
+- Auf Store oder Cancel warten (`RETURN` fr 'Speichern', 
+	oder `UNDO' fr `Cancel')
+
+

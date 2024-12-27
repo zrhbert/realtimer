@@ -1,0 +1,41 @@
+               ; CYBERMOV.PRJ 15.12.94
+               ; ---------
+.C[-W-par -W-sig -W-aus -W-par -W-use]
+=              ; list of modules follows...
+pcstart.o      ; startup code
+;
+; Standard Modules
+desktop
+dialog
+disk
+event
+gemain
+global
+initerm
+menu
+rcm
+resource
+windows
+xrsrc
+;
+; RTM 4 Modules
+realtspc
+lists
+objects
+init_cmo
+dispobj
+cmi
+cmo
+;koo
+man
+msh
+;syn
+;tra
+var
+vdicall.o      ; vdi standard call
+libmidi.lib		; MidiShare Lib
+pcfltlib.lib   ; floating point lib
+pcstdlib.lib   ; standard lib
+pcextlib.lib   ; extended lib
+pctoslib.lib   ; TOS lib
+pcgemlib.lib   ; AES and VDI lib

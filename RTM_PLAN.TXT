@@ -1,0 +1,97 @@
+Realtimer 4 Arbeitsplan
+24.01.1995
+
+Allgemein:
+- Besetzt-Bit fÅr Setups
+- Write-Protect
+- Versions-Management fÅr Setup-Dateien!
+
+A3D:
+- Problem mit mehreren offenen Setup-Boxen
+
+CMO:
+- Ausgabe auf CM rep.
+
+COI: Controller-In
+- neues Modul
+- Midi-Port, Midi-Kanal
+- Icon zu klein
+- legt externe Fader auf Fader-VAR
+
+COO: Controller-Out
+- neues Modul
+- Midi-Port, Midi-Kanal
+- gibt beliebige VAR als Controller aus
+
+DESKTOP/MENU
+- F-Tastenleiste abschaltbar (Optionen)
+- Exitbutton per Enter an/aus (Optionen)
+- ROT, COI, COO, FUN einbinden
+
+DISPOBJ: 
+- Matrizen
+- Bar, Text und Area, List, X-Pos, Y-Pos
+
+EC4
+
+ED4
+- Delete-All einbauen
+
+EFF
+- Help?
+
+GEN
+- Help: GEP
+- GEP einbauen
+- Max. Eingabewerte?
+- Verwenden-Knopf
+
+GMI
+ 
+HELP:
+- Setup-öbersichten
+- KOO Åberarbeiten
+
+KOO:
+- object ausbauen
+
+LFO:
+- Verwendung von VOL per Controller-In prÅfen
+- VOL, Spd checken
+- Instanzen-Umschalter
+
+MAE/MAA
+- maxsetups?
+
+MAN
+- maxsetups?
+- Max. Anzahl von Modulen in Anzeige
+- Verwaltung als Liste
+
+MTR
+
+OBJECTS:
+- neue Datei kreieren, bei SAVE, nicht bei LOAD
+
+PUF:
+- graph. Anzeige mit Display-Objekten
+
+SPG:
+- apply mit Matrizen
+
+SPO:
+- Buttons einbauen
+
+SPS:
+- Prop-Buttons
+
+SYN:
+- Helptexte
+
+TRA:
+- Tempo
+- Sync/Lock in Help
+
+VAR:
+- Verwendungs-Setups
+- Setup 199, click auf - gibt 0?
