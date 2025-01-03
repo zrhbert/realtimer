@@ -5,39 +5,9 @@
 /* Multi-Rotationen                                                          */
 /*                                                                           */
 /*****************************************************************************/
-#define MTRVERSION "V 1.06"
-#define MTRDATE "02.02.95"
+#define MTRVERSION "V 2.00"
+#define MTRDATE "__DATE__ __TIME__"
 
-/*****************************************************************************
-V 1.06
-- minmax fr ctrl-port und channel, 02.02.95
-- Status-Init mit ctrl-infos, 02.02.95
-- ClickSetupField eingebaut, 30.01.95
-- ctrl_out_port/ch eingebaut
-- add_rcv fr MTR_ACC
-- Pause und Umkehr eingebaut
-V 1.05 19.05.94
-- load_create_infos und instance_count eingebaut
-- eigene set_nr eingebaut
-- Import-Radius auf UMKREIS ge„ndert
-- Phasenverschiebung um 90 Grad in apply korrigiert, fr kompatibilit„t mit V 3.0
-- Controller-Out eingebaut
-V 1.04
-- Senden von VAR_MTR0-9
-- import modernisiert und Fehler mit MTR_MODUS beseitigt
-- window->module eingebaut
-- module->window in create
-- Umbau auf create_window_obj
-V 1.03
-- copy_icon umgebaut
-V 1.02
-- Umstellung auf neue RTMCLASS-Struktur
-V 1.01 25.04.93
-- Speed korrigiert
-V 1.00 20.04.93
-- einige Datentypen umbenannt
-- Fehler in reset ed/akt beseitigt
-*****************************************************************************/
 #ifndef XRSC_CREATE
 /* #define XRSC_CREATE */                    /* X-Resource-File im Code */
 #endif
@@ -918,6 +888,8 @@ PRIVATE	RTMCLASSP create ()
 	WORD			signal;
 	STAT_P		status;
 	
+	daktstatus("Initialisierung MTR", "Start");
+
 	module = create_module (module_name, instance_count);
 	
 	if (module != NULL)
@@ -1023,6 +995,8 @@ PRIVATE	RTMCLASSP create ()
 			/* add_rcv(VAR_LFB_MTR_POS0 + signal, module);	/* Message einklinken */ */
 		} /* for */
 	} /* if */
+
+	daktstatus("Initialisierung MTR", "Ende");
 	
 	return module;
 } /* create */

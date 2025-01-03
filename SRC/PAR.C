@@ -5,28 +5,8 @@
 /* Koordinaten-Anzeige                                                       */
 /*                                                                           */
 /*****************************************************************************/
-#define PARVERSION "V 1.01"
-#define PARDATE "02.02.95"
-
-/*****************************************************************************
-V 1.00
-- MAE-Schaltungen entfernt, 02.02.95
-- Bug in create_dispobj bei LFO beseitigt
-V 0.11
-- Umstellung auf dispobj
-- load_create_infos und instance_count eingebaut
-- window->module eingebaut
-- Umbau auf create_window_obj
-- Umbau info_mod
-V 0.10 20.06.93
-- Umstellung auf neue RTMCLASS Struktur
-- Anzeige mit Datenreduktion
-- Fehler in Behandlung von MTRPAUSE, PUFPAUSE und PUFZEITLUPE beseitigt
-V 0.09, 17.04.93
-- Fehler in Aufbau und Abfrage der Dialogbox beseitigt
-- apply, reset, precalc entfernt
-*****************************************************************************/
-
+#define PARVERSION "V 2.00"
+#define PARDATE "__DATE__ __TIME__"
 #ifndef XRSC_CREATE
 /*#define XRSC_CREATE 1*/                    /* X-Resource-File im Code */
 #endif
@@ -64,13 +44,13 @@ V 0.09, 17.04.93
 #define FLAGS  (WI_RESIDENT | WI_MOUSE)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fuer Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fuer Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh”he in Pixel */
-#define MILLI  0                     	/* Millisekunden fr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshoehe in Pixel */
+#define MILLI  0                     	/* Millisekunden fuer Zeitablauf */
 
 #define MOD_RSC_NAME "PAR_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -98,19 +78,19 @@ typedef struct setup
 	UINT	maa_spout	: 1	;	/* MAA Sperre aussen  */
 	UINT	mae_spin		: 1	;	/* MAE Sperre innen  */
 	UINT	mae_spout	: 1	;	/* MAE Sperre aussen  */
-} SETUP;		/* Enth„lt alle Parameter einer kompletten PAR-Einstellung */
+} SETUP;		/* Enthaelt alle Parameter einer kompletten PAR-Einstellung */
 
 typedef struct status	
 {
-	BOOLEAN	new;				/* Hat sich etwas ge„ndert ? */
+	BOOLEAN	new;				/* Hat sich etwas geï¿½ndert ? */
 } STATUS;
 
 typedef struct status *STAT_P;	
 
 /****** VARIABLES ************************************************************/
 /* Resource */
-PRIVATE WORD	par_rsc_hdr;					/* Zeigerstruktur fr RSC-Datei */
-PRIVATE WORD	*par_rsc_ptr = &par_rsc_hdr;		/* Zeigerstruktur fr RSC-Datei */
+PRIVATE WORD	par_rsc_hdr;					/* Zeigerstruktur fuer RSC-Datei */
+PRIVATE WORD	*par_rsc_ptr = &par_rsc_hdr;		/* Zeigerstruktur fuer RSC-Datei */
 PRIVATE OBJECT *par_setup;
 PRIVATE OBJECT *par_help;
 PRIVATE OBJECT *par_desk;
@@ -119,7 +99,7 @@ PRIVATE OBJECT *par_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "PAR";		/* Name, fr Extension etc. */
+PRIVATE CONST STRING module_name = "PAR";		/* Name, fuer Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 PRIVATE VOID create_displayobs (WINDOWP window);
@@ -213,7 +193,7 @@ PRIVATE VOID set_dbox (RTMCLASSP module)
 	update_checkbox (window, PARMAESPIN, akt->mae_spin, ed->mae_spin, draw);
 
 */
-	/* Neue Daten bernehmen */
+	/* Neue Daten uebernehmen */
 	mem_move(ed, akt, (UWORD)module->setup_length);
 
 } /* set_dbox */
@@ -292,23 +272,23 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 				case VAR_MAE_SPERRE_AUSSEN :	akt->mae_spout	= (WORD) value; break;
 				default:
 				if ((variable >= VAR_LFA_ON1) && (variable < VAR_LFA_ON1 + 12 ))
-					/* Panbreite fr diesen Kanal setzen */
+					/* Panbreite fuer diesen Kanal setzen */
 					akt->lfa_on[variable - VAR_LFA_ON1 ] = (WORD)value;
 
 				else if ((variable >= VAR_LFB_ON1) && (variable < VAR_LFB_ON1 + 12 ))
-					/* Panbreite fr diesen Kanal setzen */
+					/* Panbreite fuer diesen Kanal setzen */
 					akt->lfb_on[variable - VAR_LFB_ON1 ] = (WORD)value;
 					
 				else if ((variable >= VAR_MTR_ON0) && (variable < VAR_MTR_ON0 + MAXSIGNALS ))
-					/* Pan-Position fr diesen Kanal setzen */
+					/* Pan-Position fuer diesen Kanal setzen */
 					akt->mtr_on[variable - VAR_MTR_ON0 ] = (WORD)value;
 
 				else if ((variable >= VAR_PUF_REC_SIG0) && (variable < VAR_PUF_REC_SIG0 + MAXSIGNALS ))
-					/* Pan-Position fr diesen Kanal setzen */
+					/* Pan-Position fuer diesen Kanal setzen */
 					akt->puf_rec[variable - VAR_PUF_REC_SIG0 ] = (WORD)value;
 
 				else if ((variable >= VAR_PUF_PLAY_SIG0) && (variable < VAR_PUF_PLAY_SIG0 + MAXSIGNALS ))
-					/* Pan-Position fr diesen Kanal setzen */
+					/* Pan-Position fuer diesen Kanal setzen */
 					akt->puf_play[variable - VAR_PUF_PLAY_SIG0 ] = (WORD)value;
 
 			} /* switch */
@@ -336,7 +316,7 @@ MKINFO  *mk;
 } /* wi_click_mod */
 
 /*****************************************************************************/
-/* Zeitablauf fr Fenster                                                    */
+/* Zeitablauf fuer Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -396,7 +376,7 @@ WORD   icon;
 
 	} /* if */
 	
-	return (window);                      /* Fenster zurckgeben */
+	return (window);                      /* Fenster zurueckgeben */
 } /* crt_par */
 
 PRIVATE VOID create_displayobs (WINDOWP window)
@@ -435,7 +415,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 } /* create_displayobs */
 
 /*****************************************************************************/
-/* ™ffnen des Objekts                                                        */
+/* oeffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -522,6 +502,8 @@ PRIVATE	RTMCLASSP create ()
 	FILE			*fp;
 	WORD			x;
 	
+	daktstatus("Initialisierung PAR", "Start");
+
 	module = create_module (module_name, instance_count);
 	
 	if (module != NULL)
@@ -584,7 +566,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Prfen, ob DEFAULT-Datei vorhanden */
+		/* Pruefen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -640,6 +622,8 @@ PRIVATE	RTMCLASSP create ()
 		var_set_max(var_module, VAR_SET_PAR, MAXSETUPS);
 	} /* if */
 	
+	daktstatus("Initialisierung MTR", "Ende");
+
 	return module;
 } /* create */
 

@@ -4,59 +4,9 @@
 /*                                                                           */
 /* VAR Systemvariablen                                                       */
 /*****************************************************************************/
-#define VARVERSION "V 1.06"
-#define VARDATE "09.02.95"
+#define VARVERSION "V 2.00"
+#define VARDATE "__DATE__ __TIME__"
 
-/*****************************************************************************
-02.12.2024
-- zus„tzliche daktstatus eingebaut in init
-09.02.95
-- kopieren den VAR info beim zuweisen von var->var_number in send_messages, 09.02.95
-- update von Set-Vars in update_var nur bei Ver„nderungen, 05.02.95
-- update_var bei receive_evts_var, 05.02.95
-- var_get_relvalue eingebaut, 03.02.95
-- Žnderungen in VAR initialisierung, 03.02.95
-- relative Werte in Variablen eingebaut, 02.02.95
-- Controller-Midi-In Addressierung um -1 verschoben, 02.02.95
-- ClickSetupField eingebaut, 30.01.95
-- quadpan eingebaut, 09.01.95
-- VAR_CM_MASTER1/2 eingebaut
-- Bug in wi_click inc/dec Var-Quelle beseitigt
-- create_var in create umbenannt
-V 1.06 19.05.94
-- load_create_infos und instance_count eingebaut
-- update_variable auf statische Speicher fr message umgebaut, wg. Interrupt
-- var_get und var_set Makros eingebaut
-- send_variable per update_var
-V 1.05
-- MS-Namen auf TRA ge„ndert
-- list-Funktionen ausgegliedert
-V 1.04 16.08.93
-- init_standard eingebaut
-- Fehler in verwaltung der VAR-Variablen beseitigt (get_dbox, set_dbox, init_standard)
-- DBox auf vierzeilig 10 Zeichen umgebaut
-- var_get_value und var_get_name eingebaut
-- msh_available eingebaut
-- MAXSYSVARS und MAXSETVARS nun global
-- window->module eingebaut
-- try_all_connect eingebaut
-- VAR_RECORD nun direkt in receive_evts_var
-- destroy_mod eingebaut
-- Umbau auf create_window_obj
-V 1.03 20.06.93
-- Abmelden alter MS-Applikationen
-- wi_click_mod eingebunden
-V 1.02
-- send-variable per MidiShare, wenn angemeldet
-- Plausibilit„tsprfung fr Werte in send_message
-
-V 1.01 23.05.93
-- Umstellung auf neue RTMCLASS-Struktur
-- Bei update wird jetzt DATA-Zeiger mitgeschickt, 
-	als erster Parameter fr message()
-V 1.00 17.04.93
-- VAR_PUF_PLAY und VAR_BIG_PLAY eingebaut
-*****************************************************************************/
 
 #ifndef XRSC_CREATE
 /* #define XRSC_CREATE TRUE                    /* X-Resource-File im Code */ */
@@ -948,7 +898,9 @@ PRIVATE RTMCLASSP create ()
 	LIST_P		element;
 	SYS_P			sysvar;
 	SHORT			refNum;
-			
+
+	daktstatus("Initialisierung VAR", "Start");
+				
 	module = create_module (module_name, instance_count);
 	
 	if (module != NULL)
@@ -1047,6 +999,8 @@ PRIVATE RTMCLASSP create ()
 		module->set_setnr(module, 0);		
 	} /* if */
 	
+	daktstatus("Initialisierung VAR", "Ende");
+					
 	return module;
 } /* create */
 
