@@ -369,7 +369,7 @@ WORD   icon;
 		window->timer     = wi_timer_mod;
 		window->showinfo  = info_mod;
 		
-		sprintf (window->name, (BYTE *)par_text [FPARN].ob_spec);
+        sprintf (window->name, "%s", (BYTE *)par_text [FPARN].ob_spec);
 		/* sprintf (window->info, (BYTE *)freetext [FPARI].ob_spec, 0); */
 	
 		create_displayobs (window);
@@ -588,7 +588,7 @@ PRIVATE	RTMCLASSP create ()
 		window->module = (VOID*) module;
 		module->window = window;
 				
-/*
+#if false
 		/* Messages einklinken */
 		for (x = 0; x < 12; x++)
 			add_rcv(VAR_LFA_ON1 + x, module);
@@ -616,7 +616,7 @@ PRIVATE	RTMCLASSP create ()
 		add_rcv(VAR_MAA_SPERRE_AUSSEN, module);	
 		add_rcv(VAR_MAE_SPERRE_INNEN, module);	
 		add_rcv(VAR_MAE_SPERRE_AUSSEN, module);
-*/	
+#endif
 	
 		add_rcv(VAR_SET_PAR, module);	/* Message einklinken */
 		var_set_max(var_module, VAR_SET_PAR, MAXSETUPS);
@@ -643,9 +643,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   par_setup = (OBJECT *)rs_trindex [PAR_SETUP]; /* Adresse der PAR-Parameter-Box */
   par_help  = (OBJECT *)rs_trindex [PAR_HELP];	/* Adresse der PAR-Hilfe */
   par_desk  = (OBJECT *)rs_trindex [PAR_DESK];	/* Adresse des PAR-Desktops */

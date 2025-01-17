@@ -461,7 +461,7 @@ PRIVATE VOID    set_dbox	(RTMCLASSP module)
 PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 {
 	WORD			lfo = 0, pos, position, signal;	
-	LONG 			temp;				/* Hilfsvariable um šberlauf zu vermeiden */
+	LONG 			temp =0L;				/* Hilfsvariable um šberlauf zu vermeiden */
 	SET_P			set 		= module->actual->setup;
 	LFOQUELLE	*quelle	= set->quelle;
 	LFOPATCH		*patch	= set->patch;
@@ -551,7 +551,8 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 	for (signal=0; signal < MAXSIGNALS; signal++)
 	{
 
-/* Volume abgeschaltet!
+/* Volume abgeschaltet! */
+#if false
 		/* Volume, wenn Patch Volume ver„ndert */
 		if (patch[signal].volume > 0) 
 		{
@@ -559,7 +560,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 			volv			/= 127;
 			k->volume	= max(min(volv * k->volume, 127),0);
 		} /* if */
-*/
+#endif
 
 		/* Zoom, wenn Patch Zoom ver„ndert */
 		if (patch[signal].zoom > 0) 
@@ -1085,7 +1086,8 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					if (x == 0) patch = akt->patch;
 					patch++;	 /* Auf Info fr n„chste Signal zeigen */
 				} /* for */
-				/* ok = fscanf(in, "%s", s);	/* Leerzeile */ */
+                /* Leerzeile */
+				/* ok = fscanf(in, "%s", s);	 */
 				/* Setup speichern und n„chstes Setup anw„hlen */
 				if (! module->get_setnr(module, setnr))
 					ok = EOF;	/* Import beenden */
@@ -1175,10 +1177,10 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 						ziel[(variable - VAR_LFA_QUADPOS1+1)*4+2].quad_pos = (WORD)value;
 						ziel[(variable - VAR_LFA_QUADPOS1+1)*4+3].quad_pos = (WORD)value;
 					} /* else if */
-/*
+#if false
 					else if (variable < VAR_VAR0 + MAXSETVARS )
 						status->var_values[variable - VAR_VAR0] = (WORD)value;
-*/
+#endif
 					break;
 			} /* switch */
 			break;
@@ -1267,27 +1269,11 @@ MKINFO  *mk;
 						} /* if */
 						break;
 					case LFOVARIN1:
-#if TRUE
 						lfo_q->form = LFO_VAR;
 						copy_icon (&lfo_setup[LFOQUELLE1 + lfo_offset(lfo)], &lfo_quelle[item_quelle(lfo_q->form)]);
 						draw_object(window, LFOQUELLE1 + lfo_offset(lfo));
 						ClickValueField (window, window->exit_obj, mk, 0, MAXSYSVARS, UpdateVARInField);
 						module->get_dbox (module);
-#else
-						do {
-							if (mk->momask == 0x001)		/* linke Taste */
-								x = lfo_q->var + 1;
-							else if (mk->momask == 0x002)	/* rechte Taste */
-								x = lfo_q->var - 1;
-							minmaxsetup(&x, MAXSYSVARS);
-							lfo_q->var = (WORD) x;
-							module->set_dbox(module);
-							draw_object(window, LFOVARIN1 + lfo_offset(lfo));
-							/* Maus noch gedrckt? */
-							if(mk->mobutton>0 && mk->momask>0)
-								graf_mkstate(&ret, &ret, &mk->mobutton, &ret);
-						} while (mk->mobutton>0 && mk->momask>0);
-#endif
 						found = TRUE;
 						break;
 				} /* switch */
@@ -1447,7 +1433,7 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 
-    sprintf (window->name, (BYTE *)lfo_text [FLFON].ob_spec);
+      sprintf (window->name, "%s", (BYTE *)lfo_text [FLFON].ob_spec);
     sprintf (window->info, (BYTE *)lfo_text [FLFOI].ob_spec, 0);
   } /* if */
 
@@ -1655,10 +1641,10 @@ PRIVATE	RTMCLASSP create ()
 		add_rcv(VAR_SET_LFB, module);	/* Message einklinken */
 		add_rcv(VAR_PROP_LFB, module);	/* Message einklinken */
 
-/*
+#if false
 		for (x = 0; x < MAXSETVARS; x++)
 			add_rcv(VAR_VAR0 + x, module);	/* Message einklinken */
-*/
+#endif
 	} /* if */
 	
 	return module;
@@ -1680,9 +1666,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             	/* Adresse der Fehlermeldungen */
-*/
+#endif
   lfo_setup = (OBJECT *)rs_trindex [LFO_SETUP]; 	/* Adresse der LFO-Parameter-Box */
   lfo_help  = (OBJECT *)rs_trindex [LFO_HELP];		/* Adresse der LFO-Hilfe */
   lfo_quelle= (OBJECT *)rs_trindex [LFO_QUELLE];	/* Adresse des LFO-Quellen */

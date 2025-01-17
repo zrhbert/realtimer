@@ -253,7 +253,7 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 	
-    sprintf (window->name, (BYTE *)eff_text [FEFFN].ob_spec);
+      sprintf (window->name, "%s", (BYTE *)eff_text [FEFFN].ob_spec);
     sprintf (window->info, (BYTE *)eff_text [FEFFI].ob_spec, 0);
     
   } /* if */
@@ -428,7 +428,8 @@ PRIVATE	RTMCLASSP create ()
 		
 		add_rcv(VAR_SET_EFF, module);	/* Message einklinken */
 		var_set_max(var_module, VAR_SET_EFF, MAXSETUPS);
-		/* add_rcv(VAR_PROP_EFF, module);	/* Message einklinken */ */
+        /* Message einklinken */ 
+        /* add_rcv(VAR_PROP_EFF, module);*/
 	} /* if */
 	return module;
 } /* create */
@@ -449,9 +450,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   eff_setup = (OBJECT *)rs_trindex [EFF_SETUP]; /* Adresse der EFF-Parameter-Box */
   eff_help  = (OBJECT *)rs_trindex [EFF_HELP];	/* Adresse der EFF-Hilfe */
   eff_desk  = (OBJECT *)rs_trindex [EFF_DESK];	/* Adresse des EFF-Desktops */

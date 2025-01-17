@@ -236,23 +236,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 	STAT_P	status = module->status;
 	WINDOWP	window = module->window;
 	
-/*	This handling is not necessary, as DISPOBJ take their data
-	directly from the VAR's
-	
-	/* Wenn Gruppe 1 neue Koor erhalten soll, dann Koordinaten in
-		Gruppe eins schieben, sonst in Gruppe 2 */
-	if (status->koor_stat1 != USED)
-	{
-		status->koor_stat1 = NEW;
-		mem_movex(&status->koor_akt1, event->koors, (UWORD)sizeof(KOOR_ALL));
-	} /* if */
-	else
-	{
-		status->koor_stat2 = NEW;
-		mem_movex(&status->koor_akt2, event->koors, (UWORD)sizeof(KOOR_ALL));
-	} /* else */
-	
-*/
+
 	window->milli = 1; 	/* Update so schnell wie mîglich */
 	return event;
 } /* apply */
@@ -450,7 +434,7 @@ PRIVATE VOID dsetup (WINDOWP refwindow)
 
 PRIVATE RTMCLASSP define_setup (WINDOWP window, RTMCLASSP refmodule)
 {
-	RTMCLASSP module;
+	RTMCLASSP module = NULL;
 
 	if (window != NULL)
 	{
@@ -685,23 +669,6 @@ WINDOWP window;
 			dispobj->set_uni (dispobj, DOUniSpaceCrosshair, x);
 		} /* if new */
 
-		/*	This handling is not necessary, as DISPOBJ take their data
-			directly from the VAR's
-		if (new || newkoor) {
-			for (index = 0; index < MAXPOS; index ++)
-			{
-				/* Die Daten muessen von absoluten Koordinaten in Prozent
-					umgerechnet werden */
-					
-				point = &koor->koor[index].koor;
-				position.x = point->x * 100 / MAXKOOR;
-				position.y = point->y * 100 / MAXKOOR;
-				position.z = point->z * 100 / MAXKOOR;
-
-				(*dispobj->set) (dispobj, DOParPosition, index, (VOID*)&position);
-			} /* for index */
-		} /* if new || newkoor */
-		*/
 
 		if (status->reset_flag)
 			if (dispobj->reset) (*dispobj->reset) (dispobj);
@@ -721,18 +688,6 @@ WINDOWP window;
 {	
 	STAT_P	status = Status(window);
 
-/*	This handling is not necessary, as DISPOBJ take their data
-	directly from the VAR's
-
-	/* Neue Koordinaten Åbernehmen */
-	if (status->koor_stat1 == USED)
-		mem_move(&status->koor_alt, &status->koor_akt1,(UWORD)sizeof(KOOR_ALL)); 
-	else
-		mem_move(&status->koor_alt, &status->koor_akt2,(UWORD)sizeof(KOOR_ALL)); 
-
-	window->milli = 0; 			/* keine Timer-Funktion mehr bis
-										zur nÑchsten énderung */
-*/
 	status->new = FALSE;
 } /* wi_finished_mod */
 
@@ -858,7 +813,7 @@ WORD icon;
 	/* Wenn nicht gefunden */
 	if (window == NULL)
 	{
-		if (create()>0);	/* Neue Instanz */
+		if (create()>0)	/* Neue Instanz */
 			window = search_window (CLASS_A3D, SRCH_CLOSED, icon);
 	} /* if */
 	
@@ -1061,9 +1016,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   a3d_menu  = (OBJECT *)rs_trindex [A3D_MENU];  /* Adresse der A3D-MenÅzeile */
   a3d_setup = (OBJECT *)rs_trindex [A3D_SETUP]; /* Adresse der A3D-Parameter-Box */
   a3d_shelp = (OBJECT *)rs_trindex [A3D_SHELP];	/* Adresse der A3D-Parameter-Hilfe */

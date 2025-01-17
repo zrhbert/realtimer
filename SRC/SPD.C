@@ -131,7 +131,6 @@ PUBLIC VOID    send_messages	(RTMCLASSP module)
 	SET_P		akt = actual->setup;
 	UWORD 	signal;
 
-/*
 	send_variable(VAR_SET_PAR, actual->number);
 
 } /* send_messages */
@@ -243,8 +242,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 	WORD		signal, lfo, h = gl_hbox, w = gl_wbox, x0, y0;
 	LONGSTR	s;
 	RECT		a;
-
-	CrtBarDOInsert (window, SPDLFAUMKEHR, VAR_LFA_UMK, ObjectCheck, 0);
+   	CrtBarDOInsert (window, SPDLFAUMKEHR, VAR_LFA_UMK, ObjectCheck, 0);
 	CrtObjectDOInsert (window, SPDLFAPAUSE, VAR_LFA_PAUSE, ObjectCheck, 0);
 	CrtObjectDOInsert (window, SPDLFBUMKEHR, VAR_LFB_UMK, ObjectCheck, 0);
 	CrtObjectDOInsert (window, SPDLFBPAUSE, VAR_LFB_PAUSE, ObjectCheck, 0);

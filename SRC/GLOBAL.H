@@ -152,11 +152,12 @@
 
 #define new(type) (type*) mem_alloc (sizeof(type))
 
+
 /****** TYPES ****************************************************************/
 
-typedef BYTE STRING [STRSIZE];            /* Zeichenkette */
-typedef BYTE LONGSTR [LONGSTRSIZE];       /* Lange Zeichenkette */
-typedef BYTE STR128 [HALFSTRSIZE];        /* Halblange Zeichenkette */
+typedef unsigned char STRING [STRSIZE];            /* Zeichenkette */
+typedef unsigned char LONGSTR [LONGSTRSIZE];       /* Lange Zeichenkette */
+typedef unsigned char STR128 [HALFSTRSIZE];        /* Halblange Zeichenkette */
 typedef ULONG SET [SETSIZE];              /* Menge */
 
 typedef BYTE HUGE *HPTR;                  /* Huge Pointer */
@@ -374,7 +375,7 @@ GLOBAL BOOLEAN file_exist   _((CONST BYTE *filename));
 GLOBAL BOOLEAN path_exist   _((CONST BYTE *pathname));
 GLOBAL BOOLEAN select_file  _((BYTE *name, BYTE *path, BYTE *suffix, BYTE *label, BYTE *filename));
 
-GLOBAL BOOLEAN init_global  _((INT argc, BYTE *argv [], BYTE *acc_menu, WORD class));
+GLOBAL BOOLEAN init_global  _((INT argc, BYTE *argv [], BYTE *acc_menu, WORD classtype));
 GLOBAL BOOLEAN term_global  _((VOID));
 
 #endif /* __GLOBAL__ */

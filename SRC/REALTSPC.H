@@ -303,7 +303,9 @@ typedef struct soundobj
 	WORD		graf_mod;					/* Mono/Stereo/Quadro/Okto */
 	SO_P		next;							/* Zeiger auf n„chsten Event */
 	SO_P		prev;							/* Zeiger auf vorigen Event */
-	VOID		set_speed (SO_P so, FLOAT speed);
+#if false
+    VOID		*set_speed (SO_P so, FLOAT speed);
+#endif
 } SOUNDOBJ;	/* Enth„lt alle Parameter eines ED4-Sound Objektes */
 
 typedef VOID (UpdateFieldFn) (struct window* window, WORD obj, LONG value);

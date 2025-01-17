@@ -26,7 +26,9 @@
 #include "cmi.h"
 #include "cmo.h"
 #include "ec4.h"
+#if false
 #include "ed4.h"
+#endif
 #include "eff.h"
 #include "gen.h"
 #include "gmi.h"
@@ -116,57 +118,59 @@ GLOBAL BOOLEAN init_modules ()
 	rtmmrec = (RTMCLASSP)mem_alloc ((LONG)max_rtmmodules * sizeof (RTMCLASS));
 	mem_lset(rtmmrec, 0, (max_rtmmodules * sizeof (RTMCLASS)));
 
-	if(init_msh) ok &= init_msh ();		/* Initialisiere MSH */
+    if(&init_msh) ok &= init_msh ();		/* Initialisiere MSH */
 	
 	/* VAR als erstes Modul Initialisieren, wg. msg. */
-	if(init_var) ok &= init_var ();		/* Initialisiere var */
+    if(&init_var) ok &= init_var ();		/* Initialisiere var */
 
 
-/*	Abgeschaltete Module 
-	if(init_eff) ok &= init_eff ();		/* Initialisiere eff */
+
+    /*	Abgeschaltete Module */
+#if false
+    if(init_eff) ok &= init_eff ();		/* Initialisiere eff */
 	if(init_maa) ok &= init_maa ();		/* Initialisiere maa */
 	if(init_pow) ok &= init_pow ();		/* Initialisiere pow */
-	*/
+#endif
 
 
-	if(init_a3d) ok &= init_a3d ();		/* Initialisiere 3D-Anzeige */
+    if(&init_a3d) ok &= init_a3d ();		/* Initialisiere 3D-Anzeige */
 
 
 
-	if(init_cmi) ok &= init_cmi ();		/* Initialisiere cmi */
-	if(init_gen) ok &= init_gen ();		/* Initialisiere gen */
-	if(init_gmi) ok &= init_gmi ();		/* Initialisiere gen */
+    if(&init_cmi) ok &= init_cmi ();		/* Initialisiere cmi */
+    if(&init_gen) ok &= init_gen ();		/* Initialisiere gen */
+    if(&init_gmi) ok &= init_gmi ();		/* Initialisiere gen */
 
-	if(init_koo) ok &= init_koo ();		/* Initialisiere koo */
+    if(&init_koo) ok &= init_koo ();		/* Initialisiere koo */
 
-/*
+#if false
 	if(init_mae) ok &= init_mae ();		/* Initialisiere mae */
-*/
+#endif
 
-	if(init_mtr) ok &= init_mtr ();		/* Initialisiere mtr */
+    if(&init_mtr) ok &= init_mtr ();		/* Initialisiere mtr */
 
 
-	if(init_par) ok &= init_par ();		/* Initialisiere par */
-	if(init_spg) ok &= init_spg ();		/* Initialisiere spg */
-	if(init_spo) ok &= init_spo ();		/* Initialisiere spo */
-	if(init_sps) ok &= init_sps ();		/* Initialisiere sps */
+    if(&init_par) ok &= init_par ();		/* Initialisiere par */
+    if(&init_spg) ok &= init_spg ();		/* Initialisiere spg */
+    if(&init_spo) ok &= init_spo ();		/* Initialisiere spo */
+    if(&init_sps) ok &= init_sps ();		/* Initialisiere sps */
 
 
 /* LFO muss im MAN-Standard-Setup hinten an liegen */
-	if(init_lfo) ok &= init_lfo ();		/* Initialisiere lfo */
+    if(&init_lfo) ok &= init_lfo ();		/* Initialisiere lfo */
 
-	if(init_syn) ok &= init_syn ();		/* Initialisiere syn */
+    if(&init_syn) ok &= init_syn ();		/* Initialisiere syn */
 
 
-	if(init_cmo) ok &= init_cmo ();		/* Initialisiere cmo */
+    if(&init_cmo) ok &= init_cmo ();		/* Initialisiere cmo */
 
 
 /* MAN als letztes initialisieren, braucht Obj-Infos der anderen Module */
-	if(init_man) ok &= init_man ();		/* Initialisiere man */
+    if(&init_man) ok &= init_man ();		/* Initialisiere man */
 
 /* Ganz zum Schluž die MidiShare-Applikationen */
-	if(init_tra) ok &= init_tra ();		/* Initialisiere tra */
-	if(init_puf) ok &= init_puf ();		/* Initialisiere puf */
+    if(&init_tra) ok &= init_tra ();		/* Initialisiere tra */
+    if(&init_puf) ok &= init_puf ();		/* Initialisiere puf */
 
 	for (i = 0; i < max_rtmmodules; i++)         	/* Untersuche alle Module */
 	{

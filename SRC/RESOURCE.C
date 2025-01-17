@@ -330,9 +330,9 @@ BOOLEAN is_dialog;
       if (type == G_ICON)
       {
         ib = (ICONBLK *)ob->ob_spec;
-        /*
+#if false
         ob->ob_height = ib->ib_ytext + ib->ib_htext; /* Objekthîhe = Iconhîhe */
-        */
+#endif
         trans_gimage (tree, obj);         /* Icons an Bildschirm anpassen */
       } /* if */
 
@@ -403,9 +403,9 @@ GLOBAL BOOLEAN init_resource ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   desktop  = (OBJECT *)rs_trindex [DESKTOP];    /* Adresse der MenÅzeile */
   menu     = (OBJECT *)rs_trindex [MENU];       /* Adresse der MenÅzeile */
   about    = (OBJECT *)rs_trindex [ABOUT];      /* Adresse der "About"-Box */

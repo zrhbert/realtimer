@@ -262,8 +262,9 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					
 					single++;	/* Auf Info fr n„chste Signal zeigen */
 				} /* for */
+#if false
 				/* ok = fscanf(in, "%s", s);	/* Leerzeile */ */
-
+#endif
 				/* Setup speichern und n„chstes Setup anw„hlen */
 				if (! module->get_setnr(module, setnr))
 					ok = EOF;	/* Import beenden */
@@ -496,7 +497,7 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 
-    sprintf (window->name, (BYTE *)sps_text [FSPSN].ob_spec);
+      sprintf (window->name, "%s", (BYTE *)sps_text [FSPSN].ob_spec);
     sprintf (window->info, (BYTE *)sps_text [FSPSI].ob_spec, 0);
   } /* if */
 
@@ -684,9 +685,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   sps_setup = (OBJECT *)rs_trindex [SPS_SETUP]; /* Adresse der SPS-Parameter-Box */
   sps_help  = (OBJECT *)rs_trindex [SPS_HELP];	/* Adresse der SPS-Hilfe */
   sps_desk  = (OBJECT *)rs_trindex [SPS_DESK];	/* Adresse des SPS-Desktops */

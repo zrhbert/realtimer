@@ -119,7 +119,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 	
 	status->new			= TRUE;
 
-/*
+#if false
 	switch(type)
 	{
 		case SET_VAR:				/* Systemvariable auf neuen Wert setzen */
@@ -228,7 +228,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			} /* switch */
 			break;
 	} /* switch */
-*/
+#endif
 	Window(module)->milli = 1;
 } /* message */
 
@@ -334,7 +334,7 @@ WORD   icon;
 		window->timer     = wi_timer_mod;
 		window->showinfo  = info_mod;
 		
-		sprintf (window->name, (BYTE *)gmi_text [FGMIN].ob_spec);
+        sprintf (window->name, "%s", (BYTE *)gmi_text [FGMIN].ob_spec);
 		
 		create_displayobs (window);
 	} /* if */
@@ -525,7 +525,7 @@ GLOBAL	RTMCLASSP create_gmi ()
 		module->window		= window;
 
 		
-/*	
+#if false
 		add_rcv(VAR_SET_GEN, module);	/* Message einklinken */
 		add_rcv(VAR_SET_LFA, module);	/* Message einklinken */
 		add_rcv(VAR_SET_LFB, module);	/* Message einklinken */
@@ -535,7 +535,7 @@ GLOBAL	RTMCLASSP create_gmi ()
 		add_rcv(VAR_SET_SPG, module);	/* Message einklinken */
 		add_rcv(VAR_SET_SPO, module);	/* Message einklinken */
 		add_rcv(VAR_SET_SPS, module);	/* Message einklinken */
-*/
+#endif
 	} /* if */
 	
 	return module;
@@ -563,9 +563,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   gmi_setup = (OBJECT *)rs_trindex [GMI_SETUP]; /* Adresse der GMI-Parameter-Box */
   gmi_help  = (OBJECT *)rs_trindex [GMI_HELP];	/* Adresse der GMI-Hilfe */
   gmi_desk  = (OBJECT *)rs_trindex [GMI_DESK];	/* Adresse des GMI-Desktops */

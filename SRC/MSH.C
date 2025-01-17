@@ -580,9 +580,9 @@ GLOBAL VOID rtm_send (SHORT refnum, VOID *e)
 		if (refpuf > 0) MidiSendIm (refpuf, MidiCopyEv(e));
 		if (refvar > 0) MidiSendIm (refvar, MidiCopyEv(e));
 		if (reftra > 0) MidiSendIm (reftra, MidiCopyEv(e));
-	/*	
+#if false
 		MidiFreeEv(e);	/* Original freigeben */
-	*/
+#endif
 	} /* if */
 } /* rtm_send */
 
@@ -678,7 +678,7 @@ GLOBAL VOID rtm_record	 (SHORT refnum, BOOLEAN flag)
 	/* Gibt allen angeschlossenen RTM-Modulen an,
 		ob Record-Modus aktiv ist oder nicht */
 
-/*		
+#if false
 	MidiSTPtr e = (MidiSTPtr) MidiNewEv(typeRTMRecordOnOff);
 	
 	if (e)
@@ -687,7 +687,7 @@ GLOBAL VOID rtm_record	 (SHORT refnum, BOOLEAN flag)
 		rtm_sendm (refnum, e);
 	} /* if */
 	else
-*/
+#endif
 	send_variable(VAR_RECORD, flag);
 } /* rtm_record */
 

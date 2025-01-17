@@ -16,7 +16,7 @@
 #include <portab.h>
 #include <aes.h>
 #include <vdi.h>
-#include "winclass.h"	/* BD */
+#include "WINCLASS.H"	/* BD */
 
 #if GEMDOS
 #include <tos.h>

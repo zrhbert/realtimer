@@ -252,9 +252,9 @@ GLOBAL VOID hndl_events ()
     if (mk.momask == 0x0000) mk.momask = 0x0001;         /* Irgendein Knopf ist linker Knopf */
 #endif
 
-	/*
-	 mk.kstate |= Kbshift (-1); 	/* akt. Tasten-Status hinein-'or'en */
-	 */
+#if false
+      mk.kstate |= Kbshift (-1); 	/* akt. Tasten-Status hinein-'or'en */
+#endif
     mk.shift  = (mk.kstate & (K_RSHIFT | K_LSHIFT)) != 0;
     mk.ctrl   = (mk.kstate & K_CTRL) != 0;
     mk.alt    = (mk.kstate & K_ALT) != 0;

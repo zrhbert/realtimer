@@ -200,7 +200,7 @@ PRIVATE VOID    set_dbox	(RTMCLASSP module)
 			koo_v->dehn, koo_v->track);
 			v_text (vdi_handle, 1 + signal * h, 2 * w, s, w);
 	} /* for */
-/*
+#if false
 	for(signal=0; signal<MAXSIGNALS; signal++)
 	{
 		offset=(KOO1-KOO0)*(signal);
@@ -220,14 +220,8 @@ PRIVATE VOID    set_dbox	(RTMCLASSP module)
 		update_ptext (window, KOODEHN0 + offset, koo_v->dehn, alt_v->dehn, s, force_draw);
 		update_ptext (window, KOOCMI0 + offset, koo_v->track, alt_v->track, s, force_draw);
 	} /* for */
-/*
-	if (edited->modified)
-		sprintf (s, "%ld*", edited->number);
-	else
-		sprintf (s, "%ld", edited->number);
-	set_ptext (koo_setup, KOOSETNR , s);
-*/
-*/
+
+#endif
 } /* set_dbox */
 
 /*****************************************************************************/
@@ -476,7 +470,7 @@ WORD   icon;
 		/* Display-Objekte einklinken */
 		create_displayobs (window);
 
-		sprintf (window->name, (BYTE *)koo_text [FKOON].ob_spec);
+        sprintf (window->name, "%s", (BYTE *)koo_text [FKOON].ob_spec);
 		sprintf (window->info, (BYTE *)koo_text [FKOOI].ob_spec, 0);
 	} /* if */
 	
@@ -806,9 +800,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   koo_setup = (OBJECT *)rs_trindex [KOO_SETUP]; /* Adresse der KOO-Parameter-Box */
   koo_help  = (OBJECT *)rs_trindex [KOO_HELP];	/* Adresse der KOO-Hilfe */
   koo_desk  = (OBJECT *)rs_trindex [KOO_DESK];	/* Adresse des KOO-Desktops */

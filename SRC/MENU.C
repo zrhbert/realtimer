@@ -4,25 +4,9 @@
 /*                                                                           */
 /*****************************************************************************/
 
-#define RTMVERSION "V 4.04"
-#define RTMDATE "09.01.95"
+#define RTMVERSION "V 5"
+#define RTMDATE "__DATE__ __TIME__"
 
-/* HISTORY *******************************************************************
-V 4.04
-- CUT/COPY/PASTE und FONTS herausgenommen, 09.01.95
-- printer, edit, meta, clipboard, image und trash rausgenommen
-- MBIG auf MGMI geÑndert in init_menu fÅr F-Tasten
-V 4.03
-- Bug in hndl_menu bei top->module beseitigt
-- msettings auf neue Namen umgebaut
-V 4.02
-- help umgebaut
-- mabout als globale Info-Funktion fÅr RTM4
-V 4.01
-- Modul-Helpfunktion eingebaut
-- Ende-Alert eingebaut
-- Umstellung auf neue RTMCLASS-Struktur
-*****************************************************************************/
 
 #include "import.h"
 #include "global.h"
@@ -981,11 +965,11 @@ WORD    title, item;
 		  	print_clipfiles (sel_window, sel_objs);
 		  	*/
 		  	break;
-/*
+#if false
 		 case MCALLER :
 		 	done = TRUE;       /* ZurÅck zum Aufrufer */
 		   break;
-*/
+#endif
 		 case MQUIT   :
 		 	if (hndl_alert(ERR_QUIT) == 2)
 		   {
@@ -995,7 +979,7 @@ WORD    title, item;
 		  	break;
 		  } /* switch */
 		  break;
-/*
+#if false
 		 case MEDIT    :
 		 	switch (item)
 		   {
@@ -1018,7 +1002,7 @@ WORD    title, item;
 		         break;
 		   } /* switch */
 		   break;
-*/
+#endif
 		case MCONTROLS :
 			switch (item)
 			{
@@ -1138,7 +1122,7 @@ GLOBAL BOOLEAN init_menu ()
     shel_find (called_by);
 #endif
 
-/*
+#if false
     if (deskacc || (*called_by == EOS))
     {
       i = MCALLER;
@@ -1146,7 +1130,7 @@ GLOBAL BOOLEAN init_menu ()
       menu [menu [i].ob_next].ob_height -= gl_hbox;
       objc_delete (menu, MCALLER);
     } /* if */
-*/
+#endif
   } /* if */
 
   if (menu_ok && menu_fits)

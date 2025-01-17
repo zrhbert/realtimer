@@ -1,0 +1,493 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXCopyFilesBuildPhase section */
+		46A2F62D2D2864A500425FD3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		46A2F78E2D2874F300425FD3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		46A2F62F2D2864A500425FD3 /* Realtimer V5 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Realtimer V5"; sourceTree = BUILT_PRODUCTS_DIR; };
+		46A2F7882D286B5900425FD3 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		46A2F7922D2874F300425FD3 /* Realtimer V5 68k */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Realtimer V5 68k"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		46A2F7D12D29301B00425FD3 /* Exceptions for "SRC" folder in "Realtimer V5 68k" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AUX_IO.C,
+				BIG.C,
+				GRAF.C,
+				MROS.C,
+				MROSC.C,
+				MTC.C,
+				POW.C,
+				POWER.C,
+				spd.c,
+				XRSRC_N.C,
+				XYZ.C,
+			);
+			target = 46A2F78A2D2874F300425FD3 /* Realtimer V5 68k */;
+		};
+		46A2F7D22D29301D00425FD3 /* Exceptions for "SRC" folder in "Realtimer V5" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				AUX_IO.C,
+				BIG.C,
+				GRAF.C,
+				MROS.C,
+				MROSC.C,
+				MTC.C,
+				POW.C,
+				POWER.C,
+				spd.c,
+				XRSRC_N.C,
+				XYZ.C,
+			);
+			target = 46A2F62E2D2864A500425FD3 /* Realtimer V5 */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		46A2F7422D28651000425FD3 /* SRC */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				46A2F7D22D29301D00425FD3 /* Exceptions for "SRC" folder in "Realtimer V5" target */,
+				46A2F7D12D29301B00425FD3 /* Exceptions for "SRC" folder in "Realtimer V5 68k" target */,
+			);
+			path = SRC;
+			sourceTree = "<group>";
+		};
+		46C1B9C52D2C417900963696 /* INCLUDE */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = INCLUDE;
+			path = ../INCLUDE;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		46A2F62C2D2864A500425FD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		46A2F78D2D2874F300425FD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		46A2F6262D2864A500425FD3 = {
+			isa = PBXGroup;
+			children = (
+				46C1B9C52D2C417900963696 /* INCLUDE */,
+				46A2F6302D2864A500425FD3 /* Products */,
+				46A2F7422D28651000425FD3 /* SRC */,
+			);
+			sourceTree = "<group>";
+		};
+		46A2F6302D2864A500425FD3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				46A2F62F2D2864A500425FD3 /* Realtimer V5 */,
+				46A2F7882D286B5900425FD3 /* Makefile */,
+				46A2F7922D2874F300425FD3 /* Realtimer V5 68k */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		46A2F7802D2866B200425FD3 /* REALTIME5GCC */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 46A2F7812D2866B200425FD3 /* Build configuration list for PBXLegacyTarget "REALTIME5GCC" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			dependencies = (
+			);
+			name = REALTIME5GCC;
+			packageProductDependencies = (
+			);
+			passBuildSettingsInEnvironment = 1;
+			productName = REALTIME5GCC;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXNativeTarget section */
+		46A2F62E2D2864A500425FD3 /* Realtimer V5 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 46A2F6362D2864A500425FD3 /* Build configuration list for PBXNativeTarget "Realtimer V5" */;
+			buildPhases = (
+				46A2F62B2D2864A500425FD3 /* Sources */,
+				46A2F62C2D2864A500425FD3 /* Frameworks */,
+				46A2F62D2D2864A500425FD3 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				46A2F7422D28651000425FD3 /* SRC */,
+				46C1B9C52D2C417900963696 /* INCLUDE */,
+			);
+			name = "Realtimer V5";
+			packageProductDependencies = (
+			);
+			productName = "Realtimer V5";
+			productReference = 46A2F62F2D2864A500425FD3 /* Realtimer V5 */;
+			productType = "com.apple.product-type.tool";
+		};
+		46A2F78A2D2874F300425FD3 /* Realtimer V5 68k */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 46A2F78F2D2874F300425FD3 /* Build configuration list for PBXNativeTarget "Realtimer V5 68k" */;
+			buildPhases = (
+				46A2F78B2D2874F300425FD3 /* Sources */,
+				46A2F78D2D2874F300425FD3 /* Frameworks */,
+				46A2F78E2D2874F300425FD3 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				46A2F7422D28651000425FD3 /* SRC */,
+				46C1B9C52D2C417900963696 /* INCLUDE */,
+			);
+			name = "Realtimer V5 68k";
+			packageProductDependencies = (
+			);
+			productName = "Realtimer V5";
+			productReference = 46A2F7922D2874F300425FD3 /* Realtimer V5 68k */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46A2F6272D2864A500425FD3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					46A2F62E2D2864A500425FD3 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					46A2F7802D2866B200425FD3 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+				};
+			};
+			buildConfigurationList = 46A2F62A2D2864A500425FD3 /* Build configuration list for PBXProject "Realtimer V5" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 46A2F6262D2864A500425FD3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 46A2F6302D2864A500425FD3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				46A2F62E2D2864A500425FD3 /* Realtimer V5 */,
+				46A2F7802D2866B200425FD3 /* REALTIME5GCC */,
+				46A2F78A2D2874F300425FD3 /* Realtimer V5 68k */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		46A2F62B2D2864A500425FD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		46A2F78B2D2874F300425FD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		46A2F6342D2864A500425FD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		46A2F6352D2864A500425FD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		46A2F6372D2864A500425FD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = ansi;
+				GCC_INPUT_FILETYPE = sourcecode.c.c;
+				OTHER_CFLAGS = (
+					"-Wno-nonportable-include-path",
+					"-DDISABLE_CDECL",
+					"-Wno-pointer-sign",
+					"-Wno-deprecated-non-prototype",
+					"-Wno-strict-prototypes",
+					"-Wno-unused-variable",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = "'/Users/bertramd/Documents/Development/Hatari/GEMDOS Disks/MAGIC_C/PURE_C/INCLUDE'";
+			};
+			name = Debug;
+		};
+		46A2F6382D2864A500425FD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = ansi;
+				GCC_INPUT_FILETYPE = sourcecode.c.c;
+				OTHER_CFLAGS = (
+					"-Wno-nonportable-include-path",
+					"-DDISABLE_CDECL",
+					"-Wno-pointer-sign",
+					"-Wno-deprecated-non-prototype",
+					"-Wno-strict-prototypes",
+					"-Wno-unused-variable",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = "'/Users/bertramd/Documents/Development/Hatari/GEMDOS Disks/MAGIC_C/PURE_C/INCLUDE'";
+			};
+			name = Release;
+		};
+		46A2F7822D2866B200425FD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUGGING_SYMBOLS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		46A2F7832D2866B200425FD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		46A2F7902D2874F300425FD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = ansi;
+				GCC_VERSION = "/opt/cross-mint/bin/m68k-atari-mint-gcc";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = "'/Users/bertramd/Documents/Development/Hatari/GEMDOS Disks/MAGIC_C/PURE_C/INCLUDE'";
+			};
+			name = Debug;
+		};
+		46A2F7912D2874F300425FD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = ansi;
+				GCC_VERSION = "/opt/cross-mint/bin/m68k-atari-mint-gcc";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = "'/Users/bertramd/Documents/Development/Hatari/GEMDOS Disks/MAGIC_C/PURE_C/INCLUDE'";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		46A2F62A2D2864A500425FD3 /* Build configuration list for PBXProject "Realtimer V5" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46A2F6342D2864A500425FD3 /* Debug */,
+				46A2F6352D2864A500425FD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		46A2F6362D2864A500425FD3 /* Build configuration list for PBXNativeTarget "Realtimer V5" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46A2F6372D2864A500425FD3 /* Debug */,
+				46A2F6382D2864A500425FD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		46A2F7812D2866B200425FD3 /* Build configuration list for PBXLegacyTarget "REALTIME5GCC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46A2F7822D2866B200425FD3 /* Debug */,
+				46A2F7832D2866B200425FD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		46A2F78F2D2874F300425FD3 /* Build configuration list for PBXNativeTarget "Realtimer V5 68k" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46A2F7902D2874F300425FD3 /* Debug */,
+				46A2F7912D2874F300425FD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 46A2F6272D2864A500425FD3 /* Project object */;
+}

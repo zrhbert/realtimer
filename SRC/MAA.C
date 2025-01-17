@@ -445,7 +445,7 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 
-    sprintf (window->name, (BYTE *)maa_text [FMAAN].ob_spec);
+      sprintf (window->name, "%s", (BYTE *)maa_text [FMAAN].ob_spec);
     sprintf (window->info, (BYTE *)maa_text [FMAAI].ob_spec, 0);
   } /* if */
 
@@ -653,9 +653,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   maa_setup = (OBJECT *)rs_trindex [MAA_SETUP]; /* Adresse der MAA-Parameter-Box */
   maa_help  = (OBJECT *)rs_trindex [MAA_HELP];	/* Adresse der MAA-Hilfe */
   maa_desk  = (OBJECT *)rs_trindex [MAA_DESK];	/* Adresse des MAA-Desktops */

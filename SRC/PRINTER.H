@@ -29,4 +29,3 @@ GLOBAL BOOLEAN term_printer _((VOID));
 
 #endif /* __PRINTER__ */
 
-

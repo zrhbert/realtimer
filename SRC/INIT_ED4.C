@@ -122,9 +122,9 @@ GLOBAL BOOLEAN init_modules ()
 	/* VAR als erstes Modul Initialisieren, wg. msg. */
 	if(init_var) ok &= init_var ();		/* Initialisiere var */
 
-/*
+#if false
 	if(init_pow) ok &= init_pow ();		/* Initialisiere pow */
-*/
+#endif
 	if(init_mae) ok &= init_mae ();		/* Initialisiere mae */
 	if(init_koo) ok &= init_koo ();		/* Initialisiere koo */
 
@@ -136,9 +136,9 @@ GLOBAL BOOLEAN init_modules ()
 /* Ganz zum Schluž die MidiShare-Applikationen */
 	if(init_tra) ok &= init_tra ();		/* Initialisiere tra */
 
-/*
+#if false
 	if(init_cmo) ok &= init_cmo ();		/* Initialisiere cmo */
-*/
+#endif
 	if(init_ed4) ok &= init_ed4 ();		/* Initialisiere 4D-Editor */
 	if(init_ec4) ok &= init_ec4 ();		/* Initialisiere 4D-Cue-List */
 

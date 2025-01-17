@@ -97,13 +97,15 @@ V 1.00	17.04.93
 	if (port < 1) port = 4;\
 	else if (port > 4) port = 1;
 
-/* Alte Version, vor POGLI
-/* Nur legale Zuweisungen erlauben */
+/* Alte Version, vor POGLI */
+#if false
+ /* Nur legale Zuweisungen erlauben */
 #define CHECK_PORT(port) \
 	if (port < 1) port = 9;\
 	else if (port == 2) port = 6;\
 	else if ((port < 6) || (port > 9)) port = 1;
-*/
+#endif
+
 /****** TYPES ****************************************************************/
 typedef struct setup *SET_P;
 
@@ -402,7 +404,8 @@ PUBLIC VOID		reset	(RTMCLASSP module)
 	}
 	status->actualaux = actualaux;
 	
-/* Alter Code
+/* Alter Code */
+#if false
 	if (Bconmap)							/* Nur ab TOS 030 */
 	{
 		if (status->port == 1)
@@ -411,7 +414,7 @@ PUBLIC VOID		reset	(RTMCLASSP module)
 		else
 			Bconmap(status->port);	/* Nur ab TOS 030 */
 	} /* if */
-*/
+#endif
 
 	/* 1200 Baud, 0 Handshake */
 	Rsconf(7,0,-1,-1,-1,-1);
@@ -626,7 +629,7 @@ WORD   icon;
 		window->click     = wi_click_mod;
 		window->showinfo  = info_mod;
 		
-		sprintf (window->name, (BYTE *)mae_text [FMAEN].ob_spec);
+        sprintf (window->name, "%s", (BYTE *)mae_text [FMAEN].ob_spec);
 		sprintf (window->info, (BYTE *)mae_text [FMAEI].ob_spec, 0);
 	} /* if */
 
@@ -839,9 +842,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   mae_setup = (OBJECT *)rs_trindex [MAE_SETUP]; /* Adresse der MAE-Parameter-Box */
   mae_help  = (OBJECT *)rs_trindex [MAE_HELP];	/* Adresse der MAE-Hilfe */
   mae_desk  = (OBJECT *)rs_trindex [MAE_DESK];	/* Adresse des MAE-Desktops */

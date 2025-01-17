@@ -453,10 +453,10 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 {
 	WINDOWP	window = Window(module);
 
-/*
+#if false
 	if (window)
 		window->milli = 1; 	/* Update so schnell wie m”glich */
-*/		
+#endif
 	return event;
 } /* apply */
 
@@ -806,7 +806,7 @@ WORD icon;
 	/* Wenn nicht gefunden */
 	if (window == NULL)
 	{
-		if (create()>0);	/* Neue Instanz */
+		if (create()>0)	/* Neue Instanz */
 			window = search_window (CLASS_EC4, SRCH_CLOSED, icon);
 	} /* if */
 	
@@ -971,9 +971,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   ec4_setup 	= (OBJECT *)rs_trindex [EC4_SETUP]; 	/* Adresse der EC4-Cue-Setup-Box */
   ec4_cue 	= (OBJECT *)rs_trindex [EC4_CUE]; 	/* Adresse der EC4-Cue-Editor-Box */
   ec4_help  = (OBJECT *)rs_trindex [EC4_HELP];	/* Adresse der EC4-Hilfe */

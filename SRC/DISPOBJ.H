@@ -258,7 +258,9 @@ typedef struct spacestatus {
 	TEXTSTATUS text;				/* Ein Textobjekt */
 	BOOL		initializing;		/* Koor updates nur explizit durchfÅhren */
 	POLY_P	spaceform;			/* Zeiger auf Polygon fÅr Raumform */
-	/* VOID		(*form_draw) (DISPOBJP dispobj);	/* Raumform Zeichenroutine */ */
+#if false
+    VOID		(*form_draw) (DISPOBJP dispobj);	/* Raumform Zeichenroutine */
+#endif
 	VOID		(*line_draw) (DISPOBJP dispobj);	/* Linien Zeichenroutine */
 	VOID		(*vol_draw)  (DISPOBJP dispobj);	/* Volume Zeichenroutine */
 	ProjectFn *projection;		/* Projektions-Routine */

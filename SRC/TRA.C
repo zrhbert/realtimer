@@ -228,7 +228,7 @@ LONG  mtc_fr[   10 ] = { 24L, 0L, 25L, 0L, 30L, 0L, 30L, 0L, 25L };
 LOCAL LONG  mtc_dela[ 10 ] = { 83L, 0L, 80L, 0L, 67L, 0L, 67L, 0L, 80L };
 LOCAL LONG last_mtc_rcv = 0;
 
-#endif RCV_MTC_BY_MIDI_SHARE
+#endif /* RCV_MTC_BY_MIDI_SHARE */
 
 /** Sync Receive MTC **/
 LONG  		 old_mtc_time;
@@ -237,10 +237,10 @@ INT 		 frameval[] = { 24, 25, 30, 30, 100 };
 /****** FUNCTIONS ************************************************************/
 
 /* MidiShare Funktionen */
-PUBLIC VOID			cdecl	receive_evts_tra	_((INT refNum));
-PUBLIC VOID			cdecl play_task_tra		_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
-PUBLIC VOID			cdecl delayed_task_tra	_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
-PUBLIC VOID			cdecl receive_alarm_tra _((SHORT refNum, LONG code));
+PUBLIC VOID			CDECL	receive_evts_tra	_((INT refNum));
+PUBLIC VOID			CDECL play_task_tra		_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
+PUBLIC VOID			CDECL delayed_task_tra	_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
+PUBLIC VOID			CDECL receive_alarm_tra _((SHORT refNum, LONG code));
 PRIVATE VOID		InstallFilter				_((SHORT refNum));
 PRIVATE WORD		init_midishare 			_((VOID));
 
@@ -417,7 +417,7 @@ void send_mtc(RTMCLASSP module )
 	die richtige Sync-Zeit eingeklinkt. 
 **/
 /********************************************************************/
-void cdecl sync_send_mtc (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3 )
+void CDECL sync_send_mtc (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3 )
 {
 	RTMCLASSP	module = modulep[refNum];
 	MidiEvPtr	myTask;
@@ -460,11 +460,11 @@ INT receive_mtc(RTMCLASSP module,  MidiEvPtr e, INT type, INT pitch, INT vel )
 
 	if ( !status->sync_in )  return 1;
 
-/*	
+#if false
 	/** Receive MidiTimeCode **/
 	if ( status->rcv_mtc == NO_RCV_MTC_SYNC )
 	  return 1;
-*/	
+#endif
 
 	/* Wert merken fr Timeout */
 	last_mtc_rcv = MidiGetTime();
@@ -524,7 +524,7 @@ INT receive_mtc(RTMCLASSP module,  MidiEvPtr e, INT type, INT pitch, INT vel )
 	{
 		status->mtc_sync = TRY_RCV_MTC_SYNC;
 
-#if FALSE
+#if false
 		/** Test ob Sequenzer spielt **/
 		if ( status->play )
 		{
@@ -558,7 +558,7 @@ INT receive_mtc(RTMCLASSP module,  MidiEvPtr e, INT type, INT pitch, INT vel )
 	delay			das bliche Aufruf-Delay von 1 Millisekunde
 **/
 /********************************************************************/
-void cdecl sync_receive_mtc(LONG date, SHORT refNum, LONG a1, LONG a2, LONG delay )
+void CDECL sync_receive_mtc(LONG date, SHORT refNum, LONG a1, LONG a2, LONG delay )
 {
 	RTMCLASSP	module = modulep[refNum];
 	STAT_P		status = module->status;
@@ -659,7 +659,7 @@ void StartReceivingMtc(RTMCLASSP module)
 	WORD			refNum = (WORD)module->special;
 	MidiEvPtr	myTask;
 
-#if FALSE
+#if false
 	if ( status->mtc_sync == TRY_RCV_MTC_SYNC )
 	{
 		status->mtc_time = 0;
@@ -772,7 +772,7 @@ void init_mtc(RTMCLASSP module)
 
 /*****************************************************************************/
 
-PUBLIC VOID cdecl receive_evts_tra (SHORT refNum)
+PUBLIC VOID CDECL receive_evts_tra (SHORT refNum)
 {
 	MidiEvPtr	event, thru_event;
 	LONG 			n;
@@ -790,7 +790,7 @@ PUBLIC VOID cdecl receive_evts_tra (SHORT refNum)
 		type = (EvType(event) & 0xFF);
 		switch (type)
 		{
-/*
+#if false
 			case typeRTMPosit:
 				status->posit 			= get_posit((MidiSTPtr)event);
 				send_variable(VAR_SMPTE, status->posit);
@@ -838,13 +838,13 @@ PUBLIC VOID cdecl receive_evts_tra (SHORT refNum)
 				status->new	  = TRUE;
 			*/
 				break;
-*/
+#endif
 			case typeQuarterFrame:
 				receive_mtc (module, event, type, Pitch(event), Vel(event));
-/*
+#if false
 				if (RefNum(event) == 0)	/* Nur externe Events */
 					MidiSendIm(refNum, MidiCopyEv(event));
-*/
+#endif
 				break;
 			/* Thru-Funktion */
 			case typeNote:
@@ -863,7 +863,7 @@ PUBLIC VOID cdecl receive_evts_tra (SHORT refNum)
 	} /* for */
 } /* receive_evts_tra */
 
-PUBLIC VOID cdecl receive_alarm_tra (SHORT refNum, LONG code)
+PUBLIC VOID CDECL receive_alarm_tra (SHORT refNum, LONG code)
 {
 #ifdef RCV_MTC_BY_MIDI_SHARE
 	RTMCLASSP	module = modulep[refNum];
@@ -936,7 +936,7 @@ PRIVATE VOID InstallFilter (WORD refNum)
 	MidiSetFilter( refNum, filter );   /* installe le filtre				*/
 } /* InstallFilter */
 
-PUBLIC VOID cdecl play_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
+PUBLIC VOID CDECL play_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
 {
 	/* Wird soundso oft aufgerufen, um neue Daten in
 		das Fenster einzublenden */
@@ -989,7 +989,7 @@ PUBLIC VOID cdecl play_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 	send_variable(VAR_SMPTE, posit);
 } /* play_task_tra */
 
-PUBLIC VOID cdecl delayed_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
+PUBLIC VOID CDECL delayed_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
 {
 	/* Wird aufgerufen, um nicht Echtzeitf„hige Funktionen auszufhren */
 	RTMCLASSP	module 	= modulep[refNum];
@@ -1508,7 +1508,7 @@ WORD   icon;
 		window->showinfo  = info_mod;
 		window->finished	= wi_finished_mod;
 			
-		sprintf (window->name, (BYTE *)tra_text [FTRAN].ob_spec);
+        sprintf (window->name, "%s", (BYTE *)tra_text [FTRAN].ob_spec);
 		sprintf (window->info, (BYTE *)tra_text [FTRAI].ob_spec, 0);
 		
 		create_displayobs (window);
@@ -1858,9 +1858,10 @@ PRIVATE BOOLEAN init_rsc_tra ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
+    
   tra_desk	= (OBJECT *)rs_trindex [TRA_DESK];	/* Adresse des TRA-Desktop */
   transport	= (OBJECT *)rs_trindex [TRANSPORT];	/* Adresse der Transportleiste */
   tra_text	= (OBJECT *)rs_trindex [TRA_TEXT];  /* Adresse der TRA-Texte */

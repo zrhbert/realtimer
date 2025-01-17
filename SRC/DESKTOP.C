@@ -317,7 +317,7 @@ WORD    obj;
 SET     objs;
 
 {
-#if TRUE
+#if true
 #else
   RECT    ob, r, bound;
   WORD    mox, moy;
@@ -719,13 +719,13 @@ WORD    dest_obj;
 
 {
 
-/*
+#if false
   if ((dest_obj >= FKEYS) || (dest_obj == DESKINFO)) return (DRAG_NOACTN); /* Kein Ziehen auf Funktionstasten */
   if (src_window->handle == dest_window->handle) return (DRAG_SWIND); /* Im gleichen Fenster */
   if (src_window->class == dest_window->class) return (DRAG_SCLASS);  /* Gleiche Fensterart */
   if (src_window->class == CLASS_CLIPBRD)
     if ((ITRASH <= dest_obj) && (dest_obj < FKEYS)) return (DRAG_OK);
-*/
+#endif
   return (DRAG_NOACTN);
 } /* wi_drag */
 
@@ -1063,7 +1063,7 @@ WORD    icon;
 {
 
   WORD ret;
-/*
+#if false
   window = search_window (CLASS_DIALOG, SRCH_ANY, ABOUT);
 
   if (window == NULL)
@@ -1075,7 +1075,7 @@ WORD    icon;
   if (window != NULL)
     if (! open_dialog (ABOUT)) hndl_alert (ERR_NOOPEN);
 
-*/
+#endif
 	mabout(MDESK);
 	return (TRUE);
 } /* info_desktop */

@@ -407,6 +407,7 @@ WORD src_obj, dest_obj;
 
   result = FALSE;
 
+#if false
   switch (src_obj)
   {
     case IMODULE : window = search_window (CLASS_MODULE, SRCH_ANY, src_obj);
@@ -421,7 +422,8 @@ WORD src_obj, dest_obj;
                    result = TRUE;
                    break;
   } /* switch */
-
+#endif
+    
   return (result);
 } /* icons_clipbrd */
 
@@ -489,8 +491,11 @@ WORD   icon;
     window->showinfo  = info_module;
     window->showhelp  = help_module;
 
+    /* FMODULEN / FMODULEI not defined? */
+#if false
     sprintf (window->name, (BYTE *)freetext [FMODULEN].ob_spec);
     sprintf (window->info, (BYTE *)freetext [FMODULEI].ob_spec, 0);
+#endif
   } /* if */
 
   return (window);                      /* Fenster zurÅckgeben */
@@ -529,8 +534,12 @@ WORD    icon;
   if (icon != NIL)
     window = search_window (CLASS_MODULE, SRCH_ANY, icon);
 
+#if false
   if (window != NULL) note (1, INFMODULE, NIL, NULL);
-  return (window != NULL);
+#else
+    if (window != NULL) note (1, NULL, NIL, NULL);
+#endif
+    return (window != NULL);
 } /* info_module */
 
 /*****************************************************************************/
@@ -542,8 +551,10 @@ WINDOWP window;
 WORD    icon;
 
 {
-  note (1, HELPMODULE, NIL, NULL);
-  return (TRUE);
+#if false
+    note (1, HELPMODULE, NIL, NULL);
+#endif
+    return (TRUE);
 } /* help_module */
 
 /*****************************************************************************/

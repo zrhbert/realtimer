@@ -150,7 +150,7 @@ GLOBAL BOOLEAN	get_setnr_obj	(RTMCLASSP module, LONG setupnr)
 				if (module->file_pointer > 0L)
 				{
 					position = module->file_header_len + module->setup_length * setupnr;
-#if TRUE
+#if true
 					/* Versuchsweise direkt */
 					ok = ! fseek (module->file_pointer, position, SEEK_SET);
 #else
@@ -221,7 +221,7 @@ GLOBAL BOOLEAN	set_setnr_obj	(RTMCLASSP module, LONG setupnr)
 				if (module->file_pointer > 0)
 				{
 					position = module->file_header_len + module->setup_length * setupnr;
-#if TRUE
+#if true
 					/* Versuchsweise direkt */
 					ok = ! fseek (module->file_pointer, position, SEEK_SET);
 #else
@@ -482,7 +482,7 @@ GLOBAL BOOLEAN	load_obj	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 						close_daktstat();
 						break;
 					case SETUPS_EXTERN:
-						sprintf (title, "%s-Datei wird ge”ffnet", module->object_name);
+						sprintf (title, "%s-Datei wird geoeffnet", module->object_name);
 						daktstatus (title, module->file_name);
 						module->file_pointer = in;			/* Filepointer merken */
 						module->file_header_len = strlen(header);	/* Vorspann */
@@ -644,7 +644,7 @@ GLOBAL WORD hndl_alert_obj (RTMCLASSP module, WORD alert_id)
 				sprintf(alertstr, errstr, module->object_name, module->file_name);
 				break;
 			default:
-				sprintf(alertstr, errstr);		/* Standard-Fehler */
+                sprintf(alertstr, "%s", errstr);		/* Standard-Fehler */
 		} /* switch */
 		button = open_alert (alertstr);
 	} /* if */
@@ -1067,7 +1067,7 @@ WORD    icon;
 GLOBAL BOOLEAN help_obj (RTMCLASSP module)
 {
 	STRING		name;
-	BOOLEAN		ret;
+    BOOLEAN		ret = FALSE;
 	
 	if (module)
 	{

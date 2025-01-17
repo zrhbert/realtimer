@@ -9,7 +9,8 @@
 
 
 #ifndef XRSC_CREATE
-/* #define XRSC_CREATE TRUE                    /* X-Resource-File im Code */ */
+/* X-Resource-File im Code */
+/* #define XRSC_CREATE TRUE                    */
 #endif
 
 #include "import.h"
@@ -116,8 +117,8 @@ PRIVATE BOOL		var_watch = 0;				/* VAR ÅberprÅfen auf min/max etc. */
 PRIVATE BOOL		var_msgs = 0;				/* Anzahl der Message-Routinen */
 /****** FUNCTIONS ************************************************************/
 /* MidiShare Funktionen */
-PUBLIC VOID			cdecl	receive_evts_var	_((SHORT refNum));
-PUBLIC VOID			cdecl play_task_var		_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
+PUBLIC VOID			CDECL	receive_evts_var	_((SHORT refNum));
+PUBLIC VOID			CDECL play_task_var		_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
 PRIVATE VOID		InstallFilter				_((SHORT refNum));
 
 /* Interne VAR-Funktionen */
@@ -136,7 +137,7 @@ PRIVATE FLOAT SetValueVar (SYS_P var, LONG value);
 PRIVATE VOID DefineVar (RTMCLASSP module, LONG var, CONST CHAR* text, WORD index, LONG minimum, LONG maximum, LONG def, WORD t);
 
 /*****************************************************************************/
-PUBLIC VOID cdecl receive_evts_var (int refNum)
+PUBLIC VOID CDECL receive_evts_var (int refNum)
 {
 	MidiEvPtr	event;
 	LONG 			n;
@@ -196,8 +197,8 @@ PRIVATE VOID InstallFilter (SHORT refNum)
 
 /*****************************************************************************/
 
-/*	Alternativen, die zu langsam bei hohen Datenmengen sind:
-
+/*	Alternativen, die zu langsam bei hohen Datenmengen sind: */
+#if false
 GLOBAL VOID send_variable	(UWORD variable, LONG value)
 {
 	/* Sendet eine Nachricht an das VAR-Modul, um eine
@@ -231,7 +232,7 @@ GLOBAL VOID send_variable	(UWORD variable, LONG value)
 		mem_free(msg);
 	} /* else */
 } /* send_variable */
-*/
+#endif
 
 GLOBAL CHAR	*var_get_name	(RTMCLASSP module, UWORD variable, STRING s)
 {
@@ -325,7 +326,8 @@ GLOBAL VOID	var_del_rcv		(RTMCLASSP module, UWORD variable, RTMCLASSP refmodule)
 	var_msgs--;
 } /* var_del_rcv */
 
-/* jetzt als Makro in var.h 
+/* jetzt als Makro in var.h */
+#if false
 GLOBAL VOID	add_rcv		(UWORD variable, RTMCLASSP module)
 {
 	/* Message Passing einklinken */
@@ -339,7 +341,8 @@ GLOBAL VOID	add_rcv		(UWORD variable, RTMCLASSP module)
 	
 	mem_free(msg);
 } /* add_rcv */
-*/
+#endif
+
 /*****************************************************************************/
 
 PRIVATE VOID	add_link		(RTMCLASSP module, UWORD variable, KEYTYPE key)
@@ -428,7 +431,7 @@ GLOBAL VOID	update_var		(RTMCLASSP module, UWORD variable, LONG value, BOOL rese
 				} /* if mod */
 				
 				/* PrÅfen, ob sich Wert verÑndert hat, z.B. durch minmaxsetup */
-#if TRUE
+#if true
 				if (var->value != value)
 					return;	/* Sofort beenden, weil rekursiv aufgerufen und schon geÑndert! */
 				else
@@ -581,7 +584,7 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 	send_variable(VAR_SET_VAR, module->actual->number);
 } /* send_messages */
 
-/*
+#if false
 PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 {
 	SYS_P			sysvar = module->status->sysvar;
@@ -642,7 +645,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			break;
 	} /* switch */
 } /* message */
-*/
+#endif
 
 /*****************************************************************************/
 /* Selektieren des Fensterinhalts                                            */
@@ -802,7 +805,7 @@ WORD   icon;
     window->timer     = wi_timer_mod;
     window->showinfo  = info_mod;
 
-    sprintf (window->name, (BYTE *)var_text [FVARN].ob_spec);
+      sprintf (window->name, "%s", (BYTE *)var_text [FVARN].ob_spec);
     sprintf (window->info, (BYTE *)var_text [FVARI].ob_spec, 0);
   } /* if */
 
@@ -1369,12 +1372,12 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alevarsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
-/*
+#endif
+#if false
 	var_menu  = (OBJECT *)rs_trindex [VAR_SETUP]; /* Adresse des VAR-MenÅs */
-*/
+#endif
 	var_setup = (OBJECT *)rs_trindex [VAR_SETUP]; /* Adresse der VAR-Parameter-Box */
 	var_help  = (OBJECT *)rs_trindex [VAR_HELP];	/* Adresse der VAR-Hilfe */
 	var_desk  = (OBJECT *)rs_trindex [VAR_DESK];	/* Adresse des VAR-Desktops */

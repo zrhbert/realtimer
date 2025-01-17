@@ -1,9 +1,9 @@
-/*****************************************************************************/
+/* ***************************************************************************/
 /*                                                                           */
 /* Modul: WINDOWS.H                                                          */
 /* Datum: 31/10/93                                                           */
 /*                                                                           */
-/*****************************************************************************/
+/* ***************************************************************************/
 
 /*****************************************************************************
 - WINDOWP: display_objects eingebaut
@@ -14,9 +14,9 @@
 #ifndef __WINDOWS__
 #define __WINDOWS__
 
-#include "lists.h"
+#include "LISTS.H"
 
-/****** DEFINES **************************************************************/
+/* DEFINES **************************************************************/
 
 #define MAX_GEMWIND 8                     /* Maximale Anzahl Fenster in GEM */
 
@@ -76,7 +76,7 @@
 #define LIST_DRAW   0x02                  /* Zeichne Listbox */
 #define LIST_CLICK  0x04                  /* Klick in Listbox */
 
-/****** TYPES ****************************************************************/
+/* TYPES ****************************************************************/
 
 typedef struct window *WINDOWP;           /* Zeiger fÅr Parameter */
 
@@ -157,12 +157,12 @@ typedef struct
   WORD    slider;               /* Objektnummer des Schiebers */
 } LISTBOX;
 
-/****** VARIABLES ************************************************************/
+/* ***** VARIABLES ************************************************************/
 
 GLOBAL WINDOWP sel_window;      /* Zeiger auf selektiertes Fenster */
 GLOBAL SET     sel_objs;        /* Menge selektierter Objekte */
 
-/****** FUNCTIONS ************************************************************/
+/* ***** FUNCTIONS ************************************************************/
 
 GLOBAL WINDOWP search_window  _((WORD class, WORD mode, WORD icon));
 GLOBAL WINDOWP find_window    _((WORD wh));

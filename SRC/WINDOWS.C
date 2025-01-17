@@ -142,7 +142,7 @@ WORD class, mode, icon;
   {
     window = windows [slot];
 
-    if ((class == NIL) || (class == window->class) || sub && (class == window->subclass))
+      if ((class == NIL) || (class == window->class) || (sub && (class == window->subclass)))
       if (((window->opened == 0) && (mode & SRCH_CLOSED)) ||
           ((window->opened > 0) && (mode & SRCH_OPENED)))
         if ((icon == NIL) || (icon == window->icon)) return (window);
@@ -1951,17 +1951,18 @@ MKINFO  *mk;
             if (mk->scan_code != UNDO)
             {
               cont = form_keybd (window->object, window->edit_obj, next, kr, &next, &kr);
-/*
+#if false
               	/* Close verhindern bei nicht exit-objekten */
 					if (is_flags (window->object, def, DEFAULT) && !is_flags (window->object, def, EXIT))
 						cont = TRUE;
-*/					
+#endif
               if ((OB_TYPE (window->object, window->edit_obj) == G_FTEXT) ||
                   (OB_TYPE (window->object, window->edit_obj) == G_FBOXTEXT))
                 p = ((TEDINFO *)window->object [window->edit_obj].ob_spec)->te_pvalid;
               else
                 p = NULL;
-/* Gef„hrlich!
+/* Gef„hrlich! */
+#if false
               if ((p != NULL) && (*p == '9') && ((mk->ascii_code == '+') || (mk->ascii_code == '-')))
               {
                 get_ptext (window->object, window->edit_obj, s);
@@ -1988,7 +1989,7 @@ MKINFO  *mk;
                   } /* if */
                 } /* if */
               } /* if */
-*/
+#endif
             } /* if */
             else
             {
@@ -2059,7 +2060,7 @@ MKINFO  *mk;
             } /* if */
 
             if (window->click != NULL) (*window->click) (window, mk);
-/*
+#if false
 				/* Liste der Display-Objekte durchgehen */
 				header = window->dispobjs;
 				element = list_next(header);
@@ -2068,7 +2069,7 @@ MKINFO  *mk;
 					/* if (dispobj->click) (*dispobj->click) (dispobj, mk); */
 					element = list_next(element);
 				} /* while */
-*/
+#endif
           } /* if */
         } /* if */
 

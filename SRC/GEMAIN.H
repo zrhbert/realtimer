@@ -22,7 +22,7 @@ GLOBAL WORD GEMAIN _((VOID));
 
 #else
 
-GLOBAL WORD main _((INT argc, BYTE *argv []));
+GLOBAL WORD main _((INT argc, char *argv []));
 
 #endif
 

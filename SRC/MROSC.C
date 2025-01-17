@@ -21,54 +21,54 @@
 
 /* MEM Functions */
 
-GLOBAL	int cdecl	open_mros(MEM_STRUCT *mem_struct)
+GLOBAL	int CDECL	open_mros(MEM_STRUCT *mem_struct)
 {
 	return MEM(0);
 }
 
-GLOBAL	int	cdecl		close_mros(int mros_hand)
+GLOBAL	int	CDECL		close_mros(int mros_hand)
 {
 	return MEM(1);
 }
 
-GLOBAL	long cdecl	snd_message(int appl_no,long opcode,long msg2,long msg3)
+GLOBAL	long CDECL	snd_message(int appl_no,long opcode,long msg2,long msg3)
 {
 	return MEM(2);
 }
 
-GLOBAL	long cdecl	appl_req(int appl_code,int appl_count)
+GLOBAL	long CDECL	appl_req(int appl_code,int appl_count)
 {
 	return MEM(3);
 }
 
-GLOBAL	long cdecl	get_vectab(void, ...)
+GLOBAL	long CDECL	get_vectab(void, ...)
 {
 	return MEM(4);
 }
 
-GLOBAL	long cdecl	terminal_req(void, ...)
+GLOBAL	long CDECL	terminal_req(void, ...)
 {
 	return MEM(5);
 }
 
-GLOBAL	long cdecl	swtch(void, ...)
+GLOBAL	long CDECL	swtch(void, ...)
 {
 	return MEM(6);
 }
 
 /* IOM Functions */
 
-GLOBAL	int cdecl		dev_req(int dev)
+GLOBAL	int CDECL		dev_req(int dev)
 {
 	return IOM(0);
 }
 
-GLOBAL	int cdecl		snd_msingl(int dev,int out,int data)
+GLOBAL	int CDECL		snd_msingl(int dev,int out,int data)
 {
 	return IOM(1);
 }
 
-GLOBAL	int cdecl		snd_mevent(int dev,int out,int data1,int data2,int data3)
+GLOBAL	int CDECL		snd_mevent(int dev,int out,int data1,int data2,int data3)
 {
 char	evnt[4];
 void	*stack;
@@ -85,87 +85,87 @@ long	Super(void *stack);
 	return 0;
 }
 
-GLOBAL	int cdecl		snd_mmult(int dev,int out,unsigned char *data,int lenght,int opt)
+GLOBAL	int CDECL		snd_mmult(int dev,int out,unsigned char *data,int lenght,int opt)
 {
 	return IOM(3);
 }
 
-GLOBAL	int cdecl		out_mreq(int dev,int out)
+GLOBAL	int CDECL		out_mreq(int dev,int out)
 {
 	return IOM(4);
 }
 
-GLOBAL	int cdecl		mget(int dev,int inp)
+GLOBAL	int CDECL		mget(int dev,int inp)
 {
 	return IOM(5);
 }
 
-GLOBAL	int cdecl		inp_mreq(int dev,int inp)
+GLOBAL	int CDECL		inp_mreq(int dev,int inp)
 {
 	return IOM(6);
 }
 
-GLOBAL	long cdecl	remdat(int dev,int io,int ioswitch)
+GLOBAL	long CDECL	remdat(int dev,int io,int ioswitch)
 {
 	return IOM(7);
 }
 
-GLOBAL	int cdecl		set_mbuf(int dev,int io,int ioswitch,void *buffer,int lenght)
+GLOBAL	int CDECL		set_mbuf(int dev,int io,int ioswitch,void *buffer,int lenght)
 {
 	return IOM(8);
 }
 
-GLOBAL	int cdecl		rst_mbuf(int dev,int io,int ioswitch)
+GLOBAL	int CDECL		rst_mbuf(int dev,int io,int ioswitch)
 {
 	return IOM(9);
 }
 
-GLOBAL	int cdecl		dev_reset(int dev)
+GLOBAL	int CDECL		dev_reset(int dev)
 {
 	return IOM(10);
 }
 
-GLOBAL	int cdecl		run_stat(int dev,int out,int flag)
+GLOBAL	int CDECL		run_stat(int dev,int out,int flag)
 {
 	return IOM(11);
 }
 
-GLOBAL	long cdecl	get_iorec(void, ...)
+GLOBAL	long CDECL	get_iorec(void, ...)
 {
 	return MEM(15);
 }
 
-GLOBAL	int cdecl		open_io(IO_STRUCT *io_struct,int mros_hand)
+GLOBAL	int CDECL		open_io(IO_STRUCT *io_struct,int mros_hand)
 {
 	return IOM(16);
 }
 
-GLOBAL	int cdecl		close_io(int io_hand)
+GLOBAL	int CDECL		close_io(int io_hand)
 {
 	return IOM(17);
 }
 
-GLOBAL	long cdecl	open_mout(void, ...)
+GLOBAL	long CDECL	open_mout(void, ...)
 {
 	return IOM(18);
 }
 
-GLOBAL	long cdecl	open_device(void, ...)
+GLOBAL	long CDECL	open_device(void, ...)
 {
 	return IOM(20);
 }
 
-GLOBAL	long cdecl	get_minmask(void, ...)
+GLOBAL	long CDECL	get_minmask(void, ...)
 {
 	return IOM(21);
 }
 
-GLOBAL	long cdecl	n_device(void, ...)	/* next_device */
+GLOBAL	long CDECL	n_device(void, ...)	/* next_device */
 {
 	return IOM(22);
 }
 
-GLOBAL	long cdecl	get_device(void, ...)
+GLOBAL	long CDECL	get_device(void, ...)
 {
 	return IOM(23);
 }
@@ -203,17 +203,17 @@ GLOBAL	int 	tm_cont(void)
 	return TM(2);
 }
 
-GLOBAL	void cdecl	tm_pos(long pos)
+GLOBAL	void CDECL	tm_pos(long pos)
 {
 	TM(3);
 }
 
-GLOBAL	int cdecl		tm_play(unsigned long lenght)
+GLOBAL	int CDECL		tm_play(unsigned long lenght)
 {
 	return TM(4);
 }
 
-GLOBAL	void cdecl	cycle_set(long cyc_start,long cyc_end)
+GLOBAL	void CDECL	cycle_set(long cyc_start,long cyc_end)
 {
 	TM(5);
 }
@@ -223,77 +223,77 @@ GLOBAL	void			cycle_start(void)
 	TM(6);
 }
 
-GLOBAL	void cdecl	cycle_onoff(int onoff)
+GLOBAL	void CDECL	cycle_onoff(int onoff)
 {
 	TM(7);
 }
 
-GLOBAL	int cdecl	count_in(unsigned long tempo,int bars,int time_signature)
+GLOBAL	int CDECL	count_in(unsigned long tempo,int bars,int time_signature)
 {
 	return TM(8);
 }
 
-GLOBAL	void cdecl	tm_forward(unsigned long lenght)
+GLOBAL	void CDECL	tm_forward(unsigned long lenght)
 {
 	TM(9);
 }
 
-GLOBAL	void cdecl	tm_rewind(unsigned long lenght)
+GLOBAL	void CDECL	tm_rewind(unsigned long lenght)
 {
 	TM(10);
 }
 
-GLOBAL	void cdecl	timstr(unsigned long pos,char *string)
+GLOBAL	void CDECL	timstr(unsigned long pos,char *string)
 {
 	TM(16);
 }
 
-GLOBAL	void cdecl	curtimstr(char *string)
+GLOBAL	void CDECL	curtimstr(char *string)
 {
 	TM(17);
 }
 
-GLOBAL	void cdecl	songstr(unsigned long pos,char *string)
+GLOBAL	void CDECL	songstr(unsigned long pos,char *string)
 {
 	TM(18);
 }
 
-GLOBAL	void cdecl	cursngstr(char *string)
+GLOBAL	void CDECL	cursngstr(char *string)
 {
 	TM(19);
 }
 
-GLOBAL	void cdecl	curtmpstr(char *string)
+GLOBAL	void CDECL	curtmpstr(char *string)
 {
 	TM(20);
 }
 
-GLOBAL	void cdecl	curtsgstr(char *string)
+GLOBAL	void CDECL	curtsgstr(char *string)
 {
 	TM(21);
 }
 
-GLOBAL	long cdecl	strtim(void, ...)
+GLOBAL	long CDECL	strtim(void, ...)
 {
 	return TM(22);
 }
 
-GLOBAL	int cdecl		set_frame(int frame)
+GLOBAL	int CDECL		set_frame(int frame)
 {
 	return TM(24);
 }
 
-GLOBAL	int cdecl		tm_sync(int psync,int ssync,int link,int pdev,int pinp,int sdev,int sinp)
+GLOBAL	int CDECL		tm_sync(int psync,int ssync,int link,int pdev,int pinp,int sdev,int sinp)
 {
 	return TM(25);
 }
 
-GLOBAL	void cdecl	set_tempo(unsigned long tempo)
+GLOBAL	void CDECL	set_tempo(unsigned long tempo)
 {
 	TM(26);
 }
 
-GLOBAL	int cdecl		set_master(void *mastertrack)
+GLOBAL	int CDECL		set_master(void *mastertrack)
 {
 	/*  /*evtl. Referenz von HP */
 	extern char stop_ignore;
@@ -303,42 +303,42 @@ GLOBAL	int cdecl		set_master(void *mastertrack)
 	return TM(27);
 }
 
-GLOBAL	int cdecl		mtc_onoff(int dev,int out,int onoff)
+GLOBAL	int CDECL		mtc_onoff(int dev,int out,int onoff)
 {
 	return TM(28);
 }
 
-GLOBAL	int cdecl		mcl_onoff(int dev,int out,int onoff)
+GLOBAL	int CDECL		mcl_onoff(int dev,int out,int onoff)
 {
 	return TM(29);
 }
 
-GLOBAL	int cdecl		mclick(long event1,long event2)
+GLOBAL	int CDECL		mclick(long event1,long event2)
 {
 	return TM(30);
 }
 
-GLOBAL	int cdecl		wrt_smpte(int dev,int onoff,unsigned long start_time)
+GLOBAL	int CDECL		wrt_smpte(int dev,int onoff,unsigned long start_time)
 {
 	return TM(31);
 }
 
-GLOBAL	int cdecl		open_tm(TM_STRUCT *tm_struct,int mros_hand)
+GLOBAL	int CDECL		open_tm(TM_STRUCT *tm_struct,int mros_hand)
 {
 	return TM(32);
 }
 
-GLOBAL	int cdecl		close_tm(int tm_hand)
+GLOBAL	int CDECL		close_tm(int tm_hand)
 {
 	return TM(33);
 }
 
-GLOBAL	int cdecl		store_loc(int locno,long pos)
+GLOBAL	int CDECL		store_loc(int locno,long pos)
 {
 	return TM(34);
 }
 
-GLOBAL	int cdecl		get_loc(int locno)
+GLOBAL	int CDECL		get_loc(int locno)
 {
 	return TM(35);
 }
@@ -358,14 +358,14 @@ GLOBAL	void				*get_tmvec(void)
 	return (void *)TM(42);
 }
 
-GLOBAL	void cdecl	set_smpoffs(unsigned long smpoffs)
+GLOBAL	void CDECL	set_smpoffs(unsigned long smpoffs)
 {
 	TM(43);
 }
 
 #define Tm_masterconv(a)         TM(49,a)
 
-GLOBAL	void cdecl	humpar(HUMANBLK *humstruct)
+GLOBAL	void CDECL	humpar(HUMANBLK *humstruct)
 {
 	TM(50);
 }

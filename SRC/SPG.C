@@ -331,8 +331,9 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					ok = fscanf(in, "%d", &single->drehung_z);
 					single++;	/* Auf Info fr n„chste Signal zeigen */
 				} /* for */
+#if false
 				/* ok = fscanf(in, "%s", s);	/* Leerzeile */ */
-				
+#endif
 				/* Setup speichern und n„chstes Setup anw„hlen */
 				if (! module->get_setnr(module, setnr))
 					ok = EOF;	/* Import beenden */
@@ -493,7 +494,7 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 
-    sprintf (window->name, (BYTE *)spg_text [FSPGN].ob_spec);
+      sprintf (window->name, "%s", (BYTE *)spg_text [FSPGN].ob_spec);
     sprintf (window->info, (BYTE *)spg_text [FSPGI].ob_spec, 0);
   } /* if */
 
@@ -694,9 +695,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   spg_setup = (OBJECT *)rs_trindex [SPG_SETUP]; /* Adresse der SPG-Parameter-Box */
   spg_help  = (OBJECT *)rs_trindex [SPG_HELP];	/* Adresse der SPG-Hilfe */
   spg_desk  = (OBJECT *)rs_trindex [SPG_DESK];	/* Adresse des SPG-Desktops */

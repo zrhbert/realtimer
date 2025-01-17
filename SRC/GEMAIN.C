@@ -57,7 +57,7 @@ GLOBAL WORD GEMAIN ()
 
 GLOBAL WORD main (argc, argv)
 INT  argc;
-BYTE *argv [];
+char *argv [];
 
 {
 

@@ -34,7 +34,8 @@ V 0.02
 *****************************************************************************/
 
 #ifndef XRSC_CREATE
-/* #define XRSC_CREATE TRUE                    /* X-Resource-File im Code */ */
+/* X-Resource-File im Code */
+/* #define XRSC_CREATE TRUE                     */
 #endif
 
 #include "import.h"
@@ -1286,7 +1287,7 @@ LOCAL VOID StartSO (DISPOBJP dispobj)
 	strcat (text, s);
 	strcat (text, "  ");
 	
-	sprintf (s, "%3d ", event->speed.z);
+	sprintf (s, "%3f ", event->speed.z);
 	strcat (text, s);
 
 	sprintf (s, "%2d ", event->input_ch[0]+1);
@@ -1975,8 +1976,8 @@ LOCAL  VOID Project3DNeu (DISPOBJP dispobj, POS_3DP point, POINT_2DP proj)
 			yz *= 3;
 		}
 	
-/*
-	if (xz > DMAXDOKOOR) 
+#if false
+	if (xz > DMAXDOKOOR)
 		xz = DMAXDOKOOR;
 	else if (xz < DMAXDOKOOR)
 		xz = -DMAXDOKOOR;
@@ -1988,10 +1989,10 @@ LOCAL  VOID Project3DNeu (DISPOBJP dispobj, POS_3DP point, POINT_2DP proj)
 		/* Umrechnen von xz und yz auf Objektgr”že */
 		*x = status->xoffset + xz * work->w * aspect_x / 20000L;
 		*y = status->xoffset + yz * work->h * aspect_y / 20000L;
-*/
+#endif
 		/* Umrechnen von xz und yz auf Objektgroesse */
-		*x = status->xoffset + status->xwin[xz+DMAXDOKOOR];
-		*y = status->yoffset + status->ywin[yz+DMAXDOKOOR];
+        *x = status->xoffset + status->xwin[(INT)xz+DMAXDOKOOR];
+		*y = status->yoffset + status->ywin[(INT)yz+DMAXDOKOOR];
 	}
 	/* Clipping */
 	if (*x > xmax) *x = xmax;

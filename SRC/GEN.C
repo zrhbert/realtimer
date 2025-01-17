@@ -456,7 +456,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					*sps_setup = 0;
 				} /* else if */
 				
-				ok = fscanf(in, "%d", &dummy);				/* 4 Signal-Setup */
+                ok = fscanf(in, "%ld", &dummy);				/* 4 Signal-Setup */
 				ok = fscanf(in, "%d", rel_mtr_lfo);			/* 5 Rel. MTR-LFO */
 				
 				/* Rest */
@@ -832,9 +832,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   gen_setup = (OBJECT *)rs_trindex [GEN_SETUP]; /* Adresse der GEN-Parameter-Box */
   gen_help  = (OBJECT *)rs_trindex [GEN_HELP];	/* Adresse der GEN-Hilfe */
   gen_desk  = (OBJECT *)rs_trindex [GEN_DESK];	/* Adresse des GEN-Desktops */

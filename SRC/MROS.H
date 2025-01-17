@@ -20,9 +20,9 @@
 /*                    Entry points                                */
 /*----------------------------------------------------------------*/
 
-extern long IOM(void,...);
-extern long TM(void,...);
-extern long MEM(void,...);
+extern long IOM(int,...);
+extern long TM(int,...);
+extern long MEM(int,...);
 
 /*------------------------------------------------------------------------*/
 

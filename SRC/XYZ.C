@@ -17,7 +17,7 @@
 #include "xrsrc.h"
 
 #include "realtim4.h"
-#include "xyz_mod.h"
+/* #include "xyz_mod.h" */
 #include "realtspc.h"
 #include "var.h"
 
@@ -33,8 +33,8 @@
 #include "xyz.h"
 
 #if XRSC_CREATE
-#include "xyz_mod.rsh"
-#include "xyz_mod.rh"
+/* #include "xyz_mod.rsh" */
+/* #include "xyz_mod.rh" */
 #endif
 /****** DEFINES **************************************************************/
 

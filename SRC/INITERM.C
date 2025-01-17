@@ -278,14 +278,14 @@ BYTE *argv [];
   ok &= init_dialog (alerts, alert, ALERT, (BYTE *)freetext [FDESKNAM].ob_spec);
   ok &= init_desktop ();                        /* Initialisiere desktop */
   ok &= init_disk ();                           /* Initialisiere disk */
-/*
+#if false
   ok &= init_trash ();                          /* Initialisiere trash */
   ok &= init_printer ();                        /* Initialisiere printer */
   ok &= init_clipbrd ();                        /* Initialisiere clipboard */
   ok &= init_image ();                          /* Initialisiere image */
   ok &= init_meta ();                           /* Initialisiere image */
   ok &= init_edit ();                           /* Initialisiere edit */
-*/
+#endif
   ok &= init_realtspc ();                     	/* Initialisiere RTM-Spezialfunktionen */
   ok &= init_dispobj ();	                    	/* Initialisiere Display-Objekte */
   ok &= init_modules ();                     	/* Initialisiere RTM-Module */
@@ -313,9 +313,9 @@ BYTE *argv [];
       busy_mouse ();                            /* Biene zeigen */
       if (menu_fits) menu_bar (menu, TRUE);     /* MenÅzeile darstellen */
       open_desktop (NIL);                       /* Desktop îffnen */
-		/*
+#if false
       open_clipbrd (ICLIPBRD);                  /* Klemmbrett îffnen */
-		*/
+#endif
       if (*tail)                                /* ParamterÅbergabe */
       {
         p          = tail;
@@ -367,10 +367,10 @@ BYTE *argv [];
       wind_update (END_UPDATE);                 /* Benuzter darf wieder agieren */
     } /* if, if */
 
-/*
-	if (ok) 
+#if false
+	if (ok)
 		ok = dlogin();		/* Login durchfÅhren */
-*/
+#endif
   return (ok);                                  /* Alles gut verlaufen */
 } /* init_initerm */
 
@@ -447,14 +447,14 @@ GLOBAL BOOLEAN term_initerm ()
     } /* if */
 
     if (menu_fits) menu_bar (menu, FALSE);      /* MenÅzeile freigeben */
-/*
+#if false
     ok &= term_edit ();                         /* Terminiere edit */
     ok &= term_meta ();                         /* Terminiere meta */
     ok &= term_image ();                        /* Terminiere image */
     ok &= term_clipbrd ();                      /* Terminiere clipboard */
     ok &= term_printer ();                      /* Terminiere printer */
     ok &= term_trash ();                        /* Terminiere trash */
-*/
+#endif
 
     ok &= term_modules ();                     	/* Terminiere RTM-Module */
 	 ok &= term_dispobj ();                    	/* Terminiere Display-Objekte */

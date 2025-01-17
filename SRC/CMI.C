@@ -132,7 +132,7 @@ PRIVATE VOID    get_dbox	(RTMCLASSP module)
 	ED_P		edited = module->edited;
 	SET_P		ed = edited->setup;
 	STAT_P	status = module->status;
-	UWORD		signal, in, aktsignal;
+	UWORD		signal, in, aktsignal = 0;
 	BOOLEAN	found = FALSE;
 	WORD		object;
 	
@@ -363,7 +363,8 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					ok = fscanf(in, "%d", &input[signal]);
 					if (ok) input[signal] -= 1;
 				} /* for */
-				/* ok = fscanf(in, "%s", s);	/* Leerzeile */ */
+                /* Leerzeile */
+				/* ok = fscanf(in, "%s", s);	 */
 			} /* while */
 			module->actual->modified = TRUE;
 			module->flags &= ~FLAG_IMPORTING;
@@ -583,7 +584,7 @@ WORD   icon;
     window->click     = wi_click;
     window->showinfo  = info_mod;
 	
-    sprintf (window->name, (BYTE *)cmi_text [FCMIN].ob_spec);
+      sprintf (window->name, "%s", (BYTE *)cmi_text [FCMIN].ob_spec);
     sprintf (window->info, (BYTE *)cmi_text [FCMII].ob_spec, 0);
     
   } /* if */
@@ -804,9 +805,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   cmi_setup = (OBJECT *)rs_trindex [CMI_SETUP]; /* Adresse der CMI-Parameter-Box */
   cmi_help  = (OBJECT *)rs_trindex [CMI_HELP];	/* Adresse der CMI-Hilfe */
   cmi_desk  = (OBJECT *)rs_trindex [CMI_DESK];	/* Adresse des CMI-Desktops */

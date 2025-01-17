@@ -308,7 +308,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 {
 	WORD				signal = 0, pos_x, pos_y, x, y, z;
-	LONG 				temp_x, temp_y;	/* Hilfsvariable um šberlauf zu vermeiden */
+	LONG 				temp_x = 0L, temp_y=0L;	/* Hilfsvariable um šberlauf zu vermeiden */
 	SET_P				set = module->actual->setup;
 	SINGLE			*set_s;
 	STAT_P 			status = module->status;
@@ -605,7 +605,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					single++;	/* Auf Info fr n„chste Signal zeigen */
 				} /* for */
 				ok = fscanf(in, "%d", &(akt->form));	/* Kreis/Kante */
-				/* ok = fscanf(in, "%s", s);	/* Leerzeile */ */
+
 				/* Setup speichern und n„chstes Setup anw„hlen */
 				if (! module->get_setnr(module, setnr))
 					ok = EOF;	/* Import beenden */
@@ -793,7 +793,7 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 
-    sprintf (window->name, (BYTE *)mtr_text [FMTRN].ob_spec);
+      sprintf (window->name, "%s", (BYTE *)mtr_text [FMTRN].ob_spec);
     sprintf (window->info, (BYTE *)mtr_text [FMTRI].ob_spec, 0);
   } /* if */
 
@@ -992,7 +992,8 @@ PRIVATE	RTMCLASSP create ()
 			add_rcv(VAR_MTR_ACC0 + signal, module);	/* Message einklinken */
 			add_rcv(VAR_MTR_ON0 + signal, module);	/* Message einklinken */
 			add_rcv(VAR_LFA_MTR_POS0 + signal, module);	/* Message einklinken */
-			/* add_rcv(VAR_LFB_MTR_POS0 + signal, module);	/* Message einklinken */ */
+            /* Message einklinken */
+			/* add_rcv(VAR_LFB_MTR_POS0 + signal, module);	 */
 		} /* for */
 	} /* if */
 
@@ -1017,9 +1018,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   mtr_setup = (OBJECT *)rs_trindex [MTR_SETUP]; /* Adresse der MTR-Parameter-Box */
   mtr_ebene = (OBJECT *)rs_trindex [MTR_EBENE];	/* Adresse der MTR-Ebenen */
   mtr_help  = (OBJECT *)rs_trindex [MTR_HELP];	/* Adresse der MTR-Hilfe */

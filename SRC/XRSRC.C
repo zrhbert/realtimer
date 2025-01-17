@@ -70,6 +70,9 @@ LOCAL VOID fix_nptr      _((LONG index, WORD ob_type));
 LOCAL WORD fix_ptr       _((WORD type, LONG index));
 LOCAL WORD fix_long      _((LONG *lptr));
 LOCAL VOID fix_chp       _((WORD *pcoord, WORD flag));
+LOCAL WORD fix_long      _((LONG *lptr));
+GLOBAL WORD rs_gaddr (WORD *base, WORD re_gtype, WORD re_gindex, OBJECT **re_gaddr);
+GLOBAL WORD rs_sadd (WORD *base, WORD rs_stype, WORD rs_sindex, OBJECT *re_saddr);
 
 /*****************************************************************************/
 
@@ -424,7 +427,7 @@ LOCAL VOID fix_tedinfo()
 
 	while (count >= 0)
 	{
-		tedinfo = get_address (R_TEDINFO, count);
+		tedinfo = (TEDINFO *)get_address (R_TEDINFO, count);
 
 		if (fix_ptr (R_TEPTEXT, count))
 			tedinfo->te_txtlen = strlen (tedinfo->te_ptext) + 1;
@@ -445,14 +448,14 @@ LOCAL VOID fix_tedinfo()
 LOCAL VOID fix_nptr (LONG index, WORD ob_type)
 {
 	while (index >= 0)
-		fix_long (get_address(ob_type, index--));
+		fix_long ((LONG*) get_address(ob_type, index--));
 }
 
 /*****************************************************************************/
 
 LOCAL WORD fix_ptr (WORD type, LONG index)
 {
-	return (fix_long (get_address (type, index)));
+	return (fix_long ((LONG*) get_address (type, index)));
 }
 
 /*****************************************************************************/

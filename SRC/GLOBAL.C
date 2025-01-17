@@ -1,37 +1,26 @@
 /*****************************************************************************/
 /*                                                                           */
 /* Modul: GLOBAL.C                                                           */
-/* Datum: 13.11.2024                                                           */
 /*                                                                           */
 /*****************************************************************************/
 
-/*****************************************************************************
-27.11.2024
-- dialog.h included for hndl_alert usage
-13.11.2024
-- logging for "big memory chunk removed"
-09.01.95
-- DEFAULTRATE auf 0 geÑndert, 09.01.95
-- Mxalloc in mem_alloc fÅr TOS030 eingebaut, 19.12.94
-05.11.94
-- Backslash lîschen bei scrap_read rausgenommen
-16.11.93
-- app_path wird nun immer von act_path uebernommen
-03.06.93
-- is_menu_key                                                      
-- form_alert Aufruf in note() mit (BYTE*)                                   
-*****************************************************************************/
+#define GLOBALVERSION "V 2.00"
+#define GLOBALDATE __DATE____TIME__
+
 
 #include <ctype.h>
 
 #include "import.h"
+/*
+#include "dialog.h"
+#include "windows.h"
+*/
 
 #if UNIX
 #if PCC
 #include <malloc.h>
 #endif
 #endif
-/* #include "dialog.h" */
 
 #include "export.h"
 #include "errors.h"
@@ -43,14 +32,16 @@
 #define MAX_COLORS  16                  /* GEM Standard-Farben */
 #define DEFAULTRATE 0                   /* Default Blinkrate */
 
-#define CTRL_CHAR   '^'                 /* MenÅ-Control-Buchstabe */
-#define ALT_CHAR    0x07                /* MenÅ-Alternate-Buchstabe */
-#define SHIFT_CHAR  0x01                /* MenÅ-Shifttaste */
-#define FUNC_CHAR   'F'                 /* MenÅ-Funktionstaste */
+#define CTRL_CHAR   '^'                 /* MenÔøΩ-Control-Buchstabe */
+#define ALT_CHAR    0x07                /* MenÔøΩ-Alternate-Buchstabe */
+#define SHIFT_CHAR  0x01                /* MenÔøΩ-Shifttaste */
+#define FUNC_CHAR   'F'                 /* MenÔøΩ-Funktionstaste */
 
 #define FMD_FORWARD  0
 #define FMD_BACKWARD 1
 #define FMD_DEFLT    2
+
+#define MALLOC_DEBUG 1            /* Speicher-Debugging: mem_alloc erzwingt mem_set */
 
 /****** TYPES ****************************************************************/
 
@@ -186,7 +177,7 @@ LOCAL UWORD func_keys [] =
 
 #endif
 
-LOCAL  WORD tos = 0;	/* EnthÑlt TOS-Version nach init_global */
+LOCAL  WORD tos = 0;	/* EnthÔøΩlt TOS-Version nach init_global */
 /****** FUNCTIONS ************************************************************/
 
 LOCAL VOID vdi_fix   _((MFDB *pfd, VOID *theaddr, WORD wb, WORD h));
@@ -208,7 +199,7 @@ LOCAL LONG *get_actpd _((VOID));
 #endif /* GEMDOS */
 
 /*****************************************************************************/
-/* ôffne virtuelle Workstation                                               */
+/* ÔøΩffne virtuelle Workstation                                               */
 /*****************************************************************************/
 
 GLOBAL VOID open_vwork ()
@@ -221,7 +212,7 @@ GLOBAL VOID open_vwork ()
   for (i = 0; i < 10; work_in [i++] = 1);
   work_in [10] = RC;                           /* Raster Koordinaten */
   vdi_handle = phys_handle;
-  v_opnvwk (work_in, &vdi_handle, work_out);   /* ôffne virtuelle Workstation */
+  v_opnvwk (work_in, &vdi_handle, work_out);   /* ÔøΩffne virtuelle Workstation */
   colors = work_out [13];                      /* Anzahl der Farben */
 
   if (vdi_handle == 0) vdi_handle = phys_handle;
@@ -230,14 +221,14 @@ GLOBAL VOID open_vwork ()
   vst_point (vdi_handle, gl_point, &i, &i, &i, &i);
 #endif
 
-  vqt_attributes (vdi_handle, work_out);       /* Globale Zeichensatzgrîûen */
+  vqt_attributes (vdi_handle, work_out);       /* Globale ZeichensatzgrÔøΩÔøΩen */
 
   gl_wchar = work_out [6];                     /* Werte von Zeichen holen */
   gl_hchar = work_out [7];
 } /* open_vwork */
 
 /*****************************************************************************/
-/* Schlieûe virtuelle Workstation                                            */
+/* SchlieÔøΩe virtuelle Workstation                                            */
 /*****************************************************************************/
 
 GLOBAL VOID close_vwork ()
@@ -251,7 +242,7 @@ GLOBAL VOID close_vwork ()
 } /* close_vwork */
 
 /*****************************************************************************/
-/* ôffne Workstation                                                         */
+/* ÔøΩffne Workstation                                                         */
 /*****************************************************************************/
 
 GLOBAL WORD open_work (device, dev_info)
@@ -274,12 +265,12 @@ DEVINFO *dev_info;
   if (device == SCREEN)
   {
     handle = phys_handle;
-    v_opnvwk (work_in, &handle, work_out); /* Virtuell îffnen */
+    v_opnvwk (work_in, &handle, work_out); /* Virtuell ÔøΩffnen */
   } /* if */
   else                                     /* Nicht Bildschirm */
   {
     work_in [11] = OW_NOCHANGE;            /* Paralleler oder serieller port */
-    v_opnwk (work_in, &handle, work_out);  /* Physikalisch îffnen */
+    v_opnwk (work_in, &handle, work_out);  /* Physikalisch ÔøΩffnen */
   } /* else */
 
   dev_info->dev_w = work_out [0] + 1L;
@@ -291,7 +282,7 @@ DEVINFO *dev_info;
 } /* open_work */
 
 /*****************************************************************************/
-/* Schlieûe Workstation                                                      */
+/* SchlieÔøΩe Workstation                                                      */
 /*****************************************************************************/
 
 GLOBAL VOID close_work (device, out_handle)
@@ -401,7 +392,7 @@ WORD   obj;
 UWORD  state;
 
 {
-  tree [obj].ob_state &= ~ state;       /* Status im Objekt lîschen */
+  tree [obj].ob_state &= ~ state;       /* Status im Objekt lÔøΩschen */
 } /* undo_state */
 
 /*****************************************************************************/
@@ -461,7 +452,7 @@ WORD   obj;
 UWORD  flags;
 
 {
-  tree [obj].ob_flags &= ~ flags;       /* Flags im Objekt lîschen */
+  tree [obj].ob_flags &= ~ flags;       /* Flags im Objekt lÔøΩschen */
 } /* undo_flags */
 
 /*****************************************************************************/
@@ -666,13 +657,13 @@ BOOLEAN calc_border;
       rect->h -= 2 * border;
     } /* if */
 
-    if (is_state (tree, obj, SHADOWED))         /* Schatten berÅcksichtigen */
+    if (is_state (tree, obj, SHADOWED))         /* Schatten berÔøΩcksichtigen */
     {
       rect->w += 2 * abs (border);
       rect->h += 2 * abs (border);
     } /* if */
 
-    if (is_state (tree, obj, OUTLINED))         /* Outlined berÅcksichtigen */
+    if (is_state (tree, obj, OUTLINED))         /* Outlined berÔøΩcksichtigen */
     {
       if (border >= 0)
         diff = 3;
@@ -764,7 +755,7 @@ WORD   obj;
 } /* trans_gimage */
 
 /*****************************************************************************/
-/* Default-Attribute fÅr Linie setzen                                        */
+/* Default-Attribute fÔøΩr Linie setzen                                        */
 /*****************************************************************************/
 
 GLOBAL VOID line_default (vdi_handle)
@@ -779,7 +770,7 @@ WORD vdi_handle;
 } /* line_default */
 
 /*****************************************************************************/
-/* Default-Attribute fÅr Text setzen                                         */
+/* Default-Attribute fÔøΩr Text setzen                                         */
 /*****************************************************************************/
 
 GLOBAL VOID text_default (vdi_handle)
@@ -1002,7 +993,7 @@ BOOLEAN *ok;
   hide_mouse ();
 
   *ok = closedial (tree, grow_shrink, size, screenp, bufferp);
-  undo_state (tree, exit_obj, SELECTED);                /* Objekt wieder weiû machen */
+  undo_state (tree, exit_obj, SELECTED);                /* Objekt wieder weiÔøΩ machen */
 
   return (exit_obj);           /* Objekt, mit dem Dialogbox verlassen wurde */
 } /* hndl_dial */
@@ -1182,7 +1173,7 @@ WORD   obj, blinkrate;
 {
   REG WORD i;
 
-  if ((tree != NULL) && (obj != NIL))           /* Blinken mîglich */
+  if ((tree != NULL) && (obj != NIL))           /* Blinken mÔøΩglich */
     for (i = 0; i < 2 * blinkrate; i++)
     {
       objc_change (tree, obj, 0, desk.x, desk.y, desk.w, desk.h, tree [obj].ob_state ^ SELECTED, TRUE);
@@ -1223,7 +1214,7 @@ WORD    bmsk;
   xdiff = (relative ? mox : 0) - box.x;
   ydiff = (relative ? moy : 0) - box.y;
 
-  if (center_obj != NIL)                        /* Zentrum von Objekt berÅcksichtigen */
+  if (center_obj != NIL)                        /* Zentrum von Objekt berÔøΩcksichtigen */
   {
     objc_rect (tree, center_obj, &r, FALSE);
 
@@ -1242,20 +1233,20 @@ WORD    bmsk;
   objp->ob_x += xdiff + x;                      /* X/Y neu setzen */
   objp->ob_y += ydiff + y;
 
-  objc_rect (tree, obj, &box, FALSE);           /* RÑnder berÅcksichtigen */
+  objc_rect (tree, obj, &box, FALSE);           /* RÔøΩnder berÔøΩcksichtigen */
 
-  xdiff = box.x + box.w - (desk.x + desk.w);    /* Rechts heraushÑngend ? */
+  xdiff = box.x + box.w - (desk.x + desk.w);    /* Rechts heraushÔøΩngend ? */
   if (xdiff > 0) objp->ob_x -= xdiff;
 
-  ydiff = box.y + box.h - (desk.y + desk.h);    /* Unten heraushÑngend ? */
+  ydiff = box.y + box.h - (desk.y + desk.h);    /* Unten heraushÔøΩngend ? */
   if (ydiff > 0) objp->ob_y -= ydiff;
 
-  objc_rect (tree, obj, &box, FALSE);           /* RÑnder berÅcksichtigen */
+  objc_rect (tree, obj, &box, FALSE);           /* RÔøΩnder berÔøΩcksichtigen */
 
-  xdiff = box.x - desk.x;                       /* Links heraushÑngend ? */
+  xdiff = box.x - desk.x;                       /* Links heraushÔøΩngend ? */
   if (xdiff < 0) objp->ob_x -= xdiff;
 
-  ydiff = box.y - desk.y;                       /* Oben heraushÑngend ? */
+  ydiff = box.y - desk.y;                       /* Oben heraushÔøΩngend ? */
   if (ydiff < 0) objp->ob_y -= ydiff;
 
   if (relative)
@@ -1265,7 +1256,7 @@ WORD    bmsk;
   } /* if */
 
   olditem   = NIL;
-  founditem = item = objc_find (tree, obj, MAX_DEPTH, mox, moy); /* In MenÅ ? */
+  founditem = item = objc_find (tree, obj, MAX_DEPTH, mox, moy); /* In MenÔøΩ ? */
 
   if (item != NIL)
     if (is_state (tree, item, DISABLED) || ! is_flags (tree, item, SELECTABLE)) item = NIL;
@@ -1276,16 +1267,16 @@ WORD    bmsk;
   objc_draw (tree, obj, MAX_DEPTH, desk.x, desk.y, desk.w, desk.h);
 
   set_mouse (ARROW, NULL);
-  wind_update (BEG_MCTRL);                      /* Mauskontrolle Åbernehmen */
+  wind_update (BEG_MCTRL);                      /* Mauskontrolle ÔøΩbernehmen */
 
   do
   {
-    if (founditem != NIL)                       /* In MenÅeintrag */
+    if (founditem != NIL)                       /* In MenÔøΩeintrag */
     {
       leave = TRUE;
       objc_rect (tree, founditem, &r, FALSE);
     } /* if */
-    else                                        /* Auûerhalb Pop-Up-MenÅ */
+    else                                        /* AuÔøΩerhalb Pop-Up-MenÔøΩ */
     {
       leave = FALSE;
       objc_rect (tree, obj, &r, FALSE);
@@ -1299,7 +1290,7 @@ WORD    bmsk;
                         &mox, &moy, &ret, &ret, &uret, &ret);
 
 	if (objc_find (tree, obj, MAX_DEPTH, mox, moy))
-	{ /* geÑndert: Nix tun, wenn Maus auf Hintergrundobjekt zeigt */
+	{ /* geÔøΩndert: Nix tun, wenn Maus auf Hintergrundobjekt zeigt */
 	    olditem   = item;
 		 founditem = item = objc_find (tree, obj, MAX_DEPTH, mox, moy);
 		
@@ -1365,9 +1356,9 @@ WORD   *title, *item;
       {
         if (((menu [litem].ob_type & 0xFF) == G_STRING) && ! is_state (menu, litem, DISABLED))
         {
-          s = (BYTE *)menu [litem].ob_spec;             /* MenÅ */
+          s = (BYTE *)menu [litem].ob_spec;             /* MenÔøΩ */
 
-          /* énderung: rechts angehÑngte Leerzeichen ignorieren. BD */
+          /* ÔøΩnderung: rechts angehÔøΩngte Leerzeichen ignorieren. BD */
           for (x = strlen (s)-1; (x >= 0) && (s [x] == SP); x--);
 			 
 			 /*if(x>0) x--;*/
@@ -1423,11 +1414,11 @@ WORD   *title, *item;
           } /* if */
         } /* if */
 
-        litem = menu [litem].ob_next;                   /* NÑchster Eintrag */
+        litem = menu [litem].ob_next;                   /* NÔøΩchster Eintrag */
       } while (litem != menubox);
 
-      menubox = menu [menubox].ob_next;                 /* NÑchstes Drop-Down-MenÅ */
-      ltitle  = menu [ltitle].ob_next;                  /* NÑchster Titel */
+      menubox = menu [menubox].ob_next;                 /* NÔøΩchstes Drop-Down-MenÔøΩ */
+      ltitle  = menu [ltitle].ob_next;                  /* NÔøΩchster Titel */
     } while (ltitle != THEACTIVE);
   } /* if */
 
@@ -1698,7 +1689,7 @@ CONST RECT *size;
   if (size == NULL)
     rc_copy (&desk, &r);                /* Nichts definiert, nimm Desktop */
   else
-    rc_copy (size, &r);                 /* Benutze definierte Grîûe */
+    rc_copy (size, &r);                 /* Benutze definierte GrÔøΩÔøΩe */
 
   rc_copy (&r, &clip);                  /* Rette aktuelle Werte */
 
@@ -1897,8 +1888,12 @@ LONG mem;
     if (ret == NULL) {
    	hndl_alert (ERR_NOMEMORY);
     }
-	
-	
+    else {
+#if MALLOC_DEBUG == 1
+        /* fprintf (stdout, "Allocated %ld bytes at %p\n", mem, ret); */
+        mem_set (ret, 0x0, mem);
+#endif
+    }
     return (ret);
 } /* mem_alloc */
 
@@ -2452,17 +2447,17 @@ BYTE *name, *path, *suffix, *label, *filename;
   Super ((VOID *)stack);
 #endif
 
-  if ((path != NULL) && (*path))        /* Pfad Ñndern */
+  if ((path != NULL) && (*path))        /* Pfad ÔøΩndern */
     strcpy (fs_path, path);
 
-  if (suffix != NULL)                   /* Suffix Ñndern */
+  if (suffix != NULL)                   /* Suffix ÔøΩndern */
   {
     p = strrchr (fs_path, PATHSEP);
-    if (p != NULL) p [1] = EOS;         /* Suffix lîschen */
+    if (p != NULL) p [1] = EOS;         /* Suffix lÔøΩschen */
     strcat (fs_path, suffix);
   } /* if */
 
-  if (name != NULL)                     /* Name Ñndern */
+  if (name != NULL)                     /* Name ÔøΩndern */
   {
     strncpy (fs_sel, name, 12);         /* Default-Name */
     fs_sel [12] = EOS;
@@ -2485,24 +2480,24 @@ BYTE *name, *path, *suffix, *label, *filename;
   p = strrchr (s, PATHSEP);
   if (p != NULL) p [1] = EOS;
 
-  if (*fs_sel)                          /* Dateinamen gewÑhlt */
+  if (*fs_sel)                          /* Dateinamen gewÔøΩhlt */
   {
     strcpy (filename, s);
     strcat (filename, fs_sel);
   } /* if */
   else
-    filename [0] = EOS;                 /* Keinen Dateinamen gewÑhlt */
+    filename [0] = EOS;                 /* Keinen Dateinamen gewÔøΩhlt */
 
   if (fs_button != 0)
   {
-    if ((path != NULL) && (*path))      /* Pfad Ñndern */
+    if ((path != NULL) && (*path))      /* Pfad ÔøΩndern */
       strcpy (path, fs_path);
 
-    if ((name != NULL) && (*name) && (*fs_sel)) /* Name Ñndern */
+    if ((name != NULL) && (*name) && (*fs_sel)) /* Name ÔøΩndern */
       strcpy (name, fs_sel);
   } /* if */
 
-  return (*fs_sel && (fs_button != 0)); /* Dateiname und OK gewÑhlt */
+  return (*fs_sel && (fs_button != 0)); /* Dateiname und OK gewÔøΩhlt */
 } /* select_file */
 
 /*****************************************************************************/
@@ -2547,14 +2542,14 @@ WORD class;
   phys_handle = graf_handle (&gl_wbox, &gl_hbox, &gl_wattr, &gl_hattr); /* Handle des Bildschirms */
   vdi_handle  = phys_handle;              /* Benutze physikalischen Bildschirm */
 
-  open_vwork ();                          /* Workstation îffnen */
+  open_vwork ();                          /* Workstation ÔøΩffnen */
 
   vst_font (vdi_handle, FONT_SYSTEM);
 
   for (gl_point = 8; gl_point <= 10; gl_point++)
   {
     vst_point (vdi_handle, i, &char_width, &char_height, &cell_width, &cell_height);
-    if (cell_height == gl_hbox) break;    /* Punktgrîûe des System Fonts */
+    if (cell_height == gl_hbox) break;    /* PunktgrÔøΩÔøΩe des System Fonts */
   } /* for */
 
 #if GEM & (GEM2 | GEM3 | XGEM)            /* wegen TT */
@@ -2571,21 +2566,21 @@ WORD class;
     } /* for, if */
 #endif
 
-  wind_get (DESK, WF_WXYWH, &desk.x, &desk.y, &desk.w, &desk.h);        /* Grîûe des Desktop */
+  wind_get (DESK, WF_WXYWH, &desk.x, &desk.y, &desk.w, &desk.h);        /* GrÔøΩÔøΩe des Desktop */
 
   hidden        = 0;                      /* Maus ist da */
-  busy          = 0;                      /* Maus ist nicht geschÑftig */
+  busy          = 0;                      /* Maus ist nicht geschÔøΩftig */
   mousenumber   = ARROW;                  /* Aktuelle Mausform-Nummer */
   mouseform     = NULL;                   /* Aktuelle Mausform */
-  done          = FALSE;                  /* "Ende" wurde nicht gewÑhlt */
+  done          = FALSE;                  /* "Ende" wurde nicht gewÔøΩhlt */
   ring_bell     = TRUE;                   /* Glocke eingeschaltet */
   grow_shrink   = TRUE;                   /* Grow/Shrink-Modus eingeschaltet */
   blinkrate     = DEFAULTRATE;            /* Anfangsblinkrate */
-  updtmenu      = TRUE;                   /* MenÅs immer auf neuen Stand bringen */
+  updtmenu      = TRUE;                   /* MenÔøΩs immer auf neuen Stand bringen */
   cmd [0]       = EOS;                    /* Kein Kommando */
   tail [0]      = EOS;                    /* Keine Kommandozeile */
   called_by [0] = EOS;                    /* Eventuell kein aufrufendes Programm */
-  menu          = NULL;                   /* Noch keine MenÅzeile */
+  menu          = NULL;                   /* Noch keine MenÔøΩzeile */
   about         = NULL;                   /* Noch keine About-Box */
   desktop       = NULL;                   /* Noch kein eigener Desktop */
   freetext      = NULL;                   /* Noch keine freien Texte */
@@ -2593,11 +2588,11 @@ WORD class;
 
   act_drv = Dgetdrv ();                   /* Aktuelles Laufwerk holen */
   strcpy (act_path, "A:");
-  act_path [0] += (BYTE)act_drv;          /* Aktuelles Laufwerk hinzufÅgen */
+  act_path [0] += (BYTE)act_drv;          /* Aktuelles Laufwerk hinzufÔøΩgen */
   get_path (act_path + 2, 0);             /* Aktuellen Pfad holen */
 
 #if FLEXOS
-  str_upper (act_path);                   /* Aktueller Pfad nicht immer groû */
+  str_upper (act_path);                   /* Aktueller Pfad nicht immer groÔøΩ */
 #endif
 
   strcpy (fs_path, "A:\\*.*");            /* Standard-Zugriffspfad */
@@ -2606,19 +2601,19 @@ WORD class;
 
   for (i = 1; i < argc; i++)              /* Programm mit Pexec aufgerufen */
   {
-    strcat (tail, argv [i]);              /* FÅge Parameter zusammen */
+    strcat (tail, argv [i]);              /* FÔøΩge Parameter zusammen */
     strcat (tail, " ");
   } /* for */
 
-  if (*tail) tail [strlen (tail) - 1] = EOS; /* Letztes Leerzeichen lîschen */
+  if (*tail) tail [strlen (tail) - 1] = EOS; /* Letztes Leerzeichen lÔøΩschen */
 
   shel_read (cmd, s);                     /* Kommando holen */
 
-  s [s [0] + 1] = EOS;                    /* Lîsche '\r' */
+  s [s [0] + 1] = EOS;                    /* LÔøΩsche '\r' */
 
   if (*tail == EOS) strcpy (tail, s + 1); /* Programm mit shel_write aufgerufen */
 
-  str_upper (tail);                       /* Parameter immer in Groûschrift */
+  str_upper (tail);                       /* Parameter immer in GroÔøΩschrift */
 
   p = strrchr (tail, PROGSEP);
 
@@ -2656,7 +2651,7 @@ WORD class;
 
   if (deskacc)
   {
-    menu_id    = (acc_menu == NULL) ? FAILURE : menu_register (gl_apid, acc_menu); /* Accesory-MenÅ */
+    menu_id    = (acc_menu == NULL) ? FAILURE : menu_register (gl_apid, acc_menu); /* Accesory-MenÔøΩ */
     class_desk = DESKWINDOW;                    /* Desktop im Fenster */
 
     if (menu_id < 0)
@@ -2664,7 +2659,7 @@ WORD class;
   } /* if */
   else
   {
-    menu_id    = FAILURE;                       /* Kein Accesoory-MenÅ */
+    menu_id    = FAILURE;                       /* Kein Accesoory-MenÔøΩ */
     class_desk = class;                         /* Desktop-Klasse */
   } /* else */
 
@@ -2709,9 +2704,6 @@ WORD class;
 
   strcpy (s, scrapdir);
 
-/* FÅhrt zu Problemen bei TOS 030, BD
-  s [strlen (s) - 1] = EOS;                     /* Backslash lîschen */
-*/
 
   if (! path_exist (scrapdir))
   {
@@ -2723,7 +2715,7 @@ WORD class;
     if (! ok)
     {
       *scrapdir = EOS;
-      scrp_write (scrapdir);                    /* Kein Scrap-Directory mîglich */
+      scrp_write (scrapdir);                    /* Kein Scrap-Directory mÔøΩglich */
     } /* if */
   } /* if */
 
@@ -2739,7 +2731,7 @@ GLOBAL BOOLEAN term_global ()
 {
   if (gl_apid >= 0)
   {
-    close_vwork ();                     /* Workstation schlieûen */
+    close_vwork ();                     /* Workstation schlieÔøΩen */
     appl_exit ();                       /* Applikation beenden */
   } /* if */
 

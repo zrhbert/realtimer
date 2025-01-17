@@ -97,9 +97,11 @@ enum koor_states
 #define KOEFF		50
 
 /* Grafik */
+#if false
 #define Sinq(x) sinus[x%360]
 #define Cosq(x) sinus[(x+270)%360]
-#define Sqrt(x) sqrt_array[(x)>>1]	
+#endif
+#define Sqrt(x) sqrt_array[(x)>>1]
 
 #define MUSTER1 0x5555 /*&X0101010101010101*/
 #define MUSTER2 0xAAAA /*&X1010101010101010*/
@@ -234,14 +236,14 @@ PRIVATE VOID ComputeWorkDO (WINDOWP window, WORD obj_num, RECT *work);
 PRIVATE VOID create_displayobs (WINDOWP window);
 
 /* MidiShare Funktionen */
-PUBLIC VOID	cdecl	receive_evts_cmo	(SHORT refNum);
-PUBLIC VOID cdecl receive_alarm_cmo (SHORT refNum, LONG code);
+PUBLIC VOID	CDECL	receive_evts_cmo	(SHORT refNum);
+PUBLIC VOID CDECL receive_alarm_cmo (SHORT refNum, LONG code);
 PRIVATE VOID		InstallFilter				_((SHORT refNum));
 PRIVATE WORD		init_midishare 			_((VOID));
 
 /*****************************************************************************/
 
-PUBLIC VOID cdecl receive_evts_cmo (SHORT refNum)
+PUBLIC VOID CDECL receive_evts_cmo (SHORT refNum)
 {
 	MidiEvPtr	event;
 	LONG 			n;
@@ -303,7 +305,7 @@ PUBLIC VOID cdecl receive_evts_cmo (SHORT refNum)
 	} /* for */
 } /* receive_evts_cmo */
 
-PUBLIC VOID cdecl receive_alarm_cmo (SHORT refNum, LONG code)
+PUBLIC VOID CDECL receive_alarm_cmo (SHORT refNum, LONG code)
 {
 	RTMCLASSP	module = modulep[refNum];
 	STAT_P		status = module->status;
@@ -806,7 +808,7 @@ PRIVATE VOID dsetup (WINDOWP refwindow)
 
 PRIVATE RTMCLASSP define_setup (WINDOWP window, RTMCLASSP refmodule)
 {
-	RTMCLASSP module;
+	RTMCLASSP module = NULL;
 
 	if (window != NULL)
 	{
@@ -1078,7 +1080,7 @@ WINDOWP window;
 	RTMCLASSP	module = Module(window);
 	STAT_P	status = Status(window);
 	SET_P		akt = Akt(window);
-	DISPOBJP	dispobj;
+	DISPOBJP	dispobj = NULL;
 	LIST_P	header, element;
 	BOOLEAN	new = status->new || (window->flags & WI_JUNK);
 	BOOLEAN	newkoor = FALSE;
@@ -1477,7 +1479,7 @@ WORD icon;
 	/* Wenn nicht gefunden */
 	if (window == NULL)
 	{
-		if (create()>0);	/* Neue Instanz */
+		if (create()>0)	/* Neue Instanz */
 			window = search_window (CLASS_CMO, SRCH_CLOSED, icon);
 	} /* if */
 	
@@ -1735,9 +1737,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   cmo_menu  = (OBJECT *)rs_trindex [CMO_MENU];  /* Adresse der CMO-MenÅzeile */
   cmo_setup = (OBJECT *)rs_trindex [CMO_SETUP]; /* Adresse der CMO-Parameter-Box */
   cmo_shelp = (OBJECT *)rs_trindex [CMO_SHELP];	/* Adresse der CMO-Parameter-Hilfe */

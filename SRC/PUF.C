@@ -124,7 +124,6 @@ enum DTaskTypes {PUFDTaskReset, PUFDTaskPrecalc};	/* Delayed Task Typen */
 #define INTERN_TO_MIDI(koor) 64 + koor
 
 #define NO_REFNUM		-1
-#define OUTPUT_MODULE FALSE					/* Output through OUTPUT-Module or direct MIDI */
 
 /****** TYPES ****************************************************************/
 
@@ -219,9 +218,9 @@ PRIVATE	VOL_ALL		tmp_volumes;		/* General-Volume aus BIG */
 /****** FUNCTIONS ************************************************************/
 
 /* MidiShare Funktionen */
-PUBLIC VOID			cdecl	receive_evts_puf	_((SHORT refNum));
-PUBLIC VOID			cdecl play_task_puf		_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
-PUBLIC VOID			cdecl delayed_task_puf	_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
+PUBLIC VOID			CDECL receive_evts_puf	_((SHORT refNum));
+PUBLIC VOID			CDECL play_task_puf		_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
+PUBLIC VOID			CDECL delayed_task_puf	_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
 PRIVATE VOID		InstallFilter				_((SHORT refNum));
 
 /* Interne PUF-Funktionen */
@@ -255,7 +254,7 @@ PRIVATE BOOLEAN term_rsc			_((VOID));
 
 /*****************************************************************************/
 
-PUBLIC VOID cdecl receive_evts_puf (int refNum)
+PUBLIC VOID CDECL receive_evts_puf (int refNum)
 {
 	MidiEvPtr	event;
 	LONG 			n;
@@ -271,7 +270,7 @@ PUBLIC VOID cdecl receive_evts_puf (int refNum)
 		event = MidiGetEv (r);				/*  Information holen */
 		switch (EvType(event))
 		{
-/*		
+#if false
 			case typeRTMPosit:
 				if (status->sync)
 				{
@@ -314,7 +313,7 @@ PUBLIC VOID cdecl receive_evts_puf (int refNum)
 					status->new	  = TRUE;
 				} /* if */
 				break;
-*/
+#endif
 			case typeRTMCycleSet:
 				status->leftloc 		= get_cycle_start((MidiSTPtr)event);
 				status->rightloc		= get_cycle_end((MidiSTPtr)event);
@@ -390,7 +389,7 @@ PRIVATE PUFEVP insert_ev_puf(PUFEVP location)
 
 } /* insert_ev_puf */
 
-PUBLIC VOID cdecl delayed_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
+PUBLIC VOID CDECL delayed_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
 {
 	/* Wird aufgerufen, um nicht Echtzeitf„hige Funktionen auszufhren */
 	RTMCLASSP	module 	= modulep[refNum];
@@ -407,7 +406,7 @@ PUBLIC VOID cdecl delayed_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, L
 	} /* switch */
 } /* delayed_task_puf */
 
-PUBLIC VOID cdecl play_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
+PUBLIC VOID CDECL play_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
 {
 	/* Wird soundso oft aufgerufen, um neue Daten in
 		das Fenster einzublenden und neue Koordinaten zu berechnen und speichern */
@@ -423,7 +422,7 @@ PUBLIC VOID cdecl play_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 	REG WORD 	signal;
 	PUF_INF		*event, *tmp = &module->status->tmp_event;
 	MidiEvPtr	myTask;
-	BOOLEAN		ret,
+    BOOLEAN		ret = FALSE,
 					record 		= status->record,
 					force			= status->new,
 					*ausgabe		= akt->ausgabe,
@@ -595,7 +594,8 @@ PRIVATE VOID position (RTMCLASSP module, LONG posit)
 	status->posit = posit;
 } /* position */
 
-/* Alte PUF-BIG-Routinen
+/* Alte PUF-BIG-Routinen */
+#if false
 GLOBAL EVENT_INFO *get_event_puf(RTMCLASSP module, LONG smpte, EVENT_INFO *event)
 {
 	/* Koordinaten zu einem bestimmten Zeitpunkt abfragen */
@@ -627,7 +627,8 @@ GLOBAL BOOLEAN set_event_puf (RTMCLASSP module, LONG smpte, EVENT_INFO *event)
 	else
 		return (FALSE);	/* Kein Event vorhanden fr diesen Zeitpunkt */
 } /* set_event_puf */
-*/
+#endif
+
 
 PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 {
@@ -848,8 +849,6 @@ PRIVATE BOOLEAN	send_event (RTMCLASSP module, INT miditrack, INT vel)
 {
 	/* Track 0 ..63 */
 	/* Einen Event rausschicken */
-#if OUTPUT_MODULE
-#else
 	MidiEvPtr	e;
 	WORD 		channel, port;
 	STAT_P	status	= module->status;
@@ -905,7 +904,6 @@ PRIVATE BOOLEAN	send_event (RTMCLASSP module, INT miditrack, INT vel)
 			} /* else */
 		} /* if */
 	} /* if */
-#endif /* OUTPUT_MODULE */
 	return TRUE;
 } /* send_event */
 
@@ -1267,10 +1265,9 @@ PRIVATE VOID dsetup (WINDOWP refwindow)
 
 PRIVATE RTMCLASSP define_setup (WINDOWP window, RTMCLASSP refmodule)
 {
-	RTMCLASSP module;
+    RTMCLASSP module = NULL;
 	
-	if (window != NULL)
-	{
+    {
 		module = create_module(module_name, instance_count);
 		/* Informationen kopieren */
 		mem_move (module, refmodule, (UWORD)sizeof (RTMCLASS));
@@ -1390,8 +1387,8 @@ WINDOWP window;
 	SHORT			refNum = (SHORT)module->special;
 	LONG			numtasks;		
 	
-/* BD 2012_01_21: Midi blockieren
-	
+/* BD 2012_01_21: Midi blockieren*/
+#if false
 	/* Max. einen Event ausfhren */
 	numtasks = MidiCountDTasks(refNum);
 	if (numtasks > 0)
@@ -1401,15 +1398,16 @@ WINDOWP window;
 		if (numtasks > 1)
 			MidiFlushDTasks(refNum);
 	} /* if numtasks */
-*/
+#endif
 
-/*
+
 	/* Alle Delayed-Tasks ausfhren */
-	for (numtasks = MidiCountDTasks (refNum); numtasks > 0; numtasks--)
+#if false
+    for (numtasks = MidiCountDTasks (refNum); numtasks > 0; numtasks--)
 	{
 		MidiExec1DTask(refNum);
 	} /* for numtasks */
-*/	
+#endif
 	window->milli = 0; /* Timer b.a.w. abschalten */
 
 	if (window->opened >0)
@@ -1467,7 +1465,7 @@ WORD   icon;
 		window->timer     = wi_timer_mod;
 		window->showinfo  = info_mod;
 		
-		sprintf (window->name, (BYTE *)puf_text [FPUFN].ob_spec);
+        sprintf (window->name, "%s", (BYTE *)puf_text [FPUFN].ob_spec);
 		sprintf (window->info, (BYTE *)puf_text [FPUFI].ob_spec, 0);
 	} /* if */
 	
@@ -1699,7 +1697,7 @@ RTMCLASSP module;
 	sprintf (s, "%ld Events werden freigegeben ...", status->max_events);
 	daktstatus(" PUF-Terminierung ", s);
 
-#if FALSE
+#if false
 	header = status->header;
 	event = NextEvent (header);
 	while (event != header)
@@ -1822,7 +1820,7 @@ PRIVATE VOID init_standard (RTMCLASSP module)
 PRIVATE VOID init_events (RTMCLASSP module)
 {
 	STAT_P		status = module->status;
-	LONG			event, max_events = status->max_events, event_size;
+	LONG			event, max_events = status, event_size;
 	PUFEVP		location, previous, header = status->header, *locator = status->locator;
 	KOOR_ALL		*koors;
 	TRACK_ALL	*tracks;
@@ -1846,7 +1844,7 @@ PRIVATE VOID init_events (RTMCLASSP module)
 	sprintf (s, "%ld Events ...", max_events);
 	daktstatus(" PUF-Initialisierung", s);
 
-#if FALSE
+#if false
 	header	= CreateEvent();
 #else
 	do {
@@ -1902,7 +1900,7 @@ PRIVATE VOID init_events (RTMCLASSP module)
 	ok = TRUE;
 	while (ok && event<max_events)
 	{
-#if FALSE
+#if false
 		location = CreateEvent ();
 		event++;
 #else
@@ -2030,9 +2028,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   puf_setup = (OBJECT *)rs_trindex [PUF_SETUP]; /* Adresse der PUF-Setup-Box */
   puf_shelp = (OBJECT *)rs_trindex [PUF_SHELP];	/* Adresse der PUF-Setup-Hilfe */
   puf_help  = (OBJECT *)rs_trindex [PUF_HELP];	/* Adresse der PUF-Hilfe (allg)*/

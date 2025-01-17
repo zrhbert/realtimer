@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "MTC.C": "cpp",
+        "PAR.C": "cpp",
+        "GEMAIN.C": "cpp",
+        "META.C": "cpp",
+        "OBJECTS.C": "cpp",
+        "GLOBAL.C": "cpp",
+        "INITERM.C": "cpp"
+    }
+}

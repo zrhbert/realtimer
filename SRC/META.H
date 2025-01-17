@@ -30,4 +30,3 @@ GLOBAL BOOLEAN term_meta  _((VOID));
 
 #endif /* __META__ */
 
-

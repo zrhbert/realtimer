@@ -451,7 +451,7 @@ GLOBAL VOID daktstatus (STRING title, STRING text)
 	
 	if (window != NULL)
 	{
-		sprintf (window->name, stitle);
+        sprintf (window->name, "%s", stitle);
 		if (window->opened == 0)
 		{
 			window->edit_obj	= NIL;
@@ -665,7 +665,7 @@ GLOBAL VOID dzahl (LONG *number, INT posx, INT posy, STRING title)
 	{
 		if (window->opened == 0)
 		{
-			sprintf (window->name, title);
+            sprintf (window->name, "%s", title);
 			window->edit_obj	= find_flags (zahl, ROOT, EDITABLE);
 			window->edit_inx	= NIL;
 			window->scroll.x  = posx;
@@ -715,7 +715,7 @@ GLOBAL VOID dzeit (LONG *time, INT posx, INT posy, STRING title)
 	{
 		if (window->opened == 0)
 		{
-			sprintf (window->name, title);
+            sprintf (window->name, "%s", title);
 			window->edit_obj	= find_flags (zeit, ROOT, EDITABLE);
 			window->edit_inx	= NIL;
 			window->scroll.x  = posx;
@@ -818,7 +818,7 @@ GLOBAL VOID dsave (STR128 filename, RTMCLASSP module)
 	{
 		if (window->opened == 0)
 		{
-			sprintf (window->name, module->object_name);
+            sprintf (window->name, "%s", module->object_name);
 			window->edit_obj	= find_flags (save, ROOT, EDITABLE);
 			window->edit_inx	= NIL;
 			set_save (filename);
@@ -910,7 +910,7 @@ GLOBAL BOOL dlogin ()
 	{
 		if (window->opened == 0)
 		{
-			sprintf (window->name, title);
+            sprintf (window->name, "%s", title);
 			window->edit_obj	= LOGUSERNAME;
 			window->edit_inx	= NIL;
 			window->work.x    = window->scroll.x;
@@ -1037,10 +1037,10 @@ GLOBAL LONG ClickValueField (WINDOWP window, WORD object, MKINFO *mk, LONG min_v
 	BOOL	repeat;
 	
 	undo_state (window->object, object, SELECTED);
+    GetPLong (window->object, object, &x);
 	if (mk->breturn < 2)
 	{
 		/* Einfach-Click links oder rechts = dec/inc */
-		GetPLong (window->object, object, &x);
 		do{
 			step = 1;
 			if (mk->alt)	step *= 10;
@@ -1073,7 +1073,6 @@ GLOBAL LONG ClickValueField (WINDOWP window, WORD object, MKINFO *mk, LONG min_v
 	else if (mk->breturn == 2)
 	{
 		/* Doppel-Click = Eingabe Åber Tastatur */
-		GetPLong (window->object, object, &x);
 		dzahl (&x, mk->mox, mk->moy, " Zahl ");
 		if (x > max_val) x = max_val;
 		if (x < min_val) x = min_val;
@@ -1231,7 +1230,7 @@ GLOBAL VOID UpdateTimeField (WINDOWP window, WORD obj, LONG value)
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_rtm (STRING keyword )
+GLOBAL BOOLEAN help_rtm (char *KeyWord  )
 {
 	INT		msg_buff[8], acc_id;
 	BOOLEAN	ok = TRUE;
@@ -1249,10 +1248,10 @@ GLOBAL BOOLEAN help_rtm (STRING keyword )
 	}
 	else
 	{
-		if (keyword)
+		if (KeyWord)
 		{
-			for (i = 0; keyword[i] == ' '; i++); 	/* Space Åberspringen */
-			strcpy (help_key, keyword+i);		/* Name kopieren */
+			for (i = 0; KeyWord[i] == ' '; i++); 	/* Space Åberspringen */
+			strcpy (help_key, KeyWord+i);		/* Name kopieren */
 			c = strrchr (help_key, ' ');		/* Hinteres Space	suchen */
 			if (c) *c = 0;							/* String abschneiden */
 			
@@ -1262,13 +1261,13 @@ GLOBAL BOOLEAN help_rtm (STRING keyword )
 			*(char **)&msg_buff[3] = help_key;	/* the Key Word			*/
 	
 			ok &= appl_write( acc_id, 16, msg_buff );  /* write message			*/
-	/*
+#if false
 			/* wait for reply */
 			do
 			{
 				evnt_mesag( msg_buff );
 			} while ( msg_buff[0] != AC_REPLY );
-	*/	
+#endif
 		
 		} /* if */
 	} /* else */
@@ -1369,7 +1368,11 @@ GLOBAL VOID copy_icon _((OBJECT *dobj, OBJECT *sobj))
 	
 	*diconblk = *siconblk;*/
 
+#if false
 	(ICONBLK *)dobj->ob_spec = (ICONBLK *) sobj->ob_spec;
+#else
+    dobj->ob_spec = sobj->ob_spec;
+#endif
 } /* copy_icon */
 
 /*****************************************************************************/
@@ -1560,9 +1563,9 @@ LOCAL BOOLEAN init_rsc_realtspc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   zahl	   = (OBJECT *)rs_trindex [ZAHL];		/* Adresse der Zahl-Eingabebox */
   zeit	   = (OBJECT *)rs_trindex [ZEIT];		/* Adresse der Zahl-Eingabebox */
   save	   = (OBJECT *)rs_trindex [SAVE];		/* Adresse der Save-Eingabebox */
@@ -1627,7 +1630,7 @@ LOCAL BOOLEAN term_rsc_realtspc ()
   BOOLEAN ok = TRUE;
 /*
 #if ((XRSC_CREATE|RSC_CREATE) == 0)
-  ok = rs_free (spc_rsc_ptr) != 0;               /* Resourcen freigeben */
+  ok = rs_free (spc_rsc_ptr) != 0;
 #endif
 */
   return (ok);
@@ -1644,8 +1647,10 @@ GLOBAL BOOLEAN init_realtspc ()
 	ok &= init_rsc_realtspc ();
 	init_waveform ();	
 	init_sinq();
-	set_helpfunc (help_rtm);		/* Help-Funktion fÅr Geiss-Paket einklinken */	
-	return (ok);
+#if false
+    set_helpfunc (help_rtm);		/* Help-Funktion fÅr Geiss-Paket einklinken */
+#endif
+    return (ok);
 } /* init_realtspc */
 
 /*****************************************************************************/

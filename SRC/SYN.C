@@ -24,7 +24,8 @@ V 0.06
 *****************************************************************************/
 
 #ifndef XRSC_CREATE
-/* #define XRSC_CREATE TRUE                    /* X-Resource-File im Code */ */
+/* X-Resource-File im Code */
+/* #define XRSC_CREATE TRUE                     */
 #endif
 
 #include "import.h"
@@ -109,7 +110,7 @@ PRIVATE VOID    get_dbox	(RTMCLASSP module)
 {
 	SET_P		ed = module->edited->setup;
 	LONG		tmp;
-	WORD		frames_out, ports_out = 0;
+    WORD		frames_out = 0, ports_out = 0;
 	
 	GetCheck (syn_setup, SYNSYNALLPORTS, &ed->sync_all); 
 
@@ -254,7 +255,7 @@ MKINFO  *mk;
 				ClickTimeField (window, SYNSMPTESTOP, mk, 0, 0, UpdateTimeField);
 			else if (exit_obj >= SYNSMPTEOFFSET && exit_obj <= SYNSMPTEOFFSET + 4)
 				ClickTimeField (window, SYNSMPTEOFFSET, mk, 0, 0, UpdateTimeField);
-/*
+#if false
 			if(syn_setup_nr!=0)
 			{
 				setups[0]=setups[syn_setup_nr];
@@ -266,8 +267,8 @@ MKINFO  *mk;
 				set_ptext (syn_setup, SYNSETNR, s);
 				draw_object(window, SYNSETNR);
 			} /* if */
-*/				
-			break;						
+#endif
+            break;						
 	} /* switch */
 } /* wi_click_mod */
 
@@ -314,7 +315,7 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 
-    sprintf (window->name, (BYTE *)syn_text [FSYNN].ob_spec);
+      sprintf (window->name, "%s", (BYTE *)syn_text [FSYNN].ob_spec);
     sprintf (window->info, (BYTE *)syn_text [FSYNI].ob_spec, 0);
   } /* if */
 
@@ -386,7 +387,7 @@ WORD    icon;
 		set_ptext (syn_info, SYNICOMPILE, s);
 		sprintf(s, "%-20s", SYNVERSION);
 		set_ptext (syn_info, SYNIVERNR, s);
-		sprintf(s, "%-20d", module->max_setups);
+        sprintf(s, "%-20ld", module->max_setups);
 		set_ptext (syn_info, SYNISETUPS, s);
 		if (module)
 			sprintf(s, "%-20ld", module->actual->number);
@@ -513,13 +514,13 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alesynsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
-/*
+#endif
+#if false
 	syn_menu  = (OBJECT *)rs_trindex [SYN_SETUP]; /* Adresse des SYN-MenÅs */
-*/
-	syn_setup = (OBJECT *)rs_trindex [SYN_SETUP]; /* Adresse der SYN-Parameter-Box */
+#endif
+    syn_setup = (OBJECT *)rs_trindex [SYN_SETUP]; /* Adresse der SYN-Parameter-Box */
 	syn_help  = (OBJECT *)rs_trindex [SYN_HELP];	/* Adresse der SYN-Hilfe */
 	syn_desk  = (OBJECT *)rs_trindex [SYN_DESK];	/* Adresse des SYN-Desktops */
 	syn_text  = (OBJECT *)rs_trindex [SYN_TEXT];	/* Adresse der SYN-Texte */

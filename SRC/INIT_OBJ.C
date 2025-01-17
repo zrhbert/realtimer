@@ -9,7 +9,7 @@
 #include "realtim4.h"
 #include "realtspc.h"
 #include <msh_unit.h>					/* Deklarationen fÅr MidiShare */
-
+#include "OBJECTS.H"
 #include "var.h"
 
 #include "a3d.h"
@@ -126,8 +126,9 @@ GLOBAL BOOLEAN init_modules ()
 	if(init_big) ok &= init_big ();		/* Initialisiere big */
 	if(init_cmo) ok &= init_cmo ();		/* Initialisiere cmo */
 	if(init_ed4) ok &= init_ed4 ();		/* Initialisiere 4D-Editor */
-	if(init_ec4) ok &= init_ec4 ();		/* Initialisiere 4D-Cue-List */
-
+#if false
+    if(init_ec4) ok &= init_ec4 ();		/* Initialisiere 4D-Cue-List */
+#endif
 	for (i = 0; i < max_rtmmodules; i++)         	/* Untersuche alle Module */
 	{
 		module = rtmmodules [i];

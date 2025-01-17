@@ -29,5 +29,3 @@ GLOBAL BOOLEAN init_image  _((VOID));
 GLOBAL BOOLEAN term_image  _((VOID));
 
 #endif /* __IMAGE__ */
-
-

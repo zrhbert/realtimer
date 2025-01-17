@@ -219,8 +219,8 @@ PRIVATE BOOLEAN term_rsc		_((VOID));
 PRIVATE VOID		handle_loc 		_((WINDOWP window));
 PRIVATE VOID		draw_loc 		_((INT flag, INT *pxyarray));
 
-PUBLIC VOID cdecl receive_evts_big (SHORT refNum);
-PUBLIC VOID cdecl play_task_big 	(LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3);
+PUBLIC VOID CDECL receive_evts_big (SHORT refNum);
+PUBLIC VOID CDECL play_task_big 	(LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3);
 PRIVATE VOID		InstallFilter				_((SHORT refNum));
 PRIVATE SHORT		init_midishare (VOID);
 PRIVATE VOID hide_loc _((WINDOWP window));
@@ -966,7 +966,7 @@ PRIVATE SHORT init_midishare ()
 } /* init_midishare */
 
 
-PUBLIC VOID cdecl receive_evts_big (SHORT refNum)
+PUBLIC VOID CDECL receive_evts_big (SHORT refNum)
 {
 	MidiEvPtr	event;
 	LONG 			n;
@@ -1025,7 +1025,7 @@ PUBLIC VOID cdecl receive_evts_big (SHORT refNum)
 	} /* for */
 } /* receive_evts_big */
 
-PUBLIC VOID cdecl receive_alarm_mod (SHORT refNum, LONG code)
+PUBLIC VOID CDECL receive_alarm_mod (SHORT refNum, LONG code)
 {
 	RTMCLASSP	module = modulep[refNum];
 	STAT_P		status = module->status;
@@ -1092,7 +1092,7 @@ PRIVATE VOID InstallFilter (SHORT refNum)
 	MidiSetFilter( refNum, filter );
 } /* InstallFilter */
 
-PUBLIC VOID cdecl play_task_big (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
+PUBLIC VOID CDECL play_task_big (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
 {
 	/* Wird soundso oft aufgerufen, um neue Daten in
 		das Fenster einzublenden */

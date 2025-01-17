@@ -511,7 +511,7 @@ WORD   icon;
 		window->click     = wi_click_mod;
 		window->showinfo  = info_mod;
 
-		sprintf (window->name, (BYTE *)man_text [FMANN].ob_spec);
+        sprintf (window->name, "%s", (BYTE *)man_text [FMANN].ob_spec);
 		sprintf (window->info, (BYTE *)man_text [FMANI].ob_spec, 0);
 		
 	} /* if */
@@ -758,9 +758,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   man_setup  = (OBJECT *)rs_trindex [MAN_SETUP];	/* Adresse der Transportleiste */
   man_help  = (OBJECT *)rs_trindex [MAN_HELP];	/* Adresse der MAN-Hilfe */
   man_desk  = (OBJECT *)rs_trindex [MAN_DESK];	/* Adresse des MAN-Desktops */

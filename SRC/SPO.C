@@ -279,8 +279,9 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					ok = fscanf(in, "%d", &single->offset_z);
 					single++;	/* Auf Info fr n„chstes Signal zeigen */
 				} /* for */
-				/* ok = fscanf(in, "%s", s);	/* Leerzeile */ */
-
+#if false
+				ok = fscanf(in, "%s", s);	/* Leerzeile */
+#endif
 				/* Setup speichern und n„chstes Setup anw„hlen */
 				module->get_setnr(module, setnr);
 				if (setnr % 20 == 0)
@@ -642,9 +643,9 @@ PRIVATE BOOLEAN init_rsc ()
               rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
               rs_tedinfo, rs_object, (OBJECT **)rs_trindex, (RS_IMDOPE *)rs_imdope);
 #endif
-/*
+#if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
-*/
+#endif
   spo_setup = (OBJECT *)rs_trindex [SPO_SETUP]; /* Adresse der SPO-Parameter-Box */
   spo_help  = (OBJECT *)rs_trindex [SPO_HELP];	/* Adresse der SPO-Hilfe */
   spo_desk  = (OBJECT *)rs_trindex [SPO_DESK]; 	/* Adresse des SPO-Desktop */
