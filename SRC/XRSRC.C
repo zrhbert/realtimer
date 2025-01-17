@@ -92,14 +92,14 @@ GLOBAL WORD xrsrc_free (VOID)
 
 GLOBAL WORD xrsrc_gaddr (WORD re_gtype, WORD re_gindex, VOID *re_gaddr)
 {
-	return (rs_gaddr (pglobal, re_gtype, re_gindex, re_gaddr));
+	return (rs_gaddr (pglobal, re_gtype, re_gindex, (OBJECT **)re_gaddr));
 }
 
 /*****************************************************************************/
 
 GLOBAL WORD xrsrc_saddr (WORD re_stype, WORD re_sindex, VOID *re_saddr)
 {
-	return (rs_sadd (pglobal, re_stype, re_sindex, re_saddr));
+	return (rs_sadd (pglobal, re_stype, re_sindex, (OBJECT *)re_saddr));
 }
 
 /*****************************************************************************/
@@ -159,7 +159,7 @@ GLOBAL WORD rs_gaddr (WORD *base, WORD re_gtype, WORD re_gindex, OBJECT **re_gad
 {
 	rs_sglobal (base);
 
-	*re_gaddr = get_address (re_gtype, re_gindex);
+	*re_gaddr = (OBJECT *) get_address (re_gtype, re_gindex);
 
 	if (*re_gaddr == (OBJECT *)NULL)
 		return (FALSE);
@@ -175,7 +175,7 @@ GLOBAL WORD rs_sadd (WORD *base, WORD rs_stype, WORD rs_sindex, OBJECT *re_saddr
 
 	rs_sglobal (base);
 
-	old_addr = get_address (rs_stype, rs_sindex);
+	old_addr = (OBJECT *) get_address (rs_stype, rs_sindex);
 
 	if (old_addr == (OBJECT *)NULL)
 		return (FALSE);
@@ -240,13 +240,13 @@ LOCAL VOID *get_address (WORD type, WORD index)
 			break;
 
 		case R_OBSPEC:
-			all_ptr.object = get_address(R_OBJECT, index);
+			all_ptr.object = (OBJECT *)get_address(R_OBJECT, index);
 			the_addr = &all_ptr.object->ob_spec;
 			break;
 
 		case R_TEPVALID:
 		case R_TEPTMPLT:
-			all_ptr.tedinfo = get_address(R_TEDINFO, index);
+			all_ptr.tedinfo = (TEDINFO *)get_address(R_TEDINFO, index);
 			if (type == R_TEPVALID)
 				the_addr = &all_ptr.tedinfo->te_pvalid;
 			else
@@ -255,7 +255,7 @@ LOCAL VOID *get_address (WORD type, WORD index)
 
 		case R_IBPDATA:
 		case R_IBPTEXT:
-			all_ptr.iconblk = get_address(R_ICONBLK, index);
+            all_ptr.iconblk = (ICONBLK *)get_address(R_ICONBLK, index);
 			if (type == R_IBPDATA)
 				the_addr = &all_ptr.iconblk->ib_pdata;
 			else
@@ -310,14 +310,14 @@ LOCAL WORD rs_read (WORD *global, CONST BYTE *fname)
 	WORD fh;
 	BYTE tmpnam[128];
 
-	strcpy (tmpnam, fname);
+	strcpy ((char*)tmpnam, (char*)fname);
 
 	if (!shel_find (tmpnam))
 		return (FALSE);
 
 	rs_global = global;
 
-	if ((fh = Fopen (tmpnam, 0)) < 0)
+	if ((fh = Fopen ((char*)tmpnam, 0)) < 0)
 		return (FALSE);
 
 	if (Fread (fh, sizeof(RSXHDR), &hdr_buf) != sizeof (RSXHDR))
@@ -384,7 +384,7 @@ LOCAL VOID fix_treeindex (VOID)
 
 	count = rs_hdr->rsh_ntree - 1L;
 
-	adr = get_sub (0, rs_hdr->rsh_trindex, sizeof (OBJECT *));
+	adr = (OBJECT **)get_sub (0, rs_hdr->rsh_trindex, sizeof (OBJECT *));
 
 	rs_global[5] = ((LONG)adr >> 16) & 0xFFFF;
 	rs_global[6] = (LONG)adr & 0xFFFF;
@@ -407,7 +407,7 @@ LOCAL VOID fix_object (VOID)
 
 	while (count >= 0)
 	{
-		obj = get_address (R_OBJECT, count);
+		obj = (OBJECT **)get_address (R_OBJECT, count);
 		rs_obfix (obj, 0);
 		if ((obj->ob_type & 0xff) != G_BOX && (obj->ob_type & 0xff) != G_IBOX && (obj->ob_type & 0xff) != G_BOXCHAR)
 			fix_long ((LONG *)&obj->ob_spec);
@@ -430,10 +430,10 @@ LOCAL VOID fix_tedinfo()
 		tedinfo = (TEDINFO *)get_address (R_TEDINFO, count);
 
 		if (fix_ptr (R_TEPTEXT, count))
-			tedinfo->te_txtlen = strlen (tedinfo->te_ptext) + 1;
+			tedinfo->te_txtlen = strlen ((char*)tedinfo->te_ptext) + 1;
 
 		if (fix_ptr (R_TEPTMPLT, count))
-			tedinfo->te_tmplen = strlen (tedinfo->te_ptmplt) + 1;
+			tedinfo->te_tmplen = strlen ((char*)tedinfo->te_ptmplt) + 1;
 
 		fix_ptr (R_TEPVALID, count);
 
