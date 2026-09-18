@@ -10,25 +10,24 @@ SDK_USR = $(SDK_ROOT)/usr
 COMPAT_INCLUDE ?= gcc/include
 
 CFLAGS = --sysroot=$(SDK_ROOT) -D__GEMLIB_OLDNAMES \
-	-ISRC -I$(COMPAT_INCLUDE) -std=c99 -g \
+	-Isrc -I$(COMPAT_INCLUDE) -std=c99 -g \
 	-Wno-incompatible-pointer-types -x c
 LDFLAGS = $(SDK_USR)/lib/crt0.o -nostdlib -L$(SDK_USR)/lib \
 	-lgem -lm -lc -lgcc
 
-TARGET = SRC/realtim5.prg
+TARGET = src/realtim5.prg
 
 SRCS = \
-	SRC/DESKTOP.C SRC/DIALOG.C SRC/DISK.C SRC/EVENT.C SRC/GEMAIN.C \
-	SRC/GLOBAL.C SRC/INITERM.C SRC/MENU.C SRC/RCM.C SRC/RESOURCE.C \
-	SRC/WINDOWS.C SRC/XRSRC.C \
-	SRC/REALTSPC.C SRC/LISTS.C SRC/OBJECTS.C SRC/init_rtm.c \
-	SRC/DISPOBJ.C SRC/a3d.c SRC/CMI.C SRC/CMO.C SRC/GEN.C SRC/GMI.C \
-	SRC/KOO.C SRC/LFO.C SRC/MAE.C SRC/MAN.C SRC/MSH.C SRC/MTR.C \
-	SRC/PAR.C SRC/PUF.C SRC/SPG.C SRC/SPO.C SRC/SPS.C SRC/SYN.C \
-	SRC/TRA.C SRC/VAR.C SRC/midishare_stub.c
+	src/desktop.c src/dialog.c src/disk.c src/event.c src/gemain.c \
+	src/global.c src/initerm.c src/menu.c src/rcm.c src/resource.c \
+	src/windows.c src/xrsrc.c \
+	src/realtspc.c src/lists.c src/objects.c src/init_rtm.c \
+	src/dispobj.c src/a3d.c src/cmi.c src/cmo.c src/gen.c src/gmi.c \
+	src/koo.c src/lfo.c src/mae.c src/man.c src/msh.c src/mtr.c \
+	src/par.c src/puf.c src/spg.c src/spo.c src/sps.c src/syn.c \
+	src/tra.c src/var.c src/midishare_stub.c
 
-OBJS = $(SRCS:.C=.o)
-OBJS := $(OBJS:.c=.o)
+OBJS = $(SRCS:.c=.o)
 
 .PHONY: all clean
 
@@ -37,10 +36,6 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(info Linking $(TARGET))
 	$(CC) $^ $(LDFLAGS) -o $@
-
-%.o: %.C
-	$(info Compiling $<)
-	$(CC) $(CFLAGS) -c $< -o $@
 
 %.o: %.c
 	$(info Compiling $<)
