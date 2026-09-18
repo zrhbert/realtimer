@@ -36,7 +36,7 @@
 #define GEM_OUTPUT  "OUTPUT.APP"        /* Name des GEM-Output Programms */
 
 #define MAX_FONTS       99              /* maximale Anzahl von Fonts */
-#define MAX_POINTS     256              /* maximale Anzahl von Punktgrî·en */
+#define MAX_POINTS     256              /* maximale Anzahl von PunktgrÔøΩÔøΩen */
 
 #define FONT_SWAPSIZE 3072              /* 3072 * 16 = 48 KByte font swapping */
 
@@ -57,26 +57,26 @@ typedef struct status
 /****** VARIABLES ************************************************************/
 
 LOCAL BOOLEAN  fonts_loaded;    /* Fonts schon geladen ? */
-LOCAL WORD     num_fonts;       /* Anzahl verfÅgbarer Fonts */
+LOCAL WORD     num_fonts;       /* Anzahl verfÔøΩgbarer Fonts */
 LOCAL WORD     ccp_ext;         /* Cut/Copy/Paste extern auf Klemmbrett */
 LOCAL WORD     g_font;          /* Aktueller Font */
-LOCAL WORD     g_point;         /* Aktuelle Punktgrî·e */
+LOCAL WORD     g_point;         /* Aktuelle PunktgrÔøΩÔøΩe */
 
 LOCAL LISTBOX  lnames;          /* Liste der Fontnamen */
-LOCAL LISTBOX  lsizes;          /* Liste der Fontgrî·en */
+LOCAL LISTBOX  lsizes;          /* Liste der FontgrÔøΩÔøΩen */
 LOCAL BYTE     *fnames;         /* Zeiger auf Fontnamen */
-LOCAL BYTE     *fsizes;         /* Zeiger auf Fontgrî·en */
+LOCAL BYTE     *fsizes;         /* Zeiger auf FontgrÔøΩÔøΩen */
 LOCAL WORD     wnames;          /* Breite der Scrollbox der Fontnamen */
-LOCAL WORD     wsizes;          /* Breite der Scrollbox der Fontgrî·en */
+LOCAL WORD     wsizes;          /* Breite der Scrollbox der FontgrÔøΩÔøΩen */
 LOCAL WORD     nlines;          /* Anzahl Zeilen der Fontnamen */
-LOCAL WORD     slines;          /* Anzahl Zeilen der Fontgrî·en */
+LOCAL WORD     slines;          /* Anzahl Zeilen der FontgrÔøΩÔøΩen */
 LOCAL WORD     sel_font;        /* selektierter Fontname */
-LOCAL WORD     sel_point;       /* selektierte Fontgrî·e */
+LOCAL WORD     sel_point;       /* selektierte FontgrÔøΩÔøΩe */
 
 LOCAL WORD     font_table [MAX_FONTS];
 LOCAL WORD     point_table [MAX_POINTS];
 
-LOCAL WORD     edit_inx;        /* Index Passwort fÅr edit_noecho */
+LOCAL WORD     edit_inx;        /* Index Passwort fÔøΩr edit_noecho */
 LOCAL BYTE     password [MAX_PASSWORD + 1];
 
 /****** FUNCTIONS ************************************************************/
@@ -124,7 +124,7 @@ WORD title;
 	if (window == NULL)
 	{
 		 form_center (about, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (about, NULL, ABOUT, (BYTE *)freetext [FABOUT].ob_spec, WI_MODAL);
+		 window = crt_dialog (about, NULL, ABOUT, freetext [FABOUT].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)
@@ -185,8 +185,8 @@ MKINFO  *mk;
   {
     case SETPASSWD : edit_inx = window->edit_inx;
                    break;
-    case SETOK     : get_settings (); /* Hier kînnte man das Paûwort abfragen */
-                   break;           /* Wenn es falsch ist, kînnte man z.B. WI_DLCLOSE zurÅcksetzen */
+    case SETOK     : get_settings (); /* Hier kÔøΩnnte man das PaÔøΩwort abfragen */
+                   break;           /* Wenn es falsch ist, kÔøΩnnte man z.B. WI_DLCLOSE zurÔøΩcksetzen */
     case SETCANCEL : set_settings ();
                    break;
     case SETHELP   : help_settings (NULL, NIL);
@@ -207,7 +207,7 @@ MKINFO  *mk;
 
   switch (window->edit_obj)
   {
-    case SETBLINK  : p = ((TEDINFO *)settings [SETBLINK].ob_spec)->te_ptext;
+    case SETBLINK  : p = (settings [SETBLINK].ob_spec.tedinfo)->te_ptext;
                    if ((*p == EOS) == ! is_state (settings, SETOK, DISABLED))
                    {
                      flip_state (settings, SETOK, DISABLED);
@@ -239,7 +239,7 @@ WORD    icon;
   {
     settinghelp->ob_x = desk.x + desk.w - settinghelp->ob_width;
     settinghelp->ob_y = desk.y + desk.h - settinghelp->ob_height;
-    helpwin = crt_dialog (settinghelp, NULL, SETTINGHELP, (BYTE *)freetext [FHELPSET].ob_spec, WI_MODELESS);
+    helpwin = crt_dialog (settinghelp, NULL, SETTINGHELP, freetext [FHELPSET].ob_spec.free_string, WI_MODELESS);
   } /* if */
 
   ok = helpwin != NULL;
@@ -271,7 +271,7 @@ LOCAL VOID msettings ()
   if (window == NULL)
   {
     form_center (settings, &ret, &ret, &ret, &ret);
-    window = crt_dialog (settings, NULL, SETTINGS, (BYTE *)freetext [FSETTING].ob_spec, WI_MODELESS);
+    window = crt_dialog (settings, NULL, SETTINGS, freetext [FSETTING].ob_spec.free_string, WI_MODELESS);
 
     if (window != NULL)
     {
@@ -367,6 +367,7 @@ LOCAL VOID get_font ()
 /*****************************************************************************/
 
 LOCAL VOID set_font (font, point)
+WORD font, point;
 
 {
   WORD size, inx;
@@ -517,7 +518,7 @@ WORD    icon;
   {
     fonthelp->ob_x = desk.x + desk.w - fonthelp->ob_width;
     fonthelp->ob_y = desk.y + desk.h - fonthelp->ob_height;
-    helpwin = crt_dialog (fonthelp, NULL, FONTHELP, (BYTE *)freetext [FHELPFON].ob_spec, WI_MODELESS);
+    helpwin = crt_dialog (fonthelp, NULL, FONTHELP, freetext [FHELPFON].ob_spec.free_string, WI_MODELESS);
   } /* if */
 
   ok = helpwin != NULL;
@@ -570,7 +571,7 @@ WINDOWP window;
     old_clip = clip;
     set_clip (TRUE, &r);
     clr_area (&r);
-    v_gtext (vdi_handle, x, y + diff / 2, (BYTE *)freetext [FTXTDEMO].ob_spec);
+    v_gtext (vdi_handle, x, y + diff / 2, freetext [FTXTDEMO].ob_spec.free_string);
     set_clip (TRUE, &old_clip);
   } /* if */
 } /* draw_font */
@@ -591,7 +592,7 @@ WORD num_fonts;
   {
     vqt_name (vdi_handle, font, name);
     if (font == FONT_SYSTEM) strcpy (name, "System");
-    name [wnames - 2] = EOS;            /* Name muû mit 2 Leerzeichen beginnen */
+    name [wnames - 2] = EOS;            /* Name muÔøΩ mit 2 Leerzeichen beginnen */
 
     sprintf (mem, "  %s", name);
     mem += lnames.itemsize;
@@ -658,7 +659,7 @@ LOCAL VOID mselfont ()
   if (window == NULL)
   {
     form_center (selfont, &ret, &ret, &ret, &ret);
-    window = crt_dialog (selfont, NULL, SELFONT, (BYTE *)freetext [FSELFONT].ob_spec, WI_MODELESS);
+    window = crt_dialog (selfont, NULL, SELFONT, freetext [FSELFONT].ob_spec.free_string, WI_MODELESS);
 
     if (window != NULL)
     {
@@ -731,7 +732,7 @@ WORD vdi_handle;
 } /* unload_fonts */
 
 /*****************************************************************************/
-/* MenÅ-Verarbeitung                                                         */
+/* MenÔøΩ-Verarbeitung                                                         */
 /*****************************************************************************/
 
 GLOBAL VOID updt_menu (window)
@@ -773,11 +774,11 @@ WINDOWP window;
 
     setxor (menus, after);
 
-    if (! setcmp (menus, NULL))         /* Es hat sich etwas geÑndert */
+    if (! setcmp (menus, NULL))         /* Es hat sich etwas geÔøΩndert */
     {
       for (i = 0, *s = EOS; i < 10; i++)
       {
-        if (setin (after, i)) strcat (s, (BYTE *)freetext [FM1 + i].ob_spec);
+        if (setin (after, i)) strcat (s, freetext [FM1 + i].ob_spec.free_string);
         strcat (s, ",");
       } /* for */
 
@@ -793,7 +794,7 @@ WINDOWP window;
     setcpy (menus, after);
   } /* if */
 
-  updtmenu = TRUE;      /* MenÅs immer auf neuesten Stand bringen */
+  updtmenu = TRUE;      /* MenÔøΩs immer auf neuesten Stand bringen */
 } /* updt_menu */
 
 /*****************************************************************************/
@@ -811,14 +812,14 @@ WORD    title, item;
   REG RTMCLASSP rtmmodule;
   BOOLEAN ok = FALSE;
 
-  if (is_state (menu, title, DISABLED) ||       /* Accessory kînnte Nachricht geschickt haben */
+  if (is_state (menu, title, DISABLED) ||       /* Accessory kÔøΩnnte Nachricht geschickt haben */
       is_state (menu, item, DISABLED)) return;
 
   menu_normal (window, title, FALSE);           /* Titel invers darstellen */
 
   top = find_top ();
 
-	/* Untersuche alle RTM-Module auf passenden MenÅpunkt */
+	/* Untersuche alle RTM-Module auf passenden MenÔøΩpunkt */
 	 	
 	for (i = 0; i < rtmtop && !ok; i++)         	/* Untersuche alle Module */
 	{
@@ -889,7 +890,7 @@ WORD    title, item;
 				*/
 				break;
 			default:
-				if ((rtmmodule->menu_item == item))	/* MenÅpunkt identisch? */
+				if ((rtmmodule->menu_item == item))	/* MenÔøΩpunkt identisch? */
 				{
 					(rtmmodule->open) (rtmmodule->icon_position);
 					ok = TRUE;	/* Passendes Modul gefunden */
@@ -898,7 +899,7 @@ WORD    title, item;
 		} /* switch */
 	} /* for */
 
-	if (ok==FALSE) /* kein Modul gefunden, "normale" MenÅabfrage */
+	if (ok==FALSE) /* kein Modul gefunden, "normale" MenÔøΩabfrage */
 	{
 		switch (title)
 		{
@@ -967,7 +968,7 @@ WORD    title, item;
 		  	break;
 #if false
 		 case MCALLER :
-		 	done = TRUE;       /* ZurÅck zum Aufrufer */
+		 	done = TRUE;       /* ZurÔøΩck zum Aufrufer */
 		   break;
 #endif
 		 case MQUIT   :
@@ -1064,7 +1065,7 @@ GLOBAL BOOLEAN init_menu ()
 
   get_settings ();
 
-  funcmenus [0].title = MFILE;            /* MenÅs der Funktionstasten */
+  funcmenus [0].title = MFILE;            /* MenÔøΩs der Funktionstasten */
   funcmenus [0].item  = MHELP;
 
   funcmenus [1].title = MFILE;
@@ -1094,7 +1095,7 @@ GLOBAL BOOLEAN init_menu ()
   funcmenus [9].title = MFILE;
   funcmenus [9].item  = MQUIT;
 
-  setclr (menus);                         /* Keine MenÅs auf Funktionstasten */
+  setclr (menus);                         /* Keine MenÔøΩs auf Funktionstasten */
 
   menu_ok      = (menu != NULL);
   menu_fits    = FALSE;
@@ -1103,7 +1104,7 @@ GLOBAL BOOLEAN init_menu ()
   ccp_ext      = (menu_ok && is_state (menu, MTOCLIP, CHECKED)) ? DO_EXTERNAL : 0;
 */
   if (menu_ok) menu_fits = menu [THEACTIVE].ob_x + menu [THEACTIVE].ob_width <= desk.w;
-  if ((class_desk == DESK) && menu_ok && ! menu_fits) class_desk = DESKWINDOW; /* MenÅzeile im Fenster */
+  if ((class_desk == DESK) && menu_ok && ! menu_fits) class_desk = DESKWINDOW; /* MenÔøΩzeile im Fenster */
 
   if (menu_ok)
   {
@@ -1112,7 +1113,7 @@ GLOBAL BOOLEAN init_menu ()
     {
       file_split (called_by, NULL, NULL, s, ext);
       str_lower (s + 1);
-      p = (BYTE *)menu [MCALLER].ob_spec;
+      p = menu [MCALLER].ob_spec.free_string;
       for (p += 2; *p != SP; p++);
       mem_move (p + 1, s, strlen (s));
       for (p += strlen (s) + 1; *p && (*p != SP); p++) *p = SP;
@@ -1147,8 +1148,8 @@ GLOBAL BOOLEAN init_menu ()
 
       if (ddiff > 0) menu [menubox].ob_x -= ddiff;      /* Hing rechts heraus */
 
-      menubox = menu [menubox].ob_next;                 /* NÑchstes Drop-Down-MenÅ */
-      title   = menu [title].ob_next;                   /* NÑchster Titel */
+      menubox = menu [menubox].ob_next;                 /* NÔøΩchstes Drop-Down-MenÔøΩ */
+      title   = menu [title].ob_next;                   /* NÔøΩchster Titel */
     } while (title != THEACTIVE);
   } /* if */
 

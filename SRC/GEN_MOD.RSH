@@ -1,7 +1,5 @@
 /* GEM Resource C Source */
 
-#include <portab.h>
-#include <aes.h>
 #include "GEN_MOD.H"
 
 #if !defined(WHITEBAK)
@@ -238,7 +236,7 @@ static TEDINFO rs_tedinfo[] =
   IBM  , 0, TE_LEFT , 0x1180, 0, -1, 12, 22
 };
 
-static RSIB0MASK[] =
+static WORD RSIB0MASK[] =
 { 0x7FFC, 0x0000, 0x7FFC, 0x0000, 
   0x7FFC, 0xFFFE, 0x7FFC, 0xFFFE, 
   0x7FFF, 0xFFFE, 0x7FFF, 0xFFFE, 
@@ -256,7 +254,7 @@ static RSIB0MASK[] =
   0x7FFC, 0x0000, 0x7FFC, 0x0000
 };
 
-static RSIB0DATA[] =
+static WORD RSIB0DATA[] =
 { 0x0000, 0x0000, 0x3FF8, 0x0000, 
   0x3018, 0x0000, 0x2008, 0x4FFC, 
   0x2EE8, 0x6804, 0x2EEF, 0xF804, 

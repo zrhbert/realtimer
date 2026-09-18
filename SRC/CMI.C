@@ -172,9 +172,9 @@ PRIVATE VOID set_fillbox (OBJECT *tree, WORD object, BOOL selected)
 {
 	/* Set the fill pattern in a box to grey or white */
 	if (selected)
-		((TEDINFO *)tree[object].ob_spec)->te_color |= SELMUSTER;
+		(tree[object].ob_spec.tedinfo)->te_color |= SELMUSTER;
 	else
-		((TEDINFO *)tree[object].ob_spec)->te_color &= ~SELMUSTER;
+		(tree[object].ob_spec.tedinfo)->te_color &= ~SELMUSTER;
 } /* set_fillbox */
 
 PRIVATE VOID    set_dbox	(RTMCLASSP module)
@@ -584,8 +584,8 @@ WORD   icon;
     window->click     = wi_click;
     window->showinfo  = info_mod;
 	
-      sprintf (window->name, "%s", (BYTE *)cmi_text [FCMIN].ob_spec);
-    sprintf (window->info, (BYTE *)cmi_text [FCMII].ob_spec, 0);
+      sprintf (window->name, "%s", cmi_text [FCMIN].ob_spec.free_string);
+    sprintf (window->info, cmi_text [FCMII].ob_spec.free_string, 0);
     
   } /* if */
 
@@ -643,7 +643,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (cmi_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (cmi_info, NULL, ICMI, (BYTE *)cmi_text [FCMIN].ob_spec, WI_MODAL);
+		 window = crt_dialog (cmi_info, NULL, ICMI, cmi_text [FCMIN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)
@@ -826,7 +826,7 @@ PRIVATE BOOLEAN init_rsc ()
     form_alert (1, s);
     if (! deskacc) return (FALSE);
     menu_unregister (gl_apid);                  /* Wieder abmelden */
-    while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
+    while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
   rs_gaddr (cmi_rsc_ptr, R_TREE,  CMI_SETUP,	&cmi_setup);   /* Adresse der CMI-Parameter-Box */

@@ -275,7 +275,7 @@ BYTE *argv [];
   ok &= init_windows (NOWINDOW, MAX_RESWIND, CLASS_HELP); /* Initialisiere windows */
   ok &= init_menu ();                           /* Initialisiere menu */
   ok &= init_event ();                          /* Initialisiere event */
-  ok &= init_dialog (alerts, alert, ALERT, (BYTE *)freetext [FDESKNAM].ob_spec);
+  ok &= init_dialog (alerts, alert, ALERT, freetext [FDESKNAM].ob_spec.free_string);
   ok &= init_desktop ();                        /* Initialisiere desktop */
   ok &= init_disk ();                           /* Initialisiere disk */
 #if false

@@ -409,7 +409,7 @@ PRIVATE VOID dsetup (WINDOWP refwindow)
 	{
 		form_center (a3d_setup, &ret, &ret, &ret, &ret);
 		
-		window = crt_dialog (a3d_setup, NULL, A3D_SETUP, (BYTE *)a3d_text [FA3DSN].ob_spec, WI_MODELESS);
+		window = crt_dialog (a3d_setup, NULL, A3D_SETUP, a3d_text [FA3DSN].ob_spec.free_string, WI_MODELESS);
 	} /* if */
 		
 	if (window != NULL)
@@ -791,8 +791,8 @@ WORD   icon;
 		if (dispobj)
 			list_insert (window->dispobjs, list_new_el ((VOID*) dispobj));
 
-		sprintf (window->name, (BYTE *)a3d_text [FA3DN].ob_spec, 0);
-		sprintf (window->info, (BYTE *)a3d_text [FA3DI].ob_spec, 0);
+		sprintf (window->name, a3d_text [FA3DN].ob_spec.free_string, 0);
+		sprintf (window->info, a3d_text [FA3DI].ob_spec.free_string, 0);
 	} /* if */
 	
 	return (window);                      /* Fenster zurÅckgeben */
@@ -1040,7 +1040,7 @@ PRIVATE BOOLEAN init_rsc ()
     form_alert (1, s);
     if (! deskacc) return (FALSE);
     menu_unregister (gl_apid);                  /* Wieder abmelden */
-    while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
+    while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
   rs_gaddr (a3d_rsc_ptr, R_TREE,  A3D_MENU,	&a3d_menu);    /* Adresse des A3D-MenÅs */

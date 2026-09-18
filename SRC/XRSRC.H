@@ -12,6 +12,8 @@
 
 /****** TYPES ****************************************************************/
 
+#ifndef __RSXHDR
+#define __RSXHDR
 typedef struct
 {
   UWORD rsh_vrsn;				/* should be 3														     */
@@ -34,6 +36,7 @@ typedef struct
   ULONG rsh_nimages;
   ULONG rsh_rssize;			/* total bytes in resource   */
 } RSXHDR;
+#endif /* !__RSXHDR (already provided by the SDK's gem.h) */
 
 /****** VARIABLES ************************************************************/
 

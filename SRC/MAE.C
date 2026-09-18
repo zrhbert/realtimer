@@ -629,8 +629,8 @@ WORD   icon;
 		window->click     = wi_click_mod;
 		window->showinfo  = info_mod;
 		
-        sprintf (window->name, "%s", (BYTE *)mae_text [FMAEN].ob_spec);
-		sprintf (window->info, (BYTE *)mae_text [FMAEI].ob_spec, 0);
+        sprintf (window->name, "%s", mae_text [FMAEN].ob_spec.free_string);
+		sprintf (window->info, mae_text [FMAEI].ob_spec.free_string, 0);
 	} /* if */
 
 	return (window);                      /* Fenster zurÅckgeben */
@@ -687,7 +687,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (mae_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (mae_info, NULL, IMAE, (BYTE *)mae_text [FMAEN].ob_spec, WI_MODAL);
+		 window = crt_dialog (mae_info, NULL, IMAE, mae_text [FMAEN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)
@@ -863,7 +863,7 @@ PRIVATE BOOLEAN init_rsc ()
     form_alert (1, s);
     if (! deskacc) return (FALSE);
     menu_unregister (gl_apid);                  /* Wieder abmelden */
-    while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
+    while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
   rs_gaddr (mae_rsc_ptr, R_TREE,  MAE_SETUP,	&mae_setup);   /* Adresse der MAE-Parameter-Box */

@@ -8,10 +8,9 @@ CC = $(TOOLCHAIN)/bin/m68k-atari-mintelf-gcc
 SDK_ROOT = $(TOOLCHAIN)/m68k-atari-mintelf/sys-root
 SDK_USR = $(SDK_ROOT)/usr
 COMPAT_INCLUDE ?= gcc/include
-GEM_INCLUDE ?= PUREC/INCLUDE
 
 CFLAGS = --sysroot=$(SDK_ROOT) -D__GEMLIB_OLDNAMES \
-	-ISRC -I$(COMPAT_INCLUDE) -idirafter $(GEM_INCLUDE) -std=c99 -g \
+	-ISRC -I$(COMPAT_INCLUDE) -std=c99 -g \
 	-Wno-incompatible-pointer-types -x c
 LDFLAGS = $(SDK_USR)/lib/crt0.o -nostdlib -L$(SDK_USR)/lib \
 	-lgem -lm -lc -lgcc
@@ -26,7 +25,7 @@ SRCS = \
 	SRC/DISPOBJ.C SRC/a3d.c SRC/CMI.C SRC/CMO.C SRC/GEN.C SRC/GMI.C \
 	SRC/KOO.C SRC/LFO.C SRC/MAE.C SRC/MAN.C SRC/MSH.C SRC/MTR.C \
 	SRC/PAR.C SRC/PUF.C SRC/SPG.C SRC/SPO.C SRC/SPS.C SRC/SYN.C \
-	SRC/TRA.C SRC/VAR.C
+	SRC/TRA.C SRC/VAR.C SRC/midishare_stub.c
 
 OBJS = $(SRCS:.C=.o)
 OBJS := $(OBJS:.c=.o)

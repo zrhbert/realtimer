@@ -10,11 +10,11 @@
 - wi_drag: alle Funktionen abgeschaltet
 13.07.93
 - help_desktop: ACC-Aufruf
-- wi_objop: Hilfe auch fÅr nicht aktive Module per Icon-Text
+- wi_objop: Hilfe auch fÔøΩr nicht aktive Module per Icon-Text
 - show_desktop: mabout
-- Umbau von wi_objop fÅr inderekte window öbergabe
+- Umbau von wi_objop fÔøΩr inderekte window ÔøΩbergabe
 - Umstellung auf neue RTMCLASS Struktur
-- Dummy Definitionen fÅr setup und status
+- Dummy Definitionen fÔøΩr setup und status
 *****************************************************************************/
 
 #include "import.h"
@@ -44,13 +44,13 @@
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   2                        /* X-Faktor */
 #define YFAC   2                        /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fÅr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fÅr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fÔøΩr Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fÔøΩr Scrolling */
 #define INITX  (2 * gl_wbox)            /* X-Anfangsposition */
 #define INITY  (6 * gl_hbox)            /* Y-Anfangsposition */
 #define INITW  (desk.x + desk.w -  6 * gl_wbox) /* Anfangsbreite in Pixel */
-#define INITH  (desk.y + desk.h - 10 * gl_hbox) /* Anfangshîhe in Pixel */
-#define MILLI  0                        /* Millisekunden fÅr Zeitablauf */
+#define INITH  (desk.y + desk.h - 10 * gl_hbox) /* AnfangshÔøΩhe in Pixel */
+#define MILLI  0                        /* Millisekunden fÔøΩr Zeitablauf */
 
 /****** TYPES ****************************************************************/
 
@@ -210,7 +210,7 @@ BOOLEAN    center;
     strcpy (infostr, info);
     infostr [width] = EOS;
 
-    if (window->handle == DESK)                 /* RegulÑrer Desktop */
+    if (window->handle == DESK)                 /* RegulÔøΩrer Desktop */
     {
       desktop = window->object;
 
@@ -230,7 +230,7 @@ BOOLEAN    center;
       infostr [STRLEN - 1] = EOS;               /* STRLEN - 1 wegen Leerzeichen */
       strcpy (window->info, " ");
       strcat (window->info, infostr);
-      wind_set (window->handle, WF_INFO, ADR (window->info), 0, 0); /* Infozeile neu setzen */
+      wind_set_str (window->handle, WF_INFO, window->info); /* Infozeile neu setzen */
     } /* else */
   } /* if */
 } /* set_deskinfo */
@@ -271,7 +271,7 @@ GLOBAL VOID set_meminfo ()
 
     if ((desktop != NULL) && ! is_flags (desktop, FKEYS, HIDETREE))
     {
-      sprintf (s, (BYTE *)freetext [FMEMORY].ob_spec, (WORD)(avail >> 10));
+      sprintf (s, freetext [FMEMORY].ob_spec.free_string, (WORD)(avail >> 10));
       get_ptext (desktop, IMEMORY, t);
 
       if (strcmp (s, t) != 0)             /* Es hat sich was getan */
@@ -341,7 +341,7 @@ SET     objs;
 /*    f  = (window->doc.h - window->doc.y) * window->yfac - window->scroll.h;*/ /* doc.h gerade ! */
       f  = desk.h - window->doc.y * window->yfac - window->scroll.h;  /* Von unten fehlend */
 
-      fh = 0;                                   /* Hîhe der Funktionstasten */
+      fh = 0;                                   /* HÔøΩhe der Funktionstasten */
       if (! (desktop [FKEYS].ob_flags & HIDETREE)) fh = desktop [FKEYS].ob_height + 5;
 
       bound.h += min (f - fh - 4, 0);
@@ -409,12 +409,12 @@ SET     objs;
                                } /* if */
                                else
                                  if (! drag_react (window, i, dest_window, dest_obj))
-                                   graf_mbox (ob.w, ob.h, ob.x + r.w, ob.y + r.h, ob.x, ob.y); /* ZurÅckschnalzen */
+                                   graf_mbox (ob.w, ob.h, ob.x + r.w, ob.y + r.h, ob.x, ob.y); /* ZurÔøΩckschnalzen */
                                break;
             case DRAG_SCLASS :
             case DRAG_NOWIND :
             case DRAG_NORCVR :
-            case DRAG_NOACTN : graf_mbox (ob.w, ob.h, ob.x + r.w, ob.y + r.h, ob.x, ob.y); /* ZurÅckschnalzen */
+            case DRAG_NOACTN : graf_mbox (ob.w, ob.h, ob.x + r.w, ob.y + r.h, ob.x, ob.y); /* ZurÔøΩckschnalzen */
                                break;
           } /* switch */
         } /* if, for */
@@ -492,14 +492,14 @@ MKINFO  *mk;
     r.h  = - r.h;
   } /* if */
 
-  if (mk->shift)                                /* Auschlieûlich odernd auswÑhlen */
+  if (mk->shift)                                /* AuschlieÔøΩlich odernd auswÔøΩhlen */
   {
     fill_select (window, new_objs, &r);
     invert_objs (window, new_objs);
     setxor (sel_objs, new_objs);
   } /* if */
   else
-    if (mk->ctrl)                               /* ZusÑtzlich auswÑhlen */
+    if (mk->ctrl)                               /* ZusÔøΩtzlich auswÔøΩhlen */
     {
       fill_select (window, new_objs, &r);
       setnot (sel_objs);
@@ -508,7 +508,7 @@ MKINFO  *mk;
       invert_objs (window, new_objs);
       setor (sel_objs, new_objs);
     } /* if */
-    else                                        /* AuswÑhlen */
+    else                                        /* AuswÔøΩhlen */
     {
       fill_select (window, sel_objs, &r);
       invert_objs (window, sel_objs);
@@ -536,7 +536,7 @@ RECT    *r;
     r1.x += icon->ib_xicon;
     r1.y += icon->ib_yicon;
     r1.w  = icon->ib_wicon;
-    r1.h  = icon->ib_ytext;         /* Bis zum Text, falls Icon kÅrzer */
+    r1.h  = icon->ib_ytext;         /* Bis zum Text, falls Icon kÔøΩrzer */
 
     ok = inside (mox, moy, &r1);    /* Im Icon */
 
@@ -556,16 +556,16 @@ RECT    *r;
 } /* in_icon */
 
 /*****************************************************************************/
-/* Schlieûe Fenster                                                          */
+/* SchlieÔøΩe Fenster                                                          */
 /*****************************************************************************/
 
 LOCAL VOID wi_close (window)
 WINDOWP window;
 
 {
-  if (! deskacc && (window->menu != NULL))      /* MenÅzeile im Desktop-Fenster */
+  if (! deskacc && (window->menu != NULL))      /* MenÔøΩzeile im Desktop-Fenster */
   {
-    done          = TRUE;                       /* Sonst keine MenÅzeile mehr */
+    done          = TRUE;                       /* Sonst keine MenÔøΩzeile mehr */
     called_by [0] = EOS;                        /* Programm ganz beenden */
   } /* if */
 } /* wi_close */
@@ -589,7 +589,7 @@ WINDOWP window;
     vsf_perimeter (vdi_handle, FALSE);          /* Keine Umrandung */
 
     rect2array (&window->scroll, pxy);
-    v_bar (vdi_handle, pxy);                    /* Scrollbereich mit Muster fÅllen */
+    v_bar (vdi_handle, pxy);                    /* Scrollbereich mit Muster fÔøΩllen */
   } /* if */
 } /* wi_draw */
 
@@ -635,7 +635,7 @@ WORD    action;
 	{
 	 rtmmodule = rtmmodules [rtmi];
 	
-	 	if (setin (objs, rtmmodule->icon_number)) /* Icon angewÑhlt? */
+	 	if (setin (objs, rtmmodule->icon_number)) /* Icon angewÔøΩhlt? */
 		{
 		   switch (action)
 		   {
@@ -653,7 +653,7 @@ WORD    action;
 		} /* if */
 	} /* for */
 
-	if (ok==FALSE) /* keine Modul-Funktion gefunden, "normale" MenÅabfrage */
+	if (ok==FALSE) /* keine Modul-Funktion gefunden, "normale" MenÔøΩabfrage */
 	{
 		for (i = 0; i < FKEYS; i++)
 			if (setin (objs, i))
@@ -696,7 +696,7 @@ WORD    action;
 							*/
 							default:
 							/* Icon-Text als Hilfe-Referenz */
-								ok = help_rtm (((ICONBLK*)desktop[i].ob_spec)->ib_ptext);
+								ok = help_rtm ((desktop[i].ob_spec.iconblk)->ib_ptext);
 								break;
 						} /* switch */
 						
@@ -753,7 +753,7 @@ MKINFO  *mk;
       if ((desktop [obj].ob_type & 0xFF) == G_ICON)
       {
         get_border (window, obj, &r);
-        if (! in_icon (mk->mox, mk->moy, (ICONBLK *)desktop [obj].ob_spec, &r)) obj = NIL;
+        if (! in_icon (mk->mox, mk->moy, desktop [obj].ob_spec.iconblk, &r)) obj = NIL;
       } /* if */
 
     if (obj > FKEYS)                            /* Funktionstaste */
@@ -764,15 +764,15 @@ MKINFO  *mk;
       if (! (desktop [obj].ob_state & DISABLED))
       {
 #if GEM & XGEM
-        bstate         = 0x0001;                /* Maustaste kann gedrÅckt gehalten werden */
+        bstate         = 0x0001;                /* Maustaste kann gedrÔøΩckt gehalten werden */
 #else
-        bclicks        = 0x0102;                /* Maustaste kann gedrÅckt gehalten werden */
+        bclicks        = 0x0102;                /* Maustaste kann gedrÔøΩckt gehalten werden */
 #endif
         mk->ascii_code = 0;                     /* Funktionstasten haben keinen ASCII-Code */
-        mk->scan_code  = F1 + func - 1;         /* Funktionstaste gedrÅckt */
+        mk->scan_code  = F1 + func - 1;         /* Funktionstaste gedrÔøΩckt */
         mk->kreturn    = (mk->scan_code << 8) | mk->ascii_code;
 
-        key_window (window, mk);                /* Taste fÅr Fenster */
+        key_window (window, mk);                /* Taste fÔøΩr Fenster */
       } /* if */
     } /* if */
     else
@@ -794,7 +794,7 @@ MKINFO  *mk;
         {
           if (! setin (sel_objs, obj))
           {
-            unclick_window (window);            /* Alte Objekte lîschen */
+            unclick_window (window);            /* Alte Objekte lÔøΩschen */
             invert_objs (window, new_objs);
           } /* if */
 
@@ -842,7 +842,7 @@ WINDOWP window;
 } /* wi_unclick */
 
 /*****************************************************************************/
-/* Taste fÅr Fenster                                                         */
+/* Taste fÔøΩr Fenster                                                         */
 /*****************************************************************************/
 
 LOCAL BOOLEAN wi_key (window, mk)
@@ -903,7 +903,7 @@ MKINFO  *mk;
 } /* wi_key */
 
 /*****************************************************************************/
-/* Zeitablauf fÅr Fenster                                                    */
+/* Zeitablauf fÔøΩr Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer (window)
@@ -942,7 +942,7 @@ WORD   icon;
     window->xunits    = XUNITS;
     window->yunits    = YUNITS;
 
-    if (window->class == DESK)                  /* RegulÑrer Desktop */
+    if (window->class == DESK)                  /* RegulÔøΩrer Desktop */
     {
       window->scroll.x = desk.x;
       window->scroll.y = desk.y;
@@ -967,8 +967,8 @@ WORD   icon;
     window->special   = 0;
     window->object    = obj;
     window->menu      = menu;
-    window->hndl_menu = hndl_menu;              /* Globaler MenÅ-Handler */
-    window->updt_menu = updt_menu;              /* Globaler MenÅ-Updater */
+    window->hndl_menu = hndl_menu;              /* Globaler MenÔøΩ-Handler */
+    window->updt_menu = updt_menu;              /* Globaler MenÔøΩ-Updater */
     window->test      = NULL;
     window->open      = NULL;
     window->close     = wi_close;
@@ -990,28 +990,28 @@ WORD   icon;
 
     if (class_desk != DESK)                     /* Desktop im Fenster */
       if (obj != NULL)                          /* Dokument angleichen */
-      {                                         /* Muû grîûer werden */
+      {                                         /* MuÔøΩ grÔøΩÔøΩer werden */
         if (obj->ob_width  > desk.x + desk.w) window->doc.w = obj->ob_width / XFAC;
         if (obj->ob_height > desk.y + desk.h) window->doc.h = obj->ob_height / YFAC;
       } /* if, if */
 
     if (obj == NULL)
     {
-      window->doc.w = 0;                        /* Immer groûe Slider zeigen */
+      window->doc.w = 0;                        /* Immer groÔøΩe Slider zeigen */
       window->doc.h = 0;
     } /* if */
     else
       window->doc.y = window->doc.h - window->scroll.h / window->yfac; /* Unten positionieren */
 
-    strcpy (window->name, (BYTE *)freetext [FDESKNAM].ob_spec); /* Name Deskfenster */
+    strcpy (window->name, freetext [FDESKNAM].ob_spec.free_string); /* Name Deskfenster */
     strcpy (window->info, "");                                  /* Infozeile immer leer */
   } /* if */
 
-  return (window);                              /* Fenster zurÅckgeben */
+  return (window);                              /* Fenster zurÔøΩckgeben */
 } /* crt_desktop */
 
 /*****************************************************************************/
-/* ôffnen des Objekts                                                        */
+/* ÔøΩffnen des Objekts                                                        */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN open_desktop (icon)
@@ -1043,8 +1043,8 @@ WORD icon;
     {
       setclr (menus);                   /* Zwinge Funktionstasten einzutragen */
       set_meminfo ();                   /* Speicher anzeigen */
-      updt_menu (NULL);                 /* AnfangsmenÅ und Funktionstatsten */
-      ok = open_window (window);        /* Desktop îffnen */
+      updt_menu (NULL);                 /* AnfangsmenÔøΩ und Funktionstatsten */
+      ok = open_window (window);        /* Desktop ÔøΩffnen */
     } /* if */
     else
       top_window (window);              /* Bringe Desktop nach oben */
@@ -1069,7 +1069,7 @@ WORD    icon;
   if (window == NULL)
   {
     form_center (about, &ret, &ret, &ret, &ret);
-    window = crt_dialog (about, NULL, ABOUT, (BYTE *)freetext [FABOUT].ob_spec, WI_MODAL);
+    window = crt_dialog (about, NULL, ABOUT, freetext [FABOUT].ob_spec.free_string, WI_MODAL);
   } /* if */
 
   if (window != NULL)

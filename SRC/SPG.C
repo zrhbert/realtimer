@@ -494,8 +494,8 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 
-      sprintf (window->name, "%s", (BYTE *)spg_text [FSPGN].ob_spec);
-    sprintf (window->info, (BYTE *)spg_text [FSPGI].ob_spec, 0);
+      sprintf (window->name, "%s", spg_text [FSPGN].ob_spec.free_string);
+    sprintf (window->info, spg_text [FSPGI].ob_spec.free_string, 0);
   } /* if */
 
   return (window);                      /* Fenster zurÅckgeben */
@@ -551,7 +551,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (spg_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (spg_info, NULL, ISPG, (BYTE *)spg_text [FSPGN].ob_spec, WI_MODAL);
+		 window = crt_dialog (spg_info, NULL, ISPG, spg_text [FSPGN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)
@@ -716,7 +716,7 @@ PRIVATE BOOLEAN init_rsc ()
     form_alert (1, s);
     if (! deskacc) return (FALSE);
     menu_unregister (gl_apid);                  /* Wieder abmelden */
-    while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
+    while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
   rs_gaddr (spg_rsc_ptr, R_TREE,  SPG_SETUP,	&spg_setup);   /* Adresse der SPG-Parameter-Box */

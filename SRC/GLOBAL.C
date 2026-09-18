@@ -16,6 +16,8 @@
 #include "windows.h"
 */
 
+GLOBAL WORD hndl_alert _((WORD alert_id));    /* prototype from dialog.h, which isn't included here */
+
 #if UNIX
 #if PCC
 #include <malloc.h>
@@ -67,9 +69,7 @@ typedef struct
 /****** VARIABLES ************************************************************/
 
 #if GEMDOS
-#if DR_C | LASER_C | TURBO_C | MW_C
 EXTERN WORD _app;                         /* Applikation oder Accessory */
-#endif
 #endif
 
 LOCAL WORD     last_mousenumber = 0;
@@ -570,7 +570,7 @@ BYTE   *s;
 {
   TEDINFO *ptedinfo;
 
-  ptedinfo = (TEDINFO *)tree [obj].ob_spec;
+  ptedinfo = tree [obj].ob_spec.tedinfo;
   strncpy (ptedinfo->te_ptext, s, ptedinfo->te_txtlen - 1);
   ptedinfo->te_ptext [ptedinfo->te_txtlen - 1] = EOS;
 } /* set_ptext */
@@ -585,7 +585,7 @@ BYTE   *s;
 {
   TEDINFO *ptedinfo;
 
-  ptedinfo = (TEDINFO *)tree [obj].ob_spec;
+  ptedinfo = tree [obj].ob_spec.tedinfo;
   strcpy (s, ptedinfo->te_ptext);
 } /* get_ptext */
 
@@ -645,7 +645,7 @@ BOOLEAN calc_border;
        (OB_TYPE (tree, obj) == G_IBOX) ||
        (OB_TYPE (tree, obj) == G_BOXCHAR)))
   {
-    border = (WORD)(((LONG)tree [obj].ob_spec >> 16) & 0x00FFL);
+    border = (WORD)((tree [obj].ob_spec.index >> 16) & 0x00FFL);
 
     if (border & 0x0080) border |= 0xFF00;      /* Rand negativ */
 
@@ -733,7 +733,7 @@ WORD   obj;
 
   if (type == G_ICON)
   {
-    piconblk = (ICONBLK *)tree [obj].ob_spec;
+    piconblk = tree [obj].ob_spec.iconblk;
     taddr    = piconblk->ib_pmask;
     wb       = piconblk->ib_wicon;
     wb       = wb >> 3;
@@ -745,7 +745,7 @@ WORD   obj;
   } /* if */
   else
   {
-    pbitblk = (BITBLK *)tree [obj].ob_spec;
+    pbitblk = tree [obj].ob_spec.bitblk;
     taddr   = pbitblk->bi_pdata;
     wb      = pbitblk->bi_wb;
     hl      = pbitblk->bi_hl;
@@ -1086,7 +1086,7 @@ WORD   start;
                         0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0,
                         NULL,
-                        0, 0,
+                        0,
                         &mx, &my, &mb, &ks, &kr, &br);
 
     if (which & MU_KEYBD)
@@ -1178,9 +1178,9 @@ WORD   obj, blinkrate;
     {
       objc_change (tree, obj, 0, desk.x, desk.y, desk.w, desk.h, tree [obj].ob_state ^ SELECTED, TRUE);
 #if GEM & XGEM
-      evnt_timer (10, 0);
+      evnt_timer (10);
 #else
-      evnt_timer (50, 0);
+      evnt_timer (50);
 #endif
     } /* for */
 } /* blink */
@@ -1286,7 +1286,7 @@ WORD    bmsk;
                         1, bmsk, ~ mobutton & bmsk,
                         leave, r.x, r.y, r.w, r.h,
                         0, 0, 0, 0, 0,
-                        NULL, 0, 0,
+                        NULL, 0,
                         &mox, &moy, &ret, &ret, &uret, &ret);
 
 	if (objc_find (tree, obj, MAX_DEPTH, mox, moy))
@@ -1356,7 +1356,7 @@ WORD   *title, *item;
       {
         if (((menu [litem].ob_type & 0xFF) == G_STRING) && ! is_state (menu, litem, DISABLED))
         {
-          s = (BYTE *)menu [litem].ob_spec;             /* Men� */
+          s = menu [litem].ob_spec.free_string;             /* Men� */
 
           /* �nderung: rechts angeh�ngte Leerzeichen ignorieren. BD */
           for (x = strlen (s)-1; (x >= 0) && (s [x] == SP); x--);
@@ -1945,9 +1945,9 @@ GLOBAL LONG mem_avail ()
     LONG ret;
     
     if (tos >= 0x0300)
-        ret = (VOID *)Mxalloc (-1L, 3);
+        ret = (LONG)Mxalloc (-1L, 3);
     else
-        ret = (VOID *)Malloc (-1L);
+        ret = (LONG)Malloc (-1L);
 
     if (ret < 100000L)
         hndl_alert (ERR_NOMEMORY);
@@ -2655,7 +2655,7 @@ WORD class;
     class_desk = DESKWINDOW;                    /* Desktop im Fenster */
 
     if (menu_id < 0)
-      while (TRUE) evnt_timer (0, 1);           /* Lasse andere Prozesse ran */
+      while (TRUE) evnt_timer (65536L);           /* Lasse andere Prozesse ran */
   } /* if */
   else
   {

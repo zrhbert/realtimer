@@ -12,12 +12,12 @@
 V 1.03
 - VOLUME AUSGESCHALTET! 03.02.95
 - Bug in send_messages und message bei PAN berechnung beseitigt, 03.02.95
-- minmax fÅr ctrl-port und channel, 02.02.95
+- minmax fÔøΩr ctrl-port und channel, 02.02.95
 - Status-Init mit ctrl-infos, 02.02.95
 - LFO_RANDOM repariert, 02.02.95
 - falsche Beschriftung der Import-Box korrigiert, 02.02.95
 - ClickSetupField eingebaut, 30.01.95
-- position_lfo umgebaut fÅr besseres Pausen-Handling, 14.01.95
+- position_lfo umgebaut fÔøΩr besseres Pausen-Handling, 14.01.95
 - random eingebaut, 09.01.95
 - pan_pan in quad_breite umbenannt, quad_pos eingebaut, 09.01.95
 - bug in pan_pan beseitigt, 08.01.95
@@ -94,13 +94,13 @@ V 0.08
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fÅr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fÅr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fÔøΩr Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fÔøΩr Scrolling */
 #define INITX  ( 1 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 3 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangshîhe in Pixel */
-#define MILLI  0						/* Millisekunden fÅr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* AnfangshÔøΩhe in Pixel */
+#define MILLI  0						/* Millisekunden fÔøΩr Zeitablauf */
 
 #define MAXSETUPS 2001l				/* Anzahl der LFO-Setups */
 #define MAXPATCH	MAXSIGNALS					/* Anzahl der Patch-Spalten */
@@ -122,7 +122,7 @@ typedef	struct	lfoquelle
 			pauso_zeit,	/* Pause am oberen Scheitelpunkt in Zeiteinheiten */
 			pausu_zeit,	/* Pause am unteren Scheitelpunkt in Zeiteinheiten */
 			var;			/* VAR-Systemvariable-Input */
-	UINT	prop_speed	: 1,	/* Speed abhÑndig von Proportional-Faktor */
+	UINT	prop_speed	: 1,	/* Speed abhÔøΩndig von Proportional-Faktor */
 			prop_phase	: 1,	/* usw. */
 			prop_ampli	: 1,
 			prop_null	: 1,
@@ -133,18 +133,18 @@ typedef	struct	lfoquelle
 typedef	struct	lfopatch
 {
 	/* Geplante Auswirkungen der LFO auf ein Signal */
-	WORD	pan_breite,	/* Koeffizient fÅr Panbreite */
+	WORD	pan_breite,	/* Koeffizient fÔøΩr Panbreite */
 			pan_pos,		/* ... Pan-Position (Balance) */ 
 			quad_breite,/* Quadro-Pan Breite */
 			quad_pos,	/* Quadro-Pan Position */
 			versch_x,	/* Verschiebung der X-Koordinate */
 			versch_y,	/* ... Y-Koor */
 			versch_z,	/* ... Z-Koor */
-			volume,		/* Modulation LautstÑrke */
+			volume,		/* Modulation LautstÔøΩrke */
 			zoom,			/* Modulation Zoom */
-			mtr_pos,		/* Vorgabe fÅr MTR-Position (in Grad) */
+			mtr_pos,		/* Vorgabe fÔøΩr MTR-Position (in Grad) */
 			mtr_spd,		/* Modulation MTR-Geschwindigkeit */
-			vor_zur;		/* Ausleseposition fÅr Arbeitpuffer */
+			vor_zur;		/* Ausleseposition fÔøΩr Arbeitpuffer */
 } LFOPATCH;
 
 typedef	struct	setup
@@ -176,37 +176,37 @@ typedef struct statqsingle
 typedef struct statzsingle
 {
 	/* Auswirkung aller LFO auf ein Signal */
-	WORD	pan_breite,	/* Koeffizient fÅr Panbreite */
+	WORD	pan_breite,	/* Koeffizient fÔøΩr Panbreite */
 			pan_pos,		/* ... Pan-Position (Balance) */ 
 			quad_breite,/* Quad Pan-Breite */ 
 			quad_pos,	/* ... Pan-Position (Balance) */ 
 			versch_x,	/* Verschiebung der X-Koordinate */
 			versch_y,	/* ... Y-Koor */
 			versch_z,	/* ... Z-Koor */
-			volume,		/* Modulation LautstÑrke */
+			volume,		/* Modulation LautstÔøΩrke */
 			zoom,			/* Modulation Zoom */
-			mtr_pos,		/* Vorgabe fÅr MTR-Position (in Grad) */
+			mtr_pos,		/* Vorgabe fÔøΩr MTR-Position (in Grad) */
 			mtr_spd,		/* Modulation MTR-Geschwindigkeit */
-			vor_zur;		/* Ausleseposition fÅr Arbeitspuffer */
+			vor_zur;		/* Ausleseposition fÔøΩr Arbeitspuffer */
 } STATZSINGLE;
 
 typedef struct status
 {
-	STATQSINGLE	quelle[MAXLFOS];		/* Status fÅr jeden LFO */
+	STATQSINGLE	quelle[MAXLFOS];		/* Status fÔøΩr jeden LFO */
 	STATZSINGLE	ziel[MAXSIGNALS];		/* Status der Auswirkungen */
 	UINT			pause	 : 1;				/* LFO-System angehalten */
 	UINT			umkehr : 1;				/* LFO-System umgedreht */
 	WORD			prop;						/* Proportional-Faktor */
 	WORD			var_values[MAXSETVARS];	/* Systemvariablen */
-	WORD			ctrl_out_port;			/* Ausgabe-Port fÅr Controller */
-	WORD			ctrl_out_ch;			/* Ausgabe-Kanal fÅr Controller */
+	WORD			ctrl_out_port;			/* Ausgabe-Port fÔøΩr Controller */
+	WORD			ctrl_out_ch;			/* Ausgabe-Kanal fÔøΩr Controller */
 } STATUS;
 
 typedef struct status *STAT_P;	
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	lfo_rsc_hdr;					/* Zeigerstruktur fÅr RSC-Datei */
-PRIVATE WORD	*lfo_rsc_ptr = &lfo_rsc_hdr;		/* Zeigerstruktur fÅr RSC-Datei */
+PRIVATE WORD	lfo_rsc_hdr;					/* Zeigerstruktur fÔøΩr RSC-Datei */
+PRIVATE WORD	*lfo_rsc_ptr = &lfo_rsc_hdr;		/* Zeigerstruktur fÔøΩr RSC-Datei */
 PRIVATE OBJECT *lfo_setup;
 PRIVATE OBJECT *lfo_help;
 PRIVATE OBJECT *lfo_quelle;
@@ -218,7 +218,7 @@ PRIVATE OBJECT *lfo_info;
 PRIVATE SHORT	refvar = 0;				/* MS-Referenz-Nummer des VAR-Moduls */
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 20;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "LFO";		/* Name, fÅr Extension etc. */
+PRIVATE CONST STRING module_name = "LFO";		/* Name, fÔøΩr Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 
@@ -277,7 +277,7 @@ PRIVATE WORD	quelle_item		(WORD item)
 
 PRIVATE WORD	lfo_offset	(WORD lfo)
 {
-	/* Berechnung des Objekt-Offsets fÅr zweireihige LFO Anzeige */
+	/* Berechnung des Objekt-Offsets fÔøΩr zweireihige LFO Anzeige */
 	/* Merke: Buttons sind von 1-12 numeriert, LFO's von 0-11 */
 	if (lfo < 6)
 		return (LFO2-LFO1)*lfo;
@@ -461,7 +461,7 @@ PRIVATE VOID    set_dbox	(RTMCLASSP module)
 PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 {
 	WORD			lfo = 0, pos, position, signal;	
-	LONG 			temp =0L;				/* Hilfsvariable um öberlauf zu vermeiden */
+	LONG 			temp =0L;				/* Hilfsvariable um ÔøΩberlauf zu vermeiden */
 	SET_P			set 		= module->actual->setup;
 	LFOQUELLE	*quelle	= set->quelle;
 	LFOPATCH		*patch	= set->patch;
@@ -474,7 +474,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 	WORD			*var = status->var_values;
 	FLOAT			zoomv, volv;
 		
-	stat_qs = status->quelle;			/* Status fÅr ersten LFO */
+	stat_qs = status->quelle;			/* Status fÔøΩr ersten LFO */
 	for(lfo=0; lfo < MAXLFOS; lfo++)
 	{
 		if (stat_qs->an && quelle->form != LFO_STOP)
@@ -511,7 +511,9 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 					temp *= quelle->ampli / 100;
 					break;
 				case LFO_RANDOM:
-					temp = random (quelle->ampli) - quelle->ampli/2;
+					/* random(n) (Turbo-C convenience function) is not available
+					   in the modern C library; emulate it via GEMDOS Random(). */
+					temp = (LONG)((ULONG)Random() % (ULONG)quelle->ampli) - quelle->ampli/2;
 					break;
 			} /* switch */
 
@@ -524,7 +526,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 			else
 				pos = (WORD)temp + quelle->null;
 			
-			/* 'pos' enthÑlt nun aktuelle Amplitude */
+			/* 'pos' enthÔøΩlt nun aktuelle Amplitude */
 			stat_qs->pos = pos;
 
 			/* MIDI Controller Ausgabe der LFO Position */
@@ -553,7 +555,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 
 /* Volume abgeschaltet! */
 #if false
-		/* Volume, wenn Patch Volume verÑndert */
+		/* Volume, wenn Patch Volume verÔøΩndert */
 		if (patch[signal].volume > 0) 
 		{
 			volv			= z->volume;
@@ -562,7 +564,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 		} /* if */
 #endif
 
-		/* Zoom, wenn Patch Zoom verÑndert */
+		/* Zoom, wenn Patch Zoom verÔøΩndert */
 		if (patch[signal].zoom > 0) 
 		{
 			zoomv = z->zoom;
@@ -607,27 +609,27 @@ PRIVATE WORD position_lfo (RTMCLASSP module, LFOQUELLE *quelle, STATQSINGLE *sta
 			step *= -1;
 	} /* else */
 	
-	/* Evtl. Proport-Faktor berÅcksichtigen */
+	/* Evtl. Proport-Faktor berÔøΩcksichtigen */
 	if (quelle->prop_speed)
 			step *= proport / 100;
 	
-	/* Phase aus Setup  berÅcksichtigen */
+	/* Phase aus Setup  berÔøΩcksichtigen */
 	if (quelle->prop_phase)
-		/* Evtl. Proport-Faktor berÅcksichtigen */
+		/* Evtl. Proport-Faktor berÔøΩcksichtigen */
 		phase = quelle->phase * proport / 100;
 	else
 		phase = quelle->phase;
 	
-	/* öberlauf verhindern */
+	/* ÔøΩberlauf verhindern */
 	stat_qs->step_cumul = fmod(720 + stat_qs->step_cumul, 360);
 	
 	/* momentane Position neu berechnen */						
 	*position = stat_qs->step_cumul + phase + step;
 	
-	/* 'stat_qs->position' enhÑlt nun endgÅltigen Wert fÅr diesen Durchlauf */
-	/* Phase wird dynamisch berechnet fÅr jeden Durchlauf */
+	/* 'stat_qs->position' enhÔøΩlt nun endgÔøΩltigen Wert fÔøΩr diesen Durchlauf */
+	/* Phase wird dynamisch berechnet fÔøΩr jeden Durchlauf */
 							
-	/* FÅr internen Zeiger nur einen Schritt weiter gehen */
+	/* FÔøΩr internen Zeiger nur einen Schritt weiter gehen */
 	if (stat_qs->an && stat_qs->pauso_cumul == 0 && stat_qs->pausu_cumul == 0)
 	{
 		/* LFO-Weiterstellen */
@@ -646,7 +648,7 @@ PRIVATE WORD position_lfo (RTMCLASSP module, LFOQUELLE *quelle, STATQSINGLE *sta
 				stat_qs->pauso_fertig = TRUE;
 				stat_qs->pauso_cumul = 0;
 				stat_qs->pausu_fertig = FALSE;
-				/* Alte Position wieder einstellen, fÅr glatten Durchlauf */
+				/* Alte Position wieder einstellen, fÔøΩr glatten Durchlauf */
 				*position = stat_qs->pos_alt;
 			} /* if */
 			else
@@ -657,9 +659,9 @@ PRIVATE WORD position_lfo (RTMCLASSP module, LFOQUELLE *quelle, STATQSINGLE *sta
 					stat_qs->pos_alt = *position;
 					*position = 90;
 				} /* if */
-				/* PausenzÑhler inkrementieren */
+				/* PausenzÔøΩhler inkrementieren */
 				if (quelle->prop_pauso)
-					/* Evtl. Proport-Faktor berÅcksichtigen */
+					/* Evtl. Proport-Faktor berÔøΩcksichtigen */
 					stat_qs->pauso_cumul += stat_qs->pauso_step * stat_qs->speed_koeff/100 * proport/100;
 				else
 					stat_qs->pauso_cumul += stat_qs->pauso_step * stat_qs->speed_koeff/100;
@@ -683,7 +685,7 @@ PRIVATE WORD position_lfo (RTMCLASSP module, LFOQUELLE *quelle, STATQSINGLE *sta
 				stat_qs->pausu_fertig = TRUE;
 				stat_qs->pausu_cumul = 0;
 				stat_qs->pauso_fertig = FALSE;
-				/* Alte Position wieder einstellen, fÅr glatten Durchlauf */
+				/* Alte Position wieder einstellen, fÔøΩr glatten Durchlauf */
 				*position=stat_qs->pos_alt;
 			} /* if */
 			else
@@ -694,9 +696,9 @@ PRIVATE WORD position_lfo (RTMCLASSP module, LFOQUELLE *quelle, STATQSINGLE *sta
 					stat_qs->pos_alt = *position;
 					*position = 270;
 				} /* if */
-				/* PausenzÑhler inkrementieren */
+				/* PausenzÔøΩhler inkrementieren */
 				if (quelle->prop_pausu)
-					/* Evtl. Proport-Faktor berÅcksichtigen */
+					/* Evtl. Proport-Faktor berÔøΩcksichtigen */
 					stat_qs->pausu_cumul += stat_qs->pausu_step * stat_qs->speed_koeff/100 * proport/100;
 				else
 					stat_qs->pausu_cumul += stat_qs->pausu_step * stat_qs->speed_koeff/100;
@@ -720,9 +722,9 @@ PRIVATE VOID use_lfos (RTMCLASSP module, LFOPATCH patches[], STATQSINGLE quell_s
 	STATZSINGLE *z;
 	WORD			signal;
 	
-	/* Alten Ziel-Status aller LFO lîschen */
+	/* Alten Ziel-Status aller LFO lÔøΩschen */
 	mem_setx (ziel_s, 0, (UWORD) sizeof(STATZSINGLE)*MAXSIGNALS);
-	/* Default-Werte fÅr Pan's */
+	/* Default-Werte fÔøΩr Pan's */
 	for (signal=0; signal < MAXSIGNALS; signal++)
 	{
 			ziel_s[signal].pan_breite = 100;
@@ -756,7 +758,7 @@ PRIVATE VOID use_lfos (RTMCLASSP module, LFOPATCH patches[], STATQSINGLE quell_s
 		} /* if */
 		if (patch->vor_zur > 0)
 		{
-			/* Vor- und ZurÅck */
+			/* Vor- und ZurÔøΩck */
 			z->vor_zur += quell_s[patch->vor_zur-1].pos;
 		} /* if */
 		if (patch->mtr_pos > 0)
@@ -779,45 +781,45 @@ PRIVATE VOID use_lfos (RTMCLASSP module, LFOPATCH patches[], STATQSINGLE quell_s
 			/* Verschieben in X-Richtung */
 			z->versch_z += quell_s[patch->versch_z-1].pos;
 		} /* if */
-		z++;		/* nÑchster Zielstatus */
+		z++;		/* nÔøΩchster Zielstatus */
 		patch++;
 	} /* for */
 
 	/* ACHTUNG: Nur ein LFO pro Pan */
 	for (signal=1; signal < MAXSIGNALS; signal+=2)
 	{
-		/* Absolute Addressierung wegen Åbersprungener Patches */
+		/* Absolute Addressierung wegen ÔøΩbersprungener Patches */
 		patch = &patches[signal];
 		z = &ziel_s[signal];		/* Adresse des Zielstatus */
 		if (patch->pan_breite > 0)
 		{
-			/* Panorama-Breite fÅr Stereo-Panoramen */
+			/* Panorama-Breite fÔøΩr Stereo-Panoramen */
 			/* LFO-Standard: Ampl 100= Panpos: -50% .. 50% */
 			z->pan_breite = quell_s[patch->pan_breite-1].pos;
 		} /* if */
 		if (patch->pan_pos > 0)
 		{
-			/* Panorama-Position fÅr Stereo-Panoramen */
+			/* Panorama-Position fÔøΩr Stereo-Panoramen */
 			/* LFO-Standard: Ampl 100= Panpos: -50% .. 50% */
 			z->pan_pos = quell_s[patch->pan_pos-1].pos;
 		} /* if */
-		z++;		/* nÑchster Zielstatus */
+		z++;		/* nÔøΩchster Zielstatus */
 		patch++;
 	} /* for */
 
 	for (signal=1; signal < MAXSIGNALS; signal+=4)
 	{
-		/* Absolute Addressierung wegen Åbersprungener Patches */
+		/* Absolute Addressierung wegen ÔøΩbersprungener Patches */
 		patch = &patches[signal];
 		z = &ziel_s[signal];		/* Adresse des Zielstatus */
 		if (patch->quad_breite > 0)
 		{
-			/* Panorama-Position fÅr Quadro-Panoramen */
+			/* Panorama-Position fÔøΩr Quadro-Panoramen */
 			z->quad_breite = quell_s[patch->quad_breite-1].pos;
 		} /* if */
 		if (patch->quad_pos > 0)
 		{
-			/* Panorama-Position fÅr Quadro-Panoramen */
+			/* Panorama-Position fÔøΩr Quadro-Panoramen */
 			z->quad_pos = quell_s[patch->quad_pos-1].pos;
 		} /* if */
 	} /* for */
@@ -825,7 +827,7 @@ PRIVATE VOID use_lfos (RTMCLASSP module, LFOPATCH patches[], STATQSINGLE quell_s
 
 PRIVATE VOID panning (KOOR_ALL *koors, STATZSINGLE ziel_s[])
 {
-	/* Pan-Funktion fÅr alle LFO-Ziele */
+	/* Pan-Funktion fÔøΩr alle LFO-Ziele */
 	STATZSINGLE *z;
 	KOOR_SINGLE	*koor = koors->koor;
 	WORD			signal;
@@ -861,7 +863,7 @@ PRIVATE VOID pan_koor (POINT_3D *k1, POINT_3D *k2, WORD breite, WORD pos)
 
 PRIVATE VOID pan (BYTE *k1, BYTE *k2, WORD breite, WORD pos)
 {
-	/* Pan-Funktion fÅr eine Dimension */
+	/* Pan-Funktion fÔøΩr eine Dimension */
 	WORD	dist, newdist;
 
 	/* Abstand berechnen */
@@ -905,7 +907,7 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 		send_variable(VAR_LFA_ZOOM0 		+ signal, z->zoom);
 		send_variable(VAR_LFA_VORZUR0		+ signal, z->vor_zur);
 		send_variable(VAR_LFA_MTR_POS0 	+ signal, z->mtr_pos);
-		z++;		/* Auf nÑchsten Signal-Setup zeigen */
+		z++;		/* Auf nÔøΩchsten Signal-Setup zeigen */
 	} /* for */	
 	x = 0;
 	z = ziel;
@@ -926,7 +928,7 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* ZurÅcksetzen von Werten */
+	/* ZurÔøΩcksetzen von Werten */
 	SET_P			akt = module->actual->setup;
 	STAT_P		status = module->status;
 	LFOQUELLE	*quelle = akt->quelle; 		/* Zeiger auf ersten Signal-Setup */
@@ -950,8 +952,8 @@ PUBLIC VOID		reset	(RTMCLASSP module)
 		q->step			= Stepwinkel (quelle->speed);
 		q->pauso_step	= Stepwinkel (quelle->pauso_zeit);
 		q->pausu_step	= Stepwinkel (quelle->pausu_zeit);
-		quelle++;	/* Auf nÑchstes Signal-Setup zeigen */
-		q++;			/* Auf nÑchsten Signal-Status zeigen */
+		quelle++;	/* Auf nÔøΩchstes Signal-Setup zeigen */
+		q++;			/* Auf nÔøΩchsten Signal-Status zeigen */
 	} /* for */
 
 	for(signal=0; signal < MAXSIGNALS; signal++)
@@ -965,11 +967,11 @@ PUBLIC VOID		reset	(RTMCLASSP module)
 		z->pan_breite	= 100;
 		z->quad_breite	= 100;
 		z->quad_pos 		= 0;
-		z++;			/* Auf nÑchsten Ziel-Status zeigen */
+		z++;			/* Auf nÔøΩchsten Ziel-Status zeigen */
 	} /* for */
 
 	send_messages (module);
-	/* FÅr Controller-Ausgabe */
+	/* FÔøΩr Controller-Ausgabe */
 		/* BD 2012_01_22: disable VAR
 		if (!refvar) refvar = MidiGetNamedAppl("VAR");
 	 */
@@ -1013,7 +1015,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 		else
 		{
 			module->import_status |= FILE_OPENED;
-			/* Zeiger auf erstes Setup nochmal holen, wegen Supervisor-MÅll in file_split */
+			/* Zeiger auf erstes Setup nochmal holen, wegen Supervisor-MÔøΩll in file_split */
 			akt = module->actual->setup;
 			daktstatus(" LFO-Datei wird importiert ... ", module->import_name);
 			module->flags |= FLAG_IMPORTING;
@@ -1065,12 +1067,12 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 									quelle->var		= VAR_PITCH;
 									break;
 					}								
-					quelle++;	/* Auf Info fÅr nÑchste Signal zeigen */
+					quelle++;	/* Auf Info fÔøΩr nÔøΩchste Signal zeigen */
 				} /* for */
 				patch = akt->patch;
 				for (x = 0; x < MAXPATCH; x++)
 				{
-					/* Signal 0 Info Åberspringen */
+					/* Signal 0 Info ÔøΩberspringen */
 					if (x == 0) patch = &muell_patch;
 					ok = fscanf(in, "%d", &muell);
 					ok = fscanf(in, "%d", &patch->pan_breite);
@@ -1084,11 +1086,11 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					ok = fscanf(in, "%d", &patch->versch_z);
 					ok = fscanf(in, "%d", &muell);
 					if (x == 0) patch = akt->patch;
-					patch++;	 /* Auf Info fÅr nÑchste Signal zeigen */
+					patch++;	 /* Auf Info fÔøΩr nÔøΩchste Signal zeigen */
 				} /* for */
                 /* Leerzeile */
 				/* ok = fscanf(in, "%s", s);	 */
-				/* Setup speichern und nÑchstes Setup anwÑhlen */
+				/* Setup speichern und nÔøΩchstes Setup anwÔøΩhlen */
 				if (! module->get_setnr(module, setnr))
 					ok = EOF;	/* Import beenden */
 				if (setnr % 20 == 0)
@@ -1282,7 +1284,7 @@ MKINFO  *mk;
 			offset = 0;
 			for (signal = 0; !found && signal < MAXSIGNALS; signal++)
 			{
-				/* Absolute Addressierung wegen Åbersprungener Patches */
+				/* Absolute Addressierung wegen ÔøΩbersprungener Patches */
 				lfo_p = &ed->patch[signal];					/* Patch holen */
 				switch (window->exit_obj-signal)
 				{
@@ -1342,7 +1344,7 @@ MKINFO  *mk;
 			offset = 0;
 			for (signal = 1; !found && signal < MAXSIGNALS; signal+=4)
 			{
-				/* Absolute Addressierung wegen Åbersprungener Patches */
+				/* Absolute Addressierung wegen ÔøΩbersprungener Patches */
 				lfo_p = &ed->patch[signal];					/* Patch holen */
 				switch (window->exit_obj - offset)
 				{
@@ -1369,9 +1371,9 @@ MKINFO  *mk;
 
 PRIVATE VOID UpdateVARInField (WINDOWP window, WORD obj, LONG value)
 {
-	/* Funktion fÅr Werte-Update,
-		Setzt neuen Wert in DBOX und den Text fÅr VAR Name ein
-		und fÅr Update auf Screen durch */
+	/* Funktion fÔøΩr Werte-Update,
+		Setzt neuen Wert in DBOX und den Text fÔøΩr VAR Name ein
+		und fÔøΩr Update auf Screen durch */
 		
 	WORD		offset = obj - LFOVARIN1;
 	STRING 	s;
@@ -1433,15 +1435,15 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 
-      sprintf (window->name, "%s", (BYTE *)lfo_text [FLFON].ob_spec);
-    sprintf (window->info, (BYTE *)lfo_text [FLFOI].ob_spec, 0);
+      sprintf (window->name, "%s", lfo_text [FLFON].ob_spec.free_string);
+    sprintf (window->info, lfo_text [FLFOI].ob_spec.free_string, 0);
   } /* if */
 
-  return (window);                      /* Fenster zurÅckgeben */
+  return (window);                      /* Fenster zurÔøΩckgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* ôffnen des Objekts                                                        */
+/* ÔøΩffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -1594,7 +1596,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* PrÅfen, ob DEFAULT-Datei vorhanden */
+		/* PrÔøΩfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -1689,7 +1691,7 @@ PRIVATE BOOLEAN init_rsc ()
     form_alert (1, s);
     if (! deskacc) return (FALSE);
     menu_unregister (gl_apid);                  /* Wieder abmelden */
-    while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
+    while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
   rs_gaddr (lfo_rsc_ptr, R_TREE,  LFO_SETUP,	&lfo_setup);   /* Adresse der LFO-Parameter-Box */

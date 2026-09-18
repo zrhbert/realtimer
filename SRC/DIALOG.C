@@ -27,23 +27,23 @@
 #define FLAGS    (WI_RESIDENT)
 #define XFAC     gl_wbox                /* X-Faktor */
 #define YFAC     2                      /* Y-Faktor */
-#define XUNITS   1                      /* X-Einheiten fÅr Scrolling */
-#define YUNITS   (gl_hbox / YFAC)       /* Y-Einheiten fÅr Scrolling */
-#define MILLI    0                      /* Millisekunden fÅr Zeitablauf */
+#define XUNITS   1                      /* X-Einheiten fÔøΩr Scrolling */
+#define YUNITS   (gl_hbox / YFAC)       /* Y-Einheiten fÔøΩr Scrolling */
+#define MILLI    0                      /* Millisekunden fÔøΩr Zeitablauf */
 
-#define MINBUT   6                      /* Mindestens 6 Buchstaben fÅr Buttons */
-#define ALT_CHAR '~'                    /* Zeichen fÅr Alternate-Bedienung */
+#define MINBUT   6                      /* Mindestens 6 Buchstaben fÔøΩr Buttons */
+#define ALT_CHAR '~'                    /* Zeichen fÔøΩr Alternate-Bedienung */
 
 /****** TYPES ****************************************************************/
 
 /****** VARIABLES ************************************************************/
 
 LOCAL HELPFUNC helpfunc = NULL; /* Zeiger auf Help-Funktion */
-LOCAL OBJECT   *alert_tree;     /* Objekt-Baum fÅr alerts */
+LOCAL OBJECT   *alert_tree;     /* Objekt-Baum fÔøΩr alerts */
 LOCAL WORD     alert_index;     /* Resource-Index des Objekt-Baums */
-LOCAL BYTE     *alert_title;    /* Titel fÅr Fehlermeldungsfenster */
-LOCAL WORD     alert_exit;      /* AngewÑhlter Exit-Button der Alert-Box */
-LOCAL STRING   alert_help;      /* Hilfsstring fÅr Alert */
+LOCAL BYTE     *alert_title;    /* Titel fÔøΩr Fehlermeldungsfenster */
+LOCAL WORD     alert_exit;      /* AngewÔøΩhlter Exit-Button der Alert-Box */
+LOCAL STRING   alert_help;      /* Hilfsstring fÔøΩr Alert */
 LOCAL BOOLEAN  alert_mode = FALSE;      /* TRUE, wenn Fehler als Dialogbox ausgegeben werden soll */
 
 /****** FUNCTIONS ************************************************************/
@@ -245,11 +245,11 @@ UWORD  flags;
     } /* if */
   } /* if */
 
-  return (window);                      /* Fenster zurÅckgeben */
+  return (window);                      /* Fenster zurÔøΩckgeben */
 } /* crt_dialog */
 
 /*****************************************************************************/
-/* ôffnen des Objekts                                                        */
+/* ÔøΩffnen des Objekts                                                        */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN open_dialog (icon)
@@ -340,7 +340,7 @@ BYTE *alertmsg;
 
     *s      = EOS;
     str [w] = EOS;
-    strcpy ((BYTE *)alert_tree [i].ob_spec, str);
+    strcpy (alert_tree [i].ob_spec.free_string, str);
     maxstr = max (maxstr, strlen (str));
     i++;
     if (*p != SEP_CLOSE) p++;
@@ -364,13 +364,13 @@ BYTE *alertmsg;
 
   while (*p != SEP_CLOSE)                       /* Buttons verarbeiten */
   {
-    s = (BYTE *)alert_tree [i].ob_spec;
+    s = alert_tree [i].ob_spec.free_string;
     undo_flags (alert_tree, i, HIDETREE);
 
     while ((*p != SEP_CLOSE) && (*p != SEP_LINE)) *s++ = *p++;
 
     *s = EOS;
-    s  = (BYTE *)alert_tree [i].ob_spec;
+    s  = alert_tree [i].ob_spec.free_string;
 
     if (strchr (s, ALT_CHAR) != NULL)           /* alternate control char */
     {
@@ -378,10 +378,10 @@ BYTE *alertmsg;
 
       alert_tree [i].ob_type &= 0xFF;
       alert_tree [i].ob_type |= ((j + 1) << 8); /* Position merken */
-      strcpy (s + j, s + j + 1);                /* Zeichen rauslîschen */
+      strcpy (s + j, s + j + 1);                /* Zeichen rauslÔøΩschen */
     } /* if */
 
-    maxbut = max (maxbut, strlen ((BYTE *)alert_tree [i].ob_spec));
+    maxbut = max (maxbut, strlen (alert_tree [i].ob_spec.free_string));
     i++;
     num_buttons++;
     if (*p != SEP_CLOSE) p++;
@@ -414,7 +414,7 @@ BYTE *alertmsg;
   p  = strchr (alert_help, SEP_CLOSE);
   *p = EOS;
 
-  maxbut = max (maxbut, MINBUT);               /* Minimale Breite der Knîpfe */
+  maxbut = max (maxbut, MINBUT);               /* Minimale Breite der KnÔøΩpfe */
 
   for (i = button1, x = gl_wbox, maxbut += 2; i - button1 < num_buttons; i++)
   {
@@ -450,9 +450,9 @@ BYTE *alertmsg;
   if ((window == NULL) || ! open_dialog (alert_index))
   {
     if (help != 0) do_state (alert_tree, help, DISABLED);       /* Keine Hilfe, da kein weiteres Fenster */
-    alert_tree->ob_spec = 0x00021100L;                          /* Rand innen = 2 Pixel */
+    alert_tree->ob_spec.index = 0x00021100L;                          /* Rand innen = 2 Pixel */
     alert_exit = hndl_dial (alert_tree, 0, FALSE, TRUE, NULL, &ok) - find_type (alert_tree, ROOT, G_BUTTON) + 1;
-    alert_tree->ob_spec = 0x00001100L;
+    alert_tree->ob_spec.index = 0x00001100L;
     if (help != 0) undo_state (alert_tree, help, DISABLED);
   } /* if */
 
@@ -484,14 +484,14 @@ BOOLEAN use_timer;
   WORD    event;                        /* Eingetretenes Ereignis */
   WORD    msgbuff [8];                  /* Event Message Puffer */
   WORD    locked;                       /* Anzahl gelockter Fenster */
-  WORD    act_hidden;                   /* Anzahl versteckter MÑuse */
+  WORD    act_hidden;                   /* Anzahl versteckter MÔøΩuse */
   WORD    act_busy;                     /* Aktuelle Anzahl Busy-Calls */
   WORD    act_number;                   /* Aktuelle Mausform-Nummer */
   MFORM   *act_form;                    /* Aktuelle Mausform */
   WORD    i;                            /* Hilfsvariable */
   WORD    ret;                          /* Dummy Return-Wert */
   MKINFO  mk;                           /* Maus und Tastatur Info */
-  WINDOWP window;                       /* FÅr Top-Window */
+  WINDOWP window;                       /* FÔøΩr Top-Window */
   WORD    tophandle;                    /* Handle von Top-Window */
 
   locked    = num_locked ();
@@ -525,7 +525,7 @@ BOOLEAN use_timer;
                         0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0,
                         msgbuff,
-                        (UWORD)(millisecs & 0xFFFF), (UWORD)(millisecs >> 16),
+                        millisecs,
                         &mk.mox, &mk.moy,
                         &mk.momask, &mk.kstate,
                         &mk.kreturn, &mk.breturn);
@@ -549,7 +549,7 @@ BOOLEAN use_timer;
     if (event & MU_TIMER ) hndl_timer (millisecs);
 
     if (deskacc && done)
-      close_all (FALSE, TRUE);          /* Schlieûe alle Fenster */
+      close_all (FALSE, TRUE);          /* SchlieÔøΩe alle Fenster */
 
     wind_update (END_UPDATE);           /* Benutzer darf wieder agieren */
     modal_done = (find_window (tophandle) == NULL) || (num_locked () < locked);
@@ -589,7 +589,7 @@ BOOLEAN grow;
 } /* box */
 
 /*****************************************************************************/
-/* ôffne Fenster                                                             */
+/* ÔøΩffne Fenster                                                             */
 /*****************************************************************************/
 
 LOCAL VOID wi_open (window)
@@ -600,7 +600,7 @@ WINDOWP window;
 } /* wi_open */
 
 /*****************************************************************************/
-/* Schlieûe Fenster                                                          */
+/* SchlieÔøΩe Fenster                                                          */
 /*****************************************************************************/
 
 LOCAL VOID wi_close (window)

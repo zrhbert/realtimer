@@ -334,7 +334,7 @@ WORD   icon;
 		window->timer     = wi_timer_mod;
 		window->showinfo  = info_mod;
 		
-        sprintf (window->name, "%s", (BYTE *)gmi_text [FGMIN].ob_spec);
+        sprintf (window->name, "%s", gmi_text [FGMIN].ob_spec.free_string);
 		
 		create_displayobs (window);
 	} /* if */
@@ -411,7 +411,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (gmi_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (gmi_info, NULL, IGMI, (BYTE *)gmi_text [FGMIN].ob_spec, WI_MODAL);
+		 window = crt_dialog (gmi_info, NULL, IGMI, gmi_text [FGMIN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)

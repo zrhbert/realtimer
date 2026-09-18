@@ -149,7 +149,7 @@ FAR PARMBLK *pb;
   else
     obj = (gl_hbox > 8) ? CBHNORM : CBLNORM; /* high resolution : low resolution */
 
-  bitblk = (BITBLK *)userimg [obj].ob_spec;
+  bitblk = userimg [obj].ob_spec.bitblk;
 
   d.mp  = NULL; /* screen */
   s.mp  = (VOID *)bitblk->bi_pdata;
@@ -220,7 +220,7 @@ FAR PARMBLK *pb;
   else
     obj = (gl_hbox > 8) ? RBHNORM : RBLNORM; /* high resolution : low resolution */
 
-  bitblk = (BITBLK *)userimg [obj].ob_spec;
+  bitblk = userimg [obj].ob_spec.bitblk;
 
   d.mp  = NULL; /* screen */
   s.mp  = (VOID *)bitblk->bi_pdata;
@@ -275,12 +275,12 @@ BOOLEAN is_dialog;
   hires   = (gl_hbox > 8) ? TRUE : FALSE;
 
   obj     = hires ? RBHNORM : RBLNORM;
-  bi      = (BITBLK *)userimg [obj].ob_spec;
+  bi      = userimg [obj].ob_spec.bitblk;
   h_radio = bi->bi_hl;
   y_radio = (gl_hbox - h_radio) / 2;
 
   obj     = hires ? CBHNORM : CBLNORM;
-  bi      = (BITBLK *)userimg [obj].ob_spec;
+  bi      = userimg [obj].ob_spec.bitblk;
   h_check = bi->bi_hl;
   y_check = (gl_hbox - h_check) / 2;
 
@@ -304,18 +304,18 @@ BOOLEAN is_dialog;
       ob   = &tree [++obj];
       type = ob->ob_type & 0xFF;
 
-      get_obinfo (ob->ob_spec, &obinfo);
+      get_obinfo (ob->ob_spec.index, &obinfo);
 
 #if GEM & (GEM2 | GEM3 | XGEM)
       if ((type == G_STRING) && (ob->ob_state & DISABLED))
-        for (s = (BYTE *)ob->ob_spec; *s; s++)
+        for (s = ob->ob_spec.free_string; *s; s++)
           if (*s == 0x13) *s = '-';
 #endif
 
       if (is_dialog)
         if ((type == G_BUTTON) || (type == G_STRING))
         {
-          p = (BYTE *)ob->ob_spec;
+          p = ob->ob_spec.free_string;
 
           if (strchr (p, ALT_CHAR) != NULL) /* alternate control char */
           {
@@ -329,7 +329,7 @@ BOOLEAN is_dialog;
 
       if (type == G_ICON)
       {
-        ib = (ICONBLK *)ob->ob_spec;
+        ib = ob->ob_spec.iconblk;
 #if false
         ob->ob_height = ib->ib_ytext + ib->ib_htext; /* Objekth”he = Iconh”he */
 #endif
@@ -338,7 +338,7 @@ BOOLEAN is_dialog;
 
       if (type == G_IMAGE)
       {
-        bi = (BITBLK *)ob->ob_spec;
+        bi = ob->ob_spec.bitblk;
         ob->ob_height = bi->bi_hl;        /* Objekth”he = Imageh”he */
         trans_gimage (tree, obj);         /* Bit Images an Bildschirm anpassen */
       } /* if */
@@ -361,22 +361,22 @@ BOOLEAN is_dialog;
 
         if (ob->ob_flags & RBUTTON)                     /* radio button */
         {
-          radio_blk.ub_parm  = (LONG)ob->ob_spec;
+          radio_blk.ub_parm  = ob->ob_spec.index;
           ob->ob_y          += y_radio;
           ob->ob_height      = h_radio;
 #if MSDOS | FLEXOS | DR_C | LATTICE_C | MW_C | TURBO_C
           ob->ob_type        = G_USERDEF;
-          ob->ob_spec        = (LONG)&radio_blk;
+          ob->ob_spec.index  = (LONG)&radio_blk;
 #endif
         } /* if */
         else                                            /* checkbox */
         {
-          check_blk.ub_parm  = (LONG)ob->ob_spec;
+          check_blk.ub_parm  = ob->ob_spec.index;
           ob->ob_y          += y_check;
           ob->ob_height      = h_check;
 #if MSDOS | FLEXOS | DR_C | LATTICE_C | MW_C | TURBO_C
           ob->ob_type        = G_USERDEF;
-          ob->ob_spec        = (LONG)&check_blk;
+          ob->ob_spec.index  = (LONG)&check_blk;
 #endif
         } /* else */
       } /* if */
@@ -439,7 +439,7 @@ GLOBAL BOOLEAN init_resource ()
     form_alert (1, s);
     if (! deskacc) return (FALSE);
     menu_unregister (gl_apid);                  /* Wieder abmelden */
-    while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
+    while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
   rs_gaddr (rsc_ptr, R_FRSTR, ROOT,     &alertmsg);    /* Adresse der Fehlermeldungen */
@@ -508,7 +508,7 @@ for (i = 0; i < NUM_OBS; i++)
 
 #if GEMDOS
     if (class_desk == DESK)                     /* Desktop nicht im Fenster */
-      if (colors == 4) desktop->ob_spec = 0x173L; /* Grner Desktop */
+      if (colors == 4) desktop->ob_spec.index = 0x173L; /* Grner Desktop */
 #endif
 
     if (desk.x + desk.w > desktop->ob_width)    /* Falls Desktop breiter Objektbreite */

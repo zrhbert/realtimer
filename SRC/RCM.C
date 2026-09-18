@@ -5,8 +5,7 @@
 /*                                                                         */
 /***************************************************************************/
 
-#include <portab.h>
-#include <aes.h>
+#include "import.h"
 
 #include "rcm.h"
 
@@ -21,7 +20,7 @@
 /****** FUNCTIONS ************************************************************/
 
 /***************************************************************************/
-/* Vorw„rtsreferenzen                                                      */
+/* Vorwï¿½rtsreferenzen                                                      */
 /***************************************************************************/
 
 LOCAL VOID fix_tree    _((WORD gl_hbox, WORD gl_wbox, WORD n_tree, OBJECT **rs_trindex, OBJECT *rs_object));
@@ -80,8 +79,8 @@ REG BYTE    **rs_strings;
 {
   REG WORD index;
 
-  index                      = (WORD)rs_object [object].ob_spec;
-  rs_object [object].ob_spec = (LONG)&rs_tedinfo [index];
+  index                      = (WORD)rs_object [object].ob_spec.index;
+  rs_object [object].ob_spec.index = (LONG)&rs_tedinfo [index];
 
   rs_tedinfo [index].te_ptext  = rs_strings [(WORD)(LONG)rs_tedinfo [index].te_ptext];
   rs_tedinfo [index].te_ptmplt = rs_strings [(WORD)(LONG)rs_tedinfo [index].te_ptmplt];
@@ -100,11 +99,11 @@ REG RS_IMDOPE *rs_imdope;
   REG WORD index1;
   REG WORD index2;
 
-  index1 = (WORD)rs_object [object].ob_spec;
+  index1 = (WORD)rs_object [object].ob_spec.index;
   index2 = (WORD)rs_bitblk [index1].bi_pdata;
 
   rs_bitblk [index1].bi_pdata = rs_imdope [index2].image;
-  rs_object [object].ob_spec  = (LONG)&rs_bitblk [index1];
+  rs_object [object].ob_spec.index  = (LONG)&rs_bitblk [index1];
 } /* fix_bitblk */
 
 /***************************************************************************/
@@ -115,7 +114,7 @@ REG OBJECT  *rs_object;
 REG BYTE    **rs_strings;
 
 {
-  rs_object [object].ob_spec = (LONG)rs_strings [(WORD)rs_object [object].ob_spec];
+  rs_object [object].ob_spec.index = (LONG)rs_strings [(WORD)rs_object [object].ob_spec.index];
 } /* fix_string */
 
 /***************************************************************************/
@@ -131,7 +130,7 @@ REG BYTE      **rs_strings;
   REG WORD index1;
   REG WORD index2;
 
-  index1 = (WORD)rs_object [object].ob_spec;
+  index1 = (WORD)rs_object [object].ob_spec.index;
 
   index2                       = (WORD)(LONG)rs_iconblk [index1].ib_pmask;
   rs_iconblk [index1].ib_pmask = rs_imdope [index2].image;
@@ -142,7 +141,7 @@ REG BYTE      **rs_strings;
   index2                       = (WORD)(LONG)rs_iconblk [index1].ib_ptext;
   rs_iconblk [index1].ib_ptext = rs_strings [index2];
 
-  rs_object [object].ob_spec = (LONG)&rs_iconblk [index1];
+  rs_object [object].ob_spec.index = (LONG)&rs_iconblk [index1];
 } /* fix_iconblk */
 
 /***************************************************************************/

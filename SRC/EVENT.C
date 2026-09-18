@@ -32,7 +32,7 @@
 /****** DEFINES **************************************************************/
 
 #define EVENTS    (MU_KEYBD | MU_BUTTON  | MU_M1 | MU_MESAG | MU_TIMER)
-#define MILLISECS 10L          /* Anzahl der Millisekunden fr timer */
+#define MILLISECS 10L          /* Anzahl der Millisekunden fï¿½r timer */
 
 /****** TYPES ****************************************************************/
 
@@ -78,7 +78,7 @@ MKINFO *mk;
 
   mk->kreturn = (mk->scan_code << 8) | mk->ascii_code;
 
-	/* CTRL-w fr Fenster Wechsel */
+	/* CTRL-w fï¿½r Fenster Wechsel */
   if (mk->ctrl && (mk->scan_code == 0x11)) cycle_window ();
 
   if (! key_all (mk))
@@ -134,7 +134,7 @@ MKINFO *mk;
 
       click_window (window, mk);                /* Selektiere */
     } /* if */
-    else                                        /* Nur fr Desktop */
+    else                                        /* Nur fï¿½r Desktop */
       if (sel_window != NULL) unclick_window (sel_window); /* Deselektiere */
   } /* else */
 } /* hndl_button */
@@ -146,12 +146,12 @@ WORD *msgbuff;
 
 {
   WORD    wh;                           /* Aktuelles Window Handle */
-  RECT    r;                            /* Koordinaten fr Fenster */
+  RECT    r;                            /* Koordinaten fï¿½r Fenster */
   WINDOWP window;                       /* Aktuelles Fenster */
 
   acc_close = msgbuff [0] == AC_CLOSE;  /* Accessory soll geschlossen werden */
   wh        = msgbuff [3];              /* Meistens Window Handle */
-  window    = find_window (wh);         /* Zugeh”riges Fenster */
+  window    = find_window (wh);         /* Zugehï¿½riges Fenster */
   r.x       = msgbuff [4];              /* Meistens Koordinaten */
   r.y       = msgbuff [5];
   r.w       = msgbuff [6];
@@ -210,11 +210,11 @@ GLOBAL VOID hndl_events ()
 
   do
   {
-    updt_menu (NULL);                   /* Eine Aktion kann Mens ver„ndern */
+    updt_menu (NULL);                   /* Eine Aktion kann Menï¿½s verï¿½ndern */
 
     events  |= MU_M1;
     old_top  = new_top;
-    top      = find_top ();             /* Hole oberstes Fenster von diesem Prozež */
+    top      = find_top ();             /* Hole oberstes Fenster von diesem Prozeï¿½ */
 
     wind_get (DESK, WF_TOP, &new_top, &ret, &ret, &ret);
 
@@ -228,10 +228,10 @@ GLOBAL VOID hndl_events ()
       xywh2rect (0, 0, 0, 0, &m1);
     } /* else */
 
-    if (old_top != new_top)             /* Mausform durch Schliežen oder... */
-    {                                   /* ...™ffnen von Fenstern zu „ndern */
+    if (old_top != new_top)             /* Mausform durch Schlieï¿½en oder... */
+    {                                   /* ...ï¿½ffnen von Fenstern zu ï¿½ndern */
       m1flags = FALSE;                  /* Auf jeden Fall auf Eintritt warten */
-      set_mouse (ARROW, NULL);          /* Zun„chst wieder Pfeil setzen */
+      set_mouse (ARROW, NULL);          /* Zunï¿½chst wieder Pfeil setzen */
     } /* if */
 
     event = evnt_multi (events,
@@ -239,7 +239,7 @@ GLOBAL VOID hndl_events ()
                         m1flags, m1.x, m1.y, m1.w, m1.h,
                         0, 0, 0, 0, 0,
                         msgbuff,
-                        (UWORD)(millisecs & 0xFFFF), (UWORD)(millisecs >> 16),
+                        millisecs,
                         &mk.mox, &mk.moy,
                         &mk.momask, &mk.kstate,
                         &mk.kreturn, &mk.breturn);
@@ -272,7 +272,7 @@ GLOBAL VOID hndl_events ()
 
       if (done)
       {
-        close_all (FALSE, TRUE);        /* Schlieže alle Fenster */
+        close_all (FALSE, TRUE);        /* Schlieï¿½e alle Fenster */
         done = FALSE;                   /* Verlasse Programm nie */
       } /* if */
     } /* if */
@@ -304,9 +304,9 @@ GLOBAL BOOLEAN init_event ()
   bmask     = 0x0001;                   /* Warte auf linken Mausknopf */
   bstate    = 0x0001;                   /* Warte auf linken Mausknopf unten */
 #else
-  bclicks   = 0x0102;                   /* Benutze beide Mauskn”pfe mit Doppelklick (Sonderfall) */
-  bmask     = 0x0003;                   /* Warte auf beide Mauskn”pfe */
-  bstate    = 0x0000;                   /* Warte auf beide Mauskn”pfe oben */
+  bclicks   = 0x0102;                   /* Benutze beide Mausknï¿½pfe mit Doppelklick (Sonderfall) */
+  bmask     = 0x0003;                   /* Warte auf beide Mausknï¿½pfe */
+  bstate    = 0x0000;                   /* Warte auf beide Mausknï¿½pfe oben */
 #endif
 
   return (TRUE);

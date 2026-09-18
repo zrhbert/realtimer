@@ -470,8 +470,8 @@ WORD   icon;
 		/* Display-Objekte einklinken */
 		create_displayobs (window);
 
-        sprintf (window->name, "%s", (BYTE *)koo_text [FKOON].ob_spec);
-		sprintf (window->info, (BYTE *)koo_text [FKOOI].ob_spec, 0);
+        sprintf (window->name, "%s", koo_text [FKOON].ob_spec.free_string);
+		sprintf (window->info, koo_text [FKOOI].ob_spec.free_string, 0);
 	} /* if */
 	
 	return (window);                      /* Fenster zurÅckgeben */
@@ -666,7 +666,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (koo_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (koo_info, NULL, IKOO, (BYTE *)koo_text [FKOON].ob_spec, WI_MODAL);
+		 window = crt_dialog (koo_info, NULL, IKOO, koo_text [FKOON].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)
@@ -821,7 +821,7 @@ PRIVATE BOOLEAN init_rsc ()
     form_alert (1, s);
     if (! deskacc) return (FALSE);
     menu_unregister (gl_apid);                  /* Wieder abmelden */
-    while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
+    while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
   rs_gaddr (koo_rsc_ptr, R_TREE,  KOO_SETUP,	&koo_setup);   /* Adresse der KOO-Parameter-Box */

@@ -607,7 +607,7 @@ WORD   icon;
 		window->timer     = wi_timer_mod;
 		window->showinfo  = info_mod;
 		
-		sprintf (window->name, (BYTE *)gen_text [FGENN].ob_spec);
+		sprintf (window->name, gen_text [FGENN].ob_spec.free_string);
 		
 	} /* if */
 	
@@ -664,7 +664,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (gen_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (gen_info, NULL, IGEN, (BYTE *)gen_text [FGENN].ob_spec, WI_MODAL);
+		 window = crt_dialog (gen_info, NULL, IGEN, gen_text [FGENN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)

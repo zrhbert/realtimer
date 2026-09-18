@@ -49,7 +49,6 @@ V 0.02
 #include "ed4.h"			/* wg. soundobjekten */
 #include <msh_unit.h>		/* Deklarationen fÅr MidiShare Library */
 #include "msh.h"			/* wg. Time-Funktionen */
-#include "ext.h"			/* wg. delay() */
 
 #include "export.h"
 #include "dispobj.h"

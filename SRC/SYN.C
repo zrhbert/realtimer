@@ -315,8 +315,8 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 
-      sprintf (window->name, "%s", (BYTE *)syn_text [FSYNN].ob_spec);
-    sprintf (window->info, (BYTE *)syn_text [FSYNI].ob_spec, 0);
+      sprintf (window->name, "%s", syn_text [FSYNN].ob_spec.free_string);
+    sprintf (window->info, syn_text [FSYNI].ob_spec.free_string, 0);
   } /* if */
 
   return (window);                      /* Fenster zurÅckgeben */
@@ -375,7 +375,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (syn_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (syn_info, NULL, ISYN, (BYTE *)syn_text [FSYNN].ob_spec, WI_MODAL);
+		 window = crt_dialog (syn_info, NULL, ISYN, syn_text [FSYNN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)
@@ -538,7 +538,7 @@ PRIVATE BOOLEAN init_rsc ()
 	 form_alert (1, s);
 	 if (! deskacc) return (FALSE);
 	 menu_unregister (gl_apid);                  /* Wieder abmelden */
-	 while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
+	 while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
 } /* if */
 /*
 	rs_gaddr (syn_rsc_ptr, R_TREE,  SYN_SETUP,	&syn_menu);    /* Adresse des SYN-MenÅs */

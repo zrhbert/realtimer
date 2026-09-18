@@ -10,9 +10,9 @@
 - max_reswind als LONG
 05.02.95
 - close verhindern bei nicht exit-objekten, 05.02.95
-- +/- fÅr Zahlenfelder herausgenommen, 03.02.95
-- Vorrang fÅr TRA vor anderen Fenstern in key_all, 04.01.95
-- Vorrang fÅr dispobj vor window in key_window, 04.01.05
+- +/- fÔøΩr Zahlenfelder herausgenommen, 03.02.95
+- Vorrang fÔøΩr TRA vor anderen Fenstern in key_all, 04.01.95
+- Vorrang fÔøΩr dispobj vor window in key_window, 04.01.05
 15.07.94
 - save_info_obj nun auch bei geschlossenem Fenster
 - dispobj->key wird nur angesprungen wenn vorhanden
@@ -23,12 +23,12 @@
 - save_info_obj eingebaut
 - dispobj eingebaut
 - window->start eingebaut
-- click_window: selektierbare Texte auch fÅr G_TEXT
+- click_window: selektierbare Texte auch fÔøΩr G_TEXT
 - window->finished eingebaut
 - TRA-Vorfahrt wieder eingebaut gebaut
-- angepaût fÅr TRA-Vorfahrt bei den Tasten                                 
-- Erweiterung in click_window fÅr selektierbare Texte                          
-- Erweiterung in draw_object fÅr ob_lines                                  
+- angepaÔøΩt fÔøΩr TRA-Vorfahrt bei den Tasten                                 
+- Erweiterung in click_window fÔøΩr selektierbare Texte                          
+- Erweiterung in draw_object fÔøΩr ob_lines                                  
 *****************************************************************************/
 
 #include <ctype.h>
@@ -46,10 +46,10 @@
 /****** DEFINES **************************************************************/
 
 #define MIN_WIDTH   (8 * gl_wbox)         /* Kleinste Breite */
-#define MIN_HEIGHT  (4 * gl_hbox)         /* Kleinste Hîhe */
+#define MIN_HEIGHT  (4 * gl_hbox)         /* Kleinste HÔøΩhe */
 
-#define M_LTARROW   1                     /* MenÅpfeil links */
-#define M_RTARROW   2                     /* MenÅpfeil rechts */
+#define M_LTARROW   1                     /* MenÔøΩpfeil links */
+#define M_RTARROW   2                     /* MenÔøΩpfeil rechts */
 
 #define DLG_CNTRL(mk) ((mk->ascii_code == ESC      ) || \
                        (mk->ascii_code == CR       ) || \
@@ -79,10 +79,10 @@ typedef struct status
 
 LOCAL WORD    top;                        /* Anzahl der Fenster */
 LOCAL WINDOWP *windows;                   /* Fensterkeller */
-LOCAL WINDOWP windrec;                    /* Speicher fÅr Fensterzeiger */
+LOCAL WINDOWP windrec;                    /* Speicher fÔøΩr Fensterzeiger */
 LOCAL WORD    max_windows;                /* Maximale Anzahl Fenster */
-LOCAL WORD    nowindow;                   /* Fehler fÅr "Kein Fenster mehr" */
-LOCAL WORD    menu_offset;                /* X-Offset MenÅzeile */
+LOCAL WORD    nowindow;                   /* Fehler fÔøΩr "Kein Fenster mehr" */
+LOCAL WORD    menu_offset;                /* X-Offset MenÔøΩzeile */
 LOCAL SET     used_windows;               /* Slots der belegten Fenster */
 LOCAL WORD    helpclass;                  /* Klasse des nicht-modalen Hilfefensters */
 LOCAL BOOLEAN graph_proc;                 /* Graphik Prozessor aktiv */
@@ -178,7 +178,7 @@ GLOBAL WINDOWP find_top ()
 
   topwin = (top == 0) ? NULL : windows [0];
 
-  if (topwin != NULL) get_work (topwin, FALSE); /* Falls ObjektbÑume gehandhabt werden */
+  if (topwin != NULL) get_work (topwin, FALSE); /* Falls ObjektbÔøΩume gehandhabt werden */
 
   return (topwin);
 } /* find_top */
@@ -220,7 +220,7 @@ BOOLEAN incl_desk, incl_closer, incl_modal;
 } /* any_open */
 
 /*****************************************************************************/
-/* ZÑhle Anzahl vorhandener Fenster einer Klasse                             */
+/* ZÔøΩhle Anzahl vorhandener Fenster einer Klasse                             */
 /*****************************************************************************/
 
 GLOBAL WORD num_windows (class, mode, winds)
@@ -297,7 +297,7 @@ WINDOWP window;
 } /* find_wslot */
 
 /*****************************************************************************/
-/* VerÑndere Reihenfolge                                                     */
+/* VerÔøΩndere Reihenfolge                                                     */
 /*****************************************************************************/
 
 LOCAL VOID sort_order ()
@@ -411,7 +411,7 @@ WORD    key, kind;
 
       if (init)
       {
-        ptedinfo = (TEDINFO *)window->object [window->edit_obj].ob_spec;
+        ptedinfo = window->object [window->edit_obj].ob_spec.tedinfo;
         p        = &ptedinfo->te_ptext [window->edit_inx];
         ch       = *p;
         *p       = EOS;
@@ -480,7 +480,7 @@ WORD  class;
   REG WINDOWP window;
   REG WORD i;
 
-  window = NULL;                /* ZunÑchst kein Fenster zur VerfÅgung */
+  window = NULL;                /* ZunÔøΩchst kein Fenster zur VerfÔøΩgung */
 
   for (i = 0; (i < max_windows) && setin (used_windows, i); i++);
 
@@ -504,11 +504,11 @@ WORD  class;
 	 window->dispobjs   = list_create();
   } /* else */
 
-  return (window);              /* Gib kreiertes Fenster zurÅck */
+  return (window);              /* Gib kreiertes Fenster zurÔøΩck */
 } /* create_window */
 
 /*****************************************************************************/
-/* Lîsche Fenster                                                            */
+/* LÔøΩsche Fenster                                                            */
 /*****************************************************************************/
 
 GLOBAL VOID delete_window (window)
@@ -528,12 +528,12 @@ WINDOWP window;
     if (cont)
     {
       flags          = window->flags;
-      window->flags |= WI_RESIDENT;             /* Lîsche nicht beim Schlieûen */
+      window->flags |= WI_RESIDENT;             /* LÔøΩsche nicht beim SchlieÔøΩen */
 
       opened = window->opened;
       while (window->opened > 0)
       {
-        close_window (window);                  /* Schlieûe Fenster */
+        close_window (window);                  /* SchlieÔøΩe Fenster */
         if (opened == window->opened)
         {
           window->flags = flags;
@@ -552,9 +552,9 @@ WINDOWP window;
 			element = list_next(element);
 		} /* while */
 		
-      if (window->delete != NULL) (*window->delete) (window); /* Lîschaktion durchfÅhren */
+      if (window->delete != NULL) (*window->delete) (window); /* LÔøΩschaktion durchfÔøΩhren */
 
-      slot = find_wslot (window);               /* Nicht nur oberstes Fenster kann gelîscht werden */
+      slot = find_wslot (window);               /* Nicht nur oberstes Fenster kann gelÔøΩscht werden */
 
       for (i = slot + 1; i < top; i++) windows [i - 1] = windows [i];
 
@@ -566,7 +566,7 @@ WINDOWP window;
 } /* delete_window */
 
 /*****************************************************************************/
-/* ôffne Fenster                                                             */
+/* ÔøΩffne Fenster                                                             */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN open_window (window)
@@ -612,14 +612,14 @@ WINDOWP window;
       } /* if */
 
       window->opened++;                           /* Fenster einmal mehr offen */
-      window->flags &= ~ WI_FULLED;               /* Fenster hat nicht volle Grîûe */
+      window->flags &= ~ WI_FULLED;               /* Fenster hat nicht volle GrÔøΩÔøΩe */
       window->flags |= WI_ONTOP;                  /* Fenster ist oben */
 
-      if (window->open != NULL) (*window->open) (window); /* Aktion durchfÅhren */
+      if (window->open != NULL) (*window->open) (window); /* Aktion durchfÔøΩhren */
 
       if (wh == DESK)                             /* GEM Desktop */
       {
-        wind_set (DESK, WF_NEWDESK, ADR (window->object), 0, 0);
+        wind_set_ptr (DESK, WF_NEWDESK, window->object);
         form_dial (FMD_FINISH, 0, 0, 0, 0, desk.x, desk.y, desk.w, desk.h);
       } /* if */
       else
@@ -627,17 +627,17 @@ WINDOWP window;
         wind_calc (WC_BORDER, window->kind,       /* Rand berechnen */
                    window->work.x, window->work.y, window->work.w, window->work.h,
                    &r.x, &r.y, &r.w, &r.h);
-        wind_set (wh, WF_NAME, ADR (window->name), 0, 0); /* Name setzen */
-        wind_set (wh, WF_INFO, ADR (window->info), 0, 0); /* Infozeile setzen */
+        wind_set_str (wh, WF_NAME, window->name); /* Name setzen */
+        wind_set_str (wh, WF_INFO, window->info); /* Infozeile setzen */
         set_sliders (window, HORIZONTAL + VERTICAL, SLPOS + SLSIZE);
-        if (window->opened == 1) wind_open (wh, r.x, r.y, r.w, r.h); /* Fenster îffnen */
+        if (window->opened == 1) wind_open (wh, r.x, r.y, r.w, r.h); /* Fenster ÔøΩffnen */
       } /* else */
 
       get_work (window, FALSE);                   /* Arbeitsbereich holen */
 
       if (window->opened == 1)
       {
-        newtop = find_slot (wh);                  /* Neu geîffnetes Fenster oben */
+        newtop = find_slot (wh);                  /* Neu geÔøΩffnetes Fenster oben */
 
         if (wh == DESK)                           /* Desktop darf nie nach oben */
         {
@@ -673,7 +673,7 @@ WINDOWP window;
 
         set_menu (FALSE);
       } /* if */
-      else                                      /* Fenster wurde geîffnet, wÑhrend modaler Zustand */
+      else                                      /* Fenster wurde geÔøΩffnet, wÔøΩhrend modaler Zustand */
       {
         for (i = 0, modal = FALSE; i < top; i++)
           if ((windows [i]->opened > 0) && (windows [i]->flags & WI_MODAL)) modal = TRUE;
@@ -689,7 +689,7 @@ WINDOWP window;
 } /* open_window */
 
 /*****************************************************************************/
-/* Schlieûe Fenster                                                          */
+/* SchlieÔøΩe Fenster                                                          */
 /*****************************************************************************/
 
 GLOBAL VOID close_window (window)
@@ -719,30 +719,30 @@ WINDOWP window;
 
         if (wh == DESK)                             /* GEM Desktop */
         {
-          wind_set (DESK, WF_NEWDESK, ADR (NULL), 0, 0); /* Original Desktop */
+          wind_set_ptr (DESK, WF_NEWDESK, NULL); /* Original Desktop */
           if (! done) form_dial (FMD_FINISH, 0, 0, 0, 0, desk.x, desk.y, desk.w, desk.h);
         } /* if */
         else
         {
 #if GEM & GEM1
-          to_close = ! acc_close;                   /* Sonst érger mit GEM */
+          to_close = ! acc_close;                   /* Sonst ÔøΩrger mit GEM */
 #else
           to_close = TRUE;
 #endif
           if (to_close && (window->opened == 1))
           {
-            wind_close (wh);                        /* Schlieûe Fenster */
+            wind_close (wh);                        /* SchlieÔøΩe Fenster */
             wind_delete (wh);                       /* Window-Handle freigeben */
           } /* if */
         } /* else */
 
-        if (window->close != NULL) (*window->close) (window); /* Schlieûaktion durchfÅhren */
+        if (window->close != NULL) (*window->close) (window); /* SchlieÔøΩaktion durchfÔøΩhren */
 
         window->opened--;                           /* Fenster einmal geschlossen */
 
-        if (window->opened == 0)                    /* Fenster ganz schlieûen */
+        if (window->opened == 0)                    /* Fenster ganz schlieÔøΩen */
         {
-          window->handle  = NO_HANDLE;              /* Kein Handle mehr verfÅgbar */
+          window->handle  = NO_HANDLE;              /* Kein Handle mehr verfÔøΩgbar */
           window->flags  &= ~ (WI_ONTOP | WI_FIRSTDRW); /* Fenster ist nicht mehr oben */
 
           sort_order ();
@@ -756,7 +756,7 @@ WINDOWP window;
               if (topped->opened > 0)
                 if (! (topped->flags & WI_ONTOP))
                 {
-                  if (topped->top != NULL) (*topped->top) (topped); /* Topaktion durchfÅhren */
+                  if (topped->top != NULL) (*topped->top) (topped); /* Topaktion durchfÔøΩhren */
                   topped->flags ^= WI_ONTOP;
                 } /* if, if */
             } /* if, if */
@@ -783,7 +783,7 @@ WINDOWP window;
 } /* close_window */
 
 /*****************************************************************************/
-/* Schlieûe oberstes Fenster                                                 */
+/* SchlieÔøΩe oberstes Fenster                                                 */
 /*****************************************************************************/
 
 GLOBAL VOID close_top ()
@@ -793,7 +793,7 @@ GLOBAL VOID close_top ()
 } /* close_top */
 
 /*****************************************************************************/
-/* Schlieûe/Lîsche alle Fenster                                              */
+/* SchlieÔøΩe/LÔøΩsche alle Fenster                                              */
 /*****************************************************************************/
 
 GLOBAL VOID close_all (delete, close_desk)
@@ -813,7 +813,7 @@ BOOLEAN delete, close_desk;
     } /* if */
 
     if (close_desk)
-      bound = 0;                                           /* Schlieûe auch Desktop */
+      bound = 0;                                           /* SchlieÔøΩe auch Desktop */
     else
     {
       bound  = 1;                                          /* Lasse Desktop offen */
@@ -836,11 +836,11 @@ BOOLEAN delete, close_desk;
 
     while ((top > bound) && (windows [bound]->opened > 0))
     {
-	      close_window (windows [bound]);                      /* Schlieûe Fenster */
+	      close_window (windows [bound]);                      /* SchlieÔøΩe Fenster */
 	 } /* while */	
 
     if (delete)
-      while (top > bound) delete_window (windows [bound]); /* Lîsche Fenster */
+      while (top > bound) delete_window (windows [bound]); /* LÔøΩsche Fenster */
 
     wind_update (END_UPDATE);                              /* Aktionen zulassen */
   } /* if */
@@ -873,7 +873,7 @@ WINDOWP window;
       } /* if */
     } /* if */
 
-    if (window->draw != NULL) (*window->draw) (window); /* Zeichenroutine ausfÅhren */
+    if (window->draw != NULL) (*window->draw) (window); /* Zeichenroutine ausfÔøΩhren */
 		/* Liste der Display-Objekte durchgehen und delete aufrufen */
 		header = window->dispobjs;
 		element = list_next(header);
@@ -886,7 +886,7 @@ WINDOWP window;
 } /* draw_window */
 
 /*****************************************************************************/
-/* Suche und zeichne Åberlagernde Rechtecke von Fenstern                     */
+/* Suche und zeichne ÔøΩberlagernde Rechtecke von Fenstern                     */
 /*****************************************************************************/
 
 GLOBAL VOID redraw_window (window, area)
@@ -929,7 +929,7 @@ CONST RECT *area;
 		} /* while */
 
     set_clip (TRUE, area);              /* Setze clipping */
-    draw_mbar (window);                 /* Zeichne MenÅzeile */
+    draw_mbar (window);                 /* Zeichne MenÔøΩzeile */
 
     r2 = *area;                         /* Schnitt-Rechteck */
 
@@ -937,7 +937,7 @@ CONST RECT *area;
     wind_get (wh, WF_FIRSTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
                                         /* Hole erstes Rechteck der Rechteckliste */
 
-    while ((r1.w != 0) && (r1.h != 0))  /* Breite und Hîhe noch nicht null */
+    while ((r1.w != 0) && (r1.h != 0))  /* Breite und HÔøΩhe noch nicht null */
     {
       if (rc_intersect (&r2, &r1))      /* Schneide Rechtecke */
       {	
@@ -946,7 +946,7 @@ CONST RECT *area;
       } /* if */
 
       wind_get (wh, WF_NEXTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
-    } /* while */                       /* Hole nÑchstes Rechteck */
+    } /* while */                       /* Hole nÔøΩchstes Rechteck */
 
 	 /* Neue Status-Informationen festlegen etc., BD */
 	 if (window->finished)	window->finished (window);
@@ -998,7 +998,7 @@ WINDOWP window;
         if (topwin != NULL)
         {
           edit_object (topwin, 0, EDINIT);
-          if (topwin->flags & WI_MODAL) topwin->flags |= WI_ONTOP; /* untop rÅckgÑngig machen */
+          if (topwin->flags & WI_MODAL) topwin->flags |= WI_ONTOP; /* untop rÔøΩckgÔøΩngig machen */
         } /* if */
 #endif
       } /* if */
@@ -1019,7 +1019,7 @@ WINDOWP window;
 
         if (! (window->flags & WI_ONTOP))
         {
-          if (window->top != NULL) (*window->top) (window); /* Topaktion durchfÅhren */
+          if (window->top != NULL) (*window->top) (window); /* Topaktion durchfÔøΩhren */
           window->flags ^= WI_ONTOP;
         } /* if */
 
@@ -1054,7 +1054,7 @@ WINDOWP window;
       if (window->opened > 0)
       {
         edit_object (window, 0, EDEND);
-        if (window->untop != NULL) (*window->untop) (window); /* Untopaktion durchfÅhren */
+        if (window->untop != NULL) (*window->untop) (window); /* Untopaktion durchfÔøΩhren */
       } /* if */
 
       window->flags &= ~ (WI_ONTOP | WI_FIRSTDRW);
@@ -1118,24 +1118,24 @@ LONG    delta;
          (dir & VERTICAL) && (labs (delta) >= r.h) ||
          (window->flags & WI_NOSCROLL)))
   {
-    rect2array (&r, xy);                /* Anfangswerte fÅr vro_cpyfm */
-    rect2array (&r, &xy [4]);           /* Anfangswerte fÅr vro_cpyfm */
+    rect2array (&r, xy);                /* Anfangswerte fÔøΩr vro_cpyfm */
+    rect2array (&r, &xy [4]);           /* Anfangswerte fÔøΩr vro_cpyfm */
 
     if (dir & HORIZONTAL)               /* Horizontales Scrolling */
     {
       if (delta > 0)                    /* Links Scrolling */
       {
-        xy [0] += delta;                /* Werte fÅr vro_cpyfm */
+        xy [0] += delta;                /* Werte fÔøΩr vro_cpyfm */
         xy [6] -= delta;
 
         r.x += r.w - delta;             /* Rechter Bereich nicht gescrollt,... */
-        r.w  = delta;                   /* ...muû neu gezeichnet werden */
+        r.w  = delta;                   /* ...muÔøΩ neu gezeichnet werden */
 
         if (wdiff > 0) r.x -= wdiff;    /* Fenster war nicht ganz in Desktop */
-      } /* if */                        /* Es muû mehr gezeichnet werden */
+      } /* if */                        /* Es muÔøΩ mehr gezeichnet werden */
       else                              /* Rechts Scrolling */
       {
-        xy [2] += delta;                /* Werte fÅr vro_cpyfm */
+        xy [2] += delta;                /* Werte fÔøΩr vro_cpyfm */
         xy [4] -= delta;
 
         r.w = -delta;                   /* Linken Bereich noch neu zeichnen */
@@ -1143,32 +1143,32 @@ LONG    delta;
     } /* if */
     else                                /* Vertikales Scrolling */
     {
-      if (delta > 0)                    /* AufwÑrts Scrolling */
+      if (delta > 0)                    /* AufwÔøΩrts Scrolling */
       {
-        xy [1] += delta;                /* Werte fÅr vro_cpyfm */
+        xy [1] += delta;                /* Werte fÔøΩr vro_cpyfm */
         xy [7] -= delta;
 
         r.y += r.h - delta;             /* Unterer Bereich nicht gescrollt,... */
-        r.h  = delta;                   /* ...muû neu gezeichnet werden */
+        r.h  = delta;                   /* ...muÔøΩ neu gezeichnet werden */
 
         if (hdiff > 0) r.y -= hdiff;    /* Fenster war nicht ganz in Desktop */
-      } /* if */                        /* Es muû mehr gezeichnet werden */
-      else                              /* AbwÑrts Scrolling */
+      } /* if */                        /* Es muÔøΩ mehr gezeichnet werden */
+      else                              /* AbwÔøΩrts Scrolling */
       {
-        xy [3] += delta;                /* Werte fÅr vro_cpyfm */
+        xy [3] += delta;                /* Werte fÔøΩr vro_cpyfm */
         xy [5] -= delta;
 
         r.h = -delta;                   /* Oberen Bereich noch neu zeichnen */
       } /* else */
     } /* else */
 
-    if (wdiff > 0)              /* Rechter Rand des Fensters auûerhalb Desktop */
+    if (wdiff > 0)              /* Rechter Rand des Fensters auÔøΩerhalb Desktop */
     {
       xy [2] -= wdiff;          /* Korrigiere rechten Rand von Quelle... */
       xy [6] -= wdiff;          /* ...und Ziel */
     } /* if */
 
-    if (hdiff > 0)              /* Unterer Rand des Fensters auûerhalb Desktop */
+    if (hdiff > 0)              /* Unterer Rand des Fensters auÔøΩerhalb Desktop */
     {
       xy [3] -= hdiff;          /* Korrigiere unteren Rand von Quelle... */
       xy [7] -= hdiff;          /* ...und Ziel */
@@ -1179,7 +1179,7 @@ LONG    delta;
     wind_get (wh, WF_FIRSTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
                                 /* Hole erstes Rechteck der Rechteckliste */
 
-    while ((r1.w != 0) && (r1.h != 0))                  /* Breite und Hîhe noch nicht null */
+    while ((r1.w != 0) && (r1.h != 0))                  /* Breite und HÔøΩhe noch nicht null */
     {
       if ((r1.w == window->work.w) &&                   /* Fenster ganz sichtbar */
           (r1.h == window->work.h))
@@ -1192,7 +1192,7 @@ LONG    delta;
         } /* if, else */
 
       wind_get (wh, WF_NEXTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
-    } /* while */                       /* Hole nÑchstes Rechteck */
+    } /* while */                       /* Hole nÔøΩchstes Rechteck */
   } /* if */
 
   redraw_window (window, &r);           /* Fenster zeichnen */
@@ -1249,11 +1249,11 @@ WORD    arrow, amount;
 
   if (window != NULL)
   {
-    updtmenu = FALSE;                   /* MenÅs mÅssen sich nicht verÑndern */
+    updtmenu = FALSE;                   /* MenÔøΩs mÔøΩssen sich nicht verÔøΩndern */
     wbox     = window->xfac;
     hbox     = window->yfac;
     w        = window->scroll.w / wbox; /* Breite in Zeichen */
-    h        = window->scroll.h / hbox; /* Hîhe in Zeichen */
+    h        = window->scroll.h / hbox; /* HÔøΩhe in Zeichen */
 
     if (arrow <= WA_DNLINE)
     {
@@ -1308,7 +1308,7 @@ WORD    new_value;
 
   if (window != NULL)
   {
-    updtmenu  = FALSE;                                  /* MenÅs mÅssen sich nicht verÑndern */
+    updtmenu  = FALSE;                                  /* MenÔøΩs mÔøΩssen sich nicht verÔøΩndern */
     wbox      = window->xfac;
     w         = window->scroll.w / wbox;                /* Breite in Zeichen */
     max_slide = window->doc.w - w;                      /* Maximale Position */
@@ -1338,9 +1338,9 @@ WORD    new_value;
 
   if (window != NULL)
   {
-    updtmenu  = FALSE;                                  /* MenÅs mÅssen sich nicht verÑndern */
+    updtmenu  = FALSE;                                  /* MenÔøΩs mÔøΩssen sich nicht verÔøΩndern */
     hbox      = window->yfac;
-    h         = window->scroll.h / hbox;                /* Hîhe in Zeichen */
+    h         = window->scroll.h / hbox;                /* HÔøΩhe in Zeichen */
     max_slide = window->doc.h - h;                      /* Maximale Position */
     oldpos    = window->doc.y;
     help      = (LONG)new_value * (window->doc.h - h);  /* Erzwinge Langzahl */
@@ -1356,7 +1356,7 @@ WORD    new_value;
 } /* v_slider */
 
 /*****************************************************************************/
-/* Setze Schieberpositionen und Schiebergrîûe                                */
+/* Setze Schieberpositionen und SchiebergrÔøΩÔøΩe                                */
 /*****************************************************************************/
 
 GLOBAL VOID set_sliders (window, which, mode)
@@ -1379,7 +1379,7 @@ WORD    which, mode;
 
       if (mode & SLPOS)
       {
-        if (max_doc <= 0)                       /* Fenster zu groû oder passend */
+        if (max_doc <= 0)                       /* Fenster zu groÔøΩ oder passend */
           newval = 0;
         else
           newval = (1000L * window->doc.x) / max_doc;
@@ -1390,7 +1390,7 @@ WORD    which, mode;
 
       if (mode & SLSIZE)
       {
-        if (window->doc.w <= 0)                 /* Fenster zu groû oder passend */
+        if (window->doc.w <= 0)                 /* Fenster zu groÔøΩ oder passend */
           newval = 1000;
         else
           newval = (1000L * w) / window->doc.w;
@@ -1407,7 +1407,7 @@ WORD    which, mode;
 
       if (mode & SLPOS)
       {
-        if (max_doc <= 0)                       /* Fenster zu groû oder passend */
+        if (max_doc <= 0)                       /* Fenster zu groÔøΩ oder passend */
           newval = 0;
         else
           newval = (1000L * window->doc.y) / max_doc;
@@ -1418,7 +1418,7 @@ WORD    which, mode;
 
       if (mode & SLSIZE)
       {
-        if (window->doc.h <= 0)                 /* Fenster zu groû oder passend */
+        if (window->doc.h <= 0)                 /* Fenster zu groÔøΩ oder passend */
           newval = 1000;
         else
           newval = (1000L * h) / window->doc.h;
@@ -1500,7 +1500,7 @@ WORD    mode;
 } /* snap_window */
 
 /*****************************************************************************/
-/* Vergîûere Fenster auf volle Grîûe bzw. verkleinere Fenster                */
+/* VergÔøΩÔøΩere Fenster auf volle GrÔøΩÔøΩe bzw. verkleinere Fenster                */
 /*****************************************************************************/
 
 GLOBAL VOID full_window (window)
@@ -1513,10 +1513,10 @@ WINDOWP window;
   if (window != NULL)
     if (window->kind & FULLER)
     {
-      updtmenu = FALSE;                   /* MenÅs mÅssen sich nicht verÑndern */
+      updtmenu = FALSE;                   /* MenÔøΩs mÔøΩssen sich nicht verÔøΩndern */
       wh       = window->handle;
 
-      wind_get (wh, WF_CXYWH, &r.x, &r.y, &r.w, &r.h); /* Hole momentane Grîûe */
+      wind_get (wh, WF_CXYWH, &r.x, &r.y, &r.w, &r.h); /* Hole momentane GrÔøΩÔøΩe */
 
       if (window->flags & WI_FULLED)                      /* Mache Fenster klein */
       {
@@ -1525,7 +1525,7 @@ WINDOWP window;
         shrinkbox (&new, &r);
         wind_set (wh, WF_CXYWH, new.x, new.y, new.w, new.h);
       } /* if */
-      else                                                /* Mache Fenster groû */
+      else                                                /* Mache Fenster groÔøΩ */
       {
         wind_get (wh, WF_FXYWH, &new.x, &new.y, &new.w, &new.h);
         snap_window (window, &new, MOVED | SIZED);
@@ -1540,7 +1540,7 @@ WINDOWP window;
 } /* full_window */
 
 /*****************************************************************************/
-/* éndere Fenstergrîûe                                                       */
+/* ÔøΩndere FenstergrÔøΩÔøΩe                                                       */
 /*****************************************************************************/
 
 GLOBAL VOID size_window (window, new)
@@ -1553,7 +1553,7 @@ CONST RECT *new;
   if (window != NULL)
     if (window->kind & SIZER)
     {
-      updtmenu = FALSE;                   /* MenÅs mÅssen sich nicht verÑndern */
+      updtmenu = FALSE;                   /* MenÔøΩs mÔøΩssen sich nicht verÔøΩndern */
       r        = *new;
       snap_window (window, &r, SIZED);
       wind_set (window->handle, WF_CXYWH, r.x, r.y, r.w, r.h);
@@ -1579,14 +1579,14 @@ CONST RECT *new;
 	if (window != NULL)
 		if (window->kind & MOVER)
 		{
-			updtmenu = FALSE;                   /* MenÅs mÅssen sich nicht verÑndern */
+			updtmenu = FALSE;                   /* MenÔøΩs mÔøΩssen sich nicht verÔøΩndern */
 			r        = *new;
 			snap_window (window, &r, MOVED);
 			wind_set (window->handle, WF_CXYWH, r.x, r.y, r.w, r.h);
 			get_work (window, TRUE);
 			window->flags &= ~ WI_FULLED;
 
-			/* in allen dispobj die Koordinaten Åbernehmen */
+			/* in allen dispobj die Koordinaten ÔøΩbernehmen */
 			header = window->dispobjs;
 			element = list_next(header);
 			while (element != header) {
@@ -1626,7 +1626,7 @@ WORD    *dest_obj;
 
   if (object != NULL) *dest_obj = objc_find (object, ROOT, MAX_DEPTH, mox, moy);
 
-  if (dest->drag == NULL) return (DRAG_NORCVR); /* EmpfÑnger desinteressiert */
+  if (dest->drag == NULL) return (DRAG_NORCVR); /* EmpfÔøΩnger desinteressiert */
 
   return ((*dest->drag) (src_window, src_obj, *dest_window, *dest_obj));
 } /* drag_to_window */
@@ -1664,7 +1664,7 @@ MKINFO  *mk;
 
       if (is_top (window) && (window->flags & (WI_MODAL | WI_MODELESS)))
       {
-        get_work (window, FALSE);       /* Objektbaum fÅr jeweiliges Fenster korrigieren */
+        get_work (window, FALSE);       /* Objektbaum fÔøΩr jeweiliges Fenster korrigieren */
         if ((window->class != DESK) && ! (window->flags & WI_FIRSTDRW)) redraw_window (window, &window->work);
 
         window->exit_obj = next = objc_find (window->object, ROOT, MAX_DEPTH, mk->mox, mk->moy);
@@ -1745,7 +1745,7 @@ MKINFO  *mk;
               objc_rect (window->object, next, &r, FALSE);
               window->edit_obj = next;
               window->edit_inx = NIL;
-              ptedinfo         = (TEDINFO *)window->object [window->edit_obj].ob_spec;
+              ptedinfo         = window->object [window->edit_obj].ob_spec.tedinfo;
               wbox             = (ptedinfo->te_font == SMALL) ? 6 : gl_wbox;
               p                = ptedinfo->te_ptmplt;
 
@@ -1804,7 +1804,7 @@ MKINFO  *mk;
             draw_object (window, next);
         } /* if, else */
 
-      window->flags &= ~ WI_DLCLOSE;    /* Auf jeden Fall zurÅcksetzen */
+      window->flags &= ~ WI_DLCLOSE;    /* Auf jeden Fall zurÔøΩcksetzen */
     } /* else */
   } /* if */
 } /* click_window */
@@ -1823,7 +1823,7 @@ WINDOWP window;
 } /* unclick_window */
 
 /*****************************************************************************/
-/* Taste fÅr ein Fenster                                                     */
+/* Taste fÔøΩr ein Fenster                                                     */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN key_window (window, mk)
@@ -1925,13 +1925,13 @@ MKINFO  *mk;
                               break;
               } /* switch, if */
 
-            get_work (window, FALSE);   /* Objektbaum fÅr jeweiliges Fenster korrigieren */
+            get_work (window, FALSE);   /* Objektbaum fÔøΩr jeweiliges Fenster korrigieren */
             if ((window->class != DESK) && ! (window->flags & WI_FIRSTDRW)) redraw_window (window, &window->work);
 
             next = window->edit_obj;                    /* Aktuelles Objekt */
             kr   = mk->kreturn;
 
-            if ((mk->ascii_code == HT) && mk->shift)    /* éndere Shift HT in BackTAB */
+            if ((mk->ascii_code == HT) && mk->shift)    /* ÔøΩndere Shift HT in BackTAB */
             {
               mk->ascii_code = 0;
               mk->scan_code  = TAB;
@@ -1958,10 +1958,10 @@ MKINFO  *mk;
 #endif
               if ((OB_TYPE (window->object, window->edit_obj) == G_FTEXT) ||
                   (OB_TYPE (window->object, window->edit_obj) == G_FBOXTEXT))
-                p = ((TEDINFO *)window->object [window->edit_obj].ob_spec)->te_pvalid;
+                p = (window->object [window->edit_obj].ob_spec.tedinfo)->te_pvalid;
               else
                 p = NULL;
-/* GefÑhrlich! */
+/* GefÔøΩhrlich! */
 #if false
               if ((p != NULL) && (*p == '9') && ((mk->ascii_code == '+') || (mk->ascii_code == '-')))
               {
@@ -2005,7 +2005,7 @@ MKINFO  *mk;
               } /* if */
             } /* else */
 
-            updtmenu = ! cont;          /* MenÅs mÅssen sich nicht verÑndern */
+            updtmenu = ! cont;          /* MenÔøΩs mÔøΩssen sich nicht verÔøΩndern */
             edit     = ((kr & 0xFF) != 0) || (mk->scan_code == LEFT) || (mk->scan_code == RIGHT) || (mk->scan_code == DELETE);
 
             if (disabled) do_flags (window->object, def, DEFAULT);
@@ -2106,14 +2106,14 @@ MKINFO  *mk;
               draw_object (window, next);
           } /* if, else */
 
-        window->flags &= ~ WI_DLCLOSE;  /* Auf jeden Fall zurÅcksetzen */
+        window->flags &= ~ WI_DLCLOSE;  /* Auf jeden Fall zurÔøΩcksetzen */
       } /* if, if, if */
 
   return (res);
 } /* key_window */
 
 /*****************************************************************************/
-/* Taste fÅr alle Fenster                                                    */
+/* Taste fÔøΩr alle Fenster                                                    */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN key_all (mk)
@@ -2144,7 +2144,7 @@ MKINFO *mk;
 			
 			if (! ok && (windows [0]->class != class_desk))
 			{
-			window = search_window (class_desk, SRCH_OPENED, NIL); /* Wegen HauptmenÅ */
+			window = search_window (class_desk, SRCH_OPENED, NIL); /* Wegen HauptmenÔøΩ */
 			
 			if (window != NULL)
 				ok = (window->flags & WI_LOCKED) || key_window (window, mk);
@@ -2155,7 +2155,7 @@ MKINFO *mk;
 } /* key_all */
 
 /*****************************************************************************/
-/* Zeitablauf fÅr ein Fenster                                                */
+/* Zeitablauf fÔøΩr ein Fenster                                                */
 /*****************************************************************************/
 
 GLOBAL VOID timer_window (window)
@@ -2178,7 +2178,7 @@ WINDOWP window;
 } /* timer_window */
 
 /*****************************************************************************/
-/* Zeitablauf fÅr alle Fenster                                               */
+/* Zeitablauf fÔøΩr alle Fenster                                               */
 /*****************************************************************************/
 
 GLOBAL VOID timer_all (milli)
@@ -2192,7 +2192,7 @@ LONG milli;
   {
     window = windows [i];
 
-    /* Zeitablauf berÅcksichtigen,
+    /* Zeitablauf berÔøΩcksichtigen,
     	 Timer aktivieren nur wenn Fenster offen oder 
     	 PUF Fenster */
     if (window->milli != 0 && 
@@ -2200,7 +2200,7 @@ LONG milli;
     {
       window->count += milli;
       
-		/* énderung: wi_timer-Routine kann wi->milli auf 0 setzen um abzubrechen. BD */
+		/* ÔøΩnderung: wi_timer-Routine kann wi->milli auf 0 setzen um abzubrechen. BD */
       while ((window->count >= window->milli)&& (window->milli!=0))    /* Zeitereignis eingetreten */
       {
         window->count -= window->milli;
@@ -2264,11 +2264,11 @@ WORD    obj;
           if (rc_intersect (&window->scroll, &r))
           {
             save = clip;
-            rc_intersect (&desk, &r);	/* geÑndert: Damit Åbergroûe Boxen gez. wd. kînnnen. BD */
+            rc_intersect (&desk, &r);	/* geÔøΩndert: Damit ÔøΩbergroÔøΩe Boxen gez. wd. kÔøΩnnnen. BD */
             set_clip (TRUE, &r);
             objc_draw (window->object, obj, MAX_DEPTH, r.x, r.y, r.w, r.h);
             if (obj == ROOT)
-	            /* énderung BD */
+	            /* ÔøΩnderung BD */
 	            draw_oblines (window->object);
 	         else
             	draw_obline (window->object, obj);
@@ -2317,12 +2317,12 @@ WORD    obj;
 
   if (inside (mox, moy, &r))        /* Im gesamten Rechteck */
   {
-    icon  = (ICONBLK *)window->object [obj].ob_spec;
+    icon  = window->object [obj].ob_spec.iconblk;
     r1    = r;
     r1.x += icon->ib_xicon;
     r1.y += icon->ib_yicon;
     r1.w  = icon->ib_wicon;
-    r1.h  = icon->ib_ytext;         /* Bis zum Text, falls Icon kÅrzer */
+    r1.h  = icon->ib_ytext;         /* Bis zum Text, falls Icon kÔøΩrzer */
 
     ok = inside (mox, moy, &r1);    /* Im Icon */
 
@@ -2410,19 +2410,19 @@ RECT       *diff;
 
   delta = 0;
   i     = bound->x - inner->x;
-  if (i > 0) delta = i;                         /* Links heraushÑngend */
+  if (i > 0) delta = i;                         /* Links heraushÔøΩngend */
 
   i = bound->x + bound->w - (inner->x + inner->w + delta);
-  if (i < 0) delta += i;                        /* Rechts heraushÑngend */
+  if (i < 0) delta += i;                        /* Rechts heraushÔøΩngend */
 
   x_offset += delta;
 
   delta = 0;
   i     = bound->y - inner->y;
-  if (i > 0) delta = i;                         /* Oben heraushÑngend */
+  if (i > 0) delta = i;                         /* Oben heraushÔøΩngend */
 
   i = bound->y + bound->h - (inner->y + inner->h + delta);
-  if (i < 0) delta += i;                        /* Unten heraushÑngend */
+  if (i < 0) delta += i;                        /* Unten heraushÔøΩngend */
 
   y_offset += delta;
 
@@ -2483,7 +2483,7 @@ WORD       x_raster, y_raster;
                         TRUE, mk.mox, mk.moy, 1, 1,
                         0, 0, 0, 0, 0,
                         NULL,
-                        0, 0,
+                        0,
                         &mk.mox, &mk.moy,
                         &mk.momask, &mk.kstate,
                         &mk.kreturn, &mk.breturn);
@@ -2735,16 +2735,16 @@ MKINFO  *mk;
       switch (OB_TYPE (tree, obj))
       {
         case G_STRING   :
-        case G_BUTTON   : p = (BYTE *)tree [obj].ob_spec;
+        case G_BUTTON   : p = tree [obj].ob_spec.free_string;
                           break;
         case G_TEXT     :
         case G_BOXTEXT  :
         case G_FTEXT    :
-        case G_FBOXTEXT : p = ((TEDINFO *)tree [obj].ob_spec)->te_ptext;
+        case G_FBOXTEXT : p = (tree [obj].ob_spec.tedinfo)->te_ptext;
                           break;
       } /* switch */
 
-      if (list->first_item + i < list->num_items)       /* GenÅgend EintrÑge vorhanden */
+      if (list->first_item + i < list->num_items)       /* GenÔøΩgend EintrÔøΩge vorhanden */
       {
         if (list->indirect)
           strncpy (p, *(BYTE **)&l [(list->first_item + i) * list->itemsize], list->width);
@@ -2848,16 +2848,16 @@ MKINFO  *mk;
             switch (OB_TYPE (tree, old))
             {
               case G_STRING   :
-              case G_BUTTON   : p = (BYTE *)tree [old].ob_spec;
+              case G_BUTTON   : p = tree [old].ob_spec.free_string;
                                 break;
               case G_TEXT     :
               case G_BOXTEXT  :
               case G_FTEXT    :
-              case G_FBOXTEXT : p = ((TEDINFO *)tree [old].ob_spec)->te_ptext;
+              case G_FBOXTEXT : p = (tree [old].ob_spec.tedinfo)->te_ptext;
                                 break;
             } /* switch */
 
-            if (list->first_item + i < list->num_items)         /* GenÅgend EintrÑge vorhanden */
+            if (list->first_item + i < list->num_items)         /* GenÔøΩgend EintrÔøΩge vorhanden */
             {
               if (list->indirect)
                 strncpy (p, *(BYTE **)&l [(list->first_item + i) * list->itemsize], list->width);
@@ -2962,7 +2962,7 @@ WORD   maxlen;
 } /* edit_noecho */
 
 /*****************************************************************************/
-/* Scroll- und Lîschroutinen                                                 */
+/* Scroll- und LÔøΩschroutinen                                                 */
 /*****************************************************************************/
 
 GLOBAL VOID scroll_area (area, dir, delta)
@@ -3020,9 +3020,9 @@ CONST RECT *area;
   {
     vswr_mode (vdi_handle, MD_REPLACE);         /* Modus = replace */
     vsf_interior (vdi_handle, FIS_SOLID);       /* Muster */
-    vsf_color (vdi_handle, WHITE);              /* Farbe weiû */
+    vsf_color (vdi_handle, WHITE);              /* Farbe weiÔøΩ */
     rect2array (&r, xy);                        /* Bereich setzen */
-    vr_recfl (vdi_handle, xy);                  /* Bereich lîschen */
+    vr_recfl (vdi_handle, xy);                  /* Bereich lÔøΩschen */
   } /* if */
 } /* clr_area */
 
@@ -3141,7 +3141,7 @@ CONST RECT *area;
 } /* set_redraw */
 
 /*****************************************************************************/
-/* Fenster-MenÅroutinen                                                      */
+/* Fenster-MenÔøΩroutinen                                                      */
 /*****************************************************************************/
 
 GLOBAL VOID draw_mtitle (window, title)
@@ -3156,7 +3156,7 @@ WORD    title;
   {
     wh = window->handle;
 
-    get_work (window, FALSE);   /* MenÅzeile fÅr jeweiliges Fenster korrigieren */
+    get_work (window, FALSE);   /* MenÔøΩzeile fÔøΩr jeweiliges Fenster korrigieren */
     objc_rect (window->menu, title, &r2, TRUE);
 
     wind_get (wh, WF_FIRSTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
@@ -3188,7 +3188,7 @@ WINDOWP window;
 
     get_work (window, FALSE);
 
-    if (window->updt_menu != NULL) (*window->updt_menu) (window); /* MenÅs einstellen */
+    if (window->updt_menu != NULL) (*window->updt_menu) (window); /* MenÔøΩs einstellen */
 
     x_offset = 0;
 
@@ -3199,12 +3199,12 @@ WINDOWP window;
       arrows [ROOT].ob_x = window->work.x;
       arrows [ROOT].ob_y = window->work.y;
 
-      if (window->first_menu == THEFIRST)       /* Auf erstem MenÅ */
+      if (window->first_menu == THEFIRST)       /* Auf erstem MenÔøΩ */
         do_state (arrows, M_LTARROW, DISABLED);
       else
         undo_state (arrows, M_LTARROW, DISABLED); 
 
-      if (window->first_menu == window->menu [THEACTIVE].ob_tail) /* Auf letzem MenÅ */
+      if (window->first_menu == window->menu [THEACTIVE].ob_tail) /* Auf letzem MenÔøΩ */
         do_state (arrows, M_RTARROW, DISABLED);
       else
         undo_state (arrows, M_RTARROW, DISABLED);
@@ -3213,10 +3213,10 @@ WINDOWP window;
     line_default (vdi_handle);
 
     xywh2array (window->work.x, window->work.y + gl_hattr - 1, window->work.w, 1, xy);
-    r2 = clip;                          /* Aktuelles Clipping berÅcksichtigen */
+    r2 = clip;                          /* Aktuelles Clipping berÔøΩcksichtigen */
     xywh2rect (window->work.x + x_offset + window->menu [THEACTIVE].ob_x, window->work.y, window->work.w, gl_hattr - 1, &r3);
 
-    r   = window->work;                 /* MenÅzeile lîschen */
+    r   = window->work;                 /* MenÔøΩzeile lÔøΩschen */
     r.h = gl_hattr - 1;
 
     wind_get (wh, WF_FIRSTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
@@ -3232,7 +3232,7 @@ WINDOWP window;
         if (rc_intersect (&r3, &r1))
           objc_draw (window->menu, THEBAR, 2, r1.x, r1.y, r1.w, r1.h);
 
-        v_pline (vdi_handle, 2, xy);    /* Line unter MenÅzeile */
+        v_pline (vdi_handle, 2, xy);    /* Line unter MenÔøΩzeile */
       } /* if */
 
       wind_get (wh, WF_NEXTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
@@ -3252,7 +3252,7 @@ BOOLEAN normal;
 
   if (window == NULL)
   {
-    if (menu != NULL) menu_tnormal (menu, title, normal);  /* Benutze globales MenÅ */
+    if (menu != NULL) menu_tnormal (menu, title, normal);  /* Benutze globales MenÔøΩ */
   } /* if */
   else
     if (window->menu != NULL)
@@ -3318,8 +3318,8 @@ WORD    obj, breturn;
     } /* if */
 
     graf_mkstate (&mox, &moy, &mobutton, &mokstate);
-    obj = objc_find (arrows, ROOT, 1, mox, moy);  /* In MenÅpfeilen ? */
-  } while (mobutton & 1);       /* Bis kein Knopf mehr gedrÅckt ist */
+    obj = objc_find (arrows, ROOT, 1, mox, moy);  /* In MenÔøΩpfeilen ? */
+  } while (mobutton & 1);       /* Bis kein Knopf mehr gedrÔøΩckt ist */
 } /* hndl_mscroll */
 
 /*****************************************************************************/
@@ -3385,10 +3385,10 @@ WINDOWP window;
   menubox = menu [menubox].ob_head;
   title   = THEFIRST;
 
-  objc_rect (menu, THEBAR, &bbox, FALSE);        /* Rechteck der MenÅzeile */
+  objc_rect (menu, THEBAR, &bbox, FALSE);        /* Rechteck der MenÔøΩzeile */
 
   if (window->handle != DESK)                    /* Keine Accessories */
-  {                                              /* MenÅbaum umhÑngen */
+  {                                              /* MenÔøΩbaum umhÔøΩngen */
     menu [menubox].ob_height   = menu [menubox + 1].ob_height;
     menu [menubox].ob_tail     = menu [menubox].ob_head;
     menu [menubox + 1].ob_next = menubox;
@@ -3401,20 +3401,20 @@ WINDOWP window;
 
     objc_rect (menu, menubox, &mbox, FALSE);
 
-    if ((mbox.y + mbox.h > desk.y + desk.h) &&          /* Muû nach oben klappen */
+    if ((mbox.y + mbox.h > desk.y + desk.h) &&          /* MuÔøΩ nach oben klappen */
         (bbox.y > (desk.y + desk.h) / 2))               /* Oben mehr Platz als unten */
     {
       tdiff  = 0;
-      border = (WORD)(((LONG)menu [menubox].ob_spec >> 16) & 0x00FFL);
+      border = (WORD)((menu [menubox].ob_spec.index >> 16) & 0x00FFL);
 
       if (border & 0x0080) border |= 0xFF00;            /* Rand negativ */
 
       if (border < 0) tdiff = - border;                 /* Wegen Rand */
 
-      if (is_state (menu, menubox, SHADOWED))           /* Schatten berÅcksichtigen */
+      if (is_state (menu, menubox, SHADOWED))           /* Schatten berÔøΩcksichtigen */
         tdiff += 2 * abs (border);
 
-      if (is_state (menu, menubox, OUTLINED))           /* Outlined berÅcksichtigen */
+      if (is_state (menu, menubox, OUTLINED))           /* Outlined berÔøΩcksichtigen */
         if (border >= 0)
           tdiff += 3;                                   /* Wegen Rand */
         else
@@ -3423,14 +3423,14 @@ WINDOWP window;
       menu [menubox].ob_y = - (menu [menubox].ob_height + menu [title].ob_height + tdiff);
     } /* if */
 
-    ddiff = mbox.x + mbox.w - (desk.x + desk.w);        /* Rechts heraushÑngend ? */
+    ddiff = mbox.x + mbox.w - (desk.x + desk.w);        /* Rechts heraushÔøΩngend ? */
 
     if (ddiff > 0) menu [menubox].ob_x -= ddiff;
     objc_rect (menu, menubox, &mbox, FALSE);
-    if (mbox.x < 0) menu [menubox].ob_x -= mbox.x;      /* Links heraushÑngend */
+    if (mbox.x < 0) menu [menubox].ob_x -= mbox.x;      /* Links heraushÔøΩngend */
 
-    menubox = menu [menubox].ob_next;                   /* NÑchstes Drop-Down-MenÅ */
-    title   = menu [title].ob_next;                     /* NÑchster Titel */
+    menubox = menu [menubox].ob_next;                   /* NÔøΩchstes Drop-Down-MenÔøΩ */
+    title   = menu [title].ob_next;                     /* NÔøΩchster Titel */
   } while (title != THEACTIVE);
 } /* fix_menu */
 
@@ -3451,11 +3451,11 @@ WORD    mox, moy, mobutton, breturn;
   BOOLEAN in_title;
   OBJECT  *menu;
 
-  get_work (window, FALSE);     /* MenÅzeile fÅr jeweiliges Fenster korrigieren */
+  get_work (window, FALSE);     /* MenÔøΩzeile fÔøΩr jeweiliges Fenster korrigieren */
 
   menu = window->menu;
 
-  if (moy >= window->work.y + gl_hattr) return (FALSE);  /* Nicht in MenÅbereich */
+  if (moy >= window->work.y + gl_hattr) return (FALSE);  /* Nicht in MenÔøΩbereich */
   if (moy < window->work.y) return (FALSE);              /* z.B. in Infozeile */
   if (! is_top (window) && (window->flags & WI_TOPMENU)) return (FALSE);
 
@@ -3466,39 +3466,39 @@ WORD    mox, moy, mobutton, breturn;
     arrows [ROOT].ob_x = window->work.x;
     arrows [ROOT].ob_y = window->work.y;
 
-    obj = objc_find (arrows, ROOT, 1, mox, moy); /* In MenÅpfeilen ? */
+    obj = objc_find (arrows, ROOT, 1, mox, moy); /* In MenÔøΩpfeilen ? */
 
-    if (obj != NIL)                             /* MenÅpfeile behandeln */
+    if (obj != NIL)                             /* MenÔøΩpfeile behandeln */
     {
       hndl_mscroll (window, obj, breturn);
       return (TRUE);
     } /* if */
   } /* if */
 
-  if (desk.w < MIN_WDESK)                       /* MenÅzeile angleichen */
+  if (desk.w < MIN_WDESK)                       /* MenÔøΩzeile angleichen */
   {
     menu [ROOT].ob_width                = MIN_WDESK;
     menu [THEBAR].ob_width              = MIN_WDESK;
     menu [menu [ROOT].ob_tail].ob_width = MIN_WDESK;
   } /* if */
 
-  if (window->updt_menu != NULL) (*window->updt_menu) (window); /* MenÅs einstellen */
+  if (window->updt_menu != NULL) (*window->updt_menu) (window); /* MenÔøΩs einstellen */
 
   oldtitle = NIL;
   olditem  = NIL;
-  title    = objc_find (menu, THEACTIVE, MAX_DEPTH, mox, moy); /* In MenÅ ? */
+  title    = objc_find (menu, THEACTIVE, MAX_DEPTH, mox, moy); /* In MenÔøΩ ? */
   item     = NIL;
   menubox  = NIL;
 
   if (title != NIL)
     if (is_state (menu, title, DISABLED) || (title < window->first_menu)) title = NIL;
 
-  if (title == NIL) return (TRUE);              /* Kein korrektes MenÅ */
+  if (title == NIL) return (TRUE);              /* Kein korrektes MenÔøΩ */
 
   fix_menu (window);
 
   set_mouse (ARROW, NULL);
-  wind_update (BEG_MCTRL);                      /* Mauskontrolle Åbernehmen */
+  wind_update (BEG_MCTRL);                      /* Mauskontrolle ÔøΩbernehmen */
 
   do
   {
@@ -3519,10 +3519,10 @@ WORD    mox, moy, mobutton, breturn;
       } /* if */
     } /* if */
 
-    if (item != NIL)                    /* In MenÅeintrag */
+    if (item != NIL)                    /* In MenÔøΩeintrag */
       objc_rect (menu, item, &r, FALSE);
     else
-      if (title != NIL)                 /* In MenÅtitel */
+      if (title != NIL)                 /* In MenÔøΩtitel */
         objc_rect (menu, title, &r, FALSE);
       else
         xywh2rect (mox, moy, 1, 1, &r); /* Sonstwo */
@@ -3531,7 +3531,7 @@ WORD    mox, moy, mobutton, breturn;
                         1, 0x0001, ~ mobutton & 0x0001,
                         TRUE, r.x, r.y, r.w, r.h,
                         0, 0, 0, 0, 0,
-                        NULL, 0, 0,
+                        NULL, 0,
                         &mox, &moy, &ret, &ret, &uret, &ret);
 
     oldtitle = title;
@@ -3552,7 +3552,7 @@ WORD    mox, moy, mobutton, breturn;
     if (item != NIL)
       if (is_state (menu, item, DISABLED)) item = NIL;
 
-    if (title == NIL) title = oldtitle;             /* Auûerhalb bei gewÑhltem MenÅ */
+    if (title == NIL) title = oldtitle;             /* AuÔøΩerhalb bei gewÔøΩhltem MenÔøΩ */
 
     if (olditem != item)
     {
@@ -3606,17 +3606,17 @@ MKINFO  *mk;
   lmenu = window->menu;
 
   if (lmenu == NULL)
-    if (window->class == class_desk) lmenu = menu;      /* Globales MenÅ */
+    if (window->class == class_desk) lmenu = menu;      /* Globales MenÔøΩ */
 
   if ((lmenu != NULL) && (window->hndl_menu != NULL))
   {
-    if (window->updt_menu != NULL) (*window->updt_menu) (window); /* MenÅs einstellen */
+    if (window->updt_menu != NULL) (*window->updt_menu) (window); /* MenÔøΩs einstellen */
 
     if (is_menu_key (lmenu, mk, &title, &item))
     {
-      wind = (window->menu == NULL) ? NULL : window;    /* Globaler MenÅ-Handler */
+      wind = (window->menu == NULL) ? NULL : window;    /* Globaler MenÔøΩ-Handler */
 
-      (*window->hndl_menu) (wind, title, item);         /* MenÅ aufrufen */
+      (*window->hndl_menu) (wind, title, item);         /* MenÔøΩ aufrufen */
 
       return (TRUE);                                    /* fertig */
     } /* if */
@@ -3649,14 +3649,14 @@ WORD err_nowindow, max_reswind, class_help;
   graph_proc = FALSE;
 #endif
 
-  sel_window  = NULL;                     /* Kein Fenster angewÑhlt */
+  sel_window  = NULL;                     /* Kein Fenster angewÔøΩhlt */
   top         = 0;                        /* Oberstes Fenster Index 0 */
   windows     = NULL;                     /* Kein Fensterkeller */
   windrec     = NULL;                     /* Keine Fenster */
-  nowindow    = err_nowindow;             /* Fehler kein Fenster Åbrig */
-  wattr       = gl_wattr - 2;             /* RÑnder abziehen */
+  nowindow    = err_nowindow;             /* Fehler kein Fenster ÔøΩbrig */
+  wattr       = gl_wattr - 2;             /* RÔøΩnder abziehen */
   hattr       = gl_hattr - 2;
-  menu_offset = (2 * wattr + 8) & 0xFFF8; /* Offset MenÅzeile */
+  menu_offset = (2 * wattr + 8) & 0xFFF8; /* Offset MenÔøΩzeile */
   helpclass   = class_help;
 
   setclr (used_windows);                  /* Benutzte Fenster */
@@ -3697,7 +3697,7 @@ WORD err_nowindow, max_reswind, class_help;
 GLOBAL BOOLEAN term_windows ()
 
 {
-  close_all (TRUE, TRUE);                  /* Schlieûe und lîsche alle Fenster */
+  close_all (TRUE, TRUE);                  /* SchlieÔøΩe und lÔøΩsche alle Fenster */
 
   if (windrec != NULL) mem_free (windrec); /* Speicher freigeben */
   if (windows != NULL) mem_free (windows); /* Speicher freigeben */

@@ -2,7 +2,7 @@
 /*                                                                           */
 /* Modul: TRA.C                                                              */
 /*                                                                           */
-/* Transportleiste fr RTM                                                   */
+/* Transportleiste fï¿½r RTM                                                   */
 /*                                                                           */
 /*****************************************************************************/
 #define TRAVERSION "V 1.06"
@@ -11,22 +11,22 @@
 /*****************************************************************************
 V 1.06
 - send_start_ev_delight und stop eingebaut und wieder auskommentiert, 19.03.95
-- Thru fr alle event-typen ausser MTC und internen in receive_evts_tra, 18.03.95
+- Thru fï¿½r alle event-typen ausser MTC und internen in receive_evts_tra, 18.03.95
 - VAR_PUF_OFFSET in message, 14.03.95
 - cast for evType to only take lower 4 bits in receive_evts_tra, 14.03.95
-- Init-Reihenfolge in init_tra ge„ndert, 04.03.95
+- Init-Reihenfolge in init_tra geï¿½ndert, 04.03.95
 - SMPTE send aktiviert, 23.02.95
 - send_xxxx eingebaut, 19.02.95
 - umstellung auf MS-freie start/stop/cont, 19.02.95
 - MTC Routinen aus Delight eingebaut, 17.02.95
 V 1.05 05.02.95
-- Fernsteuerung fr REC/MTR/LFO eingebaut, 05.02.95
+- Fernsteuerung fï¿½r REC/MTR/LFO eingebaut, 05.02.95
 - send_mtr_accel Bug beseitigt, 03.02.95
-- Tastenbedienung fr MTR und LFO Beschl. eingebaut, 09.01.95
+- Tastenbedienung fï¿½r MTR und LFO Beschl. eingebaut, 09.01.95
 - Midi-Thru eingebaut
-- CNTRL_LEFT und CNTRL_RIGHT fr LOC0 und LOC1
+- CNTRL_LEFT und CNTRL_RIGHT fï¿½r LOC0 und LOC1
 V 1.04 23.12.94
-- add rcv fr cycle on/start/stop
+- add rcv fï¿½r cycle on/start/stop
 - Bug in FFWD beseitigt, 23.12.94
 30.11.94
 - Ton an
@@ -35,7 +35,7 @@ V 1.04 23.12.94
 - click immernoch nicht synchron
 - tra_module eingebaut
 - load_create_infos und instance_count eingebaut
-- MS-Namen auf TRA ge„ndert
+- MS-Namen auf TRA geï¿½ndert
 - status->new	  = TRUE; bei sync und cycle
 - msh_available eingebaut
 - big_puf_sync eingebaut
@@ -51,7 +51,7 @@ V 1.01
 - VAR-Update bei Initialisierung eingebaut
 - Register-Variablen ausgebaut
 V 1.00, 17.04.93
-- Anzeigeformat auf 00.00.00.000 umgebaut fr MidiShare
+- Anzeigeformat auf 00.00.00.000 umgebaut fï¿½r MidiShare
 - PUF und BIG an-/ausschalten eingebaut
 - Format der Dialogbox umgebaut
 - externe Synchronisation -> start/stop eingebaut
@@ -80,7 +80,7 @@ V 1.00, 17.04.93
 #include "dispobj.h"
 
 #include "var.h"
-#include <msh_unit.h>		/* Deklarationen fr MidiShare Library */
+#include <msh_unit.h>		/* Deklarationen fï¿½r MidiShare Library */
 #include "msh.h"
 
 #include "export.h"
@@ -96,13 +96,13 @@ V 1.00, 17.04.93
 #define FLAGS  (WI_RESIDENT | WI_MOUSE)
 #define XFAC   gl_wbox                 /* X-Faktor */
 #define YFAC   gl_hbox                 /* Y-Faktor */
-#define XUNITS 1                       /* X-Einheiten fr Scrolling */
-#define YUNITS 1                       /* Y-Einheiten fr Scrolling */
+#define XUNITS 1                       /* X-Einheiten fï¿½r Scrolling */
+#define YUNITS 1                       /* Y-Einheiten fï¿½r Scrolling */
 #define INITX  1								/* X-Anfangsposition */
 #define INITY  ( 3 * gl_hbox)				/* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)          /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)          /* Anfangsh”he in Pixel */
-#define MILLI  10000							/* Millisekunden fr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)          /* Anfangshï¿½he in Pixel */
+#define MILLI  10000							/* Millisekunden fï¿½r Zeitablauf */
 #define TRA_RSC_NAME "TRA_MOD.RSC"		/* Name der Resource-Datei */
 
 #define NO_REFNUM		-1
@@ -126,18 +126,18 @@ enum RECEIVE_MC_SYNC
 	TRY_RCV_MC_SYNC
 	};
 
-#define SYNC_RESOLUTION 1	 				/* Aufruftakt fr sync_send/receive in ms,
-														mu kleiner sein als 1s/25*4 = 10ms (1QF)  */
+#define SYNC_RESOLUTION 1	 				/* Aufruftakt fï¿½r sync_send/receive in ms,
+														muï¿½ kleiner sein als 1s/25*4 = 10ms (1QF)  */
 #define LOCK_TIME 1000						/* Zeitdifferenz intern/mtc bei der MTC 
 														neu initialisiert wird */
 /****** TYPES ****************************************************************/
 typedef	struct status *STAT_P;
 typedef	struct status
 {
-	UINT	play		: 1	;	/* PLAY gedrckt */
-	UINT	record	: 1	;	/* RECORD gedrckt */
-	UINT	ffwd		: 1	;	/* >> gedrckt */
-	UINT	rew		: 1	;	/* << gedrckt */
+	UINT	play		: 1	;	/* PLAY gedrï¿½ckt */
+	UINT	record	: 1	;	/* RECORD gedrï¿½ckt */
+	UINT	ffwd		: 1	;	/* >> gedrï¿½ckt */
+	UINT	rew		: 1	;	/* << gedrï¿½ckt */
 	UINT	cycle		: 1	;	/* Cycle-Modus an/aus*/
 	UINT	master	: 1	;	/* Master-Track an/aus */
 	UINT	click		: 1	;	/* Click an/aus */
@@ -154,11 +154,11 @@ typedef	struct status
 	LONG	posit;				/* SMPTE Zeit	*/
 	INT	click_freq;			/* Click-Frequenz */	
 	INT	click_duration;	/* Click-Zeit	*/
-	INT	click_counter;		/* Z„hler */
+	INT	click_counter;		/* Zï¿½hler */
 	TFilter	filter;			/* Midi-In-Filter	*/
 	BOOLEAN new;				/* komplett neu zeichnen */
 	BOOL snd_mtc;				/* Flag ob MTC Senden an */
-	WORD snd_mtc_ports;		/* Flag fr jeden Port auf dem gesendet werden soll */
+	WORD snd_mtc_ports;		/* Flag fï¿½r jeden Port auf dem gesendet werden soll */
 	WORD snd_mtc_frames;		/* Sende-Typ (0-4 entspricht 24-100 Frames) */
 	LONG snd_mtc_offset;		/* Send Offset ( auch negative Werte ) */
 	WORD mtc_type;				/* Sende-Typ in Bits zum "einodern" in die Quarter-Frame Message. */
@@ -166,7 +166,7 @@ typedef	struct status
 	WORD ms_quarter;			/* Anzahl der Millisekunden pro Quarter-Frame */
 	BOOL rcv_mtc;				/* Flag ob MTC empfangen an. */
 	WORD mtc_sync;				/* Flag ob die Synchronisation aus, eingelockt oder ob in Planung. */
-	LONG mtc_time;				/* Aktuelle empfangene Zeit, korrigiert um das bliche Delay von zwei Frames. */
+	LONG mtc_time;				/* Aktuelle empfangene Zeit, korrigiert um das ï¿½bliche Delay von zwei Frames. */
 	LONG rcv_mtc_offset;		/* Receive Offset ( auch negative Werte ) */
 } STATUS;
 
@@ -180,8 +180,8 @@ typedef struct setup
 typedef void * SmPtr;				/** Delight Event	**/
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	tra_rsc_hdr;					/* Zeigerstruktur fr RSC-Datei */
-PRIVATE WORD	*tra_rsc_ptr = &tra_rsc_hdr;		/* Zeigerstruktur fr RSC-Datei */
+PRIVATE WORD	tra_rsc_hdr;					/* Zeigerstruktur fï¿½r RSC-Datei */
+PRIVATE WORD	*tra_rsc_ptr = &tra_rsc_hdr;		/* Zeigerstruktur fï¿½r RSC-Datei */
 PRIVATE OBJECT *transport;
 PRIVATE OBJECT *tra_text;						/* TRA-Texte */
 PRIVATE OBJECT *tra_info;						/* TRA-Info-Anzeige */
@@ -190,18 +190,18 @@ PRIVATE OBJECT *tra_desk;						/* TRA-Desktop */
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "TRA";		/* Name, fr Extension etc. */
+PRIVATE CONST STRING module_name = "TRA";		/* Name, fï¿½r Extension etc. */
 
 PRIVATE RTMCLASSP	modulep[MAXMSAPPLS];		/* Zeiger auf Modul-Strukturen */
 PRIVATE WORD		refNums[1];					/* Referenznummern */
 
 /** Send MTC **/
 /*
-	mtc_count				Z„hler von 0-7 da 8 Quarter-Frames 
-							eine vollst„ndige Message machen. 
+	mtc_count				Zï¿½hler von 0-7 da 8 Quarter-Frames 
+							eine vollstï¿½ndige Message machen. 
 	mtc_out_time			Letzte gesendete Zeit, da der Sequenzer 
-							die Routine viel ”fter anspringt als 
-							n”tig. 	
+							die Routine viel ï¿½fter anspringt als 
+							nï¿½tig. 	
 	stimh, stimm, 
 	stims, stimf  			Hilfs-Variablen zur Zerlegung 
 							der Millisekunden. 
@@ -262,7 +262,7 @@ PRIVATE BOOLEAN term_rsc_tra	_((VOID));
 /** Init Send MTC 
 	Wird aufgerufen wenn der Sequencer gestartet wird. 
 	ms_clock ist die aktuelle Ms-Position, 
-	wird aber im Moment nicht ben”tigt. 
+	wird aber im Moment nicht benï¿½tigt. 
 **/
 /********************************************************************/
 void StartSendingMtc(RTMCLASSP module, LONG ms_clock )
@@ -313,7 +313,7 @@ void send_mtc(RTMCLASSP module )
 	/** Speicher voll **/
 	if ( !e ) return;
 	
-	/** Zeit mitz„hlen **/
+	/** Zeit mitzï¿½hlen **/
 	mtc_out_time += status->ms_quarter;
 	
 	/** Nummer der Message ( 0-7 ) **/
@@ -323,7 +323,7 @@ void send_mtc(RTMCLASSP module )
 	switch( mtc_count )
 	  {
 	  case 0:
-	    /** Alle Berechnungen durchfhren **/
+	    /** Alle Berechnungen durchfï¿½hren **/
 		
 	    clock = mtc_out_time;
 		/*
@@ -381,8 +381,8 @@ void send_mtc(RTMCLASSP module )
 	    break;
 	  }
 	
-	/** Quarter Frames auf alle angew„hlten Ports 
-		( auer dem ersten angew„hlten ) schicken. 
+	/** Quarter Frames auf alle angewï¿½hlten Ports 
+		( auï¿½er dem ersten angewï¿½hlten ) schicken. 
 	**/
 	bit  = 1;
 	flag = 0;
@@ -404,7 +404,7 @@ void send_mtc(RTMCLASSP module )
 	  bit <<= 1;  
 	  }
 	
-	/** Quarter Frame auf den ersten angew„hlten Kanal schicken **/
+	/** Quarter Frame auf den ersten angewï¿½hlten Kanal schicken **/
 	MidiSendIm( refNum, e );
 	
 }
@@ -428,7 +428,7 @@ void CDECL sync_send_mtc (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3 )
 	if ( !status->snd_mtc )  return;
 
 	/** Test ob Sequenzer gespult oder frisch gestartet wurde **/
-	/* Lock/Unlock-Zeiten ursprnglich auf 100ms */
+	/* Lock/Unlock-Zeiten ursprï¿½nglich auf 100ms */
 	if ( ms_clock >= mtc_out_time + LOCK_TIME || ms_clock <= mtc_out_time - LOCK_TIME )
 	{
 		/** (Re)Initialisieren der Sende-Zeit **/  
@@ -466,7 +466,7 @@ INT receive_mtc(RTMCLASSP module,  MidiEvPtr e, INT type, INT pitch, INT vel )
 	  return 1;
 #endif
 
-	/* Wert merken fr Timeout */
+	/* Wert merken fï¿½r Timeout */
 	last_mtc_rcv = MidiGetTime();
 	
 	/** Die erste Quarter Message **/
@@ -519,7 +519,7 @@ INT receive_mtc(RTMCLASSP module,  MidiEvPtr e, INT type, INT pitch, INT vel )
 
 	mtc_lock = 0;
 
-	/** Test ob schon irgendetwas von auen Synchronisiert wird **/
+	/** Test ob schon irgendetwas von auï¿½en Synchronisiert wird **/
 	if ( status->mtc_sync == NO_RCV_MTC_SYNC )
 	{
 		status->mtc_sync = TRY_RCV_MTC_SYNC;
@@ -550,12 +550,12 @@ INT receive_mtc(RTMCLASSP module,  MidiEvPtr e, INT type, INT pitch, INT vel )
 	Wird jede Millisekunde vom Sequenzer aufgerufen. 
 	Da der Sequenzer schneller oder langsamer sein kann, 
 	oder sogar gespult oder gecycelt werden kann, 
-	mu immer das delay in Millisekunden ermittelt werden, 
+	muï¿½ immer das delay in Millisekunden ermittelt werden, 
 	sobald ein neues Quarter Frame eingetroffen ist, 
 	um den Abstand zu korrigieren. 
 	
 	posit		ist die aktuelle interne Zeit
-	delay			das bliche Aufruf-Delay von 1 Millisekunde
+	delay			das ï¿½bliche Aufruf-Delay von 1 Millisekunde
 **/
 /********************************************************************/
 void CDECL sync_receive_mtc(LONG date, SHORT refNum, LONG a1, LONG a2, LONG delay )
@@ -570,8 +570,8 @@ void CDECL sync_receive_mtc(LONG date, SHORT refNum, LONG a1, LONG a2, LONG dela
 	{
 		posit = status->posit;
 
-		/** Nun kommen zwei verschiedene M”glichkeiten der Synchronisation:
-		Die eigene Routine und die Routine die die neuen M”glichkeiten 
+		/** Nun kommen zwei verschiedene Mï¿½glichkeiten der Synchronisation:
+		Die eigene Routine und die Routine die die neuen Mï¿½glichkeiten 
 		von MidiShare ausnutzt. 
 		**/
 		
@@ -594,12 +594,12 @@ void CDECL sync_receive_mtc(LONG date, SHORT refNum, LONG a1, LONG a2, LONG dela
 		/***************************/
 #else 
 		
-		/** Ist der Abstand zwischen interner und externer Zeit zu gro, 
+		/** Ist der Abstand zwischen interner und externer Zeit zu groï¿½, 
 		dann wird der Sequenzer gestoppt, 
 		da wahrscheinlich auch das externe Signal gestoppt hat. 
 		**/
 
-		/* Prfen ob Start n”tig */
+		/* Prï¿½fen ob Start nï¿½tig */
 		if ( status->mtc_sync == TRY_RCV_MTC_SYNC )
 		{
 		  	status->mtc_sync = RCV_MTC_SYNC;
@@ -668,7 +668,7 @@ void StartReceivingMtc(RTMCLASSP module)
 	}
 #else
 	status->mtc_time = 0;
-	/* Sync routine einh„ngen */
+	/* Sync routine einhï¿½ngen */
 	myTask = MidiTask(sync_receive_mtc, MidiGetTime(), refNum, module, status->posit, 1);
 #endif		
 				
@@ -693,7 +693,7 @@ void StopReceivingMtc(RTMCLASSP module)
 
 /********************************************************************/
 /** Synchronisations-Modus setzen. 
-	Nur vonn”ten, wenn die neuen MidiShare-Features angesprochen werden.
+	Nur vonnï¿½ten, wenn die neuen MidiShare-Features angesprochen werden.
 **/
 /********************************************************************/
 INT SetSyncMode(RTMCLASSP module)
@@ -713,7 +713,7 @@ INT SetSyncMode(RTMCLASSP module)
 
 /********************************************************************/
 /** Frames setzen.
-	Wird bei jeder nderung der Frame-Art aufgerufen, 
+	Wird bei jeder ï¿½nderung der Frame-Art aufgerufen, 
 	um die internen Variablen zu setzen. 
 **/
 /********************************************************************/
@@ -772,7 +772,7 @@ void init_mtc(RTMCLASSP module)
 
 /*****************************************************************************/
 
-PUBLIC VOID CDECL receive_evts_tra (SHORT refNum)
+PUBLIC VOID CDECL receive_evts_tra (INT refNum)
 {
 	MidiEvPtr	event, thru_event;
 	LONG 			n;
@@ -900,17 +900,17 @@ PUBLIC VOID CDECL receive_alarm_tra (SHORT refNum, LONG code)
 /****************************************************************************
 * 							InstallFilter						 *
 *---------------------------------------------------------------------------*
-* Cette proc‚dure d‚finit les valeurs du filtre de l'application. Un filtre *
-* est compos‚ de trois parties, qui sont trois tableaux de bool‚ens :		 * 
+* Cette procï¿½dure dï¿½finit les valeurs du filtre de l'application. Un filtre *
+* est composï¿½ de trois parties, qui sont trois tableaux de boolï¿½ens :		 * 
 * 															 *
-*		un tableau de 256 bits pour les ports Midi accept‚s			 *
-*		un tableau de 256 bits pour les types d'‚v‚nements accept‚s		 *
-*		un tableau de  16 bits pour les canaux Midi accept‚s			 *
+*		un tableau de 256 bits pour les ports Midi acceptï¿½s			 *
+*		un tableau de 256 bits pour les types d'ï¿½vï¿½nements acceptï¿½s		 *
+*		un tableau de  16 bits pour les canaux Midi acceptï¿½s			 *
 * 															 *
-* Dans le code ci dessous, le filtre est param‚tr‚ pour accepter n'importe	 *
-* quel type d'‚v‚nement. 										 *
+* Dans le code ci dessous, le filtre est paramï¿½trï¿½ pour accepter n'importe	 *
+* quel type d'ï¿½vï¿½nement. 										 *
 * 															 *
-* Les paramŠtres de l'appel :										 *
+* Les paramï¿½tres de l'appel :										 *
 * ---------------------------										 *
 * 															 *
 *		aucun												 *
@@ -926,7 +926,7 @@ PRIVATE VOID InstallFilter (WORD refNum)
 
 	for (i = 0; i<256; i++)
 	{ 										
-		AcceptBit(filter->evType,i);		/* accepte tous les types d'‚v‚nements	*/
+		AcceptBit(filter->evType,i);		/* accepte tous les types d'ï¿½vï¿½nements	*/
 		AcceptBit(filter->port,i);		/* en provenance de tous les ports		*/
 	} /* for */
 											
@@ -951,7 +951,7 @@ PUBLIC VOID CDECL play_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 		
 	window->milli = 1; /* Updaten */
 
-	/* Zeit weiterz„hlen */
+	/* Zeit weiterzï¿½hlen */
 	status->posit += QUANT;
 
 	posit = status->posit;
@@ -959,7 +959,7 @@ PUBLIC VOID CDECL play_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 	/* Cycle Restart */
 	if ((status->cycle) && (posit >= right))
 		if ((right > left)								/* Zw. Li und Re cyclen */
-		 || ((left > right)	&& (posit < left)))	/* oder berspringen */
+		 || ((left > right)	&& (posit < left)))	/* oder ï¿½berspringen */
 				send_pos(left);
 
 	/* Punch In ? */
@@ -971,7 +971,7 @@ PUBLIC VOID CDECL play_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 			send_record(FALSE);
 
 	/* Wenn weiterhin aufgenommen/gespielt werden soll, 
-		mu der Task wieder eingeklinkt werden, ausser bei MTC-Sync */
+		muï¿½ der Task wieder eingeklinkt werden, ausser bei MTC-Sync */
 	if (status->play)
 	{
 		if (!status->sync_in)
@@ -991,7 +991,7 @@ PUBLIC VOID CDECL play_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 
 PUBLIC VOID CDECL delayed_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
 {
-	/* Wird aufgerufen, um nicht Echtzeitf„hige Funktionen auszufhren */
+	/* Wird aufgerufen, um nicht Echtzeitfï¿½hige Funktionen auszufï¿½hren */
 	RTMCLASSP	module 	= modulep[refNum];
 	WORD action = (WORD)a1;
 
@@ -1102,7 +1102,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 					if (value != status->record)
 					{
 						window->milli = 1; /* Updaten */
-						/* nichts weiter n”tig, da VAR schon neuen Wert hat. */
+						/* nichts weiter nï¿½tig, da VAR schon neuen Wert hat. */
 						/* send_record(value); */
 					}
 					break;
@@ -1218,7 +1218,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 					status->snd_mtc_offset = value;
 					break;
 				case VAR_SMPTE:
-					/* Nur im Stop Modus, sonst gibts Rckkoppelungen */
+					/* Nur im Stop Modus, sonst gibts Rï¿½ckkoppelungen */
 					if (!status->play && value != status->posit) 
 						send_pos (value);
 					break;
@@ -1302,7 +1302,7 @@ MKINFO  *mk;
 } /* wi_click_mod */
 
 /*****************************************************************************/
-/* Taste fr Fenster                                                         */
+/* Taste fï¿½r Fenster                                                         */
 /*****************************************************************************/
 
 #define send_lfo_accel(value)\
@@ -1382,7 +1382,7 @@ MKINFO  *mk;
 		} /* if not ok */
 	} /* if ctrl */
 
-	/* Remote Steuerung fr PLAY/REC/MTR/LFO an/aus */
+	/* Remote Steuerung fï¿½r PLAY/REC/MTR/LFO an/aus */
 	switch (scan_code)
 	{
 		case LOC0: signal = 1; break;
@@ -1409,7 +1409,7 @@ MKINFO  *mk;
 } /* wi_key_mod */
 
 /*****************************************************************************/
-/* Zeitablauf fr Fenster                                                    */
+/* Zeitablauf fï¿½r Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -1435,7 +1435,7 @@ WINDOWP window;
 } /* wi_timer_mod */
 
 /*****************************************************************************/
-/* Nach zeichnen Status ver„ndern                                            */
+/* Nach zeichnen Status verï¿½ndern                                            */
 /*****************************************************************************/
 
 PRIVATE VOID wi_finished_mod (window)
@@ -1452,11 +1452,11 @@ WINDOWP window;
 	status->new = FALSE;
 
 	if (stat_alt->record != status->record)
-	{	/* Status wurde per MidiShare-Interrupt-Message ver„ndert,
-			mu noch in VAR eingetragen werden */
+	{	/* Status wurde per MidiShare-Interrupt-Message verï¿½ndert,
+			muï¿½ noch in VAR eingetragen werden */
 		/* send_record (status->record); */
 	} /* if */
-	/* Neue Werte bernehmen */
+	/* Neue Werte ï¿½bernehmen */
 	mem_move(stat_alt, status,(UWORD)sizeof(STATUS));
 } /* wi_finished_mod */
 
@@ -1508,14 +1508,14 @@ WORD   icon;
 		window->showinfo  = info_mod;
 		window->finished	= wi_finished_mod;
 			
-        sprintf (window->name, "%s", (BYTE *)tra_text [FTRAN].ob_spec);
-		sprintf (window->info, (BYTE *)tra_text [FTRAI].ob_spec, 0);
+        sprintf (window->name, "%s", tra_text [FTRAN].ob_spec.free_string);
+		sprintf (window->info, tra_text [FTRAI].ob_spec.free_string, 0);
 		
 		create_displayobs (window);
 		
 	} /* if */
 	
-	return (window);                      /* Fenster zurckgeben */
+	return (window);                      /* Fenster zurï¿½ckgeben */
 } /* crt_mod */
 
 PRIVATE VOID create_displayobs (WINDOWP window)
@@ -1544,7 +1544,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 } /* create_displayobs */
 
 /*****************************************************************************/
-/* ™ffnen des Objekts                                                        */
+/* ï¿½ffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -1592,7 +1592,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (tra_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (tra_info, NULL, ITRA, (BYTE *)tra_text [FTRAN].ob_spec, WI_MODAL);
+		 window = crt_dialog (tra_info, NULL, ITRA, tra_text [FTRAN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)
@@ -1694,7 +1694,7 @@ PRIVATE RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Prfen, ob DEFAULT-Datei vorhanden */
+		/* Prï¿½fen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -1770,7 +1770,7 @@ PRIVATE RTMCLASSP create ()
 } /* create */
 
 /*****************************************************************************/
-/* L”sche Objekt                                                            */
+/* Lï¿½sche Objekt                                                            */
 /*****************************************************************************/
 PUBLIC VOID destroy_mod (module)
 RTMCLASSP module;
@@ -1797,7 +1797,7 @@ RTMCLASSP module;
 
 PRIVATE WORD init_midishare ()
 {
-	SHORT		ref, refNum = 0;			/* tempor„re Referenznummer */
+	SHORT		ref, refNum = 0;			/* temporï¿½re Referenznummer */
 	STRING	s;
 	
 	if (msh_available)
@@ -1812,25 +1812,25 @@ PRIVATE WORD init_midishare ()
 					sprintf (s, "TRA %d", instance_count + 1);
 				refNum = MidiGetNamedAppl(s); /* Alte Applikation schliessen */
 				if (refNum > 0) MidiClose(refNum);
-				refNum = MidiOpen(s);				/* Applikation fr MidiShare ”ffnen	*/
+				refNum = MidiOpen(s);				/* Applikation fï¿½r MidiShare ï¿½ffnen	*/
 			} /* if */
 		} /* if */
 	
 		if (refNum == 0)
 			 hndl_alert (ERR_NOMIDISHARE);
 	
-		if (refNum == MIDIerrSpace)			/* Prfen genug Platz war */
+		if (refNum == MIDIerrSpace)			/* Prï¿½fen genug Platz war */
 		{
 			 hndl_alert (ERR_MIDISHAREFULL);
 		} /* if */
 	
-		if (refNum > 0)							/* Prfen ob alles klar */
+		if (refNum > 0)							/* Prï¿½fen ob alles klar */
 		{
 			instance_count++;
-			refNums[instance_count] = refNum;				/* Merken fr term_mod */
+			refNums[instance_count] = refNum;				/* Merken fï¿½r term_mod */
 			MidiSetRcvAlarm (refNum, receive_evts_tra);	/* Interrupt-Handler */		
 			MidiSetApplAlarm (refNum, receive_alarm_tra);	/* Alarm-Handler */
-			/* An alle anschlieen */
+			/* An alle anschlieï¿½en */
 			try_all_connect (refNum);
 		} /* else */
 	} /* if */
@@ -1840,7 +1840,7 @@ PRIVATE WORD init_midishare ()
 } /* init_midishare */
 
 /*****************************************************************************/
-/* RSC ”ffnen                                                      		     */
+/* RSC ï¿½ffnen                                                      		     */
 /*****************************************************************************/
 
 PRIVATE BOOLEAN init_rsc_tra ()
@@ -1880,7 +1880,7 @@ PRIVATE BOOLEAN init_rsc_tra ()
     form_alert (1, s);
     if (! deskacc) return (FALSE);
     menu_unregister (gl_apid);                  /* Wieder abmelden */
-    while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
+    while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
   rs_gaddr (tra_rsc_ptr, R_TREE,  TRA_DESK,	&tran_desk);	/* Adresse des TRA-Desktop*/
