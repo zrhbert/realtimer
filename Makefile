@@ -15,7 +15,7 @@ CFLAGS = --sysroot=$(SDK_ROOT) -D__GEMLIB_OLDNAMES \
 LDFLAGS = $(SDK_USR)/lib/crt0.o -nostdlib -L$(SDK_USR)/lib \
 	-lgem -lm -lc -lgcc
 
-TARGET = realtim5gcc.app
+TARGET = SRC/realtim5.prg
 
 SRCS = \
 	SRC/DESKTOP.C SRC/DIALOG.C SRC/DISK.C SRC/EVENT.C SRC/GEMAIN.C \
