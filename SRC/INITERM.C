@@ -7,10 +7,10 @@
 
 /*****************************************************************************
 - Icons hidden wenn disabled, 09.01.95
-- Icon/MenÅ aktivierung fÅr Module eingebaut in init_initerm, 08.01.95
+- Icon/MenÔøΩ aktivierung fÔøΩr Module eingebaut in init_initerm, 08.01.95
 - dlogin eingebaut, 04.01.95
 25.12.94
-- terminierungs-Reihenfolge fÅr realtspc, objects und dispobj umgestellt, 25.12.94
+- terminierungs-Reihenfolge fÔøΩr realtspc, objects und dispobj umgestellt, 25.12.94
 - printer, edit, meta, clipboard, image und trash rausgenommen, 30.11.94
 - ERR_NOSCRAP wird unterbunden 
 09.03.94
@@ -18,7 +18,7 @@
 - init/term_dispobj eingebaut
 03.06.93
 - MAXRESWINDOWS auf 200 gesetzt
-- Dummy Definitionen fÅr setup und status eingebaut
+- Dummy Definitionen fÔøΩr setup und status eingebaut
 *****************************************************************************/
 
 #include "import.h"
@@ -51,11 +51,11 @@
 /****** DEFINES **************************************************************/
 
 #define ACC_MENU        "  Realtimer"
-#define MAX_RESWIND     200 /* 40 GEM-Fenster fÅr A3D, 40 andere etc. */ 
-#define CLASS_HELP      2               /* Muû in HELP.H, falls ein Help-Modul exisiert */
+#define MAX_RESWIND     200 /* 40 GEM-Fenster fÔøΩr A3D, 40 andere etc. */ 
+#define CLASS_HELP      2               /* MuÔøΩ in HELP.H, falls ein Help-Modul exisiert */
 
 #ifndef ALERT_NAME
-#define ALERT_NAME      "REALTIM4.ERR"
+#define ALERT_NAME      "REALTIM5.ERR"
 #endif
 
 /****** TYPES ****************************************************************/
@@ -87,7 +87,7 @@ typedef struct status
 LOCAL BOOLEAN gl_ok;            /* Initialisierung von global ok? */
 LOCAL BOOLEAN rsc_ok;           /* Initialisierung von resource ok ? */
 LOCAL BOOLEAN alert_ok;         /* Initialisierung von alert ok ? */
-LOCAL BYTE	  *l_alert_msgs;		/* Lokale Definition fÅr init */
+LOCAL BYTE	  *l_alert_msgs;		/* Lokale Definition fÔøΩr init */
 /****** FUNCTIONS ************************************************************/
 
 LOCAL LONG    file_length _((BYTE *filename));
@@ -197,7 +197,7 @@ LOCAL BOOLEAN read_alerts ()
           if (*s != EOS)
           {
             p = s;
-            while ((p = strchr (p, SEP_CLOSE)) != NULL) /* Separatoren zÑhlen */
+            while ((p = strchr (p, SEP_CLOSE)) != NULL) /* Separatoren zÔøΩhlen */
             {
               p++;
               count++;
@@ -262,7 +262,7 @@ BYTE *argv [];
   
   gl_ok = init_global (argc, argv, ACC_MENU, CLASS_DESK); /* Initialisiere global */
 
-  if (! gl_ok) return (FALSE);                  /* Keine Applikation mehr mîglich */
+  if (! gl_ok) return (FALSE);                  /* Keine Applikation mehr mÔøΩglich */
 
   rsc_ok = init_resource ();                    /* Initialisiere resource */
 
@@ -290,7 +290,7 @@ BYTE *argv [];
   ok &= init_dispobj ();	                    	/* Initialisiere Display-Objekte */
   ok &= init_modules ();                     	/* Initialisiere RTM-Module */
 	
-	/* Icons und MenÅs aller Module aktivieren */
+	/* Icons und MenÔøΩs aller Module aktivieren */
 	for (i = 0; i < max_rtmmodules; i++)         	
 	{
 		module = rtmmodules [i];
@@ -311,12 +311,12 @@ BYTE *argv [];
     {
       wind_update (BEG_UPDATE);                 /* Benutzer darf nicht agieren */
       busy_mouse ();                            /* Biene zeigen */
-      if (menu_fits) menu_bar (menu, TRUE);     /* MenÅzeile darstellen */
-      open_desktop (NIL);                       /* Desktop îffnen */
+      if (menu_fits) menu_bar (menu, TRUE);     /* MenÔøΩzeile darstellen */
+      open_desktop (NIL);                       /* Desktop ÔøΩffnen */
 #if false
-      open_clipbrd (ICLIPBRD);                  /* Klemmbrett îffnen */
+      open_clipbrd (ICLIPBRD);                  /* Klemmbrett ÔøΩffnen */
 #endif
-      if (*tail)                                /* ParamterÅbergabe */
+      if (*tail)                                /* ParamterÔøΩbergabe */
       {
         p          = tail;
         prefix [0] = EOS;
@@ -333,7 +333,7 @@ BYTE *argv [];
 
           file_split (s, &drive, path, filename, ext);
 
-          if (*prefix == EOS)                           /* Merke PrÑfix */
+          if (*prefix == EOS)                           /* Merke PrÔøΩfix */
           {
             strcpy (prefix, "A:");
             prefix [0] += (BYTE)drive;
@@ -359,7 +359,7 @@ BYTE *argv [];
           */
         } /* while */
 
-        tail [0] = EOS;                                 /* Nicht mehr benîtigt */
+        tail [0] = EOS;                                 /* Nicht mehr benÔøΩtigt */
       } /* if */
 
 		open_module_windows ();
@@ -369,7 +369,7 @@ BYTE *argv [];
 
 #if false
 	if (ok)
-		ok = dlogin();		/* Login durchfÅhren */
+		ok = dlogin();		/* Login durchfÔøΩhren */
 #endif
   return (ok);                                  /* Alles gut verlaufen */
 } /* init_initerm */
@@ -398,14 +398,14 @@ LOCAL VOID place_icons ()
 				y = desktop [FKEYS].ob_y;
 				
 				/* Erstes Icon in oberste Reihe, links */
-				/*   Hîhe  mal (Anzahl       + Rundung)                   pro Zeile */
+				/*   HÔøΩhe  mal (Anzahl       + Rundung)                   pro Zeile */
 				y -= iconh * (((FKEYS-ITRASH)+(iconr-((FKEYS-ITRASH+1)%(iconr+1)))) / iconr);
-				/* Evtl. nÑchste Zeile */
+				/* Evtl. nÔøΩchste Zeile */
 				y += iconh * (((count-ITRASH)/ iconr)-1);
 				/* y -= 4; */                         /* 4 Bits freilassen */
 				y -= odd (y);                   /* nur gerade Zahlen */
 				desktop [i].ob_y = y;
-				/* ... und immer schîn nebeneinander */
+				/* ... und immer schÔøΩn nebeneinander */
 				desktop [i].ob_x = iconw * ((count-ITRASH) % iconr);
 				count++;
 			} /* else */
@@ -432,7 +432,7 @@ GLOBAL BOOLEAN term_initerm ()
     wind_update (BEG_UPDATE);
     busy_mouse ();
 
-    if (*called_by)                             /* ZurÅck zum Aufrufer bzw. an OUTPUT */
+    if (*called_by)                             /* ZurÔøΩck zum Aufrufer bzw. an OUTPUT */
     {
       sep [0] = PROGSEP;
       sep [1] = EOS;
@@ -446,7 +446,7 @@ GLOBAL BOOLEAN term_initerm ()
       shel_write (TRUE, TRUE, 1, called_by, s);
     } /* if */
 
-    if (menu_fits) menu_bar (menu, FALSE);      /* MenÅzeile freigeben */
+    if (menu_fits) menu_bar (menu, FALSE);      /* MenÔøΩzeile freigeben */
 #if false
     ok &= term_edit ();                         /* Terminiere edit */
     ok &= term_meta ();                         /* Terminiere meta */
