@@ -14,7 +14,7 @@
             "miDebuggerServerAddress": "localhost:2345",
             "serverStarted": "You have entered debug mode.",
             "filterStderr": true,
-            "serverLaunchTimeout": 30000,
+            "serverLaunchTimeout": 90000,
             "windows": {
                 "miDebuggerPath": "${config:atariSTDev.path}\\opt\\cross-mint\\bin\\m68k-atari-mintelf-gdb.exe",
                 "debugServerPath": "${config:atariSTDev.path}\\hatari\\hatari.exe",
@@ -55,7 +55,7 @@
             "miDebuggerServerAddress": "localhost:2345",
             "serverStarted": "You have entered debug mode.",
             "filterStderr": true,
-            "serverLaunchTimeout": 30000,
+            "serverLaunchTimeout": 90000,
             "windows": {
                 "miDebuggerPath": "${config:atariSTDev.path}\\opt\\cross-mint\\bin\\m68k-atari-mintelf-gdb.exe",
                 "debugServerPath": "${config:atariSTDev.path}\\hatari\\hatari.exe",
@@ -64,7 +64,7 @@
             "osx": {
                 "miDebuggerPath": "${config:atariSTDev.path}/opt/cross-mint/bin/m68k-atari-mintelf-gdb",
                 "debugServerPath": "${config:atariSTDev.path}/hatari/Hatari.app/Contents/MacOS/Hatari",
-                "debugServerArgs": "--tos \"/Users/bertramd/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img\" --confirm-quit no --sound off --machine tt --ttram 0 --memsize 14 --mono --fast-forward yes --parse \"${config:atariSTDev.path}/hatari/db.ini\" \"${workspaceFolder}/SRC/realtim5.prg\""
+                "debugServerArgs": "--tos \"/Users/bertramd/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img\" --confirm-quit no --sound off --machine tt --ttram 0 --memsize 10 --mono --fast-forward yes --parse \"${config:atariSTDev.path}/hatari/db.ini\" \"${workspaceFolder}/SRC/realtim5.prg\""
             },
             "linux": {
                 "miDebuggerPath": "${config:atariSTDev.path}/opt/cross-mint/bin/m68k-atari-mintelf-gdb",
@@ -96,7 +96,7 @@
             "miDebuggerServerAddress": "localhost:2345",
             "serverStarted": "You have entered debug mode.",
             "filterStderr": true,
-            "serverLaunchTimeout": 30000,
+            "serverLaunchTimeout": 90000,
             "windows": {
                 "miDebuggerPath": "${config:atariSTDev.path}\\opt\\cross-mint\\bin\\m68k-atari-mintelf-gdb.exe",
                 "debugServerPath": "${config:atariSTDev.path}\\hatari\\hatari.exe",
@@ -105,7 +105,7 @@
             "osx": {
                 "miDebuggerPath": "${config:atariSTDev.path}/opt/cross-mint/bin/m68k-atari-mintelf-gdb",
                 "debugServerPath": "${config:atariSTDev.path}/hatari/Hatari.app/Contents/MacOS/Hatari",
-                "debugServerArgs": "--tos \"/Users/bertramd/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img\" --confirm-quit no --sound off --memsize 14 --machine tt --ttram 0 --tos-res ttmed --fast-forward yes --parse \"${config:atariSTDev.path}/hatari/db.ini\" \"${workspaceFolder}/SRC/realtim5.prg\""
+                "debugServerArgs": "--tos \"/Users/bertramd/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img\" --confirm-quit no --sound off --memsize 10 --machine tt --ttram 0 --tos-res ttmed --fast-forward yes --parse \"${config:atariSTDev.path}/hatari/db.ini\" \"${workspaceFolder}/SRC/realtim5.prg\""
             },
             "linux": {
                 "miDebuggerPath": "${config:atariSTDev.path}/opt/cross-mint/bin/m68k-atari-mintelf-gdb",
