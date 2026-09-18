@@ -1,0 +1,12 @@
+{
+    "atariSTDev.activate": true,
+    "atariSTDev.path": "/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin",
+    "terminal.integrated.env.osx": {
+        "PATH": "/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin/bin:/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin/opt/cross-mint/bin:/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin/opt/cross-mint/m68k-atari-mintelf/bin:${env:PATH}",
+        "ATARIST_TOOLS": "/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin"
+    },
+    "[m68k]": {
+        "editor.rulers": []
+    },
+    "C_Cpp.errorSquiggles": "enabled"
+}
