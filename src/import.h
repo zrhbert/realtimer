@@ -70,7 +70,7 @@
 #define np fd_nplanes
 #define ff fd_stand
 
-#include "WINCLASS.H"	/* BD */
+#include "winclass.h"	/* BD */
 
 #if GEMDOS
 #if TURBO_C

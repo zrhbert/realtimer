@@ -501,7 +501,10 @@ WORD  class;
     window->subclass   = class;
     window->first_menu = THEFIRST;
     windows [top++]    = window; /* Neues Fenster in Keller */
+#ifdef INCLUDE_RTM_BASE_MODULES
 	 window->dispobjs   = list_create();
+#endif /* INCLUDE_RTM_BASE_MODULES */
+
   } /* else */
 
   return (window);              /* Gib kreiertes Fenster zur�ck */
@@ -827,12 +830,14 @@ BOOLEAN delete, close_desk;
 		x = top;
 		for (x = top; x >= 0; x--)
 		{
+#if INCLUDE_RTM_BASE_MODULES
 			module = Module(windows[x]);
 			/* Einstellungen sichern */
 			if (module)
 				if (module->info_name)
 					save_info_obj (module->info_name, module->file_name, module->actual->number, &windows[x]->scroll, windows[x]->opened);
-		} /* for */			
+#endif /* INCLUDE_RTM_BASE_MODULES */
+        } /* for */			
 
     while ((top > bound) && (windows [bound]->opened > 0))
     {

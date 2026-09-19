@@ -25,11 +25,18 @@
 #include "global.h"
 #include "windows.h"
 
+#ifdef INCLUDE_RTM_BASE_MODULES
 #include "realtspc.h"
+#endif /* INCLUDE_RTM_BASE_MODULES */
+
 #include "objects.h"
+
+#ifdef INCLUDE_RTM_BASE_MODULES
 #include "init_obj.h"
 #include "dispobj.h"
+#endif /* INCLUDE_RTM_BASE_MODULES */
 #include "realtim4.h"
+
 #include "errors.h"
 
 #include "resource.h"
@@ -286,6 +293,8 @@ BYTE *argv [];
   ok &= init_meta ();                           /* Initialisiere image */
   ok &= init_edit ();                           /* Initialisiere edit */
 #endif
+
+#ifdef INCLUDE_RTM_BASE_MODULES 
   ok &= init_realtspc ();                     	/* Initialisiere RTM-Spezialfunktionen */
   ok &= init_dispobj ();	                    	/* Initialisiere Display-Objekte */
   ok &= init_modules ();                     	/* Initialisiere RTM-Module */
@@ -301,6 +310,7 @@ BYTE *argv [];
 			undo_state (menu, module->menu_item, DISABLED);
 		} /* if */
 	} /* for */
+#endif /* INCLUDE_RTM_BASE_MODULES */
 
 	place_icons();
 	
@@ -362,8 +372,11 @@ BYTE *argv [];
         tail [0] = EOS;                                 /* Nicht mehr ben�tigt */
       } /* if */
 
+#if INCLUDE_RTM_BASE_MODULES
 		open_module_windows ();
-      arrow_mouse ();                           /* Wieder Pfeil zeigen */
+#endif /* INCLUDE_RTM_BASE_MODULES */
+
+    arrow_mouse ();                           /* Wieder Pfeil zeigen */
       wind_update (END_UPDATE);                 /* Benuzter darf wieder agieren */
     } /* if, if */
 
@@ -456,9 +469,11 @@ GLOBAL BOOLEAN term_initerm ()
     ok &= term_trash ();                        /* Terminiere trash */
 #endif
 
+#ifdef INCLUDE_RTM_BASE_MODULES
     ok &= term_modules ();                     	/* Terminiere RTM-Module */
-	 ok &= term_dispobj ();                    	/* Terminiere Display-Objekte */
-	 ok &= term_realtspc ();                    	/* Terminiere RTM-Spezialfunktionen */
+	ok &= term_dispobj ();                    	/* Terminiere Display-Objekte */
+	ok &= term_realtspc ();                    	/* Terminiere RTM-Spezialfunktionen */
+#endif /* INCLUDE_RTM_BASE_MODULES */
 
     ok &= term_disk ();                         /* Terminiere disk */
     ok &= term_desktop ();                      /* Terminiere desktop */

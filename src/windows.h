@@ -14,62 +14,62 @@
 #ifndef __WINDOWS__
 #define __WINDOWS__
 
-#include "LISTS.H"
+#include "lists.h"
 
 /* DEFINES **************************************************************/
 
 #define MAX_GEMWIND 8                     /* Maximale Anzahl Fenster in GEM */
 
 #define WI_NONE     0x0000                /* Keine Flags */
-#define WI_FULLED   0x0001                /* Flag fr "Fenster auf voller Gr”e" */
-#define WI_LOCKED   0x0002                /* Flag fr "Fenster gelockt" */
-#define WI_FIRSTDRW 0x0004                /* Flag fr "Fenster erstesmal gezeichnet" */
-#define WI_DLCLOSE  0x0008                /* Flag fr "Dialog-Fenster schlieen" */
-#define WI_ONTOP    0x0010                /* Flag fr "Fenster ist oben" */
-#define WI_NOTOP    0x0020                /* Flag fr "Fenster darf nicht nach oben */
-#define WI_RESIDENT 0x0040                /* Flag fr "Fenster resident" */
-#define WI_MOUSE    0x0080                /* Flag fr "Eigene Mausform" */
-#define WI_NOSCROLL 0x0100                /* Flag fr "Update statt Scrolling */
-#define WI_MODAL    0x0200                /* Flag fr "Modales Dialog-Fenster" */
-#define WI_MODELESS 0x0400                /* Flag fr "Nicht-Modales Dialog-Fenster" */
-#define WI_CURSKEYS 0x0800                /* Flag fr "Cursor Tasten fr Scrolling" */
-#define WI_MNSCROLL 0x1000                /* Flag fr "Scrollbare Menzeile */
-#define WI_TOPMENU  0x2000                /* Flag fr "Menzeile soll nur oben funktionieren */
-#define WI_JUNK	  0x4000						/* Flag fr "Mll im Fenster, Scrollbereich neu aufbauen */
+#define WI_FULLED   0x0001                /* Flag fï¿½r "Fenster auf voller Grï¿½ï¿½e" */
+#define WI_LOCKED   0x0002                /* Flag fï¿½r "Fenster gelockt" */
+#define WI_FIRSTDRW 0x0004                /* Flag fï¿½r "Fenster erstesmal gezeichnet" */
+#define WI_DLCLOSE  0x0008                /* Flag fï¿½r "Dialog-Fenster schlieï¿½en" */
+#define WI_ONTOP    0x0010                /* Flag fï¿½r "Fenster ist oben" */
+#define WI_NOTOP    0x0020                /* Flag fï¿½r "Fenster darf nicht nach oben */
+#define WI_RESIDENT 0x0040                /* Flag fï¿½r "Fenster resident" */
+#define WI_MOUSE    0x0080                /* Flag fï¿½r "Eigene Mausform" */
+#define WI_NOSCROLL 0x0100                /* Flag fï¿½r "Update statt Scrolling */
+#define WI_MODAL    0x0200                /* Flag fï¿½r "Modales Dialog-Fenster" */
+#define WI_MODELESS 0x0400                /* Flag fï¿½r "Nicht-Modales Dialog-Fenster" */
+#define WI_CURSKEYS 0x0800                /* Flag fï¿½r "Cursor Tasten fï¿½r Scrolling" */
+#define WI_MNSCROLL 0x1000                /* Flag fï¿½r "Scrollbare Menï¿½zeile */
+#define WI_TOPMENU  0x2000                /* Flag fï¿½r "Menï¿½zeile soll nur oben funktionieren */
+#define WI_JUNK	  0x4000						/* Flag fï¿½r "Mï¿½ll im Fenster, Scrollbereich neu aufbauen */
 
-#define DRAG_OK     ( 0)                  /* Drag-Code fr "Funktion OK" */
-#define DRAG_SWIND  (-1)                  /* Drag-Code fr "Gleiches Fenster" */
-#define DRAG_SCLASS (-2)                  /* Drag-Code fr "Gleiche Art" */
-#define DRAG_NOWIND (-3)                  /* Drag-Code fr "Ungltiges Fenster" */
-#define DRAG_NORCVR (-4)                  /* Drag-Code fr "Kein Empf„nger" */
-#define DRAG_NOACTN (-5)                  /* Drag-Code fr "Keine Empf„nger-Aktion */
+#define DRAG_OK     ( 0)                  /* Drag-Code fï¿½r "Funktion OK" */
+#define DRAG_SWIND  (-1)                  /* Drag-Code fï¿½r "Gleiches Fenster" */
+#define DRAG_SCLASS (-2)                  /* Drag-Code fï¿½r "Gleiche Art" */
+#define DRAG_NOWIND (-3)                  /* Drag-Code fï¿½r "Ungï¿½ltiges Fenster" */
+#define DRAG_NORCVR (-4)                  /* Drag-Code fï¿½r "Kein Empfï¿½nger" */
+#define DRAG_NOACTN (-5)                  /* Drag-Code fï¿½r "Keine Empfï¿½nger-Aktion */
 
-#define DO_UNDO     0                     /* Code fr "Undo" */
-#define DO_CUT      1                     /* Code fr "Cut" */
-#define DO_COPY     2                     /* Code fr "Copy" */
-#define DO_PASTE    3                     /* Code fr "Paste" */
-#define DO_CLEAR    4                     /* Code fr "Clear" */
-#define DO_SELALL   5                     /* Code fr "Select all" */
-#define DO_CLOSE    6                     /* Code fr "Fenster schlieen" */
-#define DO_DELETE   7                     /* Code fr "Fenster l”schen" */
+#define DO_UNDO     0                     /* Code fï¿½r "Undo" */
+#define DO_CUT      1                     /* Code fï¿½r "Cut" */
+#define DO_COPY     2                     /* Code fï¿½r "Copy" */
+#define DO_PASTE    3                     /* Code fï¿½r "Paste" */
+#define DO_CLEAR    4                     /* Code fï¿½r "Clear" */
+#define DO_SELALL   5                     /* Code fï¿½r "Select all" */
+#define DO_CLOSE    6                     /* Code fï¿½r "Fenster schlieï¿½en" */
+#define DO_DELETE   7                     /* Code fï¿½r "Fenster lï¿½schen" */
 #define DO_EXTERNAL 0x0100                /* Externe Operationen */
 
-#define OBJ_OPEN    0                     /* Code fr "Objekt ”ffnen" */
-#define OBJ_INFO    1                     /* Code fr "Info von Objekt" */
-#define OBJ_HELP    2                     /* Code fr "Hilfe von Objekt" */
+#define OBJ_OPEN    0                     /* Code fï¿½r "Objekt ï¿½ffnen" */
+#define OBJ_INFO    1                     /* Code fï¿½r "Info von Objekt" */
+#define OBJ_HELP    2                     /* Code fï¿½r "Hilfe von Objekt" */
 
-#define SRCH_CLOSED 0x01                  /* Search-Code fr geschlossene Fenster */
-#define SRCH_OPENED 0x02                  /* Search-Code fr ge”ffnete Fenster */
-#define SRCH_ANY    (SRCH_CLOSED | SRCH_OPENED) /* Search-Code fr jedes Fenster */
-#define SRCH_SUB    0x04                  /* Search-Code fr Unterklasse */
+#define SRCH_CLOSED 0x01                  /* Search-Code fï¿½r geschlossene Fenster */
+#define SRCH_OPENED 0x02                  /* Search-Code fï¿½r geï¿½ffnete Fenster */
+#define SRCH_ANY    (SRCH_CLOSED | SRCH_OPENED) /* Search-Code fï¿½r jedes Fenster */
+#define SRCH_SUB    0x04                  /* Search-Code fï¿½r Unterklasse */
 
-#define MOVED       0x01                  /* Fr Verschieben und Vergr”ern */
+#define MOVED       0x01                  /* Fï¿½r Verschieben und Vergrï¿½ï¿½ern */
 #define SIZED       0x02
 
-#define HORIZONTAL  0x01                  /* Fr Scrolling... */
+#define HORIZONTAL  0x01                  /* Fï¿½r Scrolling... */
 #define VERTICAL    0x02                  /* ...und Schieber setzen */
 
-#define SLPOS       0x01                  /* Fr Schieber setzen */
+#define SLPOS       0x01                  /* Fï¿½r Schieber setzen */
 #define SLSIZE      0x02
 
 #define LIST_INIT   0x01                  /* Initialisiere Listbox */
@@ -78,12 +78,12 @@
 
 /* TYPES ****************************************************************/
 
-typedef struct window *WINDOWP;           /* Zeiger fr Parameter */
+typedef struct window *WINDOWP;           /* Zeiger fï¿½r Parameter */
 
 typedef struct window
 {
-  WORD    handle;                         /* Handle fr Fenster */
-  WORD    opened;                         /* Wie oft wurde Fenster ge”ffnet ? */
+  WORD    handle;                         /* Handle fï¿½r Fenster */
+  WORD    opened;                         /* Wie oft wurde Fenster geï¿½ffnet ? */
   UWORD   flags;                          /* Flags des Fensters */
   UWORD   kind;                           /* Art des Fensters */
   WORD    class;                          /* Klasse des Fensters */
@@ -100,24 +100,24 @@ typedef struct window
   WORD    mousenum;                       /* Nummer der Mausform */
   MFORM   *mouseform;                     /* Mausform, falls mousenum = 255 */
   LONG    milli;                          /* Anzahl der Millisekunden */
-  LONG    count;                          /* Z„hler fr Millisekunden */
-  LONG    special;                        /* Fr speziellen Gebrauch */
+  LONG    count;                          /* Zï¿½hler fï¿½r Millisekunden */
+  LONG    special;                        /* Fï¿½r speziellen Gebrauch */
   WORD    edit_obj;                       /* Aktuelles editiertes Objekt */
   WORD    edit_inx;                       /* Aktueller Index im editierten Objekt */
   WORD    exit_obj;                       /* Objekt, mit dem Box verlassen wurde */
   STRING  name;                           /* Name des Fensters */
   STRING  info;                           /* Infozeile des Fensters */
-  OBJECT  *object;                        /* Objektbaum fr Fenster */
-  OBJECT  *menu;                          /* Menzeile fr Fenster */
-  WORD    first_menu;                     /* Erstes angezeigtes Men */
-  VOID 	 *module;								/* Modulzeiger fr RTM-Module */
+  OBJECT  *object;                        /* Objektbaum fï¿½r Fenster */
+  OBJECT  *menu;                          /* Menï¿½zeile fï¿½r Fenster */
+  WORD    first_menu;                     /* Erstes angezeigtes Menï¿½ */
+  VOID 	 *module;								/* Modulzeiger fï¿½r RTM-Module */
   LIST_P	 dispobjs;								/* Eine Liste von Display-Objekten */
-  VOID    (*updt_menu) _((WINDOWP window));             /* Men auf neuen Stand bringen */
-  VOID    (*hndl_menu) _((WINDOWP window, WORD title, WORD item)); /* Men-Handler */
+  VOID    (*updt_menu) _((WINDOWP window));             /* Menï¿½ auf neuen Stand bringen */
+  VOID    (*hndl_menu) _((WINDOWP window, WORD title, WORD item)); /* Menï¿½-Handler */
   BOOLEAN (*test)      _((WINDOWP window, WORD action));/* Test vor einer Aktion */
-  VOID    (*open)      _((WINDOWP window));             /* Aktion vor dem ™ffnen */
-  VOID    (*close)     _((WINDOWP window));             /* Aktion nach dem Schlieen */
-  VOID    (*delete)    _((WINDOWP window));             /* Aktion nach dem L”schen */
+  VOID    (*open)      _((WINDOWP window));             /* Aktion vor dem ï¿½ffnen */
+  VOID    (*close)     _((WINDOWP window));             /* Aktion nach dem Schlieï¿½en */
+  VOID    (*delete)    _((WINDOWP window));             /* Aktion nach dem Lï¿½schen */
   VOID    (*draw)      _((WINDOWP window));             /* Zeichnen-Aktion */
   VOID    (*start)  	  _((WINDOWP window));             /* Wird vor redraw aufgerufen */
   VOID    (*finished)  _((WINDOWP window));             /* Wird nach redraw aufgerufen */
@@ -140,17 +140,17 @@ typedef struct
 {
   WINDOWP window;               /* Fenster der Listbox */
   OBJECT  *tree;                /* Objektbaum der Listbox */
-  VOID    *itemlist;            /* Liste der Structs aller Eintr„ge */
-  SIZE_T  itemsize;             /* Gr”e eines Elements */
+  VOID    *itemlist;            /* Liste der Structs aller Eintrï¿½ge */
+  SIZE_T  itemsize;             /* Grï¿½ï¿½e eines Elements */
   BOOLEAN indirect;             /* Elemente sind Zeiger auf Zeichenketten */
-  WORD    num_items;            /* Anzahl verfgbarer Eintr„ge */
-  WORD    vis_items;            /* Anzahl sichtbarer Eintr„ge  */
+  WORD    num_items;            /* Anzahl verfï¿½gbarer Eintrï¿½ge */
+  WORD    vis_items;            /* Anzahl sichtbarer Eintrï¿½ge  */
   WORD    width;                /* Breite eines Eintrags */
   WORD    first_item;           /* Erster Eintrag in Listbox */
   WORD    active;               /* Aktiver Eintrag in Listbox */
   UWORD   sel_state;            /* Status, mit dem selektiert werden soll */
   WORD    root;                 /* Objektnummer der Listbox */
-  WORD    items;                /* Objektnummer der Box mit Eintr„gen */
+  WORD    items;                /* Objektnummer der Box mit Eintrï¿½gen */
   WORD    up;                   /* Objektnummer des Hoch-Pfeils */
   WORD    down;                 /* Objektnummer des Unten-Pfeils */
   WORD    parent;               /* Objektnummer des Elternteils des Schiebers */

@@ -8,10 +8,11 @@
 
 #include "realtim4.h"
 #include "realtspc.h"
-#include <msh_unit.h>					/* Deklarationen fÅr MidiShare */
+#include <msh_unit.h>					/* Deklarationen fÔøΩr MidiShare */
 #include "OBJECTS.H"
 #include "var.h"
 
+#ifdef INCLUDE_RTM_OPT_MODULES
 #include "a3d.h"
 #include "big.h"
 #include "cmi.h"
@@ -34,13 +35,14 @@
 #include "spo.h"
 #include "sps.h"
 #include "syn.h"
-#include "tra.h"
+#endif
 
+#include "tra.h"
 #include "export.h"
 #include "init_obj.h"
 
 /*****************************************************************************/
-/* Initialisierung fÅr alle Module                                           */
+/* Initialisierung fÔøΩr alle Module                                           */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN init_modules ()
@@ -99,7 +101,9 @@ GLOBAL BOOLEAN init_modules ()
 
 	/* VAR als erstes Modul Initialisieren, wg. msg. */
 	if(init_var) ok &= init_var ();		/* Initialisiere var */
-	if(init_a3d) ok &= init_a3d ();		/* Initialisiere 3D-Anzeige */
+	
+	#if OPT_MODULES
+	if(init_a3d) ok &= init_a3d ();		/* Initialisiere 3D-Anzeige */	
 	if(init_cmi) ok &= init_cmi ();		/* Initialisiere cmi */
 	if(init_eff) ok &= init_eff ();		/* Initialisiere eff */
 	if(init_gen) ok &= init_gen ();		/* Initialisiere gen */
@@ -113,6 +117,7 @@ GLOBAL BOOLEAN init_modules ()
 	if(init_spg) ok &= init_spg ();		/* Initialisiere spg */
 	if(init_spo) ok &= init_spo ();		/* Initialisiere spo */
 	if(init_sps) ok &= init_sps ();		/* Initialisiere sps */
+
 /* LFO muss im MAN-Standard-Setup hinten an liegen */
 	if(init_lfo) ok &= init_lfo ();		/* Initialisiere lfo */
 	if(init_syn) ok &= init_syn ();		/* Initialisiere syn */
@@ -120,7 +125,7 @@ GLOBAL BOOLEAN init_modules ()
 /* MAN als letztes initialisieren, braucht Obj-Infos der anderen Module */
 	if(init_man) ok &= init_man ();		/* Initialisiere man */
 
-/* Ganz zum Schluû die MidiShare-Applikationen */
+/* Ganz zum SchluÔøΩ die MidiShare-Applikationen */
 	if(init_tra) ok &= init_tra ();		/* Initialisiere tra */
 	if(init_puf) ok &= init_puf ();		/* Initialisiere puf */
 	if(init_big) ok &= init_big ();		/* Initialisiere big */
@@ -129,6 +134,8 @@ GLOBAL BOOLEAN init_modules ()
 #if false
     if(init_ec4) ok &= init_ec4 ();		/* Initialisiere 4D-Cue-List */
 #endif
+	#endif OPT_MODULES
+
 	for (i = 0; i < max_rtmmodules; i++)         	/* Untersuche alle Module */
 	{
 		module = rtmmodules [i];

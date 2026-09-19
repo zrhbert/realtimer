@@ -3,7 +3,7 @@
 /* Modul: INIT_RTM.C                                                         */
 /* Datum: 04.03.95                                                           */
 /*                                                                           */
-/* Objekt-Initialisierung fÅr Realtimer                                      */
+/* Objekt-Initialisierung fÔøΩr Realtimer                                      */
 /*                                                                           */
 /*****************************************************************************/
 
@@ -15,12 +15,16 @@
 #include "initerm.h"						/* wegen alert_msgs */
 #include "errors.h"
 
+#ifdef INCLUDE_RTM_BASE_MODULES
 #include "realtim4.h"
 #include "realtspc.h"
-#include <msh_unit.h>					/* Deklarationen fÅr MidiShare */
+#include <msh_unit.h>					/* Deklarationen fÔøΩr MidiShare */
 
 #include "var.h"
+#include "msh.h"
+#endif INCLUDE_RTM_BASE_MODULES
 
+#ifdef INCLUDE_RTM_OPT_MODULES
 #include "a3d.h"
 #include "big.h"
 #include "cmi.h"
@@ -37,7 +41,6 @@
 #include "maa.h"
 #include "mae.h"
 #include "man.h"
-#include "msh.h"
 #include "mtr.h"
 #include "par.h"
 #include "pow.h"
@@ -46,11 +49,15 @@
 #include "spo.h"
 #include "sps.h"
 #include "syn.h"
+#endif INCLUDE_RTM_OPT_MODULES
+
+#ifdef INCLUDE_RTM_BASE_MODULES
 #include "tra.h"
 #include "objects.h"
 
 #include "export.h"
 #include "init_obj.h"
+#endif INCLUDE_RTM_BASE_MODULES
 
 /****** TYPES ****************************************************************/
 typedef struct setup
@@ -64,12 +71,15 @@ typedef struct status
 } STATUS;			/* Dummy Definition */
 
 /*****************************************************************************/
-/* Initialisierung fÅr alle Module                                           */
+/* Initialisierung fÔøΩr alle Module                                           */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN init_modules ()
 
 {	
+
+#ifdef INCLUDE_RTM_BASE_MODULES
+
 	WORD i;
 	BOOLEAN ok = TRUE;
 	STR128 s;
@@ -126,11 +136,10 @@ GLOBAL BOOLEAN init_modules ()
 
 
     /*	Abgeschaltete Module */
-#if false
+#if INCLUDE_RTM_OPT_MODULES
     if(init_eff) ok &= init_eff ();		/* Initialisiere eff */
 	if(init_maa) ok &= init_maa ();		/* Initialisiere maa */
 	if(init_pow) ok &= init_pow ();		/* Initialisiere pow */
-#endif
 
 
     if(&init_a3d) ok &= init_a3d ();		/* Initialisiere 3D-Anzeige */
@@ -167,10 +176,15 @@ GLOBAL BOOLEAN init_modules ()
 
 /* MAN als letztes initialisieren, braucht Obj-Infos der anderen Module */
     if(&init_man) ok &= init_man ();		/* Initialisiere man */
+#endif INCLUDE_RTM_OPT_MODULES
 
-/* Ganz zum Schluû die MidiShare-Applikationen */
+/* Ganz zum SchluÔøΩ die MidiShare-Applikationen */
     if(&init_tra) ok &= init_tra ();		/* Initialisiere tra */
-    if(&init_puf) ok &= init_puf ();		/* Initialisiere puf */
+
+	#ifdef INCLUDE_RTM_OPT_MODULES
+	if(&init_puf) ok &= init_puf ();		/* Initialisiere puf */
+#endif INCLUDE_RTM_OPT_MODULES
+
 
 	for (i = 0; i < max_rtmmodules; i++)         	/* Untersuche alle Module */
 	{
@@ -180,7 +194,8 @@ GLOBAL BOOLEAN init_modules ()
 			copy_icon (&desktop[module->icon_position], module->icon);
 		} /* if */
 	} /* for */
-	
+#endif INCLUDE_RTM_BASE_MODULES
+
 	return (ok);
 	
 } /* init_modules */

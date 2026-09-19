@@ -626,6 +626,7 @@ WORD    action;
 {
   WORD    i;
   BOOLEAN ok = FALSE;
+#ifdef INCLUDE_RTM_BASE_MODULES
   REG WORD rtmi;
   REG RTMCLASSP rtmmodule;
 
@@ -652,6 +653,7 @@ WORD    action;
 			} /* switch */
 		} /* if */
 	} /* for */
+  #endif /* INCLUDE_RTM_BASE_MODULES */
 
 	if (ok==FALSE) /* keine Modul-Funktion gefunden, "normale" Men�abfrage */
 	{
@@ -696,7 +698,9 @@ WORD    action;
 							*/
 							default:
 							/* Icon-Text als Hilfe-Referenz */
+#ifdef INCLUDE_RTM_BASE_MODULES
 								ok = help_rtm ((desktop[i].ob_spec.iconblk)->ib_ptext);
+#endif /* INCLUDE_RTM_BASE_MODULES */
 								break;
 						} /* switch */
 						
@@ -1089,7 +1093,12 @@ WINDOWP window;
 WORD icon;
 
 {
+#ifdef INCLUDE_RTM_BASE_MODULES
   return (help_rtm ("RTM4"));
+#else
+  return (FALSE); 
+#endif /* INCLUDE_RTM_BASE_MODULES */
+
 } /* help_desktop */
 
 /*****************************************************************************/
