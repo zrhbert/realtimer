@@ -15,7 +15,7 @@
    a3d.c, cmo.c, etc.) are compiled in; see Makefile's RTM_BASE_SRCS and
    RTM_OPT_SRCS. Define as 1 (e.g. via -D) to include them. */
 #ifndef INCLUDE_RTM_BASE_MODULES
-#define INCLUDE_RTM_BASE_MODULES 0
+#define INCLUDE_RTM_BASE_MODULES 1
 #endif /* INCLUDE_RTM_BASE_MODULES */
 
 /* Controls whether the optional RTM modules (a3d.c, cmi.c, cmo.c, gen.c,

@@ -5,6 +5,7 @@ endif
 SDK ?= /Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin
 TOOLCHAIN = $(SDK)/opt/cross-mint
 CC = $(TOOLCHAIN)/bin/m68k-atari-mintelf-gcc
+OBJCOPY = $(TOOLCHAIN)/bin/m68k-atari-mintelf-objcopy
 SDK_ROOT = $(TOOLCHAIN)/m68k-atari-mintelf/sys-root
 SDK_USR = $(SDK_ROOT)/usr
 COMPAT_INCLUDE ?= gcc/include
@@ -17,6 +18,20 @@ LDFLAGS = $(SDK_USR)/lib/crt0.o -nostdlib -L$(SDK_USR)/lib \
 
 BUILD_DIR = build
 TARGET = realtim5.prg
+
+# A symbol-stripped copy of TARGET, loaded into Hatari during debug sessions
+# instead of TARGET itself. Hatari's own debugger parses the running .prg's
+# full ELF symbol table for its "monitor symbols"/CPU-view commands, and a
+# large table (e.g. with RTM_BASE_SRCS/RTM_OPT_SRCS enabled) overflows its
+# remote-protocol response, breaking the gdb connection with repeated
+# "Ignoring packet error" messages. TARGET_DEBUG keeps .text/.data/.bss
+# byte-identical to TARGET (only .symtab/.strtab/.debug_* are discarded), so
+# addresses still match exactly; gdb is pointed at the full TARGET (see
+# .vscode/launch.json's "program") for its own symbols/source-level
+# debugging, while Hatari loads this stripped copy at runtime. The name
+# must fit GEMDOS's 8.3 filename limit (<=8 chars + ".prg") so Hatari's
+# GEMDOS HDD emulation doesn't truncate/collide it with another file.
+TARGET_DEBUG = rt5run.prg
 
 SRCS = \
 	src/desktop.c \
@@ -43,7 +58,7 @@ RTM_BASE_SRCS = \
 	src/var.c \
 	src/midishare_stub.c
 
-#SRCS += $(RTM_BASE_SRCS)
+SRCS += $(RTM_BASE_SRCS)
 
 RTM_OPT_SRCS = \
 	src/a3d.c \
@@ -75,11 +90,16 @@ OBJS = $(patsubst src/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 .PHONY: all clean
 
-all: $(TARGET)
+all: $(TARGET) $(TARGET_DEBUG)
 
 $(TARGET): $(OBJS)
 	$(info Linking $(TARGET))
 	$(CC) $^ $(LDFLAGS) -o $@
+
+$(TARGET_DEBUG): $(TARGET)
+	$(info Creating symbol-stripped debug-run copy $(TARGET_DEBUG))
+	cp $(TARGET) $(TARGET_DEBUG)
+	$(OBJCOPY) --discard-all $(TARGET_DEBUG)
 
 $(BUILD_DIR)/%.o: src/%.c | $(BUILD_DIR)
 	$(info Compiling $<)
@@ -92,8 +112,8 @@ clean:
 	$(info Cleaning...)
 ifdef WINDOWS
 	@if exist $(BUILD_DIR) rmdir /s /q $(BUILD_DIR)
-	@del /q $(TARGET)
+	@del /q $(TARGET) $(TARGET_DEBUG)
 else
 	rm -rf $(BUILD_DIR)
-	rm -f $(TARGET)
+	rm -f $(TARGET) $(TARGET_DEBUG)
 endif
