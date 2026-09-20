@@ -501,9 +501,8 @@ WORD  class;
     window->subclass   = class;
     window->first_menu = THEFIRST;
     windows [top++]    = window; /* Neues Fenster in Keller */
-#if INCLUDE_RTM_BASE_MODULES
-	 window->dispobjs   = list_create();
-#endif /* INCLUDE_RTM_BASE_MODULES */
+    window->dispobjs   = list_create(); /* Always needed: draw_window/delete_window/etc.
+                                            unconditionally walk this list via list_next() */
 
   } /* else */
 
