@@ -67,7 +67,7 @@ V 1.00, 17.04.93
 #include "windows.h"
 #include "xrsrc.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "tra_mod.h"
 #include "realtspc.h"
 

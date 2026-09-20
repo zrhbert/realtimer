@@ -16,7 +16,7 @@
 #include "errors.h"
 
 #if INCLUDE_RTM_BASE_MODULES
-#include "realtim4.h"
+#include "realtim5.h"
 #include "realtspc.h"
 #include <msh_unit.h>					/* Deklarationen f�r MidiShare */
 

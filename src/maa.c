@@ -30,7 +30,7 @@ V 0.07
 #include "windows.h"
 #include "xrsrc.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "maa_mod.h"
 #include "realtspc.h"
 #include "var.h"

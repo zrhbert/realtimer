@@ -18,19 +18,19 @@
 #include "global.h"
 #include "xrsrc.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 
 #if RSC_CREATE
 #include "rcm.h"
-#include "realtim4.rsh"
+#include "realtim5.rsh"
                                 /* In RSH-Dateien fehlt das letzte CR/LF */
 BYTE      **rs_strings;			/* BD */
 RS_IMDOPE *rs_imdope;			/* BD */
 #endif
 
 #if XRSC_CREATE
-#include "realtim4.rsh"
-#include "realtim4.rh"
+#include "realtim5.rsh"
+#include "realtim5.rh"
 #endif
 
 #include "export.h"
@@ -39,7 +39,7 @@ RS_IMDOPE *rs_imdope;			/* BD */
 /****** DEFINES **************************************************************/
 
 #ifndef RSC_NAME
-#define RSC_NAME   "REALTIM4.RSC"          /* Name der Resource-Datei */
+#define RSC_NAME   "REALTIM5.RSC"          /* Name der Resource-Datei */
 #endif
 
 #define ALT_CHAR   '~'

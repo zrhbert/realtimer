@@ -35,7 +35,7 @@
 #include "dialog.h"
 #include "resource.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "objects.h"
 #include "errors.h"
 #include "realtspc.h"

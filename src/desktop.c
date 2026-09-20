@@ -21,7 +21,7 @@
 #include "global.h"
 #include "windows.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "realtspc.h"
 #include "errors.h"
 

@@ -32,7 +32,7 @@ V 0.09
 #include "windows.h"
 #include "xrsrc.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "spg_mod.h"
 #include "realtspc.h"
 #include "var.h"

@@ -35,7 +35,7 @@
 #include "init_obj.h"
 #include "dispobj.h"
 #endif /* INCLUDE_RTM_BASE_MODULES */
-#include "realtim4.h"
+#include "realtim5.h"
 
 #include "errors.h"
 

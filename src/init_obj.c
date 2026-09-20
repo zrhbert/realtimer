@@ -6,7 +6,7 @@
 #include "initerm.h"						/* wegen alert_msgs */
 #include "errors.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "realtspc.h"
 #include <msh_unit.h>					/* Deklarationen f�r MidiShare */
 #include "OBJECTS.H"

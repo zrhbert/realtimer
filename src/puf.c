@@ -76,7 +76,7 @@ V 1.00, 17.04.93
 #include "xrsrc.h"
 #include "time.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "puf_mod.h"
 #include "realtspc.h"
 #include "man.h"

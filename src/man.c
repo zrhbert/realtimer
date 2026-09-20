@@ -43,7 +43,7 @@ V 0.09	18.04.93
 #include "windows.h"
 #include "xrsrc.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "man_mod.h"
 #include "realtspc.h"
 #include "var.h"

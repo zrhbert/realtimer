@@ -45,7 +45,7 @@ V 0.11
 #include "windows.h"
 #include "xrsrc.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "a3d_mod.h"
 #include "realtspc.h"
 #include "var.h"

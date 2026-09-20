@@ -27,7 +27,7 @@
 #include "xrsrc.h"
 #include "time.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "ed4_mod.h"
 #include "realtspc.h"
 #include "var.h"

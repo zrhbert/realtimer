@@ -22,7 +22,7 @@ V 0.01
 #include "windows.h"
 #include "xrsrc.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "spd_mod.h"
 #include "realtspc.h"
 #include "var.h"

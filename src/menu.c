@@ -12,7 +12,7 @@
 #include "global.h"
 #include "windows.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "errors.h"
 
 #include "clipbrd.h"

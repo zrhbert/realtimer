@@ -47,7 +47,7 @@ V 0.09
 #include "xrsrc.h"
 #include "time.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "koo_mod.h"
 #include "realtspc.h"
 #include "var.h"

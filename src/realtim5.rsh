@@ -1,6 +1,6 @@
 /* GEM Resource C Source */
 
-#include "REALTIM4.H"
+#include "REALTIM5.H"
 
 #if !defined(WHITEBAK)
 #define WHITEBAK    0x0040
@@ -2349,7 +2349,7 @@ static BITBLK rs_bitblk[] =
 static BYTE *rs_frstr[] =
 { "[3][Es stehen keine weiteren|Fenster mehr zur Verf\201gung!][ Abbruch ]",
   "[3][Nicht gen\201gend Speicher|vorhanden, um Funktion|auszuf\201hren!][ Abbruch ]",
-  "[3][Datei REALTIM4.ERR nicht|gefunden. Das Programm|wird abgebrochen!][ Abbruch ]",
+  "[3][Datei REALTIM5.ERR nicht|gefunden. Das Programm|wird abgebrochen!][ Abbruch ]",
   "\0"
 };
 

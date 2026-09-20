@@ -37,7 +37,7 @@ V 0.02 28.08.94
 #include "xrsrc.h"
 #include "math.h"
 
-#include "realtim4.h"
+#include "realtim5.h"
 #include "cmo_mod.h"
 #include "realtspc.h"
 #include "dispobj.h"
