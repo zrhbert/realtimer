@@ -39,7 +39,7 @@
                 "--mono",
                 "--fast-forward", "yes",
                 "--parse", "${config:atariSTDev.path}/hatari/db.ini",
-                "${workspaceFolder}${/}src${/}realtim5.prg"
+                "${workspaceFolder}${/}realtim5.prg"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

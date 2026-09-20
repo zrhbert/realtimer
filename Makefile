@@ -15,7 +15,8 @@ CFLAGS = --sysroot=$(SDK_ROOT) -D__GEMLIB_OLDNAMES \
 LDFLAGS = $(SDK_USR)/lib/crt0.o -nostdlib -L$(SDK_USR)/lib \
 	-lgem -lm -lc -lgcc
 
-TARGET = src/realtim5.prg
+BUILD_DIR = build
+TARGET = realtim5.prg
 
 SRCS = \
 	src/desktop.c \
@@ -70,7 +71,7 @@ RTM_OPT_SRCS = \
 #SRCS += $(RTM_OPT_SRCS)
 
 
-OBJS = $(SRCS:.c=.o)
+OBJS = $(patsubst src/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 .PHONY: all clean
 
@@ -80,14 +81,19 @@ $(TARGET): $(OBJS)
 	$(info Linking $(TARGET))
 	$(CC) $^ $(LDFLAGS) -o $@
 
-%.o: %.c
+$(BUILD_DIR)/%.o: src/%.c | $(BUILD_DIR)
 	$(info Compiling $<)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
 clean:
 	$(info Cleaning...)
 ifdef WINDOWS
-	@del /q $(OBJS)
+	@if exist $(BUILD_DIR) rmdir /s /q $(BUILD_DIR)
+	@del /q $(TARGET)
 else
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(BUILD_DIR)
+	rm -f $(TARGET)
 endif
