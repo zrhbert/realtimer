@@ -15,14 +15,14 @@
 #include "initerm.h"						/* wegen alert_msgs */
 #include "errors.h"
 
-#ifdef INCLUDE_RTM_BASE_MODULES
+#if INCLUDE_RTM_BASE_MODULES
 #include "realtim4.h"
 #include "realtspc.h"
 #include <msh_unit.h>					/* Deklarationen f�r MidiShare */
 
 #include "var.h"
 #include "msh.h"
-#endif INCLUDE_RTM_BASE_MODULES
+#endif /* INCLUDE_RTM_BASE_MODULES */
 
 #ifdef INCLUDE_RTM_OPT_MODULES
 #include "a3d.h"
@@ -51,13 +51,13 @@
 #include "syn.h"
 #endif INCLUDE_RTM_OPT_MODULES
 
-#ifdef INCLUDE_RTM_BASE_MODULES
+#if INCLUDE_RTM_BASE_MODULES
 #include "tra.h"
 #include "objects.h"
 
 #include "export.h"
 #include "init_obj.h"
-#endif INCLUDE_RTM_BASE_MODULES
+#endif /* INCLUDE_RTM_BASE_MODULES */
 
 /****** TYPES ****************************************************************/
 typedef struct setup
@@ -77,11 +77,11 @@ typedef struct status
 GLOBAL BOOLEAN init_modules ()
 
 {	
+	BOOLEAN ok = TRUE;
 
-#ifdef INCLUDE_RTM_BASE_MODULES
+#if INCLUDE_RTM_BASE_MODULES
 
 	WORD i;
-	BOOLEAN ok = TRUE;
 	STR128 s;
 	RTMCLASSP module;
 
@@ -194,7 +194,7 @@ GLOBAL BOOLEAN init_modules ()
 			copy_icon (&desktop[module->icon_position], module->icon);
 		} /* if */
 	} /* for */
-#endif INCLUDE_RTM_BASE_MODULES
+#endif /* INCLUDE_RTM_BASE_MODULES */
 
 	return (ok);
 	

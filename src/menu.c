@@ -135,7 +135,7 @@ WORD title;
 		set_ptext (about, ABOCOMPILE, s);
 		sprintf(s, "%-20s", RTMVERSION);
 		set_ptext (about, ABOVERNR, s);
-  #ifdef INCLUDE_RTM_BASE_MODULES
+  #if INCLUDE_RTM_BASE_MODULES
 		sprintf(s, "%-20d", max_rtmmodules);
 		set_ptext (about, ABOMSLOTS, s);
 		sprintf(s, "%-20d", setcard(used_rtmmodules));
@@ -811,7 +811,7 @@ WORD    title, item;
   WORD    obj;
   MKINFO  mk;
   REG WORD i;
-  #ifdef INCLUDE_RTM_BASE_MODULES
+  #if INCLUDE_RTM_BASE_MODULES
   REG RTMCLASSP rtmmodule;
   #endif /* INCLUDE_RTM_BASE_MODULES */
   BOOLEAN ok = FALSE;
@@ -822,7 +822,7 @@ WORD    title, item;
   menu_normal (window, title, FALSE);           /* Titel invers darstellen */
 
   top = find_top ();
-#ifdef INCLUDE_RTM_BASE_MODULES
+#if INCLUDE_RTM_BASE_MODULES
 	/* Untersuche alle RTM-Module auf passenden Men�punkt */
 	 	
 	for (i = 0; i < rtmtop && !ok; i++)         	/* Untersuche alle Module */

@@ -25,13 +25,13 @@
 #include "global.h"
 #include "windows.h"
 
-#ifdef INCLUDE_RTM_BASE_MODULES
+#if INCLUDE_RTM_BASE_MODULES
 #include "realtspc.h"
 #endif /* INCLUDE_RTM_BASE_MODULES */
 
 #include "objects.h"
 
-#ifdef INCLUDE_RTM_BASE_MODULES
+#if INCLUDE_RTM_BASE_MODULES
 #include "init_obj.h"
 #include "dispobj.h"
 #endif /* INCLUDE_RTM_BASE_MODULES */
@@ -294,7 +294,7 @@ BYTE *argv [];
   ok &= init_edit ();                           /* Initialisiere edit */
 #endif
 
-#ifdef INCLUDE_RTM_BASE_MODULES 
+#if INCLUDE_RTM_BASE_MODULES 
   ok &= init_realtspc ();                     	/* Initialisiere RTM-Spezialfunktionen */
   ok &= init_dispobj ();	                    	/* Initialisiere Display-Objekte */
   ok &= init_modules ();                     	/* Initialisiere RTM-Module */
@@ -469,7 +469,7 @@ GLOBAL BOOLEAN term_initerm ()
     ok &= term_trash ();                        /* Terminiere trash */
 #endif
 
-#ifdef INCLUDE_RTM_BASE_MODULES
+#if INCLUDE_RTM_BASE_MODULES
     ok &= term_modules ();                     	/* Terminiere RTM-Module */
 	ok &= term_dispobj ();                    	/* Terminiere Display-Objekte */
 	ok &= term_realtspc ();                    	/* Terminiere RTM-Spezialfunktionen */
