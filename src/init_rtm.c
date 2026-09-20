@@ -24,7 +24,7 @@
 #include "msh.h"
 #endif /* INCLUDE_RTM_BASE_MODULES */
 
-#ifdef INCLUDE_RTM_OPT_MODULES
+#if INCLUDE_RTM_OPT_MODULES
 #include "a3d.h"
 #include "big.h"
 #include "cmi.h"
@@ -49,7 +49,7 @@
 #include "spo.h"
 #include "sps.h"
 #include "syn.h"
-#endif INCLUDE_RTM_OPT_MODULES
+#endif /* INCLUDE_RTM_OPT_MODULES */
 
 #if INCLUDE_RTM_BASE_MODULES
 #include "tra.h"
@@ -176,14 +176,14 @@ GLOBAL BOOLEAN init_modules ()
 
 /* MAN als letztes initialisieren, braucht Obj-Infos der anderen Module */
     if(&init_man) ok &= init_man ();		/* Initialisiere man */
-#endif INCLUDE_RTM_OPT_MODULES
+#endif /* INCLUDE_RTM_OPT_MODULES */
 
 /* Ganz zum Schlu� die MidiShare-Applikationen */
     if(&init_tra) ok &= init_tra ();		/* Initialisiere tra */
 
-	#ifdef INCLUDE_RTM_OPT_MODULES
+	#if INCLUDE_RTM_OPT_MODULES
 	if(&init_puf) ok &= init_puf ();		/* Initialisiere puf */
-#endif INCLUDE_RTM_OPT_MODULES
+#endif /* INCLUDE_RTM_OPT_MODULES */
 
 
 	for (i = 0; i < max_rtmmodules; i++)         	/* Untersuche alle Module */

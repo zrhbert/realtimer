@@ -12,7 +12,7 @@
 #include "OBJECTS.H"
 #include "var.h"
 
-#ifdef INCLUDE_RTM_OPT_MODULES
+#if INCLUDE_RTM_OPT_MODULES
 #include "a3d.h"
 #include "big.h"
 #include "cmi.h"
@@ -35,7 +35,7 @@
 #include "spo.h"
 #include "sps.h"
 #include "syn.h"
-#endif
+#endif /* INCLUDE_RTM_OPT_MODULES */
 
 #include "tra.h"
 #include "export.h"

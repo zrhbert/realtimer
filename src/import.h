@@ -18,6 +18,13 @@
 #define INCLUDE_RTM_BASE_MODULES 0
 #endif /* INCLUDE_RTM_BASE_MODULES */
 
+/* Controls whether the optional RTM modules (a3d.c, cmi.c, cmo.c, gen.c,
+   etc., see Makefile's RTM_OPT_SRCS) are compiled in; requires
+   INCLUDE_RTM_BASE_MODULES too. Define as 1 (e.g. via -D) to include them. */
+#ifndef INCLUDE_RTM_OPT_MODULES
+#define INCLUDE_RTM_OPT_MODULES 0
+#endif /* INCLUDE_RTM_OPT_MODULES */
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
