@@ -227,8 +227,8 @@ WORD   icon;
 		window->timer     = wi_timer_mod;
 		window->showinfo  = info_mod;
 		
-		sprintf (window->name, (BYTE *)spd_text [FSPDN].ob_spec);
-		/* sprintf (window->info, (BYTE *)freetext [FSPDI].ob_spec, 0); */
+		sprintf (window->name, spd_text [FSPDN].ob_spec.free_string);
+		/* sprintf (window->info, freetext [FSPDI].ob_spec.free_string, 0); */
 	
 		create_displayobs (window);
 
@@ -318,7 +318,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (spd_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (spd_info, NULL, ISPD, (BYTE *)spd_text [FSPDN].ob_spec, WI_MODAL);
+		 window = crt_dialog (spd_info, NULL, ISPD, spd_text [FSPDN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)

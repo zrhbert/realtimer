@@ -670,8 +670,8 @@ WORD   icon;
 		window->click     = wi_click_mod;
 		window->showinfo  = info_mod;
 		
-		sprintf (window->name, (BYTE *)pow_text [FPOWN].ob_spec);
-		sprintf (window->info, (BYTE *)pow_text [FPOWI].ob_spec, 0);
+		sprintf (window->name, pow_text [FPOWN].ob_spec.free_string);
+		sprintf (window->info, pow_text [FPOWI].ob_spec.free_string, 0);
 	} /* if */
 
 	return (window);                      /* Fenster zurÅckgeben */
@@ -728,7 +728,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (pow_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (pow_info, NULL, IPOW, (BYTE *)pow_text [FPOWN].ob_spec, WI_MODAL);
+		 window = crt_dialog (pow_info, NULL, IPOW, pow_text [FPOWN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)

@@ -304,9 +304,9 @@ MKINFO  *mk;
     window->doc.h   = lines [base];
     window->special = (window->special & 0xFFFF00L) + base;
 
-    sprintf (window->info, (BYTE *)freetext [FPOWERIN].ob_spec, base); /* Infozeile */
+    sprintf (window->info, freetext [FPOWERIN].ob_spec.free_string, base); /* Infozeile */
 
-    wind_set (wh, WF_INFO, ADR (window->info), 0, 0); /* Infozeile neu setzen */
+    wind_set_str (wh, WF_INFO, window->info); /* Infozeile neu setzen */
     set_sliders (window, HORIZONTAL + VERTICAL, SLPOS + SLSIZE);
     redraw_window (window, &window->scroll);
 
@@ -387,8 +387,8 @@ WORD   icon, font, point;
     window->showinfo  = info_power;
     window->showhelp  = help_power;
 
-    strcpy (window->name, (BYTE *)freetext [FPOWERNA].ob_spec);
-    sprintf (window->info, (BYTE *)freetext [FPOWERIN].ob_spec, 2);
+    strcpy (window->name, freetext [FPOWERNA].ob_spec.free_string);
+    sprintf (window->info, freetext [FPOWERIN].ob_spec.free_string, 2);
   } /* if */
 
   return (window);                      /* Fenster zurÅckgeben */

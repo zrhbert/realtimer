@@ -584,7 +584,7 @@ BYTE   *filename;
 
     strcat (s, filename);
     sprintf (window->name, " %s ", s);
-    sprintf (window->info, (BYTE *)freetext [FEDITINF].ob_spec, window->doc.h);
+    sprintf (window->info, freetext [FEDITINF].ob_spec.free_string, window->doc.h);
   } /* if */
   else
   {

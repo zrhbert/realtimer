@@ -445,8 +445,8 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 
-      sprintf (window->name, "%s", (BYTE *)maa_text [FMAAN].ob_spec);
-    sprintf (window->info, (BYTE *)maa_text [FMAAI].ob_spec, 0);
+      sprintf (window->name, "%s", maa_text [FMAAN].ob_spec.free_string);
+    sprintf (window->info, maa_text [FMAAI].ob_spec.free_string, 0);
   } /* if */
 
   return (window);                      /* Fenster zurÅckgeben */
@@ -503,7 +503,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (maa_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (maa_info, NULL, IMAA, (BYTE *)maa_text [FMAAN].ob_spec, WI_MODAL);
+		 window = crt_dialog (maa_info, NULL, IMAA, maa_text [FMAAN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)

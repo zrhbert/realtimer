@@ -596,7 +596,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (big_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (big_info, NULL, IBIG, (BYTE *)big_text [FBIGN].ob_spec, WI_MODAL);
+		 window = crt_dialog (big_info, NULL, IBIG, big_text [FBIGN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)
@@ -742,8 +742,8 @@ WORD   icon;
 		window->finished	= wi_finished_mod;
 		window->showinfo  = info_mod;
 		
-		strcpy (window->name, (BYTE *)big_text [FBIGN].ob_spec);
-		sprintf (window->info, (BYTE *)big_text [FBIGI].ob_spec, 0);
+		strcpy (window->name, big_text [FBIGN].ob_spec.free_string);
+		sprintf (window->info, big_text [FBIGI].ob_spec.free_string, 0);
 	} /* if */
 	
 	return (window);                      /* Fenster zurckgeben */

@@ -164,9 +164,9 @@ MKINFO  *mk;
     if (inx > max_inx) inx = 1;
 
     window->special = style * 256 + inx;
-    sprintf (window->info, (BYTE *)freetext [FGRAFINF].ob_spec, style, inx); /* Infozeile */
+    sprintf (window->info, freetext [FGRAFINF].ob_spec.free_string, style, inx); /* Infozeile */
 
-    wind_set (wh, WF_INFO, ADR (window->info), 0, 0); /* Infozeile neu setzen */
+    wind_set_str (wh, WF_INFO, window->info); /* Infozeile neu setzen */
     redraw_window (window, &window->scroll);
 
     return (TRUE);
@@ -259,8 +259,8 @@ WORD   icon;
     window->showinfo  = info_graf;
     window->showhelp  = help_graf;
 
-    strcpy (window->name, (BYTE *)freetext [FGRAFNAM].ob_spec);
-    sprintf (window->info, (BYTE *)freetext [FGRAFINF].ob_spec, 2, 1);
+    strcpy (window->name, freetext [FGRAFNAM].ob_spec.free_string);
+    sprintf (window->info, freetext [FGRAFINF].ob_spec.free_string, 2, 1);
   } /* if */
 
   return (window);                      /* Fenster zurÅckgeben */

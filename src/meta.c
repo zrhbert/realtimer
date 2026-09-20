@@ -320,38 +320,38 @@ WINDOWP window;
 
   page_w = meta_inf->header.pwidth;
   page_h = meta_inf->header.pheight;
-  sprintf ((BYTE *)infmeta [MPAGEW].ob_spec, "%2d.%02d", page_w / 100, page_w % 100);
-  sprintf ((BYTE *)infmeta [MPAGEH].ob_spec, "%2d.%02d", page_h / 100, page_h % 100);
+  sprintf (infmeta [MPAGEW].ob_spec.free_string, "%2d.%02d", page_w / 100, page_w % 100);
+  sprintf (infmeta [MPAGEH].ob_spec.free_string, "%2d.%02d", page_h / 100, page_h % 100);
 
   if (meta_inf->best_fit)
   {
-    sprintf ((BYTE *)infmeta [MPICW].ob_spec, "%5ld", src.w);
-    sprintf ((BYTE *)infmeta [MPICH].ob_spec, "%5ld", src.h);
+    sprintf (infmeta [MPICW].ob_spec.free_string, "%5ld", src.w);
+    sprintf (infmeta [MPICH].ob_spec.free_string, "%5ld", src.h);
   } /* if */
   else
   {
-    sprintf ((BYTE *)infmeta [MPICW].ob_spec, "%5ld", meta_inf->pic_w);
-    sprintf ((BYTE *)infmeta [MPICH].ob_spec, "%5ld", meta_inf->pic_h);
+    sprintf (infmeta [MPICW].ob_spec.free_string, "%5ld", meta_inf->pic_w);
+    sprintf (infmeta [MPICH].ob_spec.free_string, "%5ld", meta_inf->pic_h);
   } /* else */
 
   sprintf (s, "%lf", src_pixel.w);
   s [6] = EOS;
-  strcpy ((BYTE *)infmeta [MPIXW].ob_spec, s);
+  strcpy (infmeta [MPIXW].ob_spec.free_string, s);
   sprintf (s, "%lf", src_pixel.h);
   s [6] = EOS;
-  strcpy ((BYTE *)infmeta [MPIXH].ob_spec, s);
+  strcpy (infmeta [MPIXH].ob_spec.free_string, s);
 
-  sprintf ((BYTE *)infmeta [MORIGOX].ob_spec, "%6d", origo.x);
-  sprintf ((BYTE *)infmeta [MORIGOY].ob_spec, "%6d", origo.y);
+  sprintf (infmeta [MORIGOX].ob_spec.free_string, "%6d", origo.x);
+  sprintf (infmeta [MORIGOY].ob_spec.free_string, "%6d", origo.y);
 
   sprintf (s, "%lf", dst_factor * aspect_factor.w);
   s [8] = EOS;
-  strcpy ((BYTE *)infmeta [MFACTORX].ob_spec, s);
+  strcpy (infmeta [MFACTORX].ob_spec.free_string, s);
   sprintf (s, "%lf", dst_factor * aspect_factor.h);
   s [8] = EOS;
-  strcpy ((BYTE *)infmeta [MFACTORY].ob_spec, s);
+  strcpy (infmeta [MFACTORY].ob_spec.free_string, s);
 
-  sprintf ((BYTE *)infmeta [MVDICALL].ob_spec, "%8ld", meta_inf->vdi_calls);
+  sprintf (infmeta [MVDICALL].ob_spec.free_string, "%8ld", meta_inf->vdi_calls);
 
   hndl_dial (infmeta, 0, TRUE, TRUE, &window->scroll, &ok); /* Dialogverarbeitung */
 } /* meta_info */

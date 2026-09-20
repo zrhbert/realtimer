@@ -493,8 +493,8 @@ WORD   icon;
 
     /* FMODULEN / FMODULEI not defined? */
 #if false
-    sprintf (window->name, (BYTE *)freetext [FMODULEN].ob_spec);
-    sprintf (window->info, (BYTE *)freetext [FMODULEI].ob_spec, 0);
+    sprintf (window->name, freetext [FMODULEN].ob_spec.free_string);
+    sprintf (window->info, freetext [FMODULEI].ob_spec.free_string, 0);
 #endif
   } /* if */
 

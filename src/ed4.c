@@ -1364,7 +1364,7 @@ PRIVATE VOID dsetup (WINDOWP refwindow)
     {
         form_center (ed4_setup, &ret, &ret, &ret, &ret);
         
-        window = crt_dialog (ed4_setup, NULL, ED4_SETUP, (BYTE *)ed4_text [FED4SN].ob_spec, WI_MODELESS);
+        window = crt_dialog (ed4_setup, NULL, ED4_SETUP, ed4_text [FED4SN].ob_spec.free_string, WI_MODELESS);
     } /* if */
     
     if (window != NULL)
@@ -1812,8 +1812,8 @@ WORD   icon;
         /* Display-Objekte einklinken */
         create_displayobs (window);
         
-        sprintf (window->name, (BYTE *)ed4_text [FED4N].ob_spec, 0);
-        sprintf (window->info, (BYTE *)ed4_text [FED4I].ob_spec, 0);
+        sprintf (window->name, ed4_text [FED4N].ob_spec.free_string, 0);
+        sprintf (window->info, ed4_text [FED4I].ob_spec.free_string, 0);
     } /* if */
     
     return (window);                      /* Fenster zurckgeben */

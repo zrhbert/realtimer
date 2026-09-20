@@ -293,8 +293,8 @@ WORD   icon;
     window->showinfo  = info_trash;
     window->showhelp  = help_trash;
 
-    strcpy (window->name, (BYTE *)freetext [FTRASHNA].ob_spec);
-    sprintf (window->info, (BYTE *)freetext [FTRASHIN].ob_spec, 0);
+    strcpy (window->name, freetext [FTRASHNA].ob_spec.free_string);
+    sprintf (window->info, freetext [FTRASHIN].ob_spec.free_string, 0);
   } /* if */
 
   return (window);                      /* Fenster zurÅckgeben */

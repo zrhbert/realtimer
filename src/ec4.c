@@ -306,7 +306,7 @@ PRIVATE VOID deditor (WINDOWP refwindow)
 	{
 		form_center (ec4_cue, &ret, &ret, &ret, &ret);
 		
-		window = crt_dialog (ec4_cue, NULL, CLASS_EC4, (BYTE *)ec4_text [FEC4N].ob_spec, WI_MODELESS);
+		window = crt_dialog (ec4_cue, NULL, CLASS_EC4, ec4_text [FEC4N].ob_spec.free_string, WI_MODELESS);
 	} /* if */
 		
 	if (window != NULL)
@@ -711,7 +711,7 @@ WORD   icon;
 		window->start		= wi_start_mod;
 		window->finished  = wi_finished_mod;
 		
-		sprintf (window->name, (BYTE *)ec4_text [FEC4N].ob_spec);
+		sprintf (window->name, ec4_text [FEC4N].ob_spec.free_string);
 		sprintf (window->info, "   Cue-Time     Entry-Time    Exit-Time   Spd  Ch Vol   X    Y  ");
 	} /* if */
 	
@@ -837,7 +837,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (ec4_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (ec4_info, NULL, IEC4, (BYTE *)ec4_text [FEC4N].ob_spec, WI_MODAL);
+		 window = crt_dialog (ec4_info, NULL, IEC4, ec4_text [FEC4N].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)

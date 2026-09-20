@@ -356,7 +356,7 @@ BYTE *s;
 {
     BYTE *p;
     
-    p = (BYTE *)clipmenu [which].ob_spec;
+    p = clipmenu [which].ob_spec.free_string;
     strcpy (s, p + 2);                            /* 2 fÅhrende Leerzeichen */
     
     p = strchr (s, SP);
@@ -484,8 +484,8 @@ WINDOWP window;
         window->doc.w = (num_files == 0) ? 0 : as_icons ? ((num_files < IWDOC) ? num_files : IWDOC) : TWDOC;
         window->doc.h = (num_files == 0) ? 0 : as_icons ? (num_files + window->doc.w - 1) / window->doc.w : num_files;
         
-        sprintf (window->info, (BYTE *)freetext [FCLIPINF].ob_spec, len_files, num_files); /* Infozeile */
-        wind_set (window->handle, WF_INFO, ADR (window->info), 0, 0); /* Infozeile neu setzen */
+        sprintf (window->info, freetext [FCLIPINF].ob_spec.free_string, len_files, num_files); /* Infozeile */
+        wind_set_str (window->handle, WF_INFO, window->info); /* Infozeile neu setzen */
         set_sliders (window, HORIZONTAL + VERTICAL, SLPOS + SLSIZE);
         redraw_window (window, &window->scroll);
     } /* if */
@@ -628,7 +628,7 @@ SET     objs;
                     if (rc_intersect (&r, &inv))
                         if (as_icons)
                         {
-                            iconblk = (ICONBLK *)(icons [obj].ob_spec);
+                            iconblk = icons [obj].ob_spec.iconblk;
                             strcpy (iconblk->ib_ptext, fp [i].filename);
                             
                             if ((window == sel_window) && (setin (sel_objs, i)))
@@ -782,7 +782,7 @@ WINDOWP window;
     window->xfac  = IXFAC;
     window->yfac  = IYFAC;
     
-    menu_text (window->menu, MCSHOWAS, (BYTE *)freetext [FASTEXT].ob_spec);
+    menu_text (window->menu, MCSHOWAS, freetext [FASTEXT].ob_spec.free_string);
     set_sliders (window, HORIZONTAL + VERTICAL, SLPOS + SLSIZE);
     redraw_window (window, &window->scroll);
 } /* masicon */
@@ -801,7 +801,7 @@ WINDOWP window;
     window->xfac  = TXFAC;
     window->yfac  = TYFAC;
     
-    menu_text (window->menu, MCSHOWAS, (BYTE *)freetext [FASICONS].ob_spec);
+    menu_text (window->menu, MCSHOWAS, freetext [FASICONS].ob_spec.free_string);
     set_sliders (window, HORIZONTAL + VERTICAL, SLPOS + SLSIZE);
     redraw_window (window, &window->scroll);
 } /* mastext */
@@ -821,7 +821,7 @@ WORD    item;
         show_which = item;
         menu_icheck (clipmenu, show_which, TRUE);
         sprintf (window->name, " %s%s ", scrapdir, get_spec (show_which, s));
-        wind_set (window->handle, WF_NAME, ADR (window->name), 0, 0); /* Name neu setzen */
+        wind_set_str (window->handle, WF_NAME, window->name); /* Name neu setzen */
         show_scrap (window);
     } /* if */
 } /* mshow */
@@ -1178,7 +1178,7 @@ WINDOWP window;
                     icons [obj].ob_x = r.x + (x - window->doc.x) * window->xfac;
                     icons [obj].ob_y = r.y + (y - window->doc.y) * window->yfac;
                     
-                    iconblk = (ICONBLK *)(icons [obj].ob_spec);
+                    iconblk = icons [obj].ob_spec.iconblk;
                     strcpy (iconblk->ib_ptext, fp [i].filename);
                     
                     if ((window == sel_window) && (setin (sel_objs, i)))
@@ -1403,7 +1403,7 @@ MKINFO  *mk;
         if (! inside (mk->mox, mk->moy, &r)) obj = NIL;
         
         if (as_icons && (obj != NIL))
-            if (! in_icon (mk->mox, mk->moy, (ICONBLK *)icons [ICSV].ob_spec, &r)) obj = NIL;
+            if (! in_icon (mk->mox, mk->moy, icons [ICSV].ob_spec.iconblk, &r)) obj = NIL;
     } /* if */
     
     if (obj != NIL)
@@ -1628,7 +1628,7 @@ WORD   icon;
         window->showhelp  = help_clipbrd;
         
         sprintf (window->name, " %s%s ", scrapdir, get_spec (show_which, s));
-        sprintf (window->info, (BYTE *)freetext [FCLIPINF].ob_spec, len_files, num_files);
+        sprintf (window->info, freetext [FCLIPINF].ob_spec.free_string, len_files, num_files);
     } /* if */
     
     return (window);                      /* Fenster zurÅckgeben */
@@ -1701,7 +1701,7 @@ GLOBAL BOOLEAN init_clipbrd ()
 {
     WORD i;
     
-    as_icons = strcmp ((BYTE *)clipmenu [MCSHOWAS].ob_spec, (BYTE *)freetext [FASTEXT].ob_spec) == 0;
+    as_icons = strcmp (clipmenu [MCSHOWAS].ob_spec.free_string, freetext [FASTEXT].ob_spec.free_string) == 0;
     
     for (i = show_which = MSHOWSCR; i <= MSHOWDIF; i++)
         if (clipmenu [i].ob_state & CHECKED) show_which = i;

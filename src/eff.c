@@ -253,8 +253,8 @@ WORD   icon;
     window->click     = wi_click_mod;
     window->showinfo  = info_mod;
 	
-      sprintf (window->name, "%s", (BYTE *)eff_text [FEFFN].ob_spec);
-    sprintf (window->info, (BYTE *)eff_text [FEFFI].ob_spec, 0);
+      sprintf (window->name, "%s", eff_text [FEFFN].ob_spec.free_string);
+    sprintf (window->info, eff_text [FEFFI].ob_spec.free_string, 0);
     
   } /* if */
 
@@ -309,7 +309,7 @@ WORD    icon;
 	if (window == NULL)
 	{
 		 form_center (eff_info, &ret, &ret, &ret, &ret);
-		 window = crt_dialog (eff_info, NULL, IEFF, (BYTE *)eff_text [FEFFN].ob_spec, WI_MODAL);
+		 window = crt_dialog (eff_info, NULL, IEFF, eff_text [FEFFN].ob_spec.free_string, WI_MODAL);
 	} /* if */
 		
 	if (window != NULL)
