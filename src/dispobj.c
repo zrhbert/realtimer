@@ -46,7 +46,9 @@ V 0.02
 #include "realtspc.h"
 #include "objects.h"		/* wg. var_module */
 #include "var.h"			/* wg. var_get_value */
+#if INCLUDE_RTM_UNUSED_MODULES
 #include "ed4.h"			/* wg. soundobjekten */
+#endif /* INCLUDE_RTM_UNUSED_MODULES */
 #include <msh_unit.h>		/* Deklarationen fÅr MidiShare Library */
 #include "msh.h"			/* wg. Time-Funktionen */
 

@@ -22,11 +22,9 @@
 #include "var.h"
 
 #include "a3d.h"
-#include "big.h"
 #include "cmi.h"
 #include "cmo.h"
 #include "ec4.h"
-#include "ed4.h"
 #include "eff.h"
 #include "gen.h"
 #include "gmi.h"
@@ -38,7 +36,6 @@
 #include "msh.h"
 #include "mtr.h"
 #include "par.h"
-#include "pow.h"
 #include "puf.h"
 #include "spg.h"
 #include "spo.h"
@@ -46,6 +43,12 @@
 #include "syn.h"
 #include "tra.h"
 #include "objects.h"
+
+#if INCLUDE_RTM_UNUSED_MODULES
+#include "big.h"
+#include "ed4.h"
+#include "pow.h"
+#endif /* INCLUDE_RTM_UNUSED_MODULES */
 
 #include "export.h"
 #include "init_obj.h"

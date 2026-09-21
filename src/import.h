@@ -22,8 +22,15 @@
    etc., see Makefile's RTM_OPT_SRCS) are compiled in; requires
    INCLUDE_RTM_BASE_MODULES too. Define as 1 (e.g. via -D) to include them. */
 #ifndef INCLUDE_RTM_OPT_MODULES
-#define INCLUDE_RTM_OPT_MODULES 0
+#define INCLUDE_RTM_OPT_MODULES 1
 #endif /* INCLUDE_RTM_OPT_MODULES */
+
+/* Controls whether the normally unused RTM modules (big, ed4, pow,
+   etc., see Makefile's RTM_UNUSED_SRCS) are compiled in; requires
+   INCLUDE_RTM_BASE_MODULES too. Define as 1 (e.g. via -D) to include them. */
+#ifndef INCLUDE_RTM_UNUSED_MODULES
+#define INCLUDE_RTM_UNUSED_MODULES 0
+#endif /* INCLUDE_RTM_UNUSED_MODULES */
 
 #include <stdio.h>
 #include <string.h>

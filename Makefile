@@ -62,10 +62,8 @@ SRCS += $(RTM_BASE_SRCS)
 
 RTM_OPT_SRCS = \
 	src/a3d.c \
-	src/big.c \
 	src/cmi.c \
 	src/cmo.c \
-	src/ed4.c \
 	src/eff.c \
 	src/gen.c \
 	src/gmi.c \
@@ -76,15 +74,20 @@ RTM_OPT_SRCS = \
 	src/man.c \
 	src/mtr.c \
 	src/par.c \
-	src/pow.c \
 	src/puf.c \
 	src/spg.c \
 	src/spo.c \
 	src/sps.c \
 	src/syn.c
 
-#SRCS += $(RTM_OPT_SRCS)
+SRCS += $(RTM_OPT_SRCS)
 
+RTM_UNUSED_SRCS = \
+	src/pow.c \
+	src/big.c \
+	src/ed4.c 
+
+#SRCS += $(RTM_UNUSED_SRCS)
 
 OBJS = $(patsubst src/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 

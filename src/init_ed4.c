@@ -22,11 +22,9 @@
 #include "var.h"
 
 #include "a3d.h"
-#include "big.h"
 #include "cmi.h"
 #include "cmo.h"
 #include "ec4.h"
-#include "ed4.h"
 #include "eff.h"
 #include "gen.h"
 #include "gmi.h"
@@ -38,7 +36,6 @@
 #include "msh.h"
 #include "mtr.h"
 #include "par.h"
-#include "pow.h"
 #include "puf.h"
 #include "spg.h"
 #include "spo.h"
@@ -46,6 +43,12 @@
 #include "syn.h"
 #include "tra.h"
 #include "objects.h"
+
+#if INCLUDE_RTM_UNUSED_MODULES
+#include "big.h"
+#include "ed4.h"
+#include "pow.h"
+#endif /* INCLUDE_RTM_UNUSED_MODULES */
 
 #include "export.h"
 #include "init_obj.h"
@@ -122,9 +125,9 @@ GLOBAL BOOLEAN init_modules ()
 	/* VAR als erstes Modul Initialisieren, wg. msg. */
 	if(init_var) ok &= init_var ();		/* Initialisiere var */
 
-#if false
+#if INCLUDE_RTM_UNUSED_MODULES
 	if(init_pow) ok &= init_pow ();		/* Initialisiere pow */
-#endif
+#endif /* INCLUDE_RTM_UNUSED_MODULES */
 	if(init_mae) ok &= init_mae ();		/* Initialisiere mae */
 	if(init_koo) ok &= init_koo ();		/* Initialisiere koo */
 
@@ -139,7 +142,9 @@ GLOBAL BOOLEAN init_modules ()
 #if false
 	if(init_cmo) ok &= init_cmo ();		/* Initialisiere cmo */
 #endif
+#if INCLUDE_RTM_UNUSED_MODULES
 	if(init_ed4) ok &= init_ed4 ();		/* Initialisiere 4D-Editor */
+#endif /* INCLUDE_RTM_UNUSED_MODULES */
 	if(init_ec4) ok &= init_ec4 ();		/* Initialisiere 4D-Cue-List */
 
 	for (i = 0; i < max_rtmmodules; i++)         	/* Untersuche alle Module */

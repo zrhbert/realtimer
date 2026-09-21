@@ -14,10 +14,8 @@
 
 #if INCLUDE_RTM_OPT_MODULES
 #include "a3d.h"
-#include "big.h"
 #include "cmi.h"
 #include "cmo.h"
-#include "ed4.h"
 #include "eff.h"
 #include "gen.h"
 #include "gmi.h"
@@ -29,13 +27,18 @@
 #include "msh.h"
 #include "mtr.h"
 #include "par.h"
-#include "pow.h"
 #include "puf.h"
 #include "spg.h"
 #include "spo.h"
 #include "sps.h"
 #include "syn.h"
 #endif /* INCLUDE_RTM_OPT_MODULES */
+
+#if INCLUDE_RTM_UNUSED_MODULES
+#include "big.h"
+#include "ed4.h"
+#include "pow.h"
+#endif /* INCLUDE_RTM_UNUSED_MODULES */
 
 #include "tra.h"
 #include "export.h"
@@ -102,7 +105,7 @@ GLOBAL BOOLEAN init_modules ()
 	/* VAR als erstes Modul Initialisieren, wg. msg. */
 	if(init_var) ok &= init_var ();		/* Initialisiere var */
 	
-	#if OPT_MODULES
+	#if INCLUDE_RTM_OPT_MODULES
 	if(init_a3d) ok &= init_a3d ();		/* Initialisiere 3D-Anzeige */	
 	if(init_cmi) ok &= init_cmi ();		/* Initialisiere cmi */
 	if(init_eff) ok &= init_eff ();		/* Initialisiere eff */
@@ -113,7 +116,6 @@ GLOBAL BOOLEAN init_modules ()
 	if(init_mae) ok &= init_mae ();		/* Initialisiere mae */
 	if(init_mtr) ok &= init_mtr ();		/* Initialisiere mtr */
 	if(init_par) ok &= init_par ();		/* Initialisiere par */
-	if(init_pow) ok &= init_pow ();		/* Initialisiere pow */
 	if(init_spg) ok &= init_spg ();		/* Initialisiere spg */
 	if(init_spo) ok &= init_spo ();		/* Initialisiere spo */
 	if(init_sps) ok &= init_sps ();		/* Initialisiere sps */
@@ -128,13 +130,17 @@ GLOBAL BOOLEAN init_modules ()
 /* Ganz zum Schlu� die MidiShare-Applikationen */
 	if(init_tra) ok &= init_tra ();		/* Initialisiere tra */
 	if(init_puf) ok &= init_puf ();		/* Initialisiere puf */
-	if(init_big) ok &= init_big ();		/* Initialisiere big */
 	if(init_cmo) ok &= init_cmo ();		/* Initialisiere cmo */
-	if(init_ed4) ok &= init_ed4 ();		/* Initialisiere 4D-Editor */
 #if false
     if(init_ec4) ok &= init_ec4 ();		/* Initialisiere 4D-Cue-List */
 #endif
-	#endif OPT_MODULES
+	#endif /* INCLUDE_RTM_OPT_MODULES */
+
+#if INCLUDE_RTM_UNUSED_MODULES
+	if(init_pow) ok &= init_pow ();		/* Initialisiere pow */
+	if(init_big) ok &= init_big ();		/* Initialisiere big */
+	if(init_ed4) ok &= init_ed4 ();		/* Initialisiere 4D-Editor */
+#endif /* INCLUDE_RTM_UNUSED_MODULES */
 
 	for (i = 0; i < max_rtmmodules; i++)         	/* Untersuche alle Module */
 	{

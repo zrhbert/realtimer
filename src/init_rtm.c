@@ -26,13 +26,9 @@
 
 #if INCLUDE_RTM_OPT_MODULES
 #include "a3d.h"
-#include "big.h"
 #include "cmi.h"
 #include "cmo.h"
 #include "ec4.h"
-#if false
-#include "ed4.h"
-#endif
 #include "eff.h"
 #include "gen.h"
 #include "gmi.h"
@@ -43,13 +39,18 @@
 #include "man.h"
 #include "mtr.h"
 #include "par.h"
-#include "pow.h"
 #include "puf.h"
 #include "spg.h"
 #include "spo.h"
 #include "sps.h"
 #include "syn.h"
 #endif /* INCLUDE_RTM_OPT_MODULES */
+
+#if INCLUDE_RTM_UNUSED_MODULES
+#include "big.h"
+#include "ed4.h"
+#include "pow.h"
+#endif /* INCLUDE_RTM_UNUSED_MODULES */
 
 #if INCLUDE_RTM_BASE_MODULES
 #include "tra.h"
@@ -139,7 +140,6 @@ GLOBAL BOOLEAN init_modules ()
 #if INCLUDE_RTM_OPT_MODULES
     if(init_eff) ok &= init_eff ();		/* Initialisiere eff */
 	if(init_maa) ok &= init_maa ();		/* Initialisiere maa */
-	if(init_pow) ok &= init_pow ();		/* Initialisiere pow */
 
 
     if(&init_a3d) ok &= init_a3d ();		/* Initialisiere 3D-Anzeige */
@@ -177,6 +177,10 @@ GLOBAL BOOLEAN init_modules ()
 /* MAN als letztes initialisieren, braucht Obj-Infos der anderen Module */
     if(&init_man) ok &= init_man ();		/* Initialisiere man */
 #endif /* INCLUDE_RTM_OPT_MODULES */
+
+#if INCLUDE_RTM_UNUSED_MODULES
+	if(init_pow) ok &= init_pow ();		/* Initialisiere pow */
+#endif /* INCLUDE_RTM_UNUSED_MODULES */
 
 /* Ganz zum Schlu� die MidiShare-Applikationen */
     if(&init_tra) ok &= init_tra ();		/* Initialisiere tra */
