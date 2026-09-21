@@ -1,7 +1,5 @@
 /* GEM Resource C Source */
 
-#include <portab.h>
-#include <aes.h>
 #include "EFF_MOD.H"
 
 #if !defined(WHITEBAK)

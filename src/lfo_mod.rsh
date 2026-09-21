@@ -1,6 +1,5 @@
 /* GEM Resource C Source */
 
-#include "LFO_MOD.H"
 
 #if !defined(WHITEBAK)
 #define WHITEBAK    0x0040
