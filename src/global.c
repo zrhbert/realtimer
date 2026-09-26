@@ -194,10 +194,6 @@ LOCAL VOID graf_growbox   _((WORD orgx, WORD orgy, WORD orgw, WORD orgh, WORD x,
 LOCAL VOID graf_shrinkbox _((WORD orgx, WORD orgy, WORD orgw, WORD orgh, WORD x, WORD y, WORD w, WORD h));
 #endif
 
-#if GEMDOS
-LOCAL LONG *get_actpd _((VOID));
-#endif /* GEMDOS */
-
 /*****************************************************************************/
 /* �ffne virtuelle Workstation                                               */
 /*****************************************************************************/
@@ -1835,29 +1831,6 @@ OBJECT *helptree;
 /* Speicher-Routinen                                                         */
 /*****************************************************************************/
 
-#if GEMDOS
-LOCAL LONG *get_actpd ()
-
-{
-  LONG *ret;
-  WORD tos;
-  LONG stack;
-
-  stack = Super (NULL);
-  tos   = *(UWORD *)(*(LONG *)0x4F2 + 0x02);            /* get TOS version */
-
-  if (tos >= 0x0102)
-    ret = (LONG *)(*(LONG *)(*(LONG *)0x4F2 + 0x28));   /* get pointer to basepage */
-  else
-    ret = (LONG *)0x602C;
-
-  Super ((VOID *)stack);
-  return (ret);
-} /* get_actpd */
-#endif
-
-/*****************************************************************************/
-
 GLOBAL VOID *mem_alloc (mem)
 LONG mem;
 
@@ -1871,14 +1844,7 @@ LONG mem;
 */
     if (memavail > mem + 100000L)
     {
-        
-        
-        if (tos >= 0x0300)
-            ret = (VOID *)Mxalloc (mem, 3);
-        else
-            ret = (VOID *)Malloc (mem);
-        
-        
+        ret = (VOID *)malloc (mem);
     } /* if */
 	else {
    	hndl_alert (ERR_NOMEMORY);
@@ -1905,36 +1871,9 @@ VOID *memptr;
 {
   BOOLEAN ok;
 
-#if GEMDOS
-  LONG *pdp, pd;
-
-  ok = memptr != NULL;
-
-  if (ok)
-  {
-    pdp = get_actpd ();
-    pd  = *pdp;
-
-#if TURBO_C
-    *pdp = (LONG)_BasPag;
-#endif
-
-    Mfree (memptr);
-    *pdp = pd;
-  } /* if */
-#endif
-
-#if MSDOS | FLEXOS
-  ok = memptr != NULL;
-
-  if (ok) Mfree (memptr);
-#endif
-
-#if UNIX
   ok = memptr != NULL;
 
   if (ok) free (memptr);
-#endif
 } /* mem_free */
 
 /*****************************************************************************/
