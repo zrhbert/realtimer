@@ -17,7 +17,7 @@ V 0.14
 V 0.13 15.07.94
 - man_module eingebaut
 - load_create_infos und instance_count eingebaut
-- Verwaltung der Module im Setup Åber MOD_INFO Strukturen
+- Verwaltung der Module im Setup ÔøΩber MOD_INFO Strukturen
 V 0.12
 - POW aus Standard-Setup herausgenommen
 - window->module eingebaut
@@ -68,13 +68,13 @@ V 0.09	18.04.93
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                 /* X-Faktor */
 #define YFAC   gl_hbox                 /* Y-Faktor */
-#define XUNITS 1                       /* X-Einheiten fÅr Scrolling */
-#define YUNITS 1                       /* Y-Einheiten fÅr Scrolling */
+#define XUNITS 1                       /* X-Einheiten fÔøΩr Scrolling */
+#define YUNITS 1                       /* Y-Einheiten fÔøΩr Scrolling */
 #define INITX  ( 2 * gl_wbox)          /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)          /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)          /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)          /* Anfangshîhe in Pixel */
-#define MILLI  0						/* Millisekunden fÅr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)          /* AnfangshÔøΩhe in Pixel */
+#define MILLI  0						/* Millisekunden fÔøΩr Zeitablauf */
 
 #define MAN_RSC_NAME "MAN_MOD.RSC"		/* Name der Resource-Datei */
 #define MAXSETUPS 1l
@@ -103,8 +103,8 @@ typedef struct status
 } STATUS;
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	man_rsc_hdr;					/* Zeigerstruktur fÅr RSC-Datei */
-PRIVATE WORD	*man_rsc_ptr = &man_rsc_hdr;		/* Zeigerstruktur fÅr RSC-Datei */
+PRIVATE WORD	man_rsc_hdr;					/* Zeigerstruktur fÔøΩr RSC-Datei */
+PRIVATE WORD	*man_rsc_ptr = &man_rsc_hdr;		/* Zeigerstruktur fÔøΩr RSC-Datei */
 PRIVATE OBJECT *man_setup;
 PRIVATE OBJECT *man_help;
 PRIVATE OBJECT *man_desk;
@@ -114,7 +114,7 @@ PRIVATE OBJECT *man_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "MAN";		/* Name, fÅr Extension etc. */
+PRIVATE CONST STRING module_name = "MAN";		/* Name, fÔøΩr Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 /* Interne MAN-Funktionen */
@@ -223,25 +223,25 @@ PRIVATE VOID    set_dbox	(RTMCLASSP module)
 		} /* if */
 	} /* for */
 	offset = offsets[MODULE_INPUT];
-	for (slot = x[MODULE_INPUT]; slot < MAXMODULES; slot++) /* Rest auffÅllen */
+	for (slot = x[MODULE_INPUT]; slot < MAXMODULES; slot++) /* Rest auffÔøΩllen */
 	{
 		set_ptext (man_setup, MANINPUTTEXT0 + slot*offset, "");
 		set_checkbox (man_setup, MANINPUT0 + slot*offset, FALSE);
 	} /* for */
 	offset = offsets[MODULE_CALC];
-	for (slot = x[MODULE_CALC]; slot < MAXMODULES; slot++) /* Rest auffÅllen */
+	for (slot = x[MODULE_CALC]; slot < MAXMODULES; slot++) /* Rest auffÔøΩllen */
 	{
 		set_ptext (man_setup, MANCALCTEXT0 + slot*offset, "");
 		set_checkbox (man_setup, MANCALC0 + slot*offset, FALSE);
 	} /* for */
 	offset = offsets[MODULE_CONTROL];
-	for (slot = x[MODULE_CONTROL]; slot < MAXMODULES; slot++) /* Rest auffÅllen */
+	for (slot = x[MODULE_CONTROL]; slot < MAXMODULES; slot++) /* Rest auffÔøΩllen */
 	{
 		set_ptext (man_setup, MANCONTROLTEXT0 + slot*offset, "");
 		set_checkbox (man_setup, MANCONTROL0 + slot*offset, FALSE);
 	} /* for */
 	offset = offsets[MODULE_OUTPUT];
-	for (slot = x[MODULE_OUTPUT]; slot < MAXMODULES; slot++) /* Rest auffÅllen */
+	for (slot = x[MODULE_OUTPUT]; slot < MAXMODULES; slot++) /* Rest auffÔøΩllen */
 	{
 		set_ptext (man_setup, MANOUTPUTTEXT0 + slot*offset, "");
 		set_checkbox (man_setup, MANOUTPUT0 + slot*offset, FALSE);
@@ -516,11 +516,11 @@ WORD   icon;
 		
 	} /* if */
 	
-	return (window);                      /* Fenster zurÅckgeben */
+	return (window);                      /* Fenster zurÔøΩckgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* ôffnen des Objekts                                                        */
+/* ÔøΩffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -603,6 +603,8 @@ GLOBAL RTMCLASSP create_man ()
 	RTMCLASSP 	module;
 	FILE			*fp;
 	
+	daktstatus("Initialisierung MAN", "Start");
+
 	module = create_module (module_name, instance_count);
 		
 	if (module != NULL)
@@ -668,7 +670,7 @@ GLOBAL RTMCLASSP create_man ()
 		else
 		{
 		} /* else */
-		/* PrÅfen, ob DEFAULT-Datei vorhanden */
+		/* PrÔøΩfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -699,6 +701,8 @@ GLOBAL RTMCLASSP create_man ()
 		man_module = module;
 	} /* if */
 	
+	daktstatus("Initialisierung MAN", "Ende");
+	
 	return module;
 } /* create_man */
 
@@ -727,7 +731,7 @@ PRIVATE VOID init_standard (RTMCLASSP module)
 				case MODULE_INPUT:
 					slot = x[type]++;
 					standard->mod_info[type][slot].module	= rtmmodule;
-					/* MAA und POW gehîren nicht in die Standards */
+					/* MAA und POW gehÔøΩren nicht in die Standards */
 					if (  (rtmmodule->class_number != CLASS_MAA)
 						&& (rtmmodule->class_number != CLASS_POW))
 					{
@@ -740,7 +744,7 @@ PRIVATE VOID init_standard (RTMCLASSP module)
 } /* init_standard */
 
 /*****************************************************************************/
-/* RSC îffnen                                                      		     */
+/* RSC ÔøΩffnen                                                      		     */
 /*****************************************************************************/
 
 PRIVATE BOOLEAN init_rsc ()
@@ -764,7 +768,7 @@ PRIVATE BOOLEAN init_rsc ()
   man_setup  = (OBJECT *)rs_trindex [MAN_SETUP];	/* Adresse der Transportleiste */
   man_help  = (OBJECT *)rs_trindex [MAN_HELP];	/* Adresse der MAN-Hilfe */
   man_desk  = (OBJECT *)rs_trindex [MAN_DESK];	/* Adresse des MAN-Desktops */
-  man_menu  = (OBJECT *)rs_trindex [MAN_MENU];  /* Adresse der MAN-MenÅzeile */
+  man_menu  = (OBJECT *)rs_trindex [MAN_MENU];  /* Adresse der MAN-MenÔøΩzeile */
   man_text  = (OBJECT *)rs_trindex [MAN_TEXT];  /* Adresse der MAN-Texte */
   man_info 	= (OBJECT *)rs_trindex [MAN_INFO];	/* Adresse der MAN-Info-Anzeige */
 #else
@@ -783,7 +787,7 @@ PRIVATE BOOLEAN init_rsc ()
     while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
-  rs_gaddr (man_rsc_ptr, R_TREE,  MAN_MENU,	&man_menu);    /* Adresse des MAN-MenÅs */
+  rs_gaddr (man_rsc_ptr, R_TREE,  MAN_MENU,	&man_menu);    /* Adresse des MAN-MenÔøΩs */
   rs_gaddr (man_rsc_ptr, R_TREE,  MAN_SETUP,	&man_setup);   /* Adresse der MAN-Parameter-Box */
   rs_gaddr (man_rsc_ptr, R_TREE,  MAN_HELP,	&man_help);    /* Adresse der MAN-Hilfe */
   rs_gaddr (man_rsc_ptr, R_TREE,  MAN_DESK,	&man_desk);    /* Adresse der MAN-Desktop */

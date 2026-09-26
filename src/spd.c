@@ -2,7 +2,7 @@
 /*                                                                           */
 /* Modul: SPD.C                                                           	  */
 /*                                                                           */
-/* Koordinaten-Anzeige                                                       */
+/* Speed-Anzeige                                                       */
 /*                                                                           */
 /*****************************************************************************/
 #define SPDVERSION "V 0.01"
@@ -50,13 +50,13 @@ V 0.01
 #define FLAGS  (WI_RESIDENT | WI_MOUSE)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fï¿½r Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fï¿½r Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh”he in Pixel */
-#define MILLI  0                     	/* Millisekunden fr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshï¿½he in Pixel */
+#define MILLI  0                     	/* Millisekunden fï¿½r Zeitablauf */
 
 #define MOD_RSC_NAME "SPD_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -70,19 +70,19 @@ typedef struct setup
 	UINT	mtr_spd	: 1	;	/* MTR Speed an/aus  */
 	UINT	lfa_spd	: 1	;	/* LFB Speed an/aus  */
 	UINT	lfb_spd	: 1	;	/* LFA Speed an/aus  */
-} SETUP;		/* Enth„lt alle Parameter einer kompletten SPD-Einstellung */
+} SETUP;		/* Enthï¿½lt alle Parameter einer kompletten SPD-Einstellung */
 
 typedef struct status	
 {
-	BOOLEAN	new;				/* Hat sich etwas ge„ndert ? */
+	BOOLEAN	new;				/* Hat sich etwas geï¿½ndert ? */
 } STATUS;
 
 typedef struct status *STAT_P;	
 
 /****** VARIABLES ************************************************************/
 /* Resource */
-PRIVATE WORD	spd_rsc_hdr;					/* Zeigerstruktur fr RSC-Datei */
-PRIVATE WORD	*spd_rsc_ptr = &spd_rsc_hdr;		/* Zeigerstruktur fr RSC-Datei */
+PRIVATE WORD	spd_rsc_hdr;					/* Zeigerstruktur fï¿½r RSC-Datei */
+PRIVATE WORD	*spd_rsc_ptr = &spd_rsc_hdr;		/* Zeigerstruktur fï¿½r RSC-Datei */
 PRIVATE OBJECT *spd_setup;
 PRIVATE OBJECT *spd_help;
 PRIVATE OBJECT *spd_desk;
@@ -91,7 +91,7 @@ PRIVATE OBJECT *spd_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "SPD";		/* Name, fr Extension etc. */
+PRIVATE CONST STRING module_name = "SPD";		/* Name, fï¿½r Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 PRIVATE VOID create_displayobs (WINDOWP window);
@@ -120,7 +120,7 @@ PRIVATE VOID set_dbox (RTMCLASSP module)
 			BOOLEAN draw = FALSE;
 	REG	WINDOWP	window = module->window;
 	
-	/* Neue Daten bernehmen */
+	/* Neue Daten ï¿½bernehmen */
 	mem_move(ed, akt, (UWORD)module->setup_length);
 
 } /* set_dbox */
@@ -174,7 +174,7 @@ MKINFO  *mk;
 } /* wi_click_mod */
 
 /*****************************************************************************/
-/* Zeitablauf fr Fenster                                                    */
+/* Zeitablauf fï¿½r Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -234,7 +234,7 @@ WORD   icon;
 
 	} /* if */
 	
-	return (window);                      /* Fenster zurckgeben */
+	return (window);                      /* Fenster zurï¿½ckgeben */
 } /* crt_spd */
 
 PRIVATE VOID create_displayobs (WINDOWP window)
@@ -265,7 +265,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 } /* create_displayobs */
 
 /*****************************************************************************/
-/* ™ffnen des Objekts                                                        */
+/* ï¿½ffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -414,7 +414,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Prfen, ob DEFAULT-Datei vorhanden */
+		/* Prï¿½fen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */

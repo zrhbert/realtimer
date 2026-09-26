@@ -2,7 +2,7 @@
 /*                                                                           */
 /* Modul: PAR.C                                                           	  */
 /*                                                                           */
-/* Koordinaten-Anzeige                                                       */
+/* Parameter-Anzeige                                                       */
 /*                                                                           */
 /*****************************************************************************/
 #define PARVERSION "V 2.00"
@@ -622,7 +622,7 @@ PRIVATE	RTMCLASSP create ()
 		var_set_max(var_module, VAR_SET_PAR, MAXSETUPS);
 	} /* if */
 	
-	daktstatus("Initialisierung MTR", "Ende");
+	daktstatus("Initialisierung PAR", "Ende");
 
 	return module;
 } /* create */

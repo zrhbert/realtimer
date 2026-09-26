@@ -42,13 +42,13 @@
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fÅr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fÅr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fÔøΩr Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fÔøΩr Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 3 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangshîhe in Pixel */
-#define MILLI  0                        /* Millisekunden fÅr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* AnfangshÔøΩhe in Pixel */
+#define MILLI  0                        /* Millisekunden fÔøΩr Zeitablauf */
 
 #define MOD_RSC_NAME "XYZ_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -62,8 +62,8 @@ typedef struct xyzset
 typedef struct xyzset *XYZ_P;
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	xyz_rsc_hdr;					/* Zeigerstruktur fÅr RSC-Datei */
-PRIVATE WORD	*xyz_rsc_ptr = &xyz_rsc_hdr;		/* Zeigerstruktur fÅr RSC-Datei */
+PRIVATE WORD	xyz_rsc_hdr;					/* Zeigerstruktur fÔøΩr RSC-Datei */
+PRIVATE WORD	*xyz_rsc_ptr = &xyz_rsc_hdr;		/* Zeigerstruktur fÔøΩr RSC-Datei */
 PRIVATE OBJECT *xyz_setup;
 PRIVATE OBJECT *xyz_help;
 PRIVATE OBJECT *xyz_desk;
@@ -197,7 +197,7 @@ PUBLIC BOOLEAN	save_xyz	(STR128 filename, BOOLEAN fileselect)
 
 PUBLIC VOID		reset_xyz	(VOID)
 {
-	/* ZurÅcksetzen von Werten */
+	/* ZurÔøΩcksetzen von Werten */
 } /* reset_xyz */
 
 PUBLIC VOID		precalc_xyz	(VOID)
@@ -219,7 +219,7 @@ PUBLIC VOID		message_xyz	(WORD type, LONG param1, LONG param2)
 
 PUBLIC BOOLEAN	test_xyz		(RTMCLASSP rtmmodule, WORD action)
 {
-	/* PrÅfung vor DELETE des Modules */
+	/* PrÔøΩfung vor DELETE des Modules */
 	
 	return TRUE;
 } /* test_xyz */
@@ -227,7 +227,7 @@ PUBLIC BOOLEAN	test_xyz		(RTMCLASSP rtmmodule, WORD action)
 
 
 /*****************************************************************************/
-/* MenÅbehandlung                                                            */
+/* MenÔøΩbehandlung                                                            */
 /*****************************************************************************/
 
 PRIVATE VOID update_menu (window)
@@ -313,7 +313,7 @@ WORD    action;
 } /* wi_test */
 
 /*****************************************************************************/
-/* ôffne Fenster                                                             */
+/* ÔøΩffne Fenster                                                             */
 /*****************************************************************************/
 
 PRIVATE VOID wi_open (window)
@@ -324,7 +324,7 @@ WINDOWP window;
 } /* wi_open */
 
 /*****************************************************************************/
-/* Schlieûe Fenster                                                          */
+/* SchlieÔøΩe Fenster                                                          */
 /*****************************************************************************/
 
 PRIVATE VOID wi_close (window)
@@ -335,7 +335,7 @@ WINDOWP window;
 } /* wi_close */
 
 /*****************************************************************************/
-/* Lîsche Fenster                                                            */
+/* LÔøΩsche Fenster                                                            */
 /*****************************************************************************/
 
 PRIVATE VOID wi_delete (window)
@@ -369,12 +369,12 @@ LONG    oldpos, newpos;
   LONG delta;
 
   w     = window->scroll.w / window->xfac;      /* Breite in Zeichen */
-  h     = window->scroll.h / window->yfac;      /* Hîhe in Zeichen */
+  h     = window->scroll.h / window->yfac;      /* HÔøΩhe in Zeichen */
   delta = newpos - oldpos;
 
   if (dir & HORIZONTAL)         /* Horizontale Pfeile und Schieber */
   {
-    if (delta != 0)                                    /* Scrolling nîtkg */
+    if (delta != 0)                                    /* Scrolling nÔøΩtkg */
     {
       if (delta > 0)                                   /* Links-Scrolling */
       {
@@ -391,12 +391,12 @@ LONG    oldpos, newpos;
   } /* if */
   else                          /* Vertikale Pfeile und Schieber */
   {
-    if (delta != 0)                                    /* Scrolling nîtig */
+    if (delta != 0)                                    /* Scrolling nÔøΩtig */
     {
-      if (delta > 0)                                   /* AufwÑrts-Scrolling */
+      if (delta > 0)                                   /* AufwÔøΩrts-Scrolling */
       {
       } /* if */
-      else                                             /* AbwÑrts-Scrolling */
+      else                                             /* AbwÔøΩrts-Scrolling */
       {
       } /* else */
 
@@ -596,7 +596,7 @@ WINDOWP window;
 } /* wi_unclick */
 
 /*****************************************************************************/
-/* Taste fÅr Fenster                                                         */
+/* Taste fÔøΩr Fenster                                                         */
 /*****************************************************************************/
 
 PRIVATE BOOLEAN wi_key (window, mk)
@@ -610,7 +610,7 @@ MKINFO  *mk;
 } /* wi_key */
 
 /*****************************************************************************/
-/* Zeitablauf fÅr Fenster                                                    */
+/* Zeitablauf fÔøΩr Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer (window)
@@ -643,7 +643,7 @@ WINDOWP window;
 } /* wi_untop */
 
 /*****************************************************************************/
-/* Cut/Copy/Paste fÅr Fenster                                                */
+/* Cut/Copy/Paste fÔøΩr Fenster                                                */
 /*****************************************************************************/
 
 PRIVATE VOID wi_edit (window, action)
@@ -765,11 +765,11 @@ WORD   icon;
     sprintf (window->info, xyz_text [FXYZI].ob_spec.free_string, 0);
   } /* if */
 
-  return (window);                      /* Fenster zurÅckgeben */
+  return (window);                      /* Fenster zurÔøΩckgeben */
 } /* crt_xyz */
 
 /*****************************************************************************/
-/* ôffnen des Objekts                                                        */
+/* ÔøΩffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_xyz (icon)
@@ -871,6 +871,8 @@ PRIVATE	BOOLEAN create_xyz ()
 	BOOLEAN		ok;
 	STRING		s;
 
+	daktstatus("Initialisierung XYZ", "Start");
+
 	rtmmodule = create_module ();
 	
 	if (rtmmodule != NULL)
@@ -910,6 +912,8 @@ PRIVATE	BOOLEAN create_xyz ()
 	}
 	else ok=FALSE;
 	
+	daktstatus("Initialisierung XYZ", "Ende");
+
 	return ok;
 }
 
@@ -933,7 +937,7 @@ PRIVATE BOOLEAN init_rsc_xyz ()
   alexyzsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
 */
 /*
-	xyz_menu  = (OBJECT *)rs_trindex [XYZ_SETUP]; /* Adresse des XYZ-MenÅs */
+	xyz_menu  = (OBJECT *)rs_trindex [XYZ_SETUP]; /* Adresse des XYZ-MenÔøΩs */
 */
 	xyz_setup = (OBJECT *)rs_trindex [XYZ_SETUP]; /* Adresse der XYZ-Parameter-Box */
 	xyz_help  = (OBJECT *)rs_trindex [XYZ_HELP];	/* Adresse der XYZ-Hilfe */
@@ -956,7 +960,7 @@ PRIVATE BOOLEAN init_rsc_xyz ()
 	 while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
 } /* if */
 /*
-	rs_gaddr (xyz_rsc_ptr, R_TREE,  XYZ_SETUP,	&xyz_menu);    /* Adresse des XYZ-MenÅs */
+	rs_gaddr (xyz_rsc_ptr, R_TREE,  XYZ_SETUP,	&xyz_menu);    /* Adresse des XYZ-MenÔøΩs */
 */
 	rs_gaddr (xyz_rsc_ptr, R_TREE,  XYZ_SETUP,	&xyz_setup);   /* Adresse der XYZ-Parameter-Box */
 	rs_gaddr (xyz_rsc_ptr, R_TREE,  XYZ_HELP,	&xyz_help);    /* Adresse der XYZ-Hilfe */
@@ -1029,7 +1033,7 @@ GLOBAL BOOLEAN init_xyz ()
 	strcat (s, xyz_filename);
 	strcpy (xyz_filename, s);
 	
-	/* PrÅfen, ob DEFAULT-Datei vorhanden */
+	/* PrÔøΩfen, ob DEFAULT-Datei vorhanden */
 	if((test=fopen(xyz_filename, "rb"))!=0)
 	{
 		/* Wenn vorhanden, laden */

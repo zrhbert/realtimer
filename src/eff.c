@@ -2,7 +2,7 @@
 /*                                                                           */
 /* Modul: EFF.C                                                              */
 /*                                                                           */
-/* Effekt-Ger„te Treiber                                                     */
+/* Effekt-Gerï¿½te Treiber                                                     */
 /*                                                                           */
 /*****************************************************************************/
 #define EFFVERSION "V 0.08"
@@ -55,13 +55,13 @@ V 0.06
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fï¿½r Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fï¿½r Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh”he in Pixel */
-#define MILLI  1000                     /* Millisekunden fr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshï¿½he in Pixel */
+#define MILLI  1000                     /* Millisekunden fï¿½r Zeitablauf */
 
 #define MOD_RSC_NAME "EFF_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -72,7 +72,7 @@ typedef	struct setup *SET_P;
 typedef struct setup
 {
 	WORD		nummer;
-} SETUP;	/* Enth„lt alle Parameter einer kompletten EFF-Einstellung */
+} SETUP;	/* Enthï¿½lt alle Parameter einer kompletten EFF-Einstellung */
 
 typedef	struct	status
 {
@@ -81,8 +81,8 @@ typedef	struct	status
 
 typedef	struct status	*STAT_P;	/* Zeiger auf CMI-STATUS */
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	eff_rsc_hdr;					/* Zeigerstruktur fr RSC-Datei */
-PRIVATE WORD	*eff_rsc_ptr = &eff_rsc_hdr;		/* Zeigerstruktur fr RSC-Datei */
+PRIVATE WORD	eff_rsc_hdr;					/* Zeigerstruktur fï¿½r RSC-Datei */
+PRIVATE WORD	*eff_rsc_ptr = &eff_rsc_hdr;		/* Zeigerstruktur fï¿½r RSC-Datei */
 PRIVATE OBJECT *eff_setup;
 PRIVATE OBJECT *eff_help;
 PRIVATE OBJECT *eff_desk;
@@ -91,7 +91,7 @@ PRIVATE OBJECT *eff_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 20;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "EFF";		/* Name, fr Extension etc. */
+PRIVATE CONST STRING module_name = "EFF";		/* Name, fï¿½r Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 
@@ -258,11 +258,11 @@ WORD   icon;
     
   } /* if */
 
-  return (window);                      /* Fenster zurckgeben */
+  return (window);                      /* Fenster zurï¿½ckgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* ™ffnen des Objekts                                                        */
+/* ï¿½ffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -343,6 +343,7 @@ PRIVATE	RTMCLASSP create ()
 	STRING		s;
 	FILE			*fp;
 
+	daktstatus("Initialisierung EFF", "Start");
 	module = create_module (module_name, instance_count);
 	
 	if (module != NULL)
@@ -406,7 +407,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Prfen, ob DEFAULT-Datei vorhanden */
+		/* Prï¿½fen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -431,6 +432,7 @@ PRIVATE	RTMCLASSP create ()
         /* Message einklinken */ 
         /* add_rcv(VAR_PROP_EFF, module);*/
 	} /* if */
+	daktstatus("Initialisierung EFF", "Ende");
 	return module;
 } /* create */
 

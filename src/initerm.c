@@ -62,7 +62,7 @@
 #define CLASS_HELP      2               /* Mu� in HELP.H, falls ein Help-Modul exisiert */
 
 #ifndef ALERT_NAME
-#define ALERT_NAME      "REALTIM5.ERR"
+#define ALERT_NAME      "realtim5.err"
 #endif
 
 /****** TYPES ****************************************************************/

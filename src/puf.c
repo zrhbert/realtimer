@@ -641,12 +641,13 @@ PUBLIC VOID		reset	(RTMCLASSP module)
 {
 	RTMCLASSP man = module->status->manmodule;
 	STAT_P	status = module->status;
-		
+#if 0 /* Disabled reset code */
 	/* Zur�cksetzen von Werten */
 	if (man>0)					/* MAN-Modul vorhanden ? */
 		if (man->reset >0)	/* MAN reset-Funktion da? */
 			(man->reset)(man);
 	status->new	  = TRUE;
+#endif
 } /* reset */
 
 PUBLIC VOID		precalc	(RTMCLASSP module)
@@ -1555,6 +1556,8 @@ PRIVATE	RTMCLASSP create ()
 	FILE			*fp;
 	SHORT			refNum;
 
+	daktstatus("Initialisierung PUF", "Start");
+
 	module = create_module (module_name, instance_count);
 		
 	if (module != NULL)
@@ -1670,6 +1673,8 @@ PRIVATE	RTMCLASSP create ()
 		puf_module = module;	/* globaler Zeiger auf PUF-Modulparameter */
 	} /* if */
 	
+	daktstatus("Initialisierung PUF", "Ende");
+
 	return module;
 } /* create */
 

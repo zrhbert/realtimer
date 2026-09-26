@@ -12,7 +12,7 @@ V 0.09
 - MTC Send Felder eingebaut, 4.3.95
 - auf Getxxx, Setxxx umgestellt
 V 0.08
-- MTITLE auf MCONTROLS geÑndert, 27.11.94
+- MTITLE auf MCONTROLS geÔøΩndert, 27.11.94
 19.05.94
 - load_create_infos und instance_count eingebaut
 - start/stop/offset/port parameter eingebaut
@@ -44,7 +44,7 @@ V 0.06
 #include "resource.h"
 
 #include "objects.h"
-#include <msh_unit.h>		/* Deklarationen fÅr MidiShare Library */
+#include <msh_unit.h>		/* Deklarationen fÔøΩr MidiShare Library */
 #include "msh.h"
 
 #include "export.h"
@@ -60,13 +60,13 @@ V 0.06
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fÅr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fÅr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fÔøΩr Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fÔøΩr Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 3 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangshîhe in Pixel */
-#define MILLI  0                        /* Millisekunden fÅr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* AnfangshÔøΩhe in Pixel */
+#define MILLI  0                        /* Millisekunden fÔøΩr Zeitablauf */
 
 #define MOD_RSC_NAME "SYN_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -75,7 +75,7 @@ V 0.06
 typedef struct setup
 {
 	BOOLEAN	sync_all;		/* Sync auf beliebigem Input */
-	WORD		sync_port;			/* Port fÅr MTC */
+	WORD		sync_port;			/* Port fÔøΩr MTC */
 } SETUP;
 
 typedef struct setup *SET_P;
@@ -88,8 +88,8 @@ typedef struct status
 typedef struct setup *STAT_P;
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	syn_rsc_hdr;					/* Zeigerstruktur fÅr RSC-Datei */
-PRIVATE WORD	*syn_rsc_ptr = &syn_rsc_hdr;		/* Zeigerstruktur fÅr RSC-Datei */
+PRIVATE WORD	syn_rsc_hdr;					/* Zeigerstruktur fÔøΩr RSC-Datei */
+PRIVATE WORD	*syn_rsc_ptr = &syn_rsc_hdr;		/* Zeigerstruktur fÔøΩr RSC-Datei */
 PRIVATE OBJECT *syn_setup;
 PRIVATE OBJECT *syn_help;
 PRIVATE OBJECT *syn_desk;
@@ -98,7 +98,7 @@ PRIVATE OBJECT *syn_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "SYN";		/* Name, fÅr Extension etc. */
+PRIVATE CONST STRING module_name = "SYN";		/* Name, fÔøΩr Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 
@@ -319,11 +319,11 @@ WORD   icon;
     sprintf (window->info, syn_text [FSYNI].ob_spec.free_string, 0);
   } /* if */
 
-  return (window);                      /* Fenster zurÅckgeben */
+  return (window);                      /* Fenster zurÔøΩckgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* ôffnen des Objekts                                                        */
+/* ÔøΩffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -410,6 +410,8 @@ PRIVATE	RTMCLASSP create ()
 	WINDOWP		window;
 	FILE			*fp;
 
+	daktstatus("Initialisierung SYN", "Start");
+
 	module = create_module (module_name, instance_count);
 	
 	if (module != NULL)
@@ -474,7 +476,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* PrÅfen, ob DEFAULT-Datei vorhanden */
+		/* PrÔøΩfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -495,6 +497,9 @@ PRIVATE	RTMCLASSP create ()
 		add_rcv(VAR_SET_SYN, module);	/* Message einklinken */
 		var_set_max(var_module, VAR_SET_SYN, MAXSETUPS);
 	} /* if */
+	
+	daktstatus("Initialisierung SYN", "Ende");
+
 	return module;
 } /* create */
 
@@ -518,7 +523,7 @@ PRIVATE BOOLEAN init_rsc ()
   alesynsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
 #endif
 #if false
-	syn_menu  = (OBJECT *)rs_trindex [SYN_SETUP]; /* Adresse des SYN-MenÅs */
+	syn_menu  = (OBJECT *)rs_trindex [SYN_SETUP]; /* Adresse des SYN-MenÔøΩs */
 #endif
     syn_setup = (OBJECT *)rs_trindex [SYN_SETUP]; /* Adresse der SYN-Parameter-Box */
 	syn_help  = (OBJECT *)rs_trindex [SYN_HELP];	/* Adresse der SYN-Hilfe */
@@ -541,7 +546,7 @@ PRIVATE BOOLEAN init_rsc ()
 	 while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
 } /* if */
 /*
-	rs_gaddr (syn_rsc_ptr, R_TREE,  SYN_SETUP,	&syn_menu);    /* Adresse des SYN-MenÅs */
+	rs_gaddr (syn_rsc_ptr, R_TREE,  SYN_SETUP,	&syn_menu);    /* Adresse des SYN-MenÔøΩs */
 */
 	rs_gaddr (syn_rsc_ptr, R_TREE,  SYN_SETUP,	&syn_setup);   /* Adresse der SYN-Parameter-Box */
 	rs_gaddr (syn_rsc_ptr, R_TREE,  SYN_HELP,	&syn_help);    /* Adresse der SYN-Hilfe */

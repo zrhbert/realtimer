@@ -11,7 +11,7 @@ V 1.03
 - auf Getxxx Setxxx umgestellt, 19.02.95
 - ClickSetupField eingebaut, 30.01.95
 - load_create_infos und instance_count eingebaut
-- Fehler in apply fr y und z beseitigt
+- Fehler in apply fï¿½r y und z beseitigt
 V 1.02
 - import modernisiert
 - (RTMCLASSP)window->module eingebaut
@@ -59,13 +59,13 @@ V 1.00
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fï¿½r Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fï¿½r Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 4 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh”he in Pixel */
-#define MILLI  0  	                   /* Millisekunden fr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshï¿½he in Pixel */
+#define MILLI  0  	                   /* Millisekunden fï¿½r Zeitablauf */
 
 #define MOD_RSC_NAME "SPO_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -79,15 +79,15 @@ typedef struct spo_single
 	WORD	offset_x,		/* Verschiebung auf der X-Achse */
 			offset_y,		/* Verschiebung auf der Y-Achse */
 			offset_z;		/* Verschiebung auf der Z-Achse */
-	UINT	prop_x	: 1,	/* Flags fr proportional an/aus */
+	UINT	prop_x	: 1,	/* Flags fï¿½r proportional an/aus */
 			prop_y	: 1,
 			prop_z	: 1;
-} SPO_SINGLE;				/* Enth„lt alle SPO-Parameter eines einzelne Signals */
+} SPO_SINGLE;				/* Enthï¿½lt alle SPO-Parameter eines einzelne Signals */
 
 typedef struct setup
 {
-	SPO_SINGLE	spo_single [MAXSIGNALS];	/* Enth„lt die SPO-Informationen fr die einzelnen Kan„le */
-} SETUP;				/* Enth„lt alle Parameter einer kompletten SPO-Einstellung */
+	SPO_SINGLE	spo_single [MAXSIGNALS];	/* Enthï¿½lt die SPO-Informationen fï¿½r die einzelnen Kanï¿½le */
+} SETUP;				/* Enthï¿½lt alle Parameter einer kompletten SPO-Einstellung */
 
 typedef struct status
 {
@@ -102,12 +102,12 @@ PRIVATE OBJECT *spo_help;
 PRIVATE OBJECT *spo_text;
 PRIVATE OBJECT *spo_info;
 
-PRIVATE WORD	spo_rsc_hdr;					/* Zeigerstruktur fr RSC-Datei */
-PRIVATE WORD	*spo_rsc_ptr = &spo_rsc_hdr;		/* Zeigerstruktur fr RSC-Datei */
+PRIVATE WORD	spo_rsc_hdr;					/* Zeigerstruktur fï¿½r RSC-Datei */
+PRIVATE WORD	*spo_rsc_ptr = &spo_rsc_hdr;		/* Zeigerstruktur fï¿½r RSC-Datei */
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 20;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "SPO";		/* Name, fr Extension etc. */
+PRIVATE CONST STRING module_name = "SPO";		/* Name, fï¿½r Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 /* Interne SPO-Funktionen */
@@ -175,7 +175,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 {
 	SPO_SINGLE	*spo_s;
 	SET_P			akt = module->actual->setup;
-	REG WORD		k;		/* Temp. Variable wg. šberlauf */
+	REG WORD		k;		/* Temp. Variable wg. ï¿½berlauf */
 	POINT_3D		*point;
 	KOOR_ALL		*koor = event->koors;
 	UWORD			signal;
@@ -277,12 +277,12 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					ok = fscanf(in, "%d", &single->offset_x);
 					ok = fscanf(in, "%d", &single->offset_y);
 					ok = fscanf(in, "%d", &single->offset_z);
-					single++;	/* Auf Info fr n„chstes Signal zeigen */
+					single++;	/* Auf Info fï¿½r nï¿½chstes Signal zeigen */
 				} /* for */
 #if false
 				ok = fscanf(in, "%s", s);	/* Leerzeile */
 #endif
-				/* Setup speichern und n„chstes Setup anw„hlen */
+				/* Setup speichern und nï¿½chstes Setup anwï¿½hlen */
 				module->get_setnr(module, setnr);
 				if (setnr % 20 == 0)
 					set_daktstat((WORD)(100L*setnr/max_setups));
@@ -301,7 +301,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* Zurcksetzen von Werten */
+	/* Zurï¿½cksetzen von Werten */
 } /* reset */
 
 PUBLIC VOID		precalc	(RTMCLASSP module)
@@ -445,11 +445,11 @@ WORD   icon;
     sprintf (window->info, spo_text [FSPOI].ob_spec.free_string, 0);
   } /* if */
 
-  return (window);                      /* Fenster zurckgeben */
+  return (window);                      /* Fenster zurï¿½ckgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* ™ffnen des Objekts                                                        */
+/* ï¿½ffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -531,6 +531,8 @@ PRIVATE	RTMCLASSP create ()
 	RTMCLASSP 	module;
 	FILE			*fp;
 
+	daktstatus("Initialisierung SPO", "Start");
+
 	module = create_module (module_name, instance_count);
 	
 	if (module != NULL)
@@ -599,7 +601,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Prfen, ob DEFAULT-Datei vorhanden */
+		/* Prï¿½fen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -624,6 +626,8 @@ PRIVATE	RTMCLASSP create ()
 		add_rcv(VAR_PROP_SPO, module);	/* Message einklinken */
 	} /* if */
 	
+	daktstatus("Initialisierung SPO", "Ende");
+
 	return module;
 } /* create */
 

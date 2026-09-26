@@ -1530,6 +1530,7 @@ PRIVATE	RTMCLASSP create ()
 	WORD			lfo, x;
 	STAT_P		status;
 	
+	daktstatus("Initialisierung LFO", "Start");
 	module = create_module (module_name, instance_count);
 	
 	if (module != NULL)
@@ -1649,6 +1650,8 @@ PRIVATE	RTMCLASSP create ()
 #endif
 	} /* if */
 	
+	daktstatus("Initialisierung LFO", "Ende");
+
 	return module;
 } /* create */
 

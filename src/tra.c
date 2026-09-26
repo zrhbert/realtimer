@@ -1631,6 +1631,8 @@ PRIVATE RTMCLASSP create ()
 	STAT_P		status;
 	SHORT			refNum;
 	
+	daktstatus("Initialisierung TRA", "Start");
+
 	module = create_module (module_name, instance_count);
 		
 	if (module != NULL)
@@ -1766,6 +1768,9 @@ PRIVATE RTMCLASSP create ()
 		send_variable(VAR_SYNC_OUT_FRAMES, 1);
 
 	} /* if */
+	
+	daktstatus("Initialisierung TRA", "Ende");
+
 	return module;
 } /* create */
 

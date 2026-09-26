@@ -3,7 +3,7 @@
 /* Modul: POW.C                                                              */
 /*                                                                           */
 /* Extern-Maus-Treiber                                                       */
-/* fr Mouse-Systems M„use                                                   */
+/* fï¿½r Mouse-Systems Mï¿½use                                                   */
 /*                                                                           */
 /*****************************************************************************/
 #define POWVERSION "V 1.02"
@@ -65,13 +65,13 @@ V 0.01
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fï¿½r Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fï¿½r Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh”he in Pixel */
-#define MILLI  1000                     /* Millisekunden fr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshï¿½he in Pixel */
+#define MILLI  1000                     /* Millisekunden fï¿½r Zeitablauf */
 #define POWPORT 3
 
 #define MOD_RSC_NAME "POW_MOD.RSC"		/* Name der Resource-Datei */
@@ -114,9 +114,9 @@ typedef struct setup
 				sperre_an_aussen : 1;
 	WORD		zoom;					/* Zoom-Faktor */
 	WORD		speedy;				/* Beschleunigungs-Faktor */
-	WORD		sperre_innen;		/* Radius fr innere Sperre */
-	WORD		sperre_aussen;		/* Radius fr „ussere Sperre */
-} SETUP;	/* Enth„lt alle Parameter einer kompletten POW-Einstellung */
+	WORD		sperre_innen;		/* Radius fï¿½r innere Sperre */
+	WORD		sperre_aussen;		/* Radius fï¿½r ï¿½ussere Sperre */
+} SETUP;	/* Enthï¿½lt alle Parameter einer kompletten POW-Einstellung */
 
 typedef struct status *STAT_P;
 
@@ -136,8 +136,8 @@ typedef struct status
 } STATUS;
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	pow_rsc_hdr;					/* Zeigerstruktur fr RSC-Datei */
-PRIVATE WORD	*pow_rsc_ptr = &pow_rsc_hdr;		/* Zeigerstruktur fr RSC-Datei */
+PRIVATE WORD	pow_rsc_hdr;					/* Zeigerstruktur fï¿½r RSC-Datei */
+PRIVATE WORD	*pow_rsc_ptr = &pow_rsc_hdr;		/* Zeigerstruktur fï¿½r RSC-Datei */
 PRIVATE OBJECT *pow_setup;
 PRIVATE OBJECT *pow_help;
 PRIVATE OBJECT *pow_desk;
@@ -146,7 +146,7 @@ PRIVATE OBJECT *pow_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "POW";		/* Name, fr Extension etc. */
+PRIVATE CONST STRING module_name = "POW";		/* Name, fï¿½r Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 /* Interne POW-Funktionen */
@@ -303,7 +303,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* Zurcksetzen von Werten */
+	/* Zurï¿½cksetzen von Werten */
 	STAT_P	status = module->status;
 	GLOVE_DATA *glove = &status->glove;
 
@@ -443,7 +443,7 @@ PRIVATE BOOL		get_glove_data	(RTMCLASSP module)
 			new->z = z;
 		} /* if read_ok */
 		
-		/* Success ist TRUE wenn berhaupt eine Abfrage
+		/* Success ist TRUE wenn ï¿½berhaupt eine Abfrage
 			funktioniert hat. */
 		success |= read_ok;
 	} /* while */
@@ -483,7 +483,7 @@ PUBLIC VOID		precalc	(RTMCLASSP module)
 	GLOVE_DATA tmp, *new = &status->glove;
 	BOOL		success = FALSE;
 
-	/* šbertragung initialisieren wenn n”tig */
+	/* ï¿½bertragung initialisieren wenn nï¿½tig */
 	if (!status->connected && ! status->connect_aborted)
 	{
 		status->connected = init_glove (module);
@@ -495,7 +495,7 @@ PUBLIC VOID		precalc	(RTMCLASSP module)
 		success = get_glove_data (module);
 		if (success) 
 		{
-			/* Koordinaten bernehmen */
+			/* Koordinaten ï¿½bernehmen */
 			status->koor.x = new->x;
 			status->koor.y = new->y;
 			status->koor.z = new->z;
@@ -674,11 +674,11 @@ WORD   icon;
 		sprintf (window->info, pow_text [FPOWI].ob_spec.free_string, 0);
 	} /* if */
 
-	return (window);                      /* Fenster zurckgeben */
+	return (window);                      /* Fenster zurï¿½ckgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* ™ffnen des Objekts                                                        */
+/* ï¿½ffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -763,6 +763,8 @@ PRIVATE	RTMCLASSP create ()
 	FILE			*fp;
 	SET_P			standard;
 
+	daktstatus("Initialisierung POW", "Start");
+	
 	module = create_module (module_name, instance_count);
 	
 	if (module != NULL)
@@ -828,7 +830,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Prfen, ob DEFAULT-Datei vorhanden */
+		/* Prï¿½fen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -865,6 +867,8 @@ PRIVATE	RTMCLASSP create ()
 		add_rcv(VAR_POW_SPERRE_AUSSEN, module);	/* Message einklinken */
 	} /* if */
 	
+	daktstatus("Initialisierung POW", "Ende");
+
 	return module;
 } /* create */
 

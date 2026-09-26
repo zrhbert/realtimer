@@ -428,6 +428,8 @@ WORD   icon;
 	WINDOWP	window;
 	WORD		menu_height;
 	
+	daktstatus("Initialisierung KOO", "Start");
+	
 	window = create_window_obj (KIND, CLASS_KOO);
 	
 	if (window != NULL)
@@ -473,6 +475,8 @@ WORD   icon;
         sprintf (window->name, "%s", koo_text [FKOON].ob_spec.free_string);
 		sprintf (window->info, koo_text [FKOOI].ob_spec.free_string, 0);
 	} /* if */
+	
+	daktstatus("Initialisierung KOO", "Ende");
 	
 	return (window);                      /* Fenster zur�ckgeben */
 } /* crt_mod */

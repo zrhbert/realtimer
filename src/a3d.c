@@ -25,12 +25,12 @@ V 0.15, 11.01.94
 - Umstellung auf kleines RSC-Format
 V 0.14 30.07.93
 - wi_click_mod eingebaut
-- INITW und INITH vergrîûert
+- INITW und INITH vergrÔøΩÔøΩert
 - get_edit_setup und get_setnr_setup eingebaut
 - wi_start_mod eingebaut, set_a3d in wi_draw_mod eingebaut
 - Fehler in Tetraeder Innenraum beseitigt
 - window->module eingebaut
-- init_koor: set_dakstat fÅr XYK-Neuberechnung eingebaut
+- init_koor: set_dakstat fÔøΩr XYK-Neuberechnung eingebaut
 - wi_finished_mod eingebaut
 - tetraeder und quadrophon eingebaut
 - Umbau auf create_window_obj
@@ -71,13 +71,13 @@ V 0.11
 #define FLAGS  (WI_RESIDENT | WI_MOUSE | WI_NOSCROLL)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fÅr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fÅr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fÔøΩr Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fÔøΩr Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (160)				         /* Anfangsbreite in Pixel */
-#define INITH  (100)         				/* Anfangshîhe in Pixel */
-#define MILLI  100                    	/* Millisekunden fÅr Zeitablauf */
+#define INITH  (100)         				/* AnfangshÔøΩhe in Pixel */
+#define MILLI  100                    	/* Millisekunden fÔøΩr Zeitablauf */
 
 #define MOD_RSC_NAME "A3D_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -88,7 +88,7 @@ enum koor_states
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 20;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "A3D";		/* Name, fÅr Extension etc. */
+PRIVATE CONST STRING module_name = "A3D";		/* Name, fÔøΩr Extension etc. */
 
 /****** TYPES ****************************************************************/
 
@@ -98,7 +98,7 @@ typedef struct status
 {
 	WORD		xoffset,		/* Mitte des Fensters in X-Richtung */
 				yoffset,		/*               ... und Y-Richtung */
-				zoom;			/* 	Grîûe des Fensters in Relation zu xykoor */
+				zoom;			/* 	GrÔøΩÔøΩe des Fensters in Relation zu xykoor */
 	KOOR_ALL	koor_alt;	/* Letzte gezeichnete Koordinaten */
 	KOOR_ALL	koor_akt1;	/* Neue Koordinaten, Gruppe 1 */
 	WORD		koor_stat1;	/* Momentaner Zustand dieser Gruppe */
@@ -113,8 +113,8 @@ typedef struct status
 typedef struct setup *SET_P;
 typedef struct setup
 {
-	BOOLEAN	anzeige[MAXSIGNALS],		/* Flags fÅr Anzeige an/aus */
-				fadenkreuz[MAXSIGNALS]; /* Flags fÅr Fadenkreuz pro Signal */
+	BOOLEAN	anzeige[MAXSIGNALS],		/* Flags fÔøΩr Anzeige an/aus */
+				fadenkreuz[MAXSIGNALS]; /* Flags fÔøΩr Fadenkreuz pro Signal */
 	WORD		rot_x,						/* Grafik-Parameter: Rotationen */
 				rot_y,
 				rot_z,
@@ -123,13 +123,13 @@ typedef struct setup
 	WORD		modus;				/* In diesem F. benutzte Darstellung */
 	BOOLEAN	innenraum;					/* Nur Innenraum anzeigen */
 	BOOLEAN	pfeile;						/* Nur Innenraum anzeigen */
-	WORD		raumform;					/* Raumform fÅr dieses Fenster */
+	WORD		raumform;					/* Raumform fÔøΩr dieses Fenster */
 	RTMCLASSP	refmodule;				/* Das Bezugsmodul */
-} SETUP;	/* EnthÑlt alle Parameter einer kompletten A3D-Einstellung */
+} SETUP;	/* EnthÔøΩlt alle Parameter einer kompletten A3D-Einstellung */
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	a3d_rsc_hdr;					/* Zeigerstruktur fÅr RSC-Datei */
-PRIVATE WORD	*a3d_rsc_ptr = &a3d_rsc_hdr;		/* Zeigerstruktur fÅr RSC-Datei */
+PRIVATE WORD	a3d_rsc_hdr;					/* Zeigerstruktur fÔøΩr RSC-Datei */
+PRIVATE WORD	*a3d_rsc_ptr = &a3d_rsc_hdr;		/* Zeigerstruktur fÔøΩr RSC-Datei */
 PRIVATE OBJECT *a3d_menu;
 PRIVATE OBJECT *a3d_setup;
 PRIVATE OBJECT *a3d_shelp;
@@ -237,13 +237,13 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 	WINDOWP	window = module->window;
 	
 
-	window->milli = 1; 	/* Update so schnell wie mîglich */
+	window->milli = 1; 	/* Update so schnell wie mÔøΩglich */
 	return event;
 } /* apply */
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* ZurÅcksetzen von Werten */
+	/* ZurÔøΩcksetzen von Werten */
 	STAT_P	status	= module->status;
 	WINDOWP	window = module->window;
 
@@ -486,7 +486,7 @@ PUBLIC BOOLEAN	set_setnr_setup	(RTMCLASSP module, LONG setupnr)
 } /* set_setnr_setup */
 
 /*****************************************************************************/
-/* MenÅbehandlung                                                            */
+/* MenÔøΩbehandlung                                                            */
 /*****************************************************************************/
 
 PRIVATE VOID update_menu_mod (window)
@@ -598,7 +598,7 @@ WINDOWP window;
 } /* wi_draw_mod */
 
 /*****************************************************************************/
-/* Vor zeichnen Status verÑndern                                             */
+/* Vor zeichnen Status verÔøΩndern                                             */
 /*****************************************************************************/
 
 PRIVATE VOID wi_start_mod (window)
@@ -679,7 +679,7 @@ WINDOWP window;
 } /* wi_start_mod */
 
 /*****************************************************************************/
-/* Nach zeichnen Status verÑndern                                            */
+/* Nach zeichnen Status verÔøΩndern                                            */
 /*****************************************************************************/
 
 PRIVATE VOID wi_finished_mod (window)
@@ -726,7 +726,7 @@ WORD    mode;
 } /* wi_snap_mod */
 
 /*****************************************************************************/
-/* Zeitablauf fÅr Fenster                                                    */
+/* Zeitablauf fÔøΩr Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -734,7 +734,7 @@ WINDOWP window;
 {
 	redraw_window(window, &window->scroll);
 	window->milli = 0; 			/* keine Timer-Funktion mehr bis
-										zur nÑchsten énderung */
+										zur nÔøΩchsten ÔøΩnderung */
 } /* wi_timer_mod */
 
 /*****************************************************************************/
@@ -795,11 +795,11 @@ WORD   icon;
 		sprintf (window->info, a3d_text [FA3DI].ob_spec.free_string, 0);
 	} /* if */
 	
-	return (window);                      /* Fenster zurÅckgeben */
+	return (window);                      /* Fenster zurÔøΩckgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* ôffnen des Objekts                                                        */
+/* ÔøΩffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -881,6 +881,8 @@ PRIVATE	RTMCLASSP create ()
 	FILE			*fp;
 	WORD			signal;
 	
+	daktstatus("Initialisierung A3D", "Start");
+
 	module = create_module (module_name, instance_count);
 	
 	if (module != NULL && instance_count < max_instances)
@@ -946,7 +948,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* PrÅfen, ob DEFAULT-Datei vorhanden */
+		/* PrÔøΩfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -994,6 +996,7 @@ PRIVATE	RTMCLASSP create ()
 
 		instance_count++;
 	} /* if */
+	daktstatus("Initialisierung A3D", "Ende");
 	return module;
 } /* create */
 
@@ -1019,7 +1022,7 @@ PRIVATE BOOLEAN init_rsc ()
 #if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
 #endif
-  a3d_menu  = (OBJECT *)rs_trindex [A3D_MENU];  /* Adresse der A3D-MenÅzeile */
+  a3d_menu  = (OBJECT *)rs_trindex [A3D_MENU];  /* Adresse der A3D-MenÔøΩzeile */
   a3d_setup = (OBJECT *)rs_trindex [A3D_SETUP]; /* Adresse der A3D-Parameter-Box */
   a3d_shelp = (OBJECT *)rs_trindex [A3D_SHELP];	/* Adresse der A3D-Parameter-Hilfe */
   a3d_help  = (OBJECT *)rs_trindex [A3D_HELP];	/* Adresse der A3D-Hilfe */
@@ -1043,7 +1046,7 @@ PRIVATE BOOLEAN init_rsc ()
     while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
-  rs_gaddr (a3d_rsc_ptr, R_TREE,  A3D_MENU,	&a3d_menu);    /* Adresse des A3D-MenÅs */
+  rs_gaddr (a3d_rsc_ptr, R_TREE,  A3D_MENU,	&a3d_menu);    /* Adresse des A3D-MenÔøΩs */
   rs_gaddr (a3d_rsc_ptr, R_TREE,  A3D_SETUP,	&a3d_setup);   /* Adresse der A3D-Parameter-Box */
   rs_gaddr (a3d_rsc_ptr, R_TREE,  A3D_SHELP,	&a3d_shelp);   /* Adresse der A3D-Parameter-Hilfe */
   rs_gaddr (a3d_rsc_ptr, R_TREE,  A3D_HELP,	&a3d_help);    /* Adresse der A3D-Hilfe */

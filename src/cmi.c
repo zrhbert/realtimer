@@ -11,7 +11,7 @@
 /*****************************************************************************
 V 1.06
 - auf GetPxxx/SetPxxx umgestellt, 05.02.95
-- minmax fÅr ctrl-port und channel, 02.02.95
+- minmax fÔøΩr ctrl-port und channel, 02.02.95
 - ClickSetupField eingebaut, 30.01.95
 V 1.05
 - load_create_infos und instance_count eingebaut
@@ -32,7 +32,7 @@ V 1.01
 - Port/Channel manipulation in wi_click rep.
 
 V 1.00 18.04.93
-- Einstellung fÅr CMI-Ports und Channels eingebaut
+- Einstellung fÔøΩr CMI-Ports und Channels eingebaut
 
 *****************************************************************************/
 #ifndef XRSC_CREATE
@@ -73,18 +73,18 @@ V 1.00 18.04.93
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fÅr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fÅr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fÔøΩr Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fÔøΩr Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangshîhe in Pixel */
-#define MILLI  1000                     /* Millisekunden fÅr Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* AnfangshÔøΩhe in Pixel */
+#define MILLI  1000                     /* Millisekunden fÔøΩr Zeitablauf */
 
 #define MOD_RSC_NAME "CMI_MOD.RSC"		/* Name der Resource-Datei */
 #define MAXSETUPS  200l			/* Anzahl der CM-Input-Setups */
-#define SELMUSTER 0x0A1				/* Muster fÅr belegte Inputs in Setup-Box */
-											/* StÑrke 2, Text durchsichtig, Farbe schwarz */
+#define SELMUSTER 0x0A1				/* Muster fÔøΩr belegte Inputs in Setup-Box */
+											/* StÔøΩrke 2, Text durchsichtig, Farbe schwarz */
 
 #define Object(input) \
 	(input<MAXINPUTS) ? CMICM1INP1 + input : CMICM2INP1 + input - MAXINPUTS
@@ -98,17 +98,17 @@ typedef	struct	setup	*SET_P;	/* Zeiger auf CMI-Setup */
 
 typedef	struct	status
 {
-	WORD	channel1,				/* Ausgabekanal fÅr erstes CMI-System */
-			channel2,				/* Ausgabekanal fÅr zweites CMI-System */
-			port1,					/* Ausgabeanschluû fÅr erstes CMI-System */
-			port2;					/* Ausgabeanschluû fÅr zweites CMI-System */
+	WORD	channel1,				/* Ausgabekanal fÔøΩr erstes CMI-System */
+			channel2,				/* Ausgabekanal fÔøΩr zweites CMI-System */
+			port1,					/* AusgabeanschluÔøΩ fÔøΩr erstes CMI-System */
+			port2;					/* AusgabeanschluÔøΩ fÔøΩr zweites CMI-System */
 } STATUS;
 
 typedef	struct status	*STAT_P;	/* Zeiger auf CMI-STATUS */
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	cmi_rsc_hdr;					/* Zeigerstruktur fÅr RSC-Datei */
-PRIVATE WORD	*cmi_rsc_ptr = &cmi_rsc_hdr;		/* Zeigerstruktur fÅr RSC-Datei */
+PRIVATE WORD	cmi_rsc_hdr;					/* Zeigerstruktur fÔøΩr RSC-Datei */
+PRIVATE WORD	*cmi_rsc_ptr = &cmi_rsc_hdr;		/* Zeigerstruktur fÔøΩr RSC-Datei */
 PRIVATE OBJECT *cmi_setup;
 PRIVATE OBJECT *cmi_help;
 PRIVATE OBJECT *cmi_desk;
@@ -117,7 +117,7 @@ PRIVATE OBJECT *cmi_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "CMI";		/* Name, fÅr Extension etc. */
+PRIVATE CONST STRING module_name = "CMI";		/* Name, fÔøΩr Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 
@@ -136,7 +136,7 @@ PRIVATE VOID    get_dbox	(RTMCLASSP module)
 	BOOLEAN	found = FALSE;
 	WORD		object;
 	
-	/* AngewÑhltes Signal ermitteln */
+	/* AngewÔøΩhltes Signal ermitteln */
 	for (signal = 1; signal < MAXSIGNALS; signal++)
 		if(get_checkbox (cmi_setup, CMISIGNAL1  + signal-1))
 			aktsignal = signal;
@@ -206,7 +206,7 @@ PRIVATE VOID    set_dbox_signal	(RTMCLASSP module, UWORD aktsignal)
 	UWORD		signal, input, in;
 	WORD		object;
 	
-	/* AngewÑhltes Signal selektieren, alle anderen deselektieren */
+	/* AngewÔøΩhltes Signal selektieren, alle anderen deselektieren */
 	for (signal = 1; signal < MAXSIGNALS; signal++)
 		set_checkbox (cmi_setup, CMISIGNAL1  + signal -1, aktsignal == signal);
 		
@@ -231,12 +231,12 @@ PRIVATE VOID    set_dbox_signal	(RTMCLASSP module, UWORD aktsignal)
 			object = Object(input);
 			if (signal == aktsignal)
 			{
-				/* Box selektieren, weil sie zum aktuellen Signal gehîrt */
+				/* Box selektieren, weil sie zum aktuellen Signal gehÔøΩrt */
 				set_checkbox (cmi_setup, object, TRUE);
 			} /* if */
 			else
 			{
-				/* Box grau machen, weil sie zu einem nicht akt. Sig. gehîrt */
+				/* Box grau machen, weil sie zu einem nicht akt. Sig. gehÔøΩrt */
 				set_fillbox (cmi_setup, object, TRUE);
 			} /* else */
 		} /* if input */
@@ -251,7 +251,7 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 	WORD		signal;
 			
 	/* Numerierung der Channels, Ports und Tracks intern ab 0 .. */
-	/* ZulÑssigkeit der Port-Anwahl ÅberprÅfen */
+	/* ZulÔøΩssigkeit der Port-Anwahl ÔøΩberprÔøΩfen */
 	if (MidiShare())
 	{
 		if (!MidiGetPortState(status->port1))
@@ -278,8 +278,8 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 	WORD *input = module->actual->setup->input;
 	WORD signal;
 	
-	if(event)					/* Event gÅltig? */
-		if(track && input)	/* Track-Information gÅltig? */
+	if(event)					/* Event gÔøΩltig? */
+		if(track && input)	/* Track-Information gÔøΩltig? */
 			for (signal = 1; signal < MAXSIGNALS; signal++)
 				track[signal] = input[signal];
 
@@ -288,7 +288,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* ZurÅcksetzen von Werten */
+	/* ZurÔøΩcksetzen von Werten */
 } /* reset */
 
 PUBLIC VOID		precalc	(RTMCLASSP module)
@@ -350,7 +350,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 		else
 		{
 			module->import_status |= FILE_OPENED;
-			akt = module->actual->setup; /* Zeiger auf erstes Setup nochmal holen, wegen Supervisor-MÅll in file_split */
+			akt = module->actual->setup; /* Zeiger auf erstes Setup nochmal holen, wegen Supervisor-MÔøΩll in file_split */
 			
 			daktstatus(" CMI-Datei wird importiert ... ", module->import_name);
 			module->flags |= FLAG_IMPORTING;
@@ -533,7 +533,7 @@ MKINFO  *mk;
 				} /* if */	
 			draw_object(window, ROOT);
 			/* undo_state (window->object, window->exit_obj, SELECTED); */
-			module->get_dbox(module);	/* Aktuelle Signal-Zuweisung Åbernehmen */
+			module->get_dbox(module);	/* Aktuelle Signal-Zuweisung ÔøΩbernehmen */
 	} /* switch */
 } /* wi_click */
 
@@ -589,11 +589,11 @@ WORD   icon;
     
   } /* if */
 
-  return (window);                      /* Fenster zurÅckgeben */
+  return (window);                      /* Fenster zurÔøΩckgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* ôffnen des Objekts                                                        */
+/* ÔøΩffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -679,7 +679,8 @@ PRIVATE	RTMCLASSP create ()
 	SET_P			standard;
 	STAT_P		status;
 	WORD			signal;
-		
+	daktstatus("Initialisierung CMI", "Start");
+	
 	module = create_module (module_name, instance_count);
 	
 	if (module != NULL)
@@ -746,7 +747,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* PrÅfen, ob DEFAULT-Datei vorhanden */
+		/* PrÔøΩfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -785,7 +786,7 @@ PRIVATE	RTMCLASSP create ()
 		add_rcv(VAR_SET_CMI, module);	/* Message einklinken */
 		var_set_max(var_module, VAR_SET_CMI, MAXSETUPS);
 	} /* if */
-	
+	daktstatus("Initialisierung CMI", "Ende");
 	return module;
 } /* create */
 

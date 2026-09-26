@@ -757,6 +757,8 @@ PRIVATE	RTMCLASSP create ()
 	WSTAT_P		winstatus;
 	WINDOWP		window;
 	
+		daktstatus("Initialisierung BIG", "Start");
+
 	module = create_module ();
 	
 	if (module != NULL)
@@ -805,8 +807,9 @@ PRIVATE	RTMCLASSP create ()
 		add_rcv(VAR_BIG_PLAY, module);	/* Message einklinken */
 		if(!create_volumelist(module))
 			form_alert(1,"[1][Volumenliste|konnte nicht angelegt werden|Zuwenig Speicher frei][ Gnii ]");
-	} /* if */
-	
+			} /* if */
+	daktstatus("Initialisierung BIG", "Ende");
+
 	return module;
 } /* create */
 
