@@ -1361,9 +1361,9 @@ GLOBAL WORD load_create_infos (CreateFn *create, CONST CHAR *type, CONST WORD ma
 {
 	/* Go through all info files of a type and create instances for them */
 	WORD			instance;
-	BOOL			opened;
+	BOOL			opened = FALSE;
 	LONGSTR		file_name, setup_name;
-	LONG			setup_nr;
+	LONG			setup_nr = 0L;
 	RECT			scroll;
 	RTMCLASSP	module;
 	WINDOWP		window;
