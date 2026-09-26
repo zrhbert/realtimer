@@ -208,7 +208,9 @@ PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
 PRIVATE CONST STRING module_name = "PUF";		/* Name, f�r Extension etc. */
 
 PRIVATE RTMCLASSP	modulep[MAXMSAPPLS];			/* Zeiger auf Modul-Strukturen */
-PRIVATE WORD		refNums[1];						/* Referenznummern */
+/* +1: instance_count is 1-based here (see init_midishare/destroy_mod), so
+   indices 1..max_instances are used, requiring max_instances+1 slots */
+PRIVATE WORD		refNums[2];						/* Referenznummern */
 
 PRIVATE	PUF_INF		tmp_event;
 PRIVATE	KOOR_ALL		tmp_koors;			/* Koordinaten-Struktur */
@@ -1759,7 +1761,7 @@ PRIVATE SHORT init_midishare ()
 		if (refNum > 0)							/* Pr�fen ob alles klar */
 		{
 			instance_count++;
-			refNums[instance_count] = refNum;				/* Merken f�r term_mod */
+			refNums[min(instance_count, max_instances)] = refNum;				/* Merken f�r term_mod */
 			MidiSetRcvAlarm(refNum, receive_evts_puf);	/* Interrupt-Handler */		
 			/* An alle anschlie�en */
 			try_all_connect (refNum);
@@ -1848,10 +1850,13 @@ PRIVATE VOID init_events (RTMCLASSP module)
 	header	= CreateEvent();
 #else
 	do {
-		header	= (PUFEVP) mem_alloc(max_events * sizeof(PUFEVENT));
-		koors		= (KOOR_ALL*) mem_alloc(max_events * sizeof(KOOR_ALL));
-		tracks	= (TRACK_ALL*) mem_alloc(max_events * sizeof(TRACK_ALL));
-		volumes	= (VOL_ALL*) mem_alloc(max_events * sizeof(VOL_ALL));
+		/* +1: index 0 is the circular-list dummy header node, indices
+		   1..max_events hold the real events, so max_events+1 slots
+		   are needed to avoid writing past the end of the arrays */
+		header	= (PUFEVP) mem_alloc((max_events + 1) * sizeof(PUFEVENT));
+		koors		= (KOOR_ALL*) mem_alloc((max_events + 1) * sizeof(KOOR_ALL));
+		tracks	= (TRACK_ALL*) mem_alloc((max_events + 1) * sizeof(TRACK_ALL));
+		volumes	= (VOL_ALL*) mem_alloc((max_events + 1) * sizeof(VOL_ALL));
 
 		/* Pr�fen ob Allozieren geklappt hat */
 		if(!header || !koors || !tracks || !volumes)
@@ -1874,10 +1879,10 @@ PRIVATE VOID init_events (RTMCLASSP module)
 	status->tracks_p	= tracks;
 	status->vols_p		= volumes;
 
-	mem_lset(header, 0, max_events * sizeof(PUFEVENT));
-	mem_lset(koors, 0, max_events * sizeof(KOOR_ALL));
-	mem_lset(tracks, 0, max_events * sizeof(TRACK_ALL));
-	mem_lset(volumes, 0, max_events * sizeof(VOL_ALL));
+	mem_lset(header, 0, (max_events + 1) * sizeof(PUFEVENT));
+	mem_lset(koors, 0, (max_events + 1) * sizeof(KOOR_ALL));
+	mem_lset(tracks, 0, (max_events + 1) * sizeof(TRACK_ALL));
+	mem_lset(volumes, 0, (max_events + 1) * sizeof(VOL_ALL));
 
 	/* Header Initialisieren */
 	header->next = header;
