@@ -27,7 +27,6 @@
 #if INCLUDE_RTM_OPT_MODULES
 #include "a3d.h"
 #include "cmi.h"
-#include "cmo.h"
 #include "ec4.h"
 #include "eff.h"
 #include "gen.h"
@@ -47,6 +46,7 @@
 #endif /* INCLUDE_RTM_OPT_MODULES */
 
 #if INCLUDE_RTM_UNUSED_MODULES
+#include "cmo.h"
 #include "big.h"
 #include "ed4.h"
 #include "pow.h"
@@ -170,16 +170,13 @@ GLOBAL BOOLEAN init_modules ()
 
     if(&init_syn) ok &= init_syn ();		/* Initialisiere syn */
 
-
-    if(&init_cmo) ok &= init_cmo ();		/* Initialisiere cmo */
-
-
 /* MAN als letztes initialisieren, braucht Obj-Infos der anderen Module */
     if(&init_man) ok &= init_man ();		/* Initialisiere man */
 #endif /* INCLUDE_RTM_OPT_MODULES */
 
 #if INCLUDE_RTM_UNUSED_MODULES
 	if(init_pow) ok &= init_pow ();		/* Initialisiere pow */
+    if(&init_cmo) ok &= init_cmo ();		/* Initialisiere cmo */
 #endif /* INCLUDE_RTM_UNUSED_MODULES */
 
 /* Ganz zum Schlu� die MidiShare-Applikationen */

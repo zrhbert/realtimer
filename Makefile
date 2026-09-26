@@ -63,7 +63,6 @@ SRCS += $(RTM_BASE_SRCS)
 RTM_OPT_SRCS = \
 	src/a3d.c \
 	src/cmi.c \
-	src/cmo.c \
 	src/eff.c \
 	src/gen.c \
 	src/gmi.c \
@@ -83,6 +82,7 @@ RTM_OPT_SRCS = \
 SRCS += $(RTM_OPT_SRCS)
 
 RTM_UNUSED_SRCS = \
+	src/cmo.c \
 	src/pow.c \
 	src/big.c \
 	src/ed4.c 

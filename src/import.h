@@ -12,20 +12,20 @@
 #define __IMPORT__
 
 /* Controls whether the RTM base/module sources (objects.c, init_rtm.c,
-   a3d.c, cmo.c, etc.) are compiled in; see Makefile's RTM_BASE_SRCS and
+   a3d.c, etc.) are compiled in; see Makefile's RTM_BASE_SRCS and
    RTM_OPT_SRCS. Define as 1 (e.g. via -D) to include them. */
 #ifndef INCLUDE_RTM_BASE_MODULES
 #define INCLUDE_RTM_BASE_MODULES 1
 #endif /* INCLUDE_RTM_BASE_MODULES */
 
-/* Controls whether the optional RTM modules (a3d.c, cmi.c, cmo.c, gen.c,
+/* Controls whether the optional RTM modules (a3d.c, cmi.c, gen.c,
    etc., see Makefile's RTM_OPT_SRCS) are compiled in; requires
    INCLUDE_RTM_BASE_MODULES too. Define as 1 (e.g. via -D) to include them. */
 #ifndef INCLUDE_RTM_OPT_MODULES
 #define INCLUDE_RTM_OPT_MODULES 1
 #endif /* INCLUDE_RTM_OPT_MODULES */
 
-/* Controls whether the normally unused RTM modules (big, ed4, pow,
+/* Controls whether the normally unused RTM modules (cmo, big, ed4, pow,
    etc., see Makefile's RTM_UNUSED_SRCS) are compiled in; requires
    INCLUDE_RTM_BASE_MODULES too. Define as 1 (e.g. via -D) to include them. */
 #ifndef INCLUDE_RTM_UNUSED_MODULES

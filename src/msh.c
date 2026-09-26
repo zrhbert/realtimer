@@ -2,7 +2,7 @@
 /*                                                                           */
 /* Modul: MSH.C                                                          	  */
 /*                                                                           */
-/* MidiShare Funktionen fÅr RTM                                           	  */
+/* MidiShare Funktionen fÔøΩr RTM                                           	  */
 /*                                                                           */
 /*****************************************************************************/
 
@@ -15,8 +15,8 @@
 26.07.93
 - msh_available eingebaut
 - unkonditionales Laden von MIDSHARE.PRG und MIDSAVE.PRG in init_msh
-- send_ Fuktionen mit öberprÅfung auf (e) fÅr Betrieb ohne MS
-- create gibt nun immer TRUE zurÅck, auch wenn MS nicht gefunden
+- send_ Fuktionen mit ÔøΩberprÔøΩfung auf (e) fÔøΩr Betrieb ohne MS
+- create gibt nun immer TRUE zurÔøΩck, auch wenn MS nicht gefunden
 - VAR in rtm_sendm und rtm_send eingebaut
 - try_name_connect und try_num_connect eingebaut
 20.05.93
@@ -24,7 +24,7 @@
 25.04.93
 - Fehler in init beseitigt (ok-Status bei Aufruf von MS wenn MS bereits im Speicher)
 22.04.93
-- init und term incl. MS-Aufrufe eingefÅhrt
+- init und term incl. MS-Aufrufe eingefÔøΩhrt
 - MidiShare-Aufruf per Pexec()
 - MidiFreeEvent in rtm_send Makro eingebaut
 *****************************************************************************/
@@ -40,10 +40,10 @@
 #include "errors.h"
 #include "realtspc.h"
 #include "var.h"							/* wegen VAR_RECORD */
-#include <msh_unit.h>					/* Deklarationen fÅr MidiShare */
+#include <msh_unit.h>					/* Deklarationen fÔøΩr MidiShare */
 
 #include "export.h"
-#include "msh.h"							/* Deklarationen fÅr RTM-MidiShare Library */
+#include "msh.h"							/* Deklarationen fÔøΩr RTM-MidiShare Library */
 
 /* VARIABLES *******************************************************************/
 LOCAL SHORT	refpuf = 0,		/* MidiShare Referenz des Puffersequenzers */
@@ -276,8 +276,8 @@ VOID send_part_big (SHORT refnum, PUFEVP start)
 
 	if (refbig > 0)
 	{
-		sprintf (title, "öbertragung PUF->BIG");
-		daktstatus (title, "Daten werden Åbertragen...");
+		sprintf (title, "ÔøΩbertragung PUF->BIG");
+		daktstatus (title, "Daten werden ÔøΩbertragen...");
 		for (signal = 1; signal < MAXSIGNALS; signal++)
 		{
 			send_track_big (refnum, signal, start);
@@ -311,7 +311,7 @@ BOOL send_signal_mute_ev_big (SHORT refnum, WORD signal)
 	
 	MidiAddField (e, BIG_SEQ_TRACK_MUTE_EV);
 	
-	/* Zugehîrigen Ausgabekanal muten */
+	/* ZugehÔøΩrigen Ausgabekanal muten */
 	MidiAddField (e, var_get_value (var_module, VAR_CMI_SIGNAL1 +signal -1));
 	
 	if ( !refbig )
@@ -340,7 +340,7 @@ BOOL send_all_mute_evs_big (SHORT refnum)
 	{
 		if (var_get_value (var_module, VAR_PUF_PLAY_SIG0 + signal))
 		{
-			/* Zugehîrigen Ausgabekanal muten */
+			/* ZugehÔøΩrigen Ausgabekanal muten */
 			MidiAddField (e, var_get_value (var_module, VAR_CMI_SIGNAL1 +signal -1));
 		} /* if */
 	} /* for */
@@ -366,7 +366,7 @@ BOOL send_signal_demute_ev_big (SHORT refnum, WORD signal)
 	
 	MidiAddField( e, BIG_SEQ_TRACK_DEMUTE_EV );
 	
-	/* Zugehîrigen Ausgabekanal muten */
+	/* ZugehÔøΩrigen Ausgabekanal muten */
 	MidiAddField (e, var_get_value (var_module, VAR_CMI_SIGNAL1 + signal - 1));
 	
 	if ( !refbig )
@@ -393,7 +393,7 @@ BOOL send_all_demute_evs_big (SHORT refnum)
 	
 	for ( signal = 1; signal < MAXSIGNALS; signal++ )
 	{
-		/* Zugehîrigen Ausgabekanal demuten */
+		/* ZugehÔøΩrigen Ausgabekanal demuten */
 		MidiAddField (e, var_get_value (var_module, 
 			VAR_CMI_SIGNAL1 + signal - 1));
 	} /* for */
@@ -500,7 +500,7 @@ BOOL send_stop_ev_big (SHORT refnum, LONG time)
 
 GLOBAL VOID timstr (LONG time, STRING timestr)
 {
-	/* Wandelt einen Long-Wert fÅr die Anzahl der Millisekunden */
+	/* Wandelt einen Long-Wert fÔøΩr die Anzahl der Millisekunden */
 	/* in eine Kette von Zahlen der Form hh:mm:ss:ll um */
 	REG LONG temp;
 	REG WORD hh, mm, ss, ll;
@@ -528,7 +528,7 @@ GLOBAL VOID timstr (LONG time, STRING timestr)
 GLOBAL LONG strtim (STRING timestr)
 {
 	/* Wandelt eine Kette von Zahlen der Form hhmmssll */
-	/* in einen Long-Wert fÅr die Anzahl der Millisekunden um */
+	/* in einen Long-Wert fÔøΩr die Anzahl der Millisekunden um */
 	REG LONG time;
 	LONG hh = 0L, mm = 0L, ss = 0L, ll = 0L;
 	STRING s, trenn = ":. ";
@@ -563,7 +563,7 @@ GLOBAL LONG strtim (STRING timestr)
 
 GLOBAL VOID curtimstr (STRING timestr)
 {
-	/* Gibt fÅllt den String mit der aktuellen Zeit */
+	/* Gibt fÔøΩllt den String mit der aktuellen Zeit */
 	timstr (MidiGetTime(), timestr);
 } /* curtimstr */
 
@@ -717,7 +717,7 @@ GLOBAL BOOLEAN try_all_connect	 (SHORT refnum)
 	BOOL	ret;
 		
 	/* Modul an alle Applikationen anschliessen,
-		Referenznummer setzen, bzw. ungÅltig machen */
+		Referenznummer setzen, bzw. ungÔøΩltig machen */
 	ret = try_num_connect (0, refnum);
 	if (refpuf > 0)
 		refpuf = try_num_connect (refnum, refpuf);
@@ -793,14 +793,17 @@ GLOBAL BOOLEAN init_msh ()
 	
 	if (!ok)							/* Ist MidiShare da? */
 	{
+/* MSH alert disabled, BD 2026.09.26, as it will not be used for a long time */
+/*	if (refNum == 0)
 		hndl_alert (ERR_NOMIDISHARE);
+		*/
 		ok = FALSE;
 		msh_available  = FALSE;
 	} /* if */
 	else
 		msh_available  = TRUE;
 
-	return (TRUE); /* immer TRUE zurÅckgeben, auch wenn MS nicht da */
+	return (TRUE); /* immer TRUE zurÔøΩckgeben, auch wenn MS nicht da */
 } /* init_msh */
 
 /*****************************************************************************/

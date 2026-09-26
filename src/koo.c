@@ -11,12 +11,12 @@
 
 /*****************************************************************************
 V 1.00
-- Var-Darstellung auf Bar ge„ndert, 20.02.95
-- MILLI auf 100 ge„ndert, 09.02.95
+- Var-Darstellung auf Bar geï¿½ndert, 20.02.95
+- MILLI auf 100 geï¿½ndert, 09.02.95
 - SysVAR eingebaut, 03.02.95
 - panpan eingebaut, 04.01.95
 V 0.14
-- menu_title auf MCONTROLS ge„ndert, 27.11.94
+- menu_title auf MCONTROLS geï¿½ndert, 27.11.94
 V 0.13 19.05.94
 - load_create_infos und instance_count eingebaut
 - Umstellung auf DISPOBJ
@@ -75,13 +75,13 @@ V 0.09
 #define FLAGS  (WI_RESIDENT | WI_NOSCROLL)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten fr Scrolling */
-#define YUNITS 1                        /* Y-Einheiten fr Scrolling */
+#define XUNITS 1                        /* X-Einheiten fï¿½r Scrolling */
+#define YUNITS 1                        /* Y-Einheiten fï¿½r Scrolling */
 #define INITX  (20 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 4 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (57 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  (13 * gl_hbox)           /* Anfangsh”he in Pixel */
-#define MILLI  100                    	/* Millisekunden fr Zeitablauf */
+#define INITH  (13 * gl_hbox)           /* Anfangshï¿½he in Pixel */
+#define MILLI  100                    	/* Millisekunden fï¿½r Zeitablauf */
 
 #define MOD_RSC_NAME "KOO_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -100,12 +100,12 @@ typedef struct koo_signal_flags
 	UINT	vol	: 1	;	/* Volume anzeigen  */
 	UINT	panbr	: 1	;	/* Panbreite anzeigen  */
 	UINT	panpos: 1	;	/* Pan-Position anzeigen  */
-	UINT	voruz	: 1	;	/* Vor-und-Zurck-Wert anzeigen  */
+	UINT	voruz	: 1	;	/* Vor-und-Zurï¿½ck-Wert anzeigen  */
 	UINT	dehn	: 1	;	/* Dehnung anzeigen  */
 	UINT	mtrspd: 1	;	/* MTR-Geschw   */
 	UINT	track : 1	;	/* CMI Signalzuweisung   */
 	UINT  bigvol: 1	;	/* Volume aus BIG-Sequenzer */
-} SFLAGS;				/* Enth„lt alle KOO-Parameter eines einzelnen Signals */
+} SFLAGS;				/* Enthï¿½lt alle KOO-Parameter eines einzelnen Signals */
 
 typedef struct koo_signal_val
 {
@@ -116,17 +116,17 @@ typedef struct koo_signal_val
 	WORD	vol			;	/* Volume */
 	WORD	panbr			;	/* Panbreite */
 	WORD	panpos		;	/* Pan-Position  */
-	WORD	voruz			;	/* Vor-und-Zurck-Wert */
+	WORD	voruz			;	/* Vor-und-Zurï¿½ck-Wert */
 	WORD	dehn			;	/* Dehnung */
 	WORD	mtrspd		;	/* MTR-Geschw */
 	WORD	track			;	/* CMI Signalzuweisung   */
 	WORD  bigvol		;	/* Volume aus BIG-Sequenzer */
-} SVALUES;				/* Enth„lt alle aktuellen Parameter eines einzelnen Signals */
+} SVALUES;				/* Enthï¿½lt alle aktuellen Parameter eines einzelnen Signals */
 
 typedef struct setup
 {
 	VOID *dummy;
-} SETUP;		/* Enth„lt alle Parameter einer kompletten KOO-Einstellung */
+} SETUP;		/* Enthï¿½lt alle Parameter einer kompletten KOO-Einstellung */
 
 typedef struct status *STAT_P;
 
@@ -134,14 +134,14 @@ typedef struct status
 {
 	SFLAGS	flags[MAXSIGNALS];
 	SVALUES	values[MAXSIGNALS];
-	BOOLEAN	new;		/* Flag fr komplett neuen Aufbau */
+	BOOLEAN	new;		/* Flag fï¿½r komplett neuen Aufbau */
 	LONG		var_values[MAXSETVARS];	/* Systemvariablen */
 } STATUS;
 
 /****** VARIABLES ************************************************************/
 /* Resource */
-PRIVATE WORD	koo_rsc_hdr;					/* Zeigerstruktur fr RSC-Datei */
-PRIVATE WORD	*koo_rsc_ptr = &koo_rsc_hdr;		/* Zeigerstruktur fr RSC-Datei */
+PRIVATE WORD	koo_rsc_hdr;					/* Zeigerstruktur fï¿½r RSC-Datei */
+PRIVATE WORD	*koo_rsc_ptr = &koo_rsc_hdr;		/* Zeigerstruktur fï¿½r RSC-Datei */
 PRIVATE OBJECT *koo_setup;
 PRIVATE OBJECT *koo_help;
 PRIVATE OBJECT *koo_desk;
@@ -150,7 +150,7 @@ PRIVATE OBJECT *koo_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 20;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "KOO";		/* Name, fr Extension etc. */
+PRIVATE CONST STRING module_name = "KOO";		/* Name, fï¿½r Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 
@@ -230,13 +230,13 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 {
 	WINDOWP	window = module->window;
 
-	window->milli = 1; 	/* Update so schnell wie m”glich */
+	window->milli = 1; 	/* Update so schnell wie mï¿½glich */
 	return event;
 } /* apply */
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* Zurcksetzen von Werten */
+	/* Zurï¿½cksetzen von Werten */
 } /* reset */
 
 PUBLIC VOID		precalc	(RTMCLASSP module)
@@ -257,31 +257,31 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			if (variable == VAR_SET_KOO)
 				module->set_setnr(module, value);
 			else if ((variable >= VAR_LFA_PANBREITE1) && (variable < VAR_LFA_PANBREITE1 + 4 ))
-				/* Panbreite fr diesen Kanal setzen */
+				/* Panbreite fï¿½r diesen Kanal setzen */
 				values[variable - VAR_LFA_PANBREITE1 ].panbr = (WORD)value;
 			else if ((variable >= VAR_LFA_PANPOS1) && (variable < VAR_LFA_PANPOS1 + 4 ))
-				/* Pan-Position fr diesen Kanal setzen */
+				/* Pan-Position fï¿½r diesen Kanal setzen */
 				values[variable - VAR_LFA_PANPOS1 ].panpos = (WORD)value;
 			else if ((variable >= VAR_LFA_VORZUR0) && (variable < VAR_LFA_VORZUR0 + 9 ))
-				/* Vor-und-Zurck fr diesen Kanal setzen */
+				/* Vor-und-Zurï¿½ck fï¿½r diesen Kanal setzen */
 				values[variable - VAR_LFA_VORZUR0 ].voruz = (WORD)value;
 			else if ((variable >= VAR_LFB_PANBREITE1) && (variable < VAR_LFB_PANBREITE1 + 4 ))
-				/* Panbreite fr diesen Kanal setzen */
+				/* Panbreite fï¿½r diesen Kanal setzen */
 				values[variable - VAR_LFB_PANBREITE1 ].panbr = (WORD)value;
 			else if ((variable >= VAR_LFB_PANPOS1) && (variable < VAR_LFB_PANPOS1 + 4 ))
-				/* Pan-Position fr diesen Kanal setzen */
+				/* Pan-Position fï¿½r diesen Kanal setzen */
 				values[variable - VAR_LFB_PANPOS1 ].panpos = (WORD)value;
 			else if ((variable >= VAR_LFB_VORZUR0) && (variable < VAR_LFB_VORZUR0 + 9 ))
-				/* Vor-und-Zurck fr diesen Kanal setzen */
+				/* Vor-und-Zurï¿½ck fï¿½r diesen Kanal setzen */
 				values[variable - VAR_LFB_VORZUR0 ].voruz = (WORD)value;
 			else if ((variable >= VAR_MTR_ACC0) && (variable < VAR_MTR_ACC0 + 9 ))
-				/* MTR-Beschleunigung fr diesen Kanal setzen */
+				/* MTR-Beschleunigung fï¿½r diesen Kanal setzen */
 				values[variable - VAR_MTR_ACC0 ].mtrspd = (WORD)value;
 			else if ((variable >= VAR_CMI_SIGNAL1) && (variable < VAR_CMI_SIGNAL1 + 8 ))
-				/* Pan-Position fr diesen Kanal setzen */
+				/* Pan-Position fï¿½r diesen Kanal setzen */
 				values[variable - VAR_CMI_SIGNAL1 ].track = (WORD)value;
 			else if (variable < VAR_VAR0 + MAXSETVARS )
-			/* nicht n”tig, wird ber var_get_value abgefragt 
+			/* nicht nï¿½tig, wird ï¿½ber var_get_value abgefragt 
 				status->var_values[variable - VAR_VAR0] = value;
 			*/
 			
@@ -298,7 +298,7 @@ PUBLIC VOID    send_messages	(RTMCLASSP module)
 } /* send_messages */
 
 /*****************************************************************************/
-/* ™ffne Fenster                                                             */
+/* ï¿½ffne Fenster                                                             */
 /*****************************************************************************/
 
 PRIVATE VOID wi_open_mod (window)
@@ -346,7 +346,7 @@ WINDOWP window;
 } /* wi_draw_mod */
 
 /*****************************************************************************/
-/* Vor zeichnen Status ver„ndern                                             */
+/* Vor zeichnen Status verï¿½ndern                                             */
 /*****************************************************************************/
 
 PRIVATE VOID wi_start_mod (window)
@@ -374,7 +374,7 @@ WINDOWP window;
 } /* wi_start_mod */
 
 /*****************************************************************************/
-/* Nach zeichnen Status ver„ndern                                            */
+/* Nach zeichnen Status verï¿½ndern                                            */
 /*****************************************************************************/
 
 PRIVATE VOID wi_finished_mod (window)
@@ -387,7 +387,7 @@ WINDOWP window;
 } /* wi_finished_mod */
 
 /*****************************************************************************/
-/* Zeitablauf fr Fenster                                                    */
+/* Zeitablauf fï¿½r Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -474,7 +474,7 @@ WORD   icon;
 		sprintf (window->info, koo_text [FKOOI].ob_spec.free_string, 0);
 	} /* if */
 	
-	return (window);                      /* Fenster zurckgeben */
+	return (window);                      /* Fenster zurï¿½ckgeben */
 } /* crt_mod */
 
 PRIVATE VOID create_displayobs (WINDOWP window)
@@ -488,7 +488,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 	else
 		h = 8;
 		
-	/* 	      0123401234012340123401234012340123401234012340123401234 */
+	/* 	        0123401234012340123401234012340123401234012340123401234 */
 	strcpy (s, "Sig   X    Y    Z   Zoom VOL  Spd  Pos  CMI");
 	a.x = 0 * w;
 	a.y = line++ * h;
@@ -612,7 +612,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 } /* create_displayobs */
 
 /*****************************************************************************/
-/* ™ffnen des Objekts                                                        */
+/* ï¿½ffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -754,7 +754,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Prfen, ob DEFAULT-Datei vorhanden */
+		/* Prï¿½fen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
