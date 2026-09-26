@@ -56,18 +56,18 @@ V 0.07
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                        /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                        /* X-Einheiten für Scrolling */
+#define YUNITS 1                        /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh�he in Pixel */
-#define MILLI  1000                     /* Millisekunden f�r Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshöhe in Pixel */
+#define MILLI  1000                     /* Millisekunden für Zeitablauf */
 
 #define MOD_RSC_NAME "MAA_MOD.RSC"		/* Name der Resource-Datei */
 #define MAXSETUPS 200L					/* Anzahl der MAA-Setups */
 
-#define MAXPERCENT 100					/* Gr��ter Wert f�r Prozent VARs */
+#define MAXPERCENT 100					/* Größter Wert für Prozent VARs */
 
 /****** TYPES ****************************************************************/
 typedef struct setup *SET_P;
@@ -88,9 +88,9 @@ typedef struct setup
 				prop_winkyz : 1;
 	WORD		zoom;					/* Zoom-Faktor */
 	WORD		speedy;				/* Beschleunigungs-Faktor */
-	WORD		sperre_an_innen;		/* Radius f�r innere Sperre */
-	WORD		sperre_an_aussen;		/* Radius f�r �ussere Sperre */
-} SETUP;	/* Enth�lt alle Parameter einer kompletten MAA-Einstellung */
+	WORD		sperre_an_innen;		/* Radius für innere Sperre */
+	WORD		sperre_an_aussen;		/* Radius für äussere Sperre */
+} SETUP;	/* Enthält alle Parameter einer kompletten MAA-Einstellung */
 
 typedef struct status *STAT_P;
 
@@ -108,8 +108,8 @@ typedef struct status
 } STATUS;
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	maa_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*maa_rsc_ptr = &maa_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	maa_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*maa_rsc_ptr = &maa_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *maa_setup;
 PRIVATE OBJECT *maa_help;
 PRIVATE OBJECT *maa_desk;
@@ -118,7 +118,7 @@ PRIVATE OBJECT *maa_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 20;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "MAA";		/* Name, f�r Extension etc. */
+PRIVATE CONST STRING module_name = "MAA";		/* Name, für Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 
@@ -206,7 +206,7 @@ PUBLIC PUF_INF *apply (RTMCLASSP module, PUF_INF *event)
 	KOOR_SINGLE *signals = event->koors->koor;
 	register POINT_3D	*koor;
 	
-	/* Long-Multiplikation um �berlauf zu vermeiden */
+	/* Long-Multiplikation um Überlauf zu vermeiden */
 	mkoor->x = (WORD)((LONG)zoom * (LONG)(status->mousex) / 100l);
 	mkoor->z = (WORD)((LONG)zoom * (LONG)(status->mousey) / 100l);
 
@@ -266,7 +266,7 @@ PUBLIC VOID		reset	(RTMCLASSP module)
 {
 	STAT_P		status = module->status;
 	
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 	status->mousex 	= 0;	
 	status->mousey 	= 0;	
 	status->buttonl 	= FALSE;	
@@ -449,11 +449,11 @@ WORD   icon;
     sprintf (window->info, maa_text [FMAAI].ob_spec.free_string, 0);
   } /* if */
 
-  return (window);                      /* Fenster zur�ckgeben */
+  return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -605,7 +605,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Pr�fen, ob DEFAULT-Datei vorhanden */
+		/* Prüfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */

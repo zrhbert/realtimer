@@ -34,10 +34,10 @@ GLOBAL WORD hndl_alert _((WORD alert_id));    /* prototype from dialog.h, which 
 #define MAX_COLORS  16                  /* GEM Standard-Farben */
 #define DEFAULTRATE 0                   /* Default Blinkrate */
 
-#define CTRL_CHAR   '^'                 /* Men�-Control-Buchstabe */
-#define ALT_CHAR    0x07                /* Men�-Alternate-Buchstabe */
-#define SHIFT_CHAR  0x01                /* Men�-Shifttaste */
-#define FUNC_CHAR   'F'                 /* Men�-Funktionstaste */
+#define CTRL_CHAR   '^'                 /* Menü-Control-Buchstabe */
+#define ALT_CHAR    0x07                /* Menü-Alternate-Buchstabe */
+#define SHIFT_CHAR  0x01                /* Menü-Shifttaste */
+#define FUNC_CHAR   'F'                 /* Menü-Funktionstaste */
 
 #define FMD_FORWARD  0
 #define FMD_BACKWARD 1
@@ -177,7 +177,7 @@ LOCAL UWORD func_keys [] =
 
 #endif
 
-LOCAL  WORD tos = 0;	/* Enth�lt TOS-Version nach init_global */
+LOCAL  WORD tos = 0;	/* Enthält TOS-Version nach init_global */
 /****** FUNCTIONS ************************************************************/
 
 LOCAL VOID vdi_fix   _((MFDB *pfd, VOID *theaddr, WORD wb, WORD h));
@@ -195,7 +195,7 @@ LOCAL VOID graf_shrinkbox _((WORD orgx, WORD orgy, WORD orgw, WORD orgh, WORD x,
 #endif
 
 /*****************************************************************************/
-/* �ffne virtuelle Workstation                                               */
+/* Öffne virtuelle Workstation                                               */
 /*****************************************************************************/
 
 GLOBAL VOID open_vwork ()
@@ -208,7 +208,7 @@ GLOBAL VOID open_vwork ()
   for (i = 0; i < 10; work_in [i++] = 1);
   work_in [10] = RC;                           /* Raster Koordinaten */
   vdi_handle = phys_handle;
-  v_opnvwk (work_in, &vdi_handle, work_out);   /* �ffne virtuelle Workstation */
+  v_opnvwk (work_in, &vdi_handle, work_out);   /* Öffne virtuelle Workstation */
   colors = work_out [13];                      /* Anzahl der Farben */
 
   if (vdi_handle == 0) vdi_handle = phys_handle;
@@ -217,14 +217,14 @@ GLOBAL VOID open_vwork ()
   vst_point (vdi_handle, gl_point, &i, &i, &i, &i);
 #endif
 
-  vqt_attributes (vdi_handle, work_out);       /* Globale Zeichensatzgr��en */
+  vqt_attributes (vdi_handle, work_out);       /* Globale Zeichensatzgrößen */
 
   gl_wchar = work_out [6];                     /* Werte von Zeichen holen */
   gl_hchar = work_out [7];
 } /* open_vwork */
 
 /*****************************************************************************/
-/* Schlie�e virtuelle Workstation                                            */
+/* Schließe virtuelle Workstation                                            */
 /*****************************************************************************/
 
 GLOBAL VOID close_vwork ()
@@ -238,7 +238,7 @@ GLOBAL VOID close_vwork ()
 } /* close_vwork */
 
 /*****************************************************************************/
-/* �ffne Workstation                                                         */
+/* Öffne Workstation                                                         */
 /*****************************************************************************/
 
 GLOBAL WORD open_work (device, dev_info)
@@ -261,12 +261,12 @@ DEVINFO *dev_info;
   if (device == SCREEN)
   {
     handle = phys_handle;
-    v_opnvwk (work_in, &handle, work_out); /* Virtuell �ffnen */
+    v_opnvwk (work_in, &handle, work_out); /* Virtuell öffnen */
   } /* if */
   else                                     /* Nicht Bildschirm */
   {
     work_in [11] = OW_NOCHANGE;            /* Paralleler oder serieller port */
-    v_opnwk (work_in, &handle, work_out);  /* Physikalisch �ffnen */
+    v_opnwk (work_in, &handle, work_out);  /* Physikalisch öffnen */
   } /* else */
 
   dev_info->dev_w = work_out [0] + 1L;
@@ -278,7 +278,7 @@ DEVINFO *dev_info;
 } /* open_work */
 
 /*****************************************************************************/
-/* Schlie�e Workstation                                                      */
+/* Schließe Workstation                                                      */
 /*****************************************************************************/
 
 GLOBAL VOID close_work (device, out_handle)
@@ -388,7 +388,7 @@ WORD   obj;
 UWORD  state;
 
 {
-  tree [obj].ob_state &= ~ state;       /* Status im Objekt l�schen */
+  tree [obj].ob_state &= ~ state;       /* Status im Objekt löschen */
 } /* undo_state */
 
 /*****************************************************************************/
@@ -448,7 +448,7 @@ WORD   obj;
 UWORD  flags;
 
 {
-  tree [obj].ob_flags &= ~ flags;       /* Flags im Objekt l�schen */
+  tree [obj].ob_flags &= ~ flags;       /* Flags im Objekt löschen */
 } /* undo_flags */
 
 /*****************************************************************************/
@@ -653,13 +653,13 @@ BOOLEAN calc_border;
       rect->h -= 2 * border;
     } /* if */
 
-    if (is_state (tree, obj, SHADOWED))         /* Schatten ber�cksichtigen */
+    if (is_state (tree, obj, SHADOWED))         /* Schatten berücksichtigen */
     {
       rect->w += 2 * abs (border);
       rect->h += 2 * abs (border);
     } /* if */
 
-    if (is_state (tree, obj, OUTLINED))         /* Outlined ber�cksichtigen */
+    if (is_state (tree, obj, OUTLINED))         /* Outlined berücksichtigen */
     {
       if (border >= 0)
         diff = 3;
@@ -751,7 +751,7 @@ WORD   obj;
 } /* trans_gimage */
 
 /*****************************************************************************/
-/* Default-Attribute f�r Linie setzen                                        */
+/* Default-Attribute für Linie setzen                                        */
 /*****************************************************************************/
 
 GLOBAL VOID line_default (vdi_handle)
@@ -766,7 +766,7 @@ WORD vdi_handle;
 } /* line_default */
 
 /*****************************************************************************/
-/* Default-Attribute f�r Text setzen                                         */
+/* Default-Attribute für Text setzen                                         */
 /*****************************************************************************/
 
 GLOBAL VOID text_default (vdi_handle)
@@ -989,7 +989,7 @@ BOOLEAN *ok;
   hide_mouse ();
 
   *ok = closedial (tree, grow_shrink, size, screenp, bufferp);
-  undo_state (tree, exit_obj, SELECTED);                /* Objekt wieder wei� machen */
+  undo_state (tree, exit_obj, SELECTED);                /* Objekt wieder weiß machen */
 
   return (exit_obj);           /* Objekt, mit dem Dialogbox verlassen wurde */
 } /* hndl_dial */
@@ -1169,7 +1169,7 @@ WORD   obj, blinkrate;
 {
   REG WORD i;
 
-  if ((tree != NULL) && (obj != NIL))           /* Blinken m�glich */
+  if ((tree != NULL) && (obj != NIL))           /* Blinken möglich */
     for (i = 0; i < 2 * blinkrate; i++)
     {
       objc_change (tree, obj, 0, desk.x, desk.y, desk.w, desk.h, tree [obj].ob_state ^ SELECTED, TRUE);
@@ -1210,7 +1210,7 @@ WORD    bmsk;
   xdiff = (relative ? mox : 0) - box.x;
   ydiff = (relative ? moy : 0) - box.y;
 
-  if (center_obj != NIL)                        /* Zentrum von Objekt ber�cksichtigen */
+  if (center_obj != NIL)                        /* Zentrum von Objekt berücksichtigen */
   {
     objc_rect (tree, center_obj, &r, FALSE);
 
@@ -1229,20 +1229,20 @@ WORD    bmsk;
   objp->ob_x += xdiff + x;                      /* X/Y neu setzen */
   objp->ob_y += ydiff + y;
 
-  objc_rect (tree, obj, &box, FALSE);           /* R�nder ber�cksichtigen */
+  objc_rect (tree, obj, &box, FALSE);           /* Ränder berücksichtigen */
 
-  xdiff = box.x + box.w - (desk.x + desk.w);    /* Rechts heraush�ngend ? */
+  xdiff = box.x + box.w - (desk.x + desk.w);    /* Rechts heraushängend ? */
   if (xdiff > 0) objp->ob_x -= xdiff;
 
-  ydiff = box.y + box.h - (desk.y + desk.h);    /* Unten heraush�ngend ? */
+  ydiff = box.y + box.h - (desk.y + desk.h);    /* Unten heraushängend ? */
   if (ydiff > 0) objp->ob_y -= ydiff;
 
-  objc_rect (tree, obj, &box, FALSE);           /* R�nder ber�cksichtigen */
+  objc_rect (tree, obj, &box, FALSE);           /* Ränder berücksichtigen */
 
-  xdiff = box.x - desk.x;                       /* Links heraush�ngend ? */
+  xdiff = box.x - desk.x;                       /* Links heraushängend ? */
   if (xdiff < 0) objp->ob_x -= xdiff;
 
-  ydiff = box.y - desk.y;                       /* Oben heraush�ngend ? */
+  ydiff = box.y - desk.y;                       /* Oben heraushängend ? */
   if (ydiff < 0) objp->ob_y -= ydiff;
 
   if (relative)
@@ -1252,7 +1252,7 @@ WORD    bmsk;
   } /* if */
 
   olditem   = NIL;
-  founditem = item = objc_find (tree, obj, MAX_DEPTH, mox, moy); /* In Men� ? */
+  founditem = item = objc_find (tree, obj, MAX_DEPTH, mox, moy); /* In Menü ? */
 
   if (item != NIL)
     if (is_state (tree, item, DISABLED) || ! is_flags (tree, item, SELECTABLE)) item = NIL;
@@ -1263,16 +1263,16 @@ WORD    bmsk;
   objc_draw (tree, obj, MAX_DEPTH, desk.x, desk.y, desk.w, desk.h);
 
   set_mouse (ARROW, NULL);
-  wind_update (BEG_MCTRL);                      /* Mauskontrolle �bernehmen */
+  wind_update (BEG_MCTRL);                      /* Mauskontrolle übernehmen */
 
   do
   {
-    if (founditem != NIL)                       /* In Men�eintrag */
+    if (founditem != NIL)                       /* In Menüeintrag */
     {
       leave = TRUE;
       objc_rect (tree, founditem, &r, FALSE);
     } /* if */
-    else                                        /* Au�erhalb Pop-Up-Men� */
+    else                                        /* Außerhalb Pop-Up-Menü */
     {
       leave = FALSE;
       objc_rect (tree, obj, &r, FALSE);
@@ -1286,7 +1286,7 @@ WORD    bmsk;
                         &mox, &moy, &ret, &ret, &uret, &ret);
 
 	if (objc_find (tree, obj, MAX_DEPTH, mox, moy))
-	{ /* ge�ndert: Nix tun, wenn Maus auf Hintergrundobjekt zeigt */
+	{ /* geändert: Nix tun, wenn Maus auf Hintergrundobjekt zeigt */
 	    olditem   = item;
 		 founditem = item = objc_find (tree, obj, MAX_DEPTH, mox, moy);
 		
@@ -1352,9 +1352,9 @@ WORD   *title, *item;
       {
         if (((menu [litem].ob_type & 0xFF) == G_STRING) && ! is_state (menu, litem, DISABLED))
         {
-          s = menu [litem].ob_spec.free_string;             /* Men� */
+          s = menu [litem].ob_spec.free_string;             /* Menü */
 
-          /* �nderung: rechts angeh�ngte Leerzeichen ignorieren. BD */
+          /* Änderung: rechts angehängte Leerzeichen ignorieren. BD */
           for (x = strlen (s)-1; (x >= 0) && (s [x] == SP); x--);
 			 
 			 /*if(x>0) x--;*/
@@ -1410,11 +1410,11 @@ WORD   *title, *item;
           } /* if */
         } /* if */
 
-        litem = menu [litem].ob_next;                   /* N�chster Eintrag */
+        litem = menu [litem].ob_next;                   /* Nächster Eintrag */
       } while (litem != menubox);
 
-      menubox = menu [menubox].ob_next;                 /* N�chstes Drop-Down-Men� */
-      ltitle  = menu [ltitle].ob_next;                  /* N�chster Titel */
+      menubox = menu [menubox].ob_next;                 /* Nächstes Drop-Down-Menü */
+      ltitle  = menu [ltitle].ob_next;                  /* Nächster Titel */
     } while (ltitle != THEACTIVE);
   } /* if */
 
@@ -1685,7 +1685,7 @@ CONST RECT *size;
   if (size == NULL)
     rc_copy (&desk, &r);                /* Nichts definiert, nimm Desktop */
   else
-    rc_copy (size, &r);                 /* Benutze definierte Gr��e */
+    rc_copy (size, &r);                 /* Benutze definierte Größe */
 
   rc_copy (&r, &clip);                  /* Rette aktuelle Werte */
 
@@ -2386,17 +2386,17 @@ BYTE *name, *path, *suffix, *label, *filename;
   Super ((VOID *)stack);
 #endif
 
-  if ((path != NULL) && (*path))        /* Pfad �ndern */
+  if ((path != NULL) && (*path))        /* Pfad ändern */
     strcpy (fs_path, path);
 
-  if (suffix != NULL)                   /* Suffix �ndern */
+  if (suffix != NULL)                   /* Suffix ändern */
   {
     p = strrchr (fs_path, PATHSEP);
-    if (p != NULL) p [1] = EOS;         /* Suffix l�schen */
+    if (p != NULL) p [1] = EOS;         /* Suffix löschen */
     strcat (fs_path, suffix);
   } /* if */
 
-  if (name != NULL)                     /* Name �ndern */
+  if (name != NULL)                     /* Name ändern */
   {
     strncpy (fs_sel, name, 12);         /* Default-Name */
     fs_sel [12] = EOS;
@@ -2419,24 +2419,24 @@ BYTE *name, *path, *suffix, *label, *filename;
   p = strrchr (s, PATHSEP);
   if (p != NULL) p [1] = EOS;
 
-  if (*fs_sel)                          /* Dateinamen gew�hlt */
+  if (*fs_sel)                          /* Dateinamen gewählt */
   {
     strcpy (filename, s);
     strcat (filename, fs_sel);
   } /* if */
   else
-    filename [0] = EOS;                 /* Keinen Dateinamen gew�hlt */
+    filename [0] = EOS;                 /* Keinen Dateinamen gewählt */
 
   if (fs_button != 0)
   {
-    if ((path != NULL) && (*path))      /* Pfad �ndern */
+    if ((path != NULL) && (*path))      /* Pfad ändern */
       strcpy (path, fs_path);
 
-    if ((name != NULL) && (*name) && (*fs_sel)) /* Name �ndern */
+    if ((name != NULL) && (*name) && (*fs_sel)) /* Name ändern */
       strcpy (name, fs_sel);
   } /* if */
 
-  return (*fs_sel && (fs_button != 0)); /* Dateiname und OK gew�hlt */
+  return (*fs_sel && (fs_button != 0)); /* Dateiname und OK gewählt */
 } /* select_file */
 
 /*****************************************************************************/
@@ -2481,14 +2481,14 @@ WORD class;
   phys_handle = graf_handle (&gl_wbox, &gl_hbox, &gl_wattr, &gl_hattr); /* Handle des Bildschirms */
   vdi_handle  = phys_handle;              /* Benutze physikalischen Bildschirm */
 
-  open_vwork ();                          /* Workstation �ffnen */
+  open_vwork ();                          /* Workstation öffnen */
 
   vst_font (vdi_handle, FONT_SYSTEM);
 
   for (gl_point = 8; gl_point <= 10; gl_point++)
   {
     vst_point (vdi_handle, i, &char_width, &char_height, &cell_width, &cell_height);
-    if (cell_height == gl_hbox) break;    /* Punktgr��e des System Fonts */
+    if (cell_height == gl_hbox) break;    /* Punktgröße des System Fonts */
   } /* for */
 
 #if GEM & (GEM2 | GEM3 | XGEM)            /* wegen TT */
@@ -2505,21 +2505,21 @@ WORD class;
     } /* for, if */
 #endif
 
-  wind_get (DESK, WF_WXYWH, &desk.x, &desk.y, &desk.w, &desk.h);        /* Gr��e des Desktop */
+  wind_get (DESK, WF_WXYWH, &desk.x, &desk.y, &desk.w, &desk.h);        /* Größe des Desktop */
 
   hidden        = 0;                      /* Maus ist da */
-  busy          = 0;                      /* Maus ist nicht gesch�ftig */
+  busy          = 0;                      /* Maus ist nicht geschäftig */
   mousenumber   = ARROW;                  /* Aktuelle Mausform-Nummer */
   mouseform     = NULL;                   /* Aktuelle Mausform */
-  done          = FALSE;                  /* "Ende" wurde nicht gew�hlt */
+  done          = FALSE;                  /* "Ende" wurde nicht gewählt */
   ring_bell     = TRUE;                   /* Glocke eingeschaltet */
   grow_shrink   = TRUE;                   /* Grow/Shrink-Modus eingeschaltet */
   blinkrate     = DEFAULTRATE;            /* Anfangsblinkrate */
-  updtmenu      = TRUE;                   /* Men�s immer auf neuen Stand bringen */
+  updtmenu      = TRUE;                   /* Menüs immer auf neuen Stand bringen */
   cmd [0]       = EOS;                    /* Kein Kommando */
   tail [0]      = EOS;                    /* Keine Kommandozeile */
   called_by [0] = EOS;                    /* Eventuell kein aufrufendes Programm */
-  menu          = NULL;                   /* Noch keine Men�zeile */
+  menu          = NULL;                   /* Noch keine Menüzeile */
   about         = NULL;                   /* Noch keine About-Box */
   desktop       = NULL;                   /* Noch kein eigener Desktop */
   freetext      = NULL;                   /* Noch keine freien Texte */
@@ -2527,11 +2527,11 @@ WORD class;
 
   act_drv = Dgetdrv ();                   /* Aktuelles Laufwerk holen */
   strcpy (act_path, "A:");
-  act_path [0] += (BYTE)act_drv;          /* Aktuelles Laufwerk hinzuf�gen */
+  act_path [0] += (BYTE)act_drv;          /* Aktuelles Laufwerk hinzufügen */
   get_path (act_path + 2, 0);             /* Aktuellen Pfad holen */
 
 #if FLEXOS
-  str_upper (act_path);                   /* Aktueller Pfad nicht immer gro� */
+  str_upper (act_path);                   /* Aktueller Pfad nicht immer groß */
 #endif
 
   strcpy (fs_path, "A:\\*.*");            /* Standard-Zugriffspfad */
@@ -2540,19 +2540,19 @@ WORD class;
 
   for (i = 1; i < argc; i++)              /* Programm mit Pexec aufgerufen */
   {
-    strcat (tail, argv [i]);              /* F�ge Parameter zusammen */
+    strcat (tail, argv [i]);              /* Füge Parameter zusammen */
     strcat (tail, " ");
   } /* for */
 
-  if (*tail) tail [strlen (tail) - 1] = EOS; /* Letztes Leerzeichen l�schen */
+  if (*tail) tail [strlen (tail) - 1] = EOS; /* Letztes Leerzeichen löschen */
 
   shel_read (cmd, s);                     /* Kommando holen */
 
-  s [s [0] + 1] = EOS;                    /* L�sche '\r' */
+  s [s [0] + 1] = EOS;                    /* Lösche '\r' */
 
   if (*tail == EOS) strcpy (tail, s + 1); /* Programm mit shel_write aufgerufen */
 
-  str_upper (tail);                       /* Parameter immer in Gro�schrift */
+  str_upper (tail);                       /* Parameter immer in Großschrift */
 
   p = strrchr (tail, PROGSEP);
 
@@ -2590,7 +2590,7 @@ WORD class;
 
   if (deskacc)
   {
-    menu_id    = (acc_menu == NULL) ? FAILURE : menu_register (gl_apid, acc_menu); /* Accesory-Men� */
+    menu_id    = (acc_menu == NULL) ? FAILURE : menu_register (gl_apid, acc_menu); /* Accesory-Menü */
     class_desk = DESKWINDOW;                    /* Desktop im Fenster */
 
     if (menu_id < 0)
@@ -2598,7 +2598,7 @@ WORD class;
   } /* if */
   else
   {
-    menu_id    = FAILURE;                       /* Kein Accesoory-Men� */
+    menu_id    = FAILURE;                       /* Kein Accesoory-Menü */
     class_desk = class;                         /* Desktop-Klasse */
   } /* else */
 
@@ -2654,7 +2654,7 @@ WORD class;
     if (! ok)
     {
       *scrapdir = EOS;
-      scrp_write (scrapdir);                    /* Kein Scrap-Directory m�glich */
+      scrp_write (scrapdir);                    /* Kein Scrap-Directory möglich */
     } /* if */
   } /* if */
 
@@ -2670,7 +2670,7 @@ GLOBAL BOOLEAN term_global ()
 {
   if (gl_apid >= 0)
   {
-    close_vwork ();                     /* Workstation schlie�en */
+    close_vwork ();                     /* Workstation schließen */
     appl_exit ();                       /* Applikation beenden */
   } /* if */
 

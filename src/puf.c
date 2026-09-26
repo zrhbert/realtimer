@@ -2,7 +2,7 @@
 /*                                                                           */
 /* Modul: PUF.C                                                              */
 /*                                                                           */
-/* Puffersequencer f�r RTM                                                   */
+/* Puffersequencer für RTM                                                   */
 /*                                                                           */
 /*****************************************************************************/
 #define PUFVERSION "V 1.12"
@@ -21,7 +21,7 @@ V 1.11 18.11.94
 - OUTPUT FALSE
 - ret in send_event beseitigt
 V 1.10 23.07.94
-- Window-Breite und H�he standardm��ig kleiner
+- Window-Breite und Höhe standardmäßig kleiner
 V 1.09 15.07.94
 - load_create_infos und instance_count eingebaut
 - storing of Koordinates in VAR
@@ -30,9 +30,9 @@ V 1.09 15.07.94
 V 1.08
 - mem_free ausgebaut in destroy_mod
 - MIDI-Ausgabe angeschaltet
-- MS-Namen auf TRA ge�ndert
+- MS-Namen auf TRA geändert
 - Update-Zeit-Messung eingebaut
-- PUFEVP in REALTSPC.H ausgelagert, wg. PUF-BIG �bertragung
+- PUFEVP in REALTSPC.H ausgelagert, wg. PUF-BIG Übertragung
 - Bug in Window-Timer beseitigt
 V 1.07
 - ifdef TEST eingebaut
@@ -43,7 +43,7 @@ V 1.06
 - play_task_puf erweitert auf Flags-Verwendung
 - try_all_connect eingebaut
 V 1.05
-- MODULE_OTHER f�r setup
+- MODULE_OTHER für setup
 - Umbau auf Modul-Zeiger im status
 - destroy_mod eingebaut
 - Umbau auf create_window_obj
@@ -57,12 +57,12 @@ V 1.02
 - Aufnahmeverhinderung bei Header-Event
 - Midi-Ausgabe repariert
 V 1.01
-- doppelte add_rcv f�r VAR_SET_REC entfernt
+- doppelte add_rcv für VAR_SET_REC entfernt
 - erlauben von Spur 1 .. 64 bei Midi-Out
 V 1.00, 17.04.93
 - Synchronisation an/aus eingebaut
 - Midi-Ausgabe auf Midi-Share eingebaut
-- Ber�cksichtigung von CMI Port und Channel
+- Berücksichtigung von CMI Port und Channel
 - note_off in status eingesetzt
 - Fehler in send_messages() beseitigt
 *****************************************************************************/
@@ -107,13 +107,13 @@ V 1.00, 17.04.93
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                 /* X-Faktor */
 #define YFAC   gl_hbox                 /* Y-Faktor */
-#define XUNITS 1                       /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                       /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                       /* X-Einheiten für Scrolling */
+#define YUNITS 1                       /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)          /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)          /* Y-Anfangsposition */
 #define INITW  (20 * gl_wbox)          /* Anfangsbreite in Pixel */
-#define INITH  (10 * gl_hbox)          /* Anfangsh�he in Pixel */
-#define MILLI  0								/* Millisekunden f�r Zeitablauf */
+#define INITH  (10 * gl_hbox)          /* Anfangshöhe in Pixel */
+#define MILLI  0								/* Millisekunden für Zeitablauf */
 #define PUF_RSC_NAME "PUF_MOD.RSC"		/* Name der Resource-Datei */
 #define MAXSETUPS 20l						/* Anzahl der PUF-Setups */
 enum REIHENFOLGE {RSIGNALE, RKOOR};		/* Anzeige-Reihenfolge */
@@ -131,7 +131,7 @@ typedef	struct status *STAT_P;
 
 typedef	struct status
 {
-	UINT	play			: 1	;	/* PLAY gedr�ckt */
+	UINT	play			: 1	;	/* PLAY gedrückt */
 	UINT	record		: 1	;	/* RTM Record an/aus */
 	UINT	puf_record	: 1	;	/* PUF Record an/aus */
 	UINT	cycle			: 1	;	/* Cycle-Modus an/aus*/
@@ -143,24 +143,24 @@ typedef	struct status
 	BOOLEAN	new;					/* Koordinaten neu ausgeben */
 	BOOLEAN	zeitl;				/* Zeitlupe */
 	BOOLEAN	pause;				/* Pause: Sequencer anhalten */
-	PUFEVP	header;				/* Kopf f�r Event-Liste */
+	PUFEVP	header;				/* Kopf für Event-Liste */
 	PUFEVP	locator[10];		/* Locators */
 	ULONG		max_events;			/* Maximale Event-Anzahl */
-	PUF_INF		tmp_event;		/* Tempor�rer Event f�r play_task */
+	PUF_INF		tmp_event;		/* Temporärer Event für play_task */
 	KOOR_ALL		tmp_koors;		/*     "      Koordinaten */	
 	TRACK_ALL	tmp_tracks;		/*     "      Tracks */
 	VOL_ALL		tmp_vols;		/*     "      BIG-Volumes */
 	TFilter	filter;				/* Midi-In-Filter	*/
-	RTMCLASSP	manmodule,		/* Zugeh�riges MAN-Modul */
-					tramodule,		/* Zugeh�riges TRA-Modul */
-					varmodule;		/* Zugeh�riges VAR-Modul */
-	PUFEVP		events_p;		/* Merker f�r Speicherfreigabe */
-	KOOR_ALL		*koors_p;		/* Merker f�r Speicherfreigabe */	
-	TRACK_ALL	*tracks_p;		/* Merker f�r Speicherfreigabe */
-	VOL_ALL		*vols_p;			/* Merker f�r Speicherfreigabe */
+	RTMCLASSP	manmodule,		/* Zugehöriges MAN-Modul */
+					tramodule,		/* Zugehöriges TRA-Modul */
+					varmodule;		/* Zugehöriges VAR-Modul */
+	PUFEVP		events_p;		/* Merker für Speicherfreigabe */
+	KOOR_ALL		*koors_p;		/* Merker für Speicherfreigabe */	
+	TRACK_ALL	*tracks_p;		/* Merker für Speicherfreigabe */
+	VOL_ALL		*vols_p;			/* Merker für Speicherfreigabe */
 	clock_t		start_cl,		/* Messung: Interrupt-Start */
  					stop_cl,			/* 			Interrupt-Ende */
-					last_update;	/* Messung f�r Intervalldauer f�r Fenster-Update */
+					last_update;	/* Messung für Intervalldauer für Fenster-Update */
 } STATUS;
 
 typedef	struct setup
@@ -173,14 +173,14 @@ typedef	struct setup
 	BOOLEAN	rec_vol[MAXSIGNALS];		/* Aufnahme Volume */
 	BOOLEAN	rec_dub[MAXSIGNALS];		/* Overdub-Modus */
 	/* Anzeige-Parameter */
-	BOOLEAN	anz_an[MAXSIGNALS];	/* Anzeige f�r Signal x an*/
+	BOOLEAN	anz_an[MAXSIGNALS];	/* Anzeige für Signal x an*/
 	BOOLEAN	anz_x;					/* Anzeige X-Koordinaten*/
 	BOOLEAN	anz_y;					/* Anzeige Y-Koordinaten*/
 	BOOLEAN	anz_z;					/* Anzeige Z-Koordinaten*/
 	BOOLEAN	anz_vol;					/* Anzeige Volume */
 	BOOLEAN	ausgabe[MAXSIGNALS];	/* Ausgabe */
 	WORD		breite;					/* Breite eines Events */
-	WORD		hoehe;					/* H�he eines Feldes */
+	WORD		hoehe;					/* Höhe eines Feldes */
 	WORD		reihenfolge;			/* nach Koordinaten oder nach Signalen sortiert */
 } SETUP;
 
@@ -188,13 +188,13 @@ typedef struct setup *SET_P;
 
 /*
 PUF-Events liegen als zyklische, doppelt verkettete Liste mit Kopf
-im Speicher. Jeder Event tr�gt einen Zeiger auf den n�chsten und
+im Speicher. Jeder Event trägt einen Zeiger auf den nächsten und
 den vorherigen Event. Der Kopf zeigt auf den ersten Ev.. Der letzte
 Ev. zeigt wieder auf den Kopf.
 */
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	puf_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*puf_rsc_ptr = &puf_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	puf_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*puf_rsc_ptr = &puf_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *puf_setup;
 PRIVATE OBJECT *puf_shelp;
 PRIVATE OBJECT *puf_help;
@@ -205,7 +205,7 @@ PRIVATE OBJECT *puf_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "PUF";		/* Name, f�r Extension etc. */
+PRIVATE CONST STRING module_name = "PUF";		/* Name, für Extension etc. */
 
 PRIVATE RTMCLASSP	modulep[MAXMSAPPLS];			/* Zeiger auf Modul-Strukturen */
 /* +1: instance_count is 1-based here (see init_midishare/destroy_mod), so
@@ -345,7 +345,7 @@ PRIVATE VOID InstallFilter (SHORT refNum)
 
 	for (i = 0; i<256; i++)
 	{ 										
-		AcceptBit(filter->evType,i);		/* accepte tous les types d'�v�nements	*/
+		AcceptBit(filter->evType,i);		/* accepte tous les types d'événements	*/
 		AcceptBit(filter->port,i);		/* en provenance de tous les ports		*/
 	} /* for */
 											
@@ -361,7 +361,7 @@ PRIVATE	VOID start_record (RTMCLASSP module)
 	SHORT			refNum = (SHORT)module->special;
 	
 	rtm_pos(refNum, 0L);
-	send_variable(VAR_RECORD, TRUE);		/* RECORD  f�r alle Module */
+	send_variable(VAR_RECORD, TRUE);		/* RECORD  für alle Module */
 } /* start_record */
 
 /*****************************************************************************/
@@ -393,7 +393,7 @@ PRIVATE PUFEVP insert_ev_puf(PUFEVP location)
 
 PUBLIC VOID CDECL delayed_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
 {
-	/* Wird aufgerufen, um nicht Echtzeitf�hige Funktionen auszuf�hren */
+	/* Wird aufgerufen, um nicht Echtzeitfähige Funktionen auszuführen */
 	RTMCLASSP	module 	= modulep[refNum];
 	WORD action = (WORD)a1;
 
@@ -442,24 +442,24 @@ PUBLIC VOID CDECL play_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 
 	if (refNum > 0 && status->play)
 	{
-		window->milli = 1; /* So bald wie m�glich updaten */
+		window->milli = 1; /* So bald wie möglich updaten */
 	
 		/* Wenn weiterhin aufgenommen/gespielt werden soll, 
-			mu� der Task wieder eingeklinkt werden */
+			muß der Task wieder eingeklinkt werden */
 		if (status->play)
 		{
-			/* Vor dem n�chsten apply die Daten berechnen */
+			/* Vor dem nächsten apply die Daten berechnen */
 			myTask = MidiDTask(delayed_task_puf, MidiGetTime() + QUANT/2, refNum, (LONG)PUFDTaskPrecalc, 0, 0);
 			myTask = MidiTask(play_task_puf, MidiGetTime() + QUANT, refNum, 0, 0, 0);
 		} /* if play */
 		
-		/* Zeit weiterz�hlen */
+		/* Zeit weiterzählen */
 		status->posit += QUANT;
 
 		/* Die aktuellen Koordinaten feststellen */
 		location = locator[0];
 		
-		/* Zeiger auf n�chsten Event setzen */
+		/* Zeiger auf nächsten Event setzen */
 		if (location->next == header)
 		{
 			/* Kein Event mehr frei, evtl. vorne anfangen ... */
@@ -472,7 +472,7 @@ PUBLIC VOID CDECL play_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 		} /* if */
 		else
 		{
-			/* Sonst: Locator auf n�chsten Event setzen */
+			/* Sonst: Locator auf nächsten Event setzen */
 			locator[0] = location->next;	
 		} /* else */
 		
@@ -482,14 +482,14 @@ PUBLIC VOID CDECL play_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 		etrack	= event->tracks->track;
 		evolume	= event->volumes->volume;
 
-		/* Zeiger auf tempor�ren Event setzen */
+		/* Zeiger auf temporären Event setzen */
 		/* Zeiger setzen */		
 		koor		= tmp->koors->koor;
 		track 	= tmp->tracks->track;
 		volume	= tmp->volumes->volume;
 		
 			
-		/* Tempor�ren Event aufbauen */
+		/* Temporären Event aufbauen */
 		for (signal = 0; signal < MAXSIGNALS; signal++)
 		{
 			/* Soll dieses Signal aufgenommen werden ? */
@@ -517,7 +517,7 @@ PUBLIC VOID CDECL play_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 		
 		if (man>0)					/* MAN-Modul vorhanden ? */
 			if (man->apply >0)	/* MAN apply-Funktion da? */
-				tmp = man->apply(man, tmp);	/* Werte werden ver�ndert */
+				tmp = man->apply(man, tmp);	/* Werte werden verändert */
 
 		if (location != header)
 		{
@@ -608,7 +608,7 @@ GLOBAL EVENT_INFO *get_event_puf(RTMCLASSP module, LONG smpte, EVENT_INFO *event
 	
 	*event->koor_0 = pevent->koors->koor[track];		/* Daten hineinkopieren */
 	*event->koor_1 = pevent->koors->koor[track+1];	/* Daten hineinkopieren */
-	return (event);	/* Zeiger auf den Event zur�ckgeben */
+	return (event);	/* Zeiger auf den Event zurückgeben */
 } /* get_event_puf */
 
 GLOBAL BOOLEAN set_event_puf (RTMCLASSP module, LONG smpte, EVENT_INFO *event)
@@ -622,12 +622,12 @@ GLOBAL BOOLEAN set_event_puf (RTMCLASSP module, LONG smpte, EVENT_INFO *event)
 	
 	if (location != status->header)
 	{
-		pevent->koors->koor[track]		= *event->koor_0; /* Koordinaten �bernehmen */
-		pevent->koors->koor[track+1]	= *event->koor_1; /* Koordinaten �bernehmen */
+		pevent->koors->koor[track]		= *event->koor_0; /* Koordinaten übernehmen */
+		pevent->koors->koor[track+1]	= *event->koor_1; /* Koordinaten übernehmen */
 		return (TRUE);		/* Hat geklappt! */
 	} /* if */
 	else
-		return (FALSE);	/* Kein Event vorhanden f�r diesen Zeitpunkt */
+		return (FALSE);	/* Kein Event vorhanden für diesen Zeitpunkt */
 } /* set_event_puf */
 #endif
 
@@ -642,7 +642,7 @@ PUBLIC VOID		reset	(RTMCLASSP module)
 	RTMCLASSP man = module->status->manmodule;
 	STAT_P	status = module->status;
 #if 0 /* Disabled reset code */
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 	if (man>0)					/* MAN-Modul vorhanden ? */
 		if (man->reset >0)	/* MAN reset-Funktion da? */
 			(man->reset)(man);
@@ -736,7 +736,7 @@ PRIVATE BOOLEAN midi_out_puf (RTMCLASSP module, PUF_INF *akt, PUF_INF *alt, BOOL
 	UWORD 		signal;
 	KOOR_SINGLE *akt_s, *alt_s;
 	POINT_3D		*akt_p, *alt_p;			/* XYZ-Wert eines Signals */
-	UBYTE 		trackbase;					/* Basiswert f�r Key-Berechnung */
+	UBYTE 		trackbase;					/* Basiswert für Key-Berechnung */
 	BOOLEAN		xneu = FALSE,				/* X, Y, Z, Vol-Koordinate schicken */
 					yneu = FALSE,
 					zneu = FALSE,
@@ -769,7 +769,7 @@ PRIVATE BOOLEAN midi_out_puf (RTMCLASSP module, PUF_INF *akt, PUF_INF *alt, BOOL
 
 			if (status->new || (track != alt->tracks->track[signal]))
 			{
-				/* Wenn sich Spur ge�ndert hat, alles neu schicken */
+				/* Wenn sich Spur geändert hat, alles neu schicken */
 				xneu |= TRUE;
 				yneu |= TRUE;
 				zneu |= TRUE;
@@ -791,21 +791,21 @@ PRIVATE BOOLEAN midi_out_puf (RTMCLASSP module, PUF_INF *akt, PUF_INF *alt, BOOL
 				if (signal>0) ret &= send_event (module, trackbase, INTERN_TO_MIDI(akt_p->x));
 				send_variable(VAR_PUF_KOORX0 + signal, akt_p->x);
 			} /* if */
-			trackbase++;						/* n�chste Koor */
+			trackbase++;						/* nächste Koor */
 			
 			if (yneu)
 			{
 				if (signal>0) ret &= send_event (module, trackbase, INTERN_TO_MIDI(akt_p->y));
 				send_variable(VAR_PUF_KOORY0 + signal, akt_p->y);
 			} /* if */
-			trackbase++;						/* n�chste Koor */
+			trackbase++;						/* nächste Koor */
 
 			if (zneu)
 			{
 				if (signal>0) ret &= send_event (module, trackbase, INTERN_TO_MIDI(akt_p->z));
 				send_variable(VAR_PUF_KOORZ0 + signal, akt_p->z);
 			} /* if */
-			trackbase++;						/* n�chste Koor */
+			trackbase++;						/* nächste Koor */
 			
 			if (vneu)
 			{
@@ -871,7 +871,7 @@ PRIVATE BOOLEAN	send_event (RTMCLASSP module, INT miditrack, INT vel)
 			/* Ausgabe auf das zweite CMI-System */
 			channel	= var_get_value (var_module, VAR_CMI_CHANNEL2);
 			port		= var_get_value (var_module, VAR_CMI_PORT2);
-			/* Spur zur�ckrechnen (33..64->1..32) */
+			/* Spur zurückrechnen (33..64->1..32) */
 			miditrack	-= 128;
 		} /* else */
 		
@@ -1380,7 +1380,7 @@ WINDOWP window;
 } /* wi_draw_mod */
 
 /*****************************************************************************/
-/* Zeitablauf f�r Fenster                                                    */
+/* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -1392,7 +1392,7 @@ WINDOWP window;
 	
 /* BD 2012_01_21: Midi blockieren*/
 #if false
-	/* Max. einen Event ausf�hren */
+	/* Max. einen Event ausführen */
 	numtasks = MidiCountDTasks(refNum);
 	if (numtasks > 0)
 	{
@@ -1404,7 +1404,7 @@ WINDOWP window;
 #endif
 
 
-	/* Alle Delayed-Tasks ausf�hren */
+	/* Alle Delayed-Tasks ausführen */
 #if false
     for (numtasks = MidiCountDTasks (refNum); numtasks > 0; numtasks--)
 	{
@@ -1472,11 +1472,11 @@ WORD   icon;
 		sprintf (window->info, puf_text [FPUFI].ob_spec.free_string, 0);
 	} /* if */
 	
-	return (window);                      /* Fenster zur�ckgeben */
+	return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -1627,7 +1627,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Pr�fen, ob DEFAULT-Datei vorhanden */
+		/* Prüfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -1641,7 +1641,7 @@ PRIVATE	RTMCLASSP create ()
 		status->play = FALSE;
 		status->note_off = FALSE;
 
-		/* Tempor�rer Event */
+		/* Temporärer Event */
 		status->tmp_event.koors 	= &status->tmp_koors;
 		status->tmp_event.tracks	= &status->tmp_tracks;
 		status->tmp_event.volumes	= &status->tmp_vols;
@@ -1679,7 +1679,7 @@ PRIVATE	RTMCLASSP create ()
 } /* create */
 
 /*****************************************************************************/
-/* L�sche Objekt                                                            */
+/* Lösche Objekt                                                            */
 /*****************************************************************************/
 PUBLIC VOID destroy_mod (module)
 RTMCLASSP module;
@@ -1735,8 +1735,8 @@ RTMCLASSP module;
 
 PRIVATE SHORT init_midishare ()
 {
-	/* Meldet ein neues Modul bei MidiShare an und gibt die refNum zur�ck */
-	SHORT		refNum = 0;			/* tempor�re Referenznummer */
+	/* Meldet ein neues Modul bei MidiShare an und gibt die refNum zurück */
+	SHORT		refNum = 0;			/* temporäre Referenznummer */
 	STRING	s;
 	
 	if (msh_available)
@@ -1751,24 +1751,24 @@ PRIVATE SHORT init_midishare ()
 					sprintf (s, "PUF %d", instance_count + 1);
 				refNum = MidiGetNamedAppl(s); /* Alte Applikation schliessen */
 				if (refNum > 0) MidiClose(refNum);
-				refNum = MidiOpen(s);				/* Applikation f�r MidiShare �ffnen	*/
+				refNum = MidiOpen(s);				/* Applikation für MidiShare öffnen	*/
 			} /* if */
 		} /* if */
 	
 		if (refNum == 0)
 			 hndl_alert (ERR_NOMIDISHARE);
 	
-		if (refNum == MIDIerrSpace)			/* Pr�fen genug Platz war */
+		if (refNum == MIDIerrSpace)			/* Prüfen genug Platz war */
 		{
 			 hndl_alert (ERR_MIDISHAREFULL);
 		} /* if */
 	
-		if (refNum > 0)							/* Pr�fen ob alles klar */
+		if (refNum > 0)							/* Prüfen ob alles klar */
 		{
 			instance_count++;
-			refNums[min(instance_count, max_instances)] = refNum;				/* Merken f�r term_mod */
+			refNums[min(instance_count, max_instances)] = refNum;				/* Merken für term_mod */
 			MidiSetRcvAlarm(refNum, receive_evts_puf);	/* Interrupt-Handler */		
-			/* An alle anschlie�en */
+			/* An alle anschließen */
 			try_all_connect (refNum);
 		} /* if */
 	} /* if */
@@ -1836,7 +1836,7 @@ PRIVATE VOID init_events (RTMCLASSP module)
 	STRING		s;
 	BOOL			ok = FALSE;
 
-	/* Die H�lfte des Speichers reservieren */
+	/* Die Hälfte des Speichers reservieren */
 	event_size = sizeof(PUFEVENT)
 						+sizeof(KOOR_ALL)
 						+sizeof(TRACK_ALL)
@@ -1863,7 +1863,7 @@ PRIVATE VOID init_events (RTMCLASSP module)
 		tracks	= (TRACK_ALL*) mem_alloc((max_events + 1) * sizeof(TRACK_ALL));
 		volumes	= (VOL_ALL*) mem_alloc((max_events + 1) * sizeof(VOL_ALL));
 
-		/* Pr�fen ob Allozieren geklappt hat */
+		/* Prüfen ob Allozieren geklappt hat */
 		if(!header || !koors || !tracks || !volumes)
 		{
 			/* Alles wieder freigeben, wenn nicht ok. */
@@ -1871,14 +1871,14 @@ PRIVATE VOID init_events (RTMCLASSP module)
 			mem_free (koors);
 			mem_free (tracks);
 			mem_free (volumes);
-			/* Kleineres St�ck probieren */
+			/* Kleineres Stück probieren */
 			max_events /= 2;
 		}
 		else
 			ok = TRUE;
 	} while (!ok);
 
-	/* Speicheradressen merken f�r mem_free() in destroy */
+	/* Speicheradressen merken für mem_free() in destroy */
 	status->events_p	= header;
 	status->koors_p	= koors;
 	status->tracks_p	= tracks;
@@ -1892,12 +1892,12 @@ PRIVATE VOID init_events (RTMCLASSP module)
 	/* Header Initialisieren */
 	header->next = header;
 	header->prev = header;
-	header->event.koors	= &koors[0];	/* Zeiger auf zugeh�rigen KOOR_ALL Block */
-	header->event.tracks	= &tracks[0];	/* Zeiger auf zugeh�rigen TRACK_ALL Block */
-	header->event.volumes	= &volumes[0];	/* Zeiger auf zugeh�rigen VOL_ALL Block */
+	header->event.koors	= &koors[0];	/* Zeiger auf zugehörigen KOOR_ALL Block */
+	header->event.tracks	= &tracks[0];	/* Zeiger auf zugehörigen TRACK_ALL Block */
+	header->event.volumes	= &volumes[0];	/* Zeiger auf zugehörigen VOL_ALL Block */
 #endif
 
-	/* Array reservieren f�r zehn Locator */
+	/* Array reservieren für zehn Locator */
 	locator = (PUFEVP *) mem_alloc(10 * sizeof(PUFEVP));
 	
 	for (x = 0; x < 10; x++)
@@ -1916,9 +1916,9 @@ PRIVATE VOID init_events (RTMCLASSP module)
 #else
 		event++;
 		location = &header[event];					/* Zeiger auf diesen Event holen */
-		location->event.koors	= &koors[event];	/* Zeiger auf zugeh�rigen KOOR_ALL Block */
-		location->event.tracks	= &tracks[event];	/* Zeiger auf zugeh�rigen TRACK_ALL Block */
-		location->event.volumes	= &volumes[event];	/* Zeiger auf zugeh�rigen VOL_ALL Block */
+		location->event.koors	= &koors[event];	/* Zeiger auf zugehörigen KOOR_ALL Block */
+		location->event.tracks	= &tracks[event];	/* Zeiger auf zugehörigen TRACK_ALL Block */
+		location->event.volumes	= &volumes[event];	/* Zeiger auf zugehörigen VOL_ALL Block */
 #endif
 		if (location)
 		{
@@ -1931,8 +1931,8 @@ PRIVATE VOID init_events (RTMCLASSP module)
 	} /* while */
 	set_daktstat(100);
 	status->max_events	= event;
-	status->header			= header;		/* Zeiger auf Header-Event �bernehmen */
-	*status->locator		= *locator;		/* Zeiger auf Locator-Array �bernehmen */
+	status->header			= header;		/* Zeiger auf Header-Event übernehmen */
+	*status->locator		= *locator;		/* Zeiger auf Locator-Array übernehmen */
 	close_daktstat();
 } /* init_events */
 
@@ -1942,12 +1942,12 @@ PRIVATE PUFEVP CreateEvent ()
 	BOOL		ok;
 	
 	event = new(PUFEVENT);
-	event->event.koors	= new(KOOR_ALL);		/* Speicher f�r KOOR_ALL anfordern */
-	event->event.tracks	= new(TRACK_ALL);		/* Speicher f�r KOOR_ALL anfordern */
-	event->event.volumes	= new(VOL_ALL);		/* Speicher f�r KOOR_ALL anfordern */
+	event->event.koors	= new(KOOR_ALL);		/* Speicher für KOOR_ALL anfordern */
+	event->event.tracks	= new(TRACK_ALL);		/* Speicher für KOOR_ALL anfordern */
+	event->event.volumes	= new(VOL_ALL);		/* Speicher für KOOR_ALL anfordern */
 	event->next = event;
 	event->prev = event;
-	/* Pr�fen ob alles geklappt hat */
+	/* Prüfen ob alles geklappt hat */
 	ok = event && 
 			event->event.koors &&
 			event->event.tracks &&
@@ -2020,7 +2020,7 @@ PRIVATE PUFEVP PrevEvent (PUFEVP event)
 } /* PrevEvent */
 
 /*****************************************************************************/
-/* RSC �ffnen                                                      		     */
+/* RSC öffnen                                                      		     */
 /*****************************************************************************/
 
 PRIVATE BOOLEAN init_rsc ()
@@ -2045,7 +2045,7 @@ PRIVATE BOOLEAN init_rsc ()
   puf_shelp = (OBJECT *)rs_trindex [PUF_SHELP];	/* Adresse der PUF-Setup-Hilfe */
   puf_help  = (OBJECT *)rs_trindex [PUF_HELP];	/* Adresse der PUF-Hilfe (allg)*/
   puf_desk  = (OBJECT *)rs_trindex [PUF_DESK];	/* Adresse des PUF-Desktops */
-  puf_menu  = (OBJECT *)rs_trindex [PUF_MENU];  /* Adresse der PUF-Men�zeile */
+  puf_menu  = (OBJECT *)rs_trindex [PUF_MENU];  /* Adresse der PUF-Menüzeile */
   puf_text  = (OBJECT *)rs_trindex [PUF_TEXT];  /* Adresse der PUF-Texte */
   puf_info 	= (OBJECT *)rs_trindex [PUF_INFO];	/* Adresse der PUF-Info-Anzeige */
 #else
@@ -2064,7 +2064,7 @@ PRIVATE BOOLEAN init_rsc ()
     while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
-  rs_gaddr (puf_rsc_ptr, R_TREE,  PUF_MENU,	&puf_menu);    /* Adresse des PUF-Men�s */
+  rs_gaddr (puf_rsc_ptr, R_TREE,  PUF_MENU,	&puf_menu);    /* Adresse des PUF-Menüs */
   rs_gaddr (puf_rsc_ptr, R_TREE,  PUF_SETUP,	&puf_setup);   /* Adresse der PUF-Setup-Box */
   rs_gaddr (puf_rsc_ptr, R_TREE,  PUF_SHELP,	&puf_shelp);   /* Adresse der PUF-Setup-Hilfe */
   rs_gaddr (puf_rsc_ptr, R_TREE,  PUF_HELP,	&puf_help);    /* Adresse der PUF-Hilfe */

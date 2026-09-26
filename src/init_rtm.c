@@ -3,7 +3,7 @@
 /* Modul: INIT_RTM.C                                                         */
 /* Datum: 04.03.95                                                           */
 /*                                                                           */
-/* Objekt-Initialisierung f�r Realtimer                                      */
+/* Objekt-Initialisierung für Realtimer                                      */
 /*                                                                           */
 /*****************************************************************************/
 
@@ -18,7 +18,7 @@
 #if INCLUDE_RTM_BASE_MODULES
 #include "realtim5.h"
 #include "realtspc.h"
-#include <msh_unit.h>					/* Deklarationen f�r MidiShare */
+#include <msh_unit.h>					/* Deklarationen für MidiShare */
 
 #include "var.h"
 #include "msh.h"
@@ -72,7 +72,7 @@ typedef struct status
 } STATUS;			/* Dummy Definition */
 
 /*****************************************************************************/
-/* Initialisierung f�r alle Module                                           */
+/* Initialisierung für alle Module                                           */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN init_modules ()
@@ -179,7 +179,7 @@ GLOBAL BOOLEAN init_modules ()
     if(&init_cmo) ok &= init_cmo ();		/* Initialisiere cmo */
 #endif /* INCLUDE_RTM_UNUSED_MODULES */
 
-/* Ganz zum Schlu� die MidiShare-Applikationen */
+/* Ganz zum Schluß die MidiShare-Applikationen */
     if(&init_tra) ok &= init_tra ();		/* Initialisiere tra */
 
 	#if INCLUDE_RTM_OPT_MODULES

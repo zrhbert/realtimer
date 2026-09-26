@@ -15,7 +15,7 @@ V 0.05
 - MAXPERCENT ausgebaut, 03.01.95
 V 0.04, 28.12.94
 - auf MODULE_OTHER umgestellt
-- Men�-Abfrage f�r Kreisen eingebaut
+- Menü-Abfrage für Kreisen eingebaut
 - Vol-Anzeige eingebaut
 V 0.03
 - Bug in Anzahl der angezeigten Signale pro Objekt repariert
@@ -49,7 +49,7 @@ V 0.02 28.08.94
 #include "resource.h"
 
 #include "objects.h"
-#include <msh_unit.h>		/* Deklarationen f�r MidiShare Library */
+#include <msh_unit.h>		/* Deklarationen für MidiShare Library */
 #include "msh.h"
 
 #include "export.h"
@@ -65,18 +65,18 @@ V 0.02 28.08.94
 #define FLAGS  (WI_RESIDENT | WI_MOUSE | WI_NOSCROLL)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                        /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                        /* X-Einheiten für Scrolling */
+#define YUNITS 1                        /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (50 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  (20 * gl_hbox)           /* Anfangsh�he in Pixel */
-#define MILLI  100                     /* Millisekunden f�r Zeitablauf */
+#define INITH  (20 * gl_hbox)           /* Anfangshöhe in Pixel */
+#define MILLI  100                     /* Millisekunden für Zeitablauf */
 
 #define MOD_RSC_NAME "CMO_MOD.RSC"		/* Name der Resource-Datei */
 
 #define MAXSETUPS 100l					/* Anzahl der CMO-Setups */
-#define KOORV (FBREIT2/MAXKOOR)			/* Verh�ltnis von 3D-Koordinaten zu 
+#define KOORV (FBREIT2/MAXKOOR)			/* Verhältnis von 3D-Koordinaten zu 
 														RTM-Koordinaten */
 enum koor_states 
 {USED, NEW, FREE};		/* Zustand der Koordinaten in den
@@ -84,8 +84,8 @@ enum koor_states
 
 /* Sound-Ausgabe */
 #define MAXOUTPUTS 8
-#define ADRSTROBE 0xFA0000l		/* ROM4 Adresse = Offset f�r faddresse[1][1] */
-#define DATSTROBE 0xFB0000l		/* ROM3 Adresse = Offset f�r vaddresse[0] */
+#define ADRSTROBE 0xFA0000l		/* ROM4 Adresse = Offset für faddresse[1][1] */
+#define DATSTROBE 0xFB0000l		/* ROM3 Adresse = Offset für vaddresse[0] */
 
 /* Sound-Koordinaten */
 #define FBREITE	126
@@ -127,39 +127,39 @@ typedef struct status
 	BOOLEAN	new;							/* Zwang zum Neuzeichnen */
 	BOOLEAN	reset_flag;					/* Parameter wurden zurueckgesetzt */
 	KOOR_SINGLE	koor[MAXINPUTS];		/* Aktuelle Koordinaten der Inputs */
-	BOOL		kneu[MAXINPUTS];			/* TRUE, wenn Koordinate sich ge�ndert hat */
-	BOOLEAN	fader_neu[MAXINPUTS];	/* Fader m�ssen upgedated werden */
-	BOOLEAN	master_neu[MAXINPUTS];	/* Master m�ssen upgedated werden */
-	UWORD		fader[MAXINPUTS][MAXOUTPUTS];		/* Level f�r Fader */
-	UWORD		master[MAXOUTPUTS];		/* Level f�r Master-Fader */
+	BOOL		kneu[MAXINPUTS];			/* TRUE, wenn Koordinate sich geändert hat */
+	BOOLEAN	fader_neu[MAXINPUTS];	/* Fader müssen upgedated werden */
+	BOOLEAN	master_neu[MAXINPUTS];	/* Master müssen upgedated werden */
+	UWORD		fader[MAXINPUTS][MAXOUTPUTS];		/* Level für Fader */
+	UWORD		master[MAXOUTPUTS];		/* Level für Master-Fader */
 	BOOLEAN	kreisen[MAXINPUTS];		/* Rotation an/aus pro Kanal*/
 	WORD		kreis_pos[MAXINPUTS];	/* Winkel-Positionen der Rotationen */
 	WORD		kreis_radius[MAXINPUTS];	/* Radius der Rotationen */
 	WINDOWP		refwindow;
 	RTMCLASSP	refmodule;				/* Das Bezugsmodul */
 	TFilter	filter;						/* Midi-In-Filter	*/
-	WORD		num_spaces;					/* Anzahl der W�rfel */
+	WORD		num_spaces;					/* Anzahl der Würfel */
 } STATUS;
 
 typedef struct setup *SET_P;
 typedef struct setup
 {
 	WORD		grafikmodus;				/* In diesem F. benutzte Darstellung */
-	WORD		raumform;					/* Raumform f�r dieses Fenster */
+	WORD		raumform;					/* Raumform für dieses Fenster */
 	WORD		rot_x,						/* Grafik-Parameter: Rotationen */
 				rot_y,
 				rot_z,
 				distanz,						/* Distanz */
 				persp;						/* Perspektive */
 	WORD		master;						/* Master-Level */
-	WORD		midi_channel;				/* Midi-Kanal f�r eingehende Daten */
+	WORD		midi_channel;				/* Midi-Kanal für eingehende Daten */
 	BOOLEAN	innenraum;					/* Nur Innenraum anzeigen */
 	BOOLEAN	pfeile;						/* Pfeile anzeigen */
-} SETUP;	/* Enth�lt alle Parameter einer kompletten CMO-Einstellung */
+} SETUP;	/* Enthält alle Parameter einer kompletten CMO-Einstellung */
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	cmo_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*cmo_rsc_ptr = &cmo_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	cmo_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*cmo_rsc_ptr = &cmo_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *cmo_menu;
 PRIVATE OBJECT *cmo_setup;
 PRIVATE OBJECT *cmo_shelp;
@@ -171,11 +171,11 @@ PRIVATE OBJECT *cmo_raum;
 
 PRIVATE INT	xk [FBREITE+1] [FBREITE+1];
 PRIVATE INT	yk [FBREITE+1] [FBREITE+1];
-PRIVATE FLOAT	vx= 0.55,		/* Default-Werte f�r Grafikausgabe */
+PRIVATE FLOAT	vx= 0.55,		/* Default-Werte für Grafikausgabe */
 			vy=-0.50,		/* Verzerrung x/y/z */
 			vz= 0.20,
 			persp=0.0012,	/* Perspektive */
-			zoom=2.0;		/* Gr��e */
+			zoom=2.0;		/* Größe */
 
 LOCAL LONG	maxsqrt = (1+3*(FBREIT2*FBREIT2))/2;
 LOCAL WORD	*sqrt_array;		/* Wurzel Array */
@@ -199,14 +199,14 @@ LOCAL int	kennlinie[256] =
 	251, 252, 254, 255
 };
 
-LOCAL BYTE	*faddress[MAXINPUTS][MAXOUTPUTS];	/* Hardware-Adressen f�r Input-Fader */
-LOCAL BYTE	*maddress[MAXOUTPUTS];					/* Hardware-Adressen f�r Master */
+LOCAL BYTE	*faddress[MAXINPUTS][MAXOUTPUTS];	/* Hardware-Adressen für Input-Fader */
+LOCAL BYTE	*maddress[MAXOUTPUTS];					/* Hardware-Adressen für Master */
 LOCAL BYTE	*vaddress[2000];							/* Hardware-Adressen Volume-Werte */
-LOCAL WORD	sinus[360];									/* Sinus-Werte f�r Sinq() */
+LOCAL WORD	sinus[360];									/* Sinus-Werte für Sinq() */
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 2;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "CMO";		/* Name, f�r Extension etc. */
+PRIVATE CONST STRING module_name = "CMO";		/* Name, für Extension etc. */
 
 PRIVATE RTMCLASSP	modulep[MAXMSAPPLS];		/* Zeiger auf Modul-Strukturen */
 PRIVATE WORD		refNums[2];					/* Referenznummern */
@@ -325,17 +325,17 @@ PUBLIC VOID CDECL receive_alarm_cmo (SHORT refNum, LONG code)
 /****************************************************************************
 * 							InstallFilter						 *
 *---------------------------------------------------------------------------*
-* Cette proc�dure d�finit les valeurs du filtre de l'application. Un filtre *
-* est compos� de trois parties, qui sont trois tableaux de bool�ens :		 * 
+* Cette procédure définit les valeurs du filtre de l'application. Un filtre *
+* est composé de trois parties, qui sont trois tableaux de booléens :		 * 
 * 															 *
-*		un tableau de 256 bits pour les ports Midi accept�s			 *
-*		un tableau de 256 bits pour les types d'�v�nements accept�s		 *
-*		un tableau de  16 bits pour les canaux Midi accept�s			 *
+*		un tableau de 256 bits pour les ports Midi acceptés			 *
+*		un tableau de 256 bits pour les types d'événements acceptés		 *
+*		un tableau de  16 bits pour les canaux Midi acceptés			 *
 * 															 *
-* Dans le code ci dessous, le filtre est param�tr� pour accepter n'importe	 *
-* quel type d'�v�nement. 										 *
+* Dans le code ci dessous, le filtre est paramétré pour accepter n'importe	 *
+* quel type d'événement. 										 *
 * 															 *
-* Les param�tres de l'appel :										 *
+* Les paramètres de l'appel :										 *
 * ---------------------------										 *
 * 															 *
 *		aucun												 *
@@ -351,7 +351,7 @@ PRIVATE VOID InstallFilter (WORD refNum)
 
 	for (i = 0; i<256; i++)
 	{ 										
-		AcceptBit(filter->evType,i);		/* accepte tous les types d'�v�nements	*/
+		AcceptBit(filter->evType,i);		/* accepte tous les types d'événements	*/
 		AcceptBit(filter->port,i);		/* en provenance de tous les ports		*/
 	} /* for */
 											
@@ -483,7 +483,7 @@ PRIVATE	VOID update_single	(RTMCLASSP module, BOOLEAN recompute, WORD input)
 
 PRIVATE	VOID set_input (RTMCLASSP module, WORD input)
 {
-	/* Einen ganzen Input an die Hardware �begeben */
+	/* Einen ganzen Input an die Hardware übegeben */
 	volatile WORD peek;
 	UWORD *valp, *value = module->status->fader[input];
 	WORD *hardw_fader_adr;
@@ -610,14 +610,14 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 	STAT_P	status = module->status;
 	WORD		signal;
 		
-	window->milli = 1; 	/* Update so schnell wie m�glich */
+	window->milli = 1; 	/* Update so schnell wie möglich */
 
 	return event;
 } /* apply */
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 	STAT_P	status = module->status;
 	WINDOWP	window = module->window;
 	KOOR_SINGLE	*koor = status->koor, *k;
@@ -853,7 +853,7 @@ PUBLIC BOOLEAN	set_setnr_setup	(RTMCLASSP module, LONG setupnr)
 } /* set_setnr_setup */
 
 /*****************************************************************************/
-/* Men�behandlung                                                            */
+/* Menübehandlung                                                            */
 /*****************************************************************************/
 
 PRIVATE VOID update_menu_mod (window)
@@ -1002,7 +1002,7 @@ WORD    title, item;
 } /* handle_menu_mod */
 
 /*****************************************************************************/
-/* Taste f�r Fenster                                                         */
+/* Taste für Fenster                                                         */
 /*****************************************************************************/
 
 PRIVATE BOOLEAN wi_key_mod (window, mk)
@@ -1070,7 +1070,7 @@ WINDOWP window;
 } /* wi_draw_mod */
 
 /*****************************************************************************/
-/* Vor zeichnen Status ver�ndern                                             */
+/* Vor zeichnen Status verändern                                             */
 /*****************************************************************************/
 
 PRIVATE VOID wi_start_mod (window)
@@ -1110,7 +1110,7 @@ WINDOWP window;
 		dispobj = (DISPOBJP) element->key;
 		if (new) {
 			dispobj->new	= TRUE;
-			/* Nur f�r 3D-Anzeigen */
+			/* Nur für 3D-Anzeigen */
 			if (obj_nr < num_objs)
 			{
 				spacestatus = (SPACESTATP) dispobj->status;
@@ -1150,7 +1150,7 @@ WINDOWP window;
 			} /* if obj_nr < num_objs */
 			else
 			{
-				/* H�he f�r Texte berechnen */
+				/* Höhe für Texte berechnen */
 				a = dispobj->work;
 				a.y = 2 * gl_hbox;
 				dispobj->set_work (dispobj, &a);
@@ -1158,10 +1158,10 @@ WINDOWP window;
 			
 		} /* if new */		
 	
-		/* Nur f�r 3D-Anzeigen */
+		/* Nur für 3D-Anzeigen */
 		if (obj_nr < num_objs)
 		{
-			/* F�r jedes Objekt die entsprechenden Koordinaten einsetzen */
+			/* Für jedes Objekt die entsprechenden Koordinaten einsetzen */
 			spacestatus = (SPACESTATP) dispobj->status;
 			for (signal = 0; signal < num_signals; signal++)
 			{
@@ -1194,7 +1194,7 @@ WINDOWP window;
 } /* wi_start_mod */
 
 /*****************************************************************************/
-/* Nach zeichnen Status ver�ndern                                            */
+/* Nach zeichnen Status verändern                                            */
 /*****************************************************************************/
 
 PRIVATE VOID wi_finished_mod (window)
@@ -1242,7 +1242,7 @@ WORD    mode;
 } /* wi_snap_mod */
 
 /*****************************************************************************/
-/* Zeitablauf f�r Fenster                                                    */
+/* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -1250,7 +1250,7 @@ WINDOWP window;
 {
 	redraw_window(window, &window->scroll);
 	window->milli = 0; 			/* keine Timer-Funktion mehr bis
-										zur n�chsten �nderung */
+										zur nächsten Änderung */
 } /* wi_timer_mod */
 
 /*****************************************************************************/
@@ -1308,7 +1308,7 @@ WORD   icon;
 		sprintf (window->info, cmo_text [FCMOI].ob_spec.free_string, 0);
 	} /* if */
 	
-	return (window);                      /* Fenster zur�ckgeben */
+	return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 PRIVATE WORD ComputeNumDO (WINDOWP window)
@@ -1393,8 +1393,8 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 	LIST_P	header, element;
 	DISPOBJP	dispobj;
 	SPACESTATP	spacestatus;
-	WORD		*xwin,		/* X auf Fenstergr��e */
-				*ywin,		/* y auf Fenstergr��e */
+	WORD		*xwin,		/* X auf Fenstergröße */
+				*ywin,		/* y auf Fenstergröße */
 				*xpersp,		/* X Verzerrung durch Z */
 				*ypersp,		/* Y Verzerrung durch Z */
 				*xzoff,		/* X-Offset durch Z */ 
@@ -1405,7 +1405,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 	else
 		h = 8;
 	
-	/* Liste der Display-Objekte durchgehen und l�schen */
+	/* Liste der Display-Objekte durchgehen und löschen */
 	header = window->dispobjs;
 	element = list_next(header);
 	while (element != header) {
@@ -1414,7 +1414,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 		element = list_next(element);
 	} /* while */
 
-	/* Alle objekte l�schen */
+	/* Alle objekte löschen */
 	list_empty (window->dispobjs);
 	
 	num_displayobs = ComputeNumDO (window);
@@ -1440,7 +1440,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 		{
 			dispobj = CreateCMOSpaceDispobj(window, WUERFEL, SpaceModeSharedPersp, &work, obj_number*num_signals);
 			spacestatus = (SPACESTATP) dispobj->status;
-			/* F�r jedes Objekt die entsprechenden Pointer einsetzen */
+			/* Für jedes Objekt die entsprechenden Pointer einsetzen */
 			spacestatus->xwin 	= xwin;
 			spacestatus->ywin 	= ywin;
 			spacestatus->xpersp 	= xpersp;
@@ -1452,7 +1452,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 		list_insert(window->dispobjs, list_new_el (dispobj));
 	} /* for */
 
-	/* Text-Objekte m�ssen immer nach den Grafiken kommen */
+	/* Text-Objekte müssen immer nach den Grafiken kommen */
 	a.x = 1 * w;
 	a.y = 0;
 	a.h = h;
@@ -1465,7 +1465,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 } /* create_displayobs */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -1615,7 +1615,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Pr�fen, ob DEFAULT-Datei vorhanden */
+		/* Prüfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -1742,7 +1742,7 @@ PRIVATE BOOLEAN init_rsc ()
 #if false
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
 #endif
-  cmo_menu  = (OBJECT *)rs_trindex [CMO_MENU];  /* Adresse der CMO-Men�zeile */
+  cmo_menu  = (OBJECT *)rs_trindex [CMO_MENU];  /* Adresse der CMO-Menüzeile */
   cmo_setup = (OBJECT *)rs_trindex [CMO_SETUP]; /* Adresse der CMO-Parameter-Box */
   cmo_shelp = (OBJECT *)rs_trindex [CMO_SHELP];	/* Adresse der CMO-Parameter-Hilfe */
   cmo_help  = (OBJECT *)rs_trindex [CMO_HELP];	/* Adresse der CMO-Hilfe */
@@ -1766,7 +1766,7 @@ PRIVATE BOOLEAN init_rsc ()
     while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
   } /* if */
 
-  rs_gaddr (cmo_rsc_ptr, R_TREE,  CMO_MENU,	&cmo_menu);    /* Adresse des CMO-Men�s */
+  rs_gaddr (cmo_rsc_ptr, R_TREE,  CMO_MENU,	&cmo_menu);    /* Adresse des CMO-Menüs */
   rs_gaddr (cmo_rsc_ptr, R_TREE,  CMO_SETUP,	&cmo_setup);   /* Adresse der CMO-Parameter-Box */
   rs_gaddr (cmo_rsc_ptr, R_TREE,  CMO_SHELP,	&cmo_shelp);   /* Adresse der CMO-Parameter-Hilfe */
   rs_gaddr (cmo_rsc_ptr, R_TREE,  CMO_HELP,	&cmo_help);    /* Adresse der CMO-Hilfe */
@@ -1824,7 +1824,7 @@ PRIVATE BOOLEAN term_rsc ()
 
 PRIVATE WORD init_midishare ()
 {
-	SHORT		ref, refNum = 0;			/* tempor�re Referenznummer */
+	SHORT		ref, refNum = 0;			/* temporäre Referenznummer */
 	STRING	s;
 	
 	if (msh_available)
@@ -1839,25 +1839,25 @@ PRIVATE WORD init_midishare ()
 					sprintf (s, "CMO %d", instance_count + 1);
 				refNum = MidiGetNamedAppl(s); /* Alte Applikation schliessen */
 				if (refNum > 0) MidiClose(refNum);
-				refNum = MidiOpen(s);				/* Applikation f�r MidiShare �ffnen	*/
+				refNum = MidiOpen(s);				/* Applikation für MidiShare öffnen	*/
 			} /* if */
 		} /* if */
 	
 		if (refNum == 0)
 			 hndl_alert (ERR_NOMIDISHARE);
 	
-		if (refNum == MIDIerrSpace)			/* Pr�fen genug Platz war */
+		if (refNum == MIDIerrSpace)			/* Prüfen genug Platz war */
 		{
 			 hndl_alert (ERR_MIDISHAREFULL);
 		} /* if */
 	
-		if (refNum > 0)							/* Pr�fen ob alles klar */
+		if (refNum > 0)							/* Prüfen ob alles klar */
 		{
 			instance_count++;
-			refNums[instance_count] = refNum;				/* Merken f�r term_mod */
+			refNums[instance_count] = refNum;				/* Merken für term_mod */
 			MidiSetRcvAlarm (refNum, receive_evts_cmo);	/* Interrupt-Handler */		
 			MidiSetApplAlarm (refNum, receive_alarm_cmo);	/* Alarm-Handler */
-			/* An alle anschlie�en */
+			/* An alle anschließen */
 			try_all_connect (refNum);
 		} /* else */
 	} /* if */

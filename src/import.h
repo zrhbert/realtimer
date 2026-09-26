@@ -165,7 +165,7 @@ typedef _BCONMAP BCONMAP;
 /*****************************************************************************/
 
 #ifdef PASCAL_DEF
-#define and         &&                        /* F�r Pascal-Programmierer */
+#define and         &&                        /* Für Pascal-Programmierer */
 #define or          ||
 #define xor         ^^
 #define not         !
@@ -201,7 +201,7 @@ typedef _BCONMAP BCONMAP;
 /*****************************************************************************/
 
 #ifdef MODULA_DEF
-#define AND         &&                        /* F�r Modula-Programmierer */
+#define AND         &&                        /* Für Modula-Programmierer */
 #define OR          ||
 #define XOR         ^^
 #define NOT         !

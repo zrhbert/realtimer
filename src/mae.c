@@ -3,7 +3,7 @@
 /* Modul: MAE.C                                                              */
 /*                                                                           */
 /* Extern-Maus-Treiber                                                       */
-/* f�r Mouse-Systems M�use                                                   */
+/* für Mouse-Systems Mäuse                                                   */
 /*                                                                           */
 /*****************************************************************************/
 #define MAEVERSION "V 1.05"
@@ -11,20 +11,20 @@
 
 /* Updates *******************************************************************
 V 1.05
-- 0-Unterdr�ckung in set_dbox, 19.02.95
+- 0-Unterdrückung in set_dbox, 19.02.95
 - Standard mit Sperre aussen an, 05.02.95
 - ClickSetupField eingebaut, 30.01.95
 - Get/Setxxx verwendet, 04.01.95
 - Sperren() eingebaut, 03.01.95
 V 1.04 30.11.94
 - max/min Werte auf +/- 100 gesetzt
-- default f�r sperre_an_aussen ist nun FALSE
+- default für sperre_an_aussen ist nun FALSE
 - RS232 Handling mit Port-Addressierung 1..4 aus POGLI
 - load_create_infos und instance_count eingebaut
 - restliche VAR's in send_messages eingebaut
-- separate Mausports f�r mit TEST und ohne
+- separate Mausports für mit TEST und ohne
 V 1.03
-- Radius f�r sperre aussen im standard auf 0 gesetzt
+- Radius für sperre aussen im standard auf 0 gesetzt
 - Standard-Mausport auf 7 (Serial 2 am TT)
 - Mausport-Umschaltung wieder eingebaut
 - window->module eingebaut
@@ -34,12 +34,12 @@ V 1.02
 - Umstellung auf neue RTMCLASS-Struktur
 V 1.01
 - Fehler in prop-Behandlung beseitigt
-- Port-Umschaltung ver�ndert und ausgebaut
+- Port-Umschaltung verändert und ausgebaut
 V 1.00	17.04.93
-- Flags f�r Sperren an/aus eingebaut
-- Anzeigebreite f�r Setup-Nr auf 5 gesetzt in RSC
-- Ansteuerung f�r TT-Schnittstellen eingebaut
-- Prop und Sperre innen m�ssen noch eingebaut werden
+- Flags für Sperren an/aus eingebaut
+- Anzeigebreite für Setup-Nr auf 5 gesetzt in RSC
+- Ansteuerung für TT-Schnittstellen eingebaut
+- Prop und Sperre innen müssen noch eingebaut werden
 *****************************************************************************/
 
 #ifndef XRSC_CREATE
@@ -78,13 +78,13 @@ V 1.00	17.04.93
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                        /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                        /* X-Einheiten für Scrolling */
+#define YUNITS 1                        /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh�he in Pixel */
-#define MILLI  1000                     /* Millisekunden f�r Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshöhe in Pixel */
+#define MILLI  1000                     /* Millisekunden für Zeitablauf */
 
 #define MAUSPORT 2
 
@@ -127,9 +127,9 @@ typedef struct setup
 				sperre_an_aussen : 1;
 	WORD		zoom;					/* Zoom-Faktor */
 	WORD		speedy;				/* Beschleunigungs-Faktor */
-	WORD		sperre_innen;		/* Radius f�r innere Sperre */
-	WORD		sperre_aussen;		/* Radius f�r �ussere Sperre */
-} SETUP;	/* Enth�lt alle Parameter einer kompletten MAE-Einstellung */
+	WORD		sperre_innen;		/* Radius für innere Sperre */
+	WORD		sperre_aussen;		/* Radius für äussere Sperre */
+} SETUP;	/* Enthält alle Parameter einer kompletten MAE-Einstellung */
 
 typedef struct status *STAT_P;
 
@@ -147,8 +147,8 @@ typedef struct status
 } STATUS;
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	mae_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*mae_rsc_ptr = &mae_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	mae_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*mae_rsc_ptr = &mae_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *mae_setup;
 PRIVATE OBJECT *mae_help;
 PRIVATE OBJECT *mae_desk;
@@ -157,7 +157,7 @@ PRIVATE OBJECT *mae_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "MAE";		/* Name, f�r Extension etc. */
+PRIVATE CONST STRING module_name = "MAE";		/* Name, für Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 /* Interne MAE-Funktionen */
@@ -321,7 +321,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 	KOOR_SINGLE *signals = event->koors->koor;
 	register POINT_3D	*koor;
 	
-	/* Long-Multiplikation um �berlauf zu vermeiden */
+	/* Long-Multiplikation um Überlauf zu vermeiden */
 	mkoor->x = (WORD)((LONG)zoom * (LONG)(status->mousex) / 100L);
 	mkoor->z = (WORD)((LONG)zoom * (LONG)(status->mousey) / 100L);
 
@@ -378,7 +378,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 	STAT_P	status = module->status;
 	WORD		aux = status->port;
 	WORD		actualaux;
@@ -387,7 +387,7 @@ PUBLIC VOID		reset	(RTMCLASSP module)
 	/* Schnittstelle konfigurieren */
 	/*
 	 * Aus: POGLI Software aux_io.c
-	 * Feststellen, ob die gew�nschte Schnittstellen existiert und 
+	 * Feststellen, ob die gewünschte Schnittstellen existiert und 
 	 * Ablegen der Information in actualaux (modulglobal).
 	 */
 	if ((long)(bcmap = (BCONMAP*)Bconmap(-2)) == 44L)
@@ -633,11 +633,11 @@ WORD   icon;
 		sprintf (window->info, mae_text [FMAEI].ob_spec.free_string, 0);
 	} /* if */
 
-	return (window);                      /* Fenster zur�ckgeben */
+	return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -788,7 +788,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Pr�fen, ob DEFAULT-Datei vorhanden */
+		/* Prüfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */

@@ -82,7 +82,7 @@ typedef struct setup
 
 typedef struct status	
 {
-	BOOLEAN	new;				/* Hat sich etwas ge�ndert ? */
+	BOOLEAN	new;				/* Hat sich etwas geändert ? */
 } STATUS;
 
 typedef struct status *STAT_P;	

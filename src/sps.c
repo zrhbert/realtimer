@@ -58,19 +58,19 @@ V 1.00
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                        /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                        /* X-Einheiten für Scrolling */
+#define YUNITS 1                        /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh�he in Pixel */
-#define MILLI  0                     /* Millisekunden f�r Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshöhe in Pixel */
+#define MILLI  0                     /* Millisekunden für Zeitablauf */
 
 #define MOD_RSC_NAME "SPS_MOD.RSC"		/* Name der Resource-Datei */
 
 #define MAXSETUPS 1000l					/* Anzahl der SPS-Setups */
 
-#define SPIEGEL_X 0x0001					/* f�r Makro-Berechnung */
+#define SPIEGEL_X 0x0001					/* für Makro-Berechnung */
 #define SPIEGEL_Y 0x0002
 #define SPIEGEL_Z 0x0004
 #define TAUSCH_XY 0x0008
@@ -80,20 +80,20 @@ V 1.00
 
 typedef struct sps_single
 {
-	UINT	spiegel_x : 1;	/* Bitfeld f�r "Spiegelung der X-Koordinate" */
-	UINT	spiegel_y : 1;	/* Bitfeld f�r "Spiegelung der X-Koordinate" */
-	UINT	spiegel_z : 1;	/* Bitfeld f�r "Spiegelung der X-Koordinate" */
-	UINT	tausch_xy : 1;	/* Bitfeld f�r "Vertauschung X-Y LU/RO" */
-	UINT	tausch_xz : 1;	/* Bitfeld f�r "Vertauschung X-Z LH/RV" */
-	UINT	tausch_yz : 1;	/* Bitfeld f�r "Vertauschung Y-Z OV/UH" */
-} SPS_SINGLE;				/* Enth�lt alle SPS-Parameter eines einzelne Signals */
+	UINT	spiegel_x : 1;	/* Bitfeld für "Spiegelung der X-Koordinate" */
+	UINT	spiegel_y : 1;	/* Bitfeld für "Spiegelung der X-Koordinate" */
+	UINT	spiegel_z : 1;	/* Bitfeld für "Spiegelung der X-Koordinate" */
+	UINT	tausch_xy : 1;	/* Bitfeld für "Vertauschung X-Y LU/RO" */
+	UINT	tausch_xz : 1;	/* Bitfeld für "Vertauschung X-Z LH/RV" */
+	UINT	tausch_yz : 1;	/* Bitfeld für "Vertauschung Y-Z OV/UH" */
+} SPS_SINGLE;				/* Enthält alle SPS-Parameter eines einzelne Signals */
 
 typedef struct setup *SET_P;
 
 typedef struct setup
 {
-	SPS_SINGLE	sps_single [MAXSIGNALS]; /* Enth�lt die SPS-Informationen f�r die einzelnen Kan�le */
-} SETUP;	/* Enth�lt alle Parameter einer kompletten SPS-Einstellung */
+	SPS_SINGLE	sps_single [MAXSIGNALS]; /* Enthält die SPS-Informationen für die einzelnen Kanäle */
+} SETUP;	/* Enthält alle Parameter einer kompletten SPS-Einstellung */
 
 typedef struct status *STAT_P;
 
@@ -103,8 +103,8 @@ typedef struct status
 } STATUS;
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	sps_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*sps_rsc_ptr = &sps_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	sps_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*sps_rsc_ptr = &sps_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *sps_setup;
 PRIVATE OBJECT *sps_help;
 PRIVATE OBJECT *sps_desk;
@@ -113,7 +113,7 @@ PRIVATE OBJECT *sps_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 20;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "SPS";		/* Name, f�r Extension etc. */
+PRIVATE CONST STRING module_name = "SPS";		/* Name, für Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 /* Interne SPS-Funktionen */
@@ -242,7 +242,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 		else
 		{
 			module->import_status |= FILE_OPENED;
-			/* Zeiger auf erstes Setup nochmal holen, wegen Supervisor-M�ll in file_split */
+			/* Zeiger auf erstes Setup nochmal holen, wegen Supervisor-Müll in file_split */
 			akt = module->actual->setup;
 			daktstatus(" SPS-Datei wird importiert ... ", module->import_name);
 			module->flags |= FLAG_IMPORTING;
@@ -260,12 +260,12 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					else
 						set_sps_flags(single, 0);
 					
-					single++;	/* Auf Info f�r n�chste Signal zeigen */
+					single++;	/* Auf Info für nächste Signal zeigen */
 				} /* for */
 #if false
 				/* ok = fscanf(in, "%s", s);	/* Leerzeile */ */
 #endif
-				/* Setup speichern und n�chstes Setup anw�hlen */
+				/* Setup speichern und nächstes Setup anwählen */
 				if (! module->get_setnr(module, setnr))
 					ok = EOF;	/* Import beenden */
 				if (setnr % 20 == 0)
@@ -286,7 +286,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 } /* reset */
 
 PUBLIC VOID		precalc	(RTMCLASSP module)
@@ -327,7 +327,7 @@ PRIVATE VOID set_sps_flags(SPS_SINGLE *single, WORD x)
 
 PRIVATE WORD get_sps_macro (SPS_SINGLE *single)
 {
-	/* Summierung aller Flags gibt R�ckgabewerte */
+	/* Summierung aller Flags gibt Rückgabewerte */
 	return  SPIEGEL_X * single->spiegel_x
 			+ SPIEGEL_Y * single->spiegel_y
 			+ SPIEGEL_Z * single->spiegel_z
@@ -501,11 +501,11 @@ WORD   icon;
     sprintf (window->info, sps_text [FSPSI].ob_spec.free_string, 0);
   } /* if */
 
-  return (window);                      /* Fenster zur�ckgeben */
+  return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -643,7 +643,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Pr�fen, ob DEFAULT-Datei vorhanden */
+		/* Prüfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */

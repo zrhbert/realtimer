@@ -36,7 +36,7 @@
 #define GEM_OUTPUT  "OUTPUT.APP"        /* Name des GEM-Output Programms */
 
 #define MAX_FONTS       99              /* maximale Anzahl von Fonts */
-#define MAX_POINTS     256              /* maximale Anzahl von Punktgr��en */
+#define MAX_POINTS     256              /* maximale Anzahl von Punktgrößen */
 
 #define FONT_SWAPSIZE 3072              /* 3072 * 16 = 48 KByte font swapping */
 
@@ -57,26 +57,26 @@ typedef struct status
 /****** VARIABLES ************************************************************/
 
 LOCAL BOOLEAN  fonts_loaded;    /* Fonts schon geladen ? */
-LOCAL WORD     num_fonts;       /* Anzahl verf�gbarer Fonts */
+LOCAL WORD     num_fonts;       /* Anzahl verfügbarer Fonts */
 LOCAL WORD     ccp_ext;         /* Cut/Copy/Paste extern auf Klemmbrett */
 LOCAL WORD     g_font;          /* Aktueller Font */
-LOCAL WORD     g_point;         /* Aktuelle Punktgr��e */
+LOCAL WORD     g_point;         /* Aktuelle Punktgröße */
 
 LOCAL LISTBOX  lnames;          /* Liste der Fontnamen */
-LOCAL LISTBOX  lsizes;          /* Liste der Fontgr��en */
+LOCAL LISTBOX  lsizes;          /* Liste der Fontgrößen */
 LOCAL BYTE     *fnames;         /* Zeiger auf Fontnamen */
-LOCAL BYTE     *fsizes;         /* Zeiger auf Fontgr��en */
+LOCAL BYTE     *fsizes;         /* Zeiger auf Fontgrößen */
 LOCAL WORD     wnames;          /* Breite der Scrollbox der Fontnamen */
-LOCAL WORD     wsizes;          /* Breite der Scrollbox der Fontgr��en */
+LOCAL WORD     wsizes;          /* Breite der Scrollbox der Fontgrößen */
 LOCAL WORD     nlines;          /* Anzahl Zeilen der Fontnamen */
-LOCAL WORD     slines;          /* Anzahl Zeilen der Fontgr��en */
+LOCAL WORD     slines;          /* Anzahl Zeilen der Fontgrößen */
 LOCAL WORD     sel_font;        /* selektierter Fontname */
-LOCAL WORD     sel_point;       /* selektierte Fontgr��e */
+LOCAL WORD     sel_point;       /* selektierte Fontgröße */
 
 LOCAL WORD     font_table [MAX_FONTS];
 LOCAL WORD     point_table [MAX_POINTS];
 
-LOCAL WORD     edit_inx;        /* Index Passwort f�r edit_noecho */
+LOCAL WORD     edit_inx;        /* Index Passwort für edit_noecho */
 LOCAL BYTE     password [MAX_PASSWORD + 1];
 
 /****** FUNCTIONS ************************************************************/
@@ -187,8 +187,8 @@ MKINFO  *mk;
   {
     case SETPASSWD : edit_inx = window->edit_inx;
                    break;
-    case SETOK     : get_settings (); /* Hier k�nnte man das Pa�wort abfragen */
-                   break;           /* Wenn es falsch ist, k�nnte man z.B. WI_DLCLOSE zur�cksetzen */
+    case SETOK     : get_settings (); /* Hier könnte man das Paßwort abfragen */
+                   break;           /* Wenn es falsch ist, könnte man z.B. WI_DLCLOSE zurücksetzen */
     case SETCANCEL : set_settings ();
                    break;
     case SETHELP   : help_settings (NULL, NIL);
@@ -594,7 +594,7 @@ WORD num_fonts;
   {
     vqt_name (vdi_handle, font, name);
     if (font == FONT_SYSTEM) strcpy (name, "System");
-    name [wnames - 2] = EOS;            /* Name mu� mit 2 Leerzeichen beginnen */
+    name [wnames - 2] = EOS;            /* Name muß mit 2 Leerzeichen beginnen */
 
     sprintf (mem, "  %s", name);
     mem += lnames.itemsize;
@@ -734,7 +734,7 @@ WORD vdi_handle;
 } /* unload_fonts */
 
 /*****************************************************************************/
-/* Men�-Verarbeitung                                                         */
+/* Menü-Verarbeitung                                                         */
 /*****************************************************************************/
 
 GLOBAL VOID updt_menu (window)
@@ -776,7 +776,7 @@ WINDOWP window;
 
     setxor (menus, after);
 
-    if (! setcmp (menus, NULL))         /* Es hat sich etwas ge�ndert */
+    if (! setcmp (menus, NULL))         /* Es hat sich etwas geändert */
     {
       for (i = 0, *s = EOS; i < 10; i++)
       {
@@ -796,7 +796,7 @@ WINDOWP window;
     setcpy (menus, after);
   } /* if */
 
-  updtmenu = TRUE;      /* Men�s immer auf neuesten Stand bringen */
+  updtmenu = TRUE;      /* Menüs immer auf neuesten Stand bringen */
 } /* updt_menu */
 
 /*****************************************************************************/
@@ -816,14 +816,14 @@ WORD    title, item;
   #endif /* INCLUDE_RTM_BASE_MODULES */
   BOOLEAN ok = FALSE;
 
-  if (is_state (menu, title, DISABLED) ||       /* Accessory k�nnte Nachricht geschickt haben */
+  if (is_state (menu, title, DISABLED) ||       /* Accessory könnte Nachricht geschickt haben */
       is_state (menu, item, DISABLED)) return;
 
   menu_normal (window, title, FALSE);           /* Titel invers darstellen */
 
   top = find_top ();
 #if INCLUDE_RTM_BASE_MODULES
-	/* Untersuche alle RTM-Module auf passenden Men�punkt */
+	/* Untersuche alle RTM-Module auf passenden Menüpunkt */
 	 	
 	for (i = 0; i < rtmtop && !ok; i++)         	/* Untersuche alle Module */
 	{
@@ -894,7 +894,7 @@ WORD    title, item;
 				*/
 				break;
 			default:
-				if ((rtmmodule->menu_item == item))	/* Men�punkt identisch? */
+				if ((rtmmodule->menu_item == item))	/* Menüpunkt identisch? */
 				{
 					(rtmmodule->open) (rtmmodule->icon_position);
 					ok = TRUE;	/* Passendes Modul gefunden */
@@ -904,7 +904,7 @@ WORD    title, item;
 	} /* for */
   #endif /* INCLUDE_RTM_BASE_MODULES */
 
-	if (ok==FALSE) /* kein Modul gefunden, "normale" Men�abfrage */
+	if (ok==FALSE) /* kein Modul gefunden, "normale" Menüabfrage */
 	{
 		switch (title)
 		{
@@ -973,7 +973,7 @@ WORD    title, item;
 		  	break;
 #if false
 		 case MCALLER :
-		 	done = TRUE;       /* Zur�ck zum Aufrufer */
+		 	done = TRUE;       /* Zurück zum Aufrufer */
 		   break;
 #endif
 		 case MQUIT   :
@@ -1070,7 +1070,7 @@ GLOBAL BOOLEAN init_menu ()
 
   get_settings ();
 
-  funcmenus [0].title = MFILE;            /* Men�s der Funktionstasten */
+  funcmenus [0].title = MFILE;            /* Menüs der Funktionstasten */
   funcmenus [0].item  = MHELP;
 
   funcmenus [1].title = MFILE;
@@ -1100,7 +1100,7 @@ GLOBAL BOOLEAN init_menu ()
   funcmenus [9].title = MFILE;
   funcmenus [9].item  = MQUIT;
 
-  setclr (menus);                         /* Keine Men�s auf Funktionstasten */
+  setclr (menus);                         /* Keine Menüs auf Funktionstasten */
 
   menu_ok      = (menu != NULL);
   menu_fits    = FALSE;
@@ -1109,7 +1109,7 @@ GLOBAL BOOLEAN init_menu ()
   ccp_ext      = (menu_ok && is_state (menu, MTOCLIP, CHECKED)) ? DO_EXTERNAL : 0;
 */
   if (menu_ok) menu_fits = menu [THEACTIVE].ob_x + menu [THEACTIVE].ob_width <= desk.w;
-  if ((class_desk == DESK) && menu_ok && ! menu_fits) class_desk = DESKWINDOW; /* Men�zeile im Fenster */
+  if ((class_desk == DESK) && menu_ok && ! menu_fits) class_desk = DESKWINDOW; /* Menüzeile im Fenster */
 
   if (menu_ok)
   {
@@ -1153,8 +1153,8 @@ GLOBAL BOOLEAN init_menu ()
 
       if (ddiff > 0) menu [menubox].ob_x -= ddiff;      /* Hing rechts heraus */
 
-      menubox = menu [menubox].ob_next;                 /* N�chstes Drop-Down-Men� */
-      title   = menu [title].ob_next;                   /* N�chster Titel */
+      menubox = menu [menubox].ob_next;                 /* Nächstes Drop-Down-Menü */
+      title   = menu [title].ob_next;                   /* Nächster Titel */
     } while (title != THEACTIVE);
   } /* if */
 

@@ -2,13 +2,13 @@
 /**
   							MIDI SHARE
     
-	Le pr�sent fichier d�crit les points d'entr�e de MidiShare, ainsi que 
-	les structures de donn�es et les constantes utilis�es. Le code Midi-
+	Le présent fichier décrit les points d'entrée de MidiShare, ainsi que 
+	les structures de données et les constantes utilisées. Le code Midi-
 	Share proprement dit est contenu dans le fichier MIDSHARE.PRG, qui 
-	doit etre plac� dans un dossier Auto. Au d�marrage de la machine, ce 
-	code est charg� en m�moire, il est ancr� aux vecteurs $94 et $98 
-	(trap 5 et trap 6).	Toutes les proc�dures et fonctions d�finies ici 
-	se servent de cette "ancre" pour acc�der au code.
+	doit etre placé dans un dossier Auto. Au démarrage de la machine, ce 
+	code est chargé en mémoire, il est ancré aux vecteurs $94 et $98 
+	(trap 5 et trap 6).	Toutes les procédures et fonctions définies ici 
+	se servent de cette "ancre" pour accéder au code.
 
 **/	
 /**************************************************************************/
@@ -18,7 +18,7 @@
 
 
 /**************************************************************************/
-/** Typdeklarationen die die Kompatibilit�t des C-Codes gew�hrleisten.
+/** Typdeklarationen die die Kompatibilität des C-Codes gewährleisten.
     ( auch zum Apple )
 **/    
 /**************************************************************************/
@@ -28,25 +28,25 @@ typedef char 	Byte;
 typedef short 	Boolean;
 
 /**************************************************************************/
-/** Event-Type f�r die Funktion MidiNewEv()
+/** Event-Type für die Funktion MidiNewEv()
 **/
 /**************************************************************************/
 		
-#define typeNote		0	/* note avec hauteur, v�locit� et dir�e en ms */
+#define typeNote		0	/* note avec hauteur, vélocité et dirée en ms */
 		
-#define typeKeyOn		1	/* Note On avec hauteur et v�locit� 		 */
-#define typeKeyOff		2	/* Note Off avec hauteur et v�locit� 		 */
+#define typeKeyOn		1	/* Note On avec hauteur et vélocité 		 */
+#define typeKeyOff		2	/* Note Off avec hauteur et vélocité 		 */
 #define typeKeyPress 	3	/* Poly KeyPress avec hauteur et pression  	 */
 #define typePolyPress 	3	/* Poly KeyPress avec hauteur et pression  	 */
 #define typeCtrlChange	4	/* Control Change avec controleur et valeur 	 */
-#define typeProgChange	5	/* Program Change avec num�ro de programme 	 */
+#define typeProgChange	5	/* Program Change avec numéro de programme 	 */
 #define typeChanPress	6	/* Channel Pressure avec pression 		*/
 #define typeAfterTouch	6	/* Channel Pressure avec pression 		*/
 #define typePitchWheel	7	/* Pitch Wheel avec LSB et MSB 			*/
 #define typePitchBend	7	/* Pitch Wheel avec LSB et MSB 			*/
 
 #define typeSongPos		8	/* Song Position Pointer LSB und MSB	*/
-#define typeSongSel		9	/* Song Select avec num�ro de song 		*/
+#define typeSongSel		9	/* Song Select avec numéro de song 		*/
 #define typeClock		10	/* Timing Clock						 	*/
 #define typeStart		11	/* Start								*/
 #define typeContinue	12	/* Continue							 	*/
@@ -192,8 +192,8 @@ enum{	MIDIOpenAppl=1,
 typedef struct TMidiSEX *MidiSEXPtr;
 typedef struct TMidiSEX 
 	{
-	MidiSEXPtr	link;		/** Link auf die n�chste Zelle  **/
-	Byte		data[12];	/** 12 Bytes f�r die Daten 		**/
+	MidiSEXPtr	link;		/** Link auf die nächste Zelle  **/
+	Byte		data[12];	/** 12 Bytes für die Daten 		**/
 	}TMidiSEX;
 
 
@@ -203,7 +203,7 @@ typedef struct TMidiSEX
 typedef struct TMidiST *MidiSTPtr;
 typedef struct TMidiST 
 	{
-	Ptr ptr1;				/** 4 Pointer zur freien Verf�gung **/
+	Ptr ptr1;				/** 4 Pointer zur freien Verfügung **/
 	Ptr ptr2;			
 	Ptr ptr3;
 	Ptr ptr4;
@@ -226,7 +226,7 @@ typedef struct TMidiUni
 typedef struct TMidiEv *MidiEvPtr;
 typedef struct TMidiEv 
 	{
-	MidiEvPtr		link;	/** Pointer auf das n�chste Event 	  (0)  **/
+	MidiEvPtr		link;	/** Pointer auf das nächste Event 	  (0)  **/
 	unsigned long	date;	/** Datum des Events in Millisekunden (4)  **/
 	Byte			evType;	/** Event-Typ 						  (8)  **/
 	Byte			refNum;	/** Nummer der Applikation 			  (9)  **/
@@ -236,7 +236,7 @@ typedef struct TMidiEv
 	  {
 	  struct				/** Noten-Infos 					  (12) **/
 		{
-		Byte  pitch;		/** Notenh�he 						  (12) **/
+		Byte  pitch;		/** Notenhühe 						  (12) **/
 		Byte  vel;			/** Velocity    					  (13) **/
 		short dur;			/** Dauer       					  (14) **/
 		} note;
@@ -311,7 +311,7 @@ typedef struct TSmpteLocation
 } TSmpteLocation; 
 
 /**************************************************************************/
-/** Strukturen f�r die statistischen Zust�nde **/
+/** Strukturen für die statistischen Zustände **/
 /**************************************************************************/
 typedef struct MidiStat *MidiStatPtr;
 typedef struct	MidiStat 
@@ -324,7 +324,7 @@ typedef struct	MidiStat
 
 
 /**************************************************************************/
-/** Makros f�r die Feldzugriffe **/
+/** Makros für die Feldzugriffe **/
 /**************************************************************************/
 
 #define Link(e)		( (e)->link )
@@ -363,7 +363,7 @@ typedef struct	MidiStat
 
 
 /**************************************************************************/
-/** Makros f�r die Filterzugriffe **/
+/** Makros für die Filterzugriffe **/
 /**************************************************************************/
 
 #define AcceptBit(a,n)		(((Byte *)(a))[(n)>>3] |= (1<<((n)&7)))
@@ -388,7 +388,7 @@ typedef void ( *ApplAlarmPtr)( /* short refNum, long code */ );
 	( gemdos, bios, xbios ): Die Parameter werden von rechts nach links 
 	auf den Stack gelegt. Zuletzt die Nummer der Funktion.
 	die Routine deren Assembler Code in der Tabelle "_trapCode" aufgereiht
-	ist wrid aufgerufen. Nun f�hrt das Programm einen Sprung an die Stelle 
+	ist wrid aufgerufen. Nun führt das Programm einen Sprung an die Stelle 
 	aus an die der Vektor $98 zeigt. Dieser Vektor von trap #6 (Ankerpunkt
 	von MidiShare) zeigt auf die Dispatch-Routine die den effektiven 
 	Aufruf der Funktion realisiert. 
@@ -396,9 +396,9 @@ typedef void ( *ApplAlarmPtr)( /* short refNum, long code */ );
 	
 
 	Vorsicht:
-	Das Programm mu� bei Turbo C ohne die Option "ANSI keywords only"
+	Das Programm muß bei Turbo C ohne die Option "ANSI keywords only"
 	compiliert werden, da die Funktion "micro_rtx" eine cdecl Funktion
-	ist, deshalb der Compiler alle Parameter �ber den Stack �bergeben muss.
+	ist, deshalb der Compiler alle Parameter über den Stack übergeben muss.
 	Das Programm muss ausserdem mit der Library libmidi.lib gelinkt werden.
 **/
 /**************************************************************************/
@@ -453,7 +453,7 @@ extern int _trapCode_[];
 
 
 /**************************************************************************/
-/** MidiShare f�r Anwendung �ffnen/schliessen **/
+/** MidiShare für Anwendung öffnen/schliessen **/
 /**************************************************************************/
 
 /* MidiOpen( MidiName applName) => short */
@@ -514,7 +514,7 @@ extern int _trapCode_[];
 #define MidiSetPortState(a,b)	(void)( *micro_rtx)(0x13,a,b)
 
 
-/*---------------------Gestion des �v�nements-----------------------------*/
+/*---------------------Gestion des événements-----------------------------*/
 
 #define MidiFreeSpace() 		(long)( *micro_rtx)(0x14)
 
@@ -546,7 +546,7 @@ extern int _trapCode_[];
 #define MidiCountFields(a) 	(short)( *micro_rtx)(0x1B,a)	
 
 
-/*---------------------Gestion des s�quences------------------------------*/
+/*---------------------Gestion des séquences------------------------------*/
 
 /* MidiNewSeq() => MidiSeqPtr */
 #define MidiNewSeq() 		(MidiSeqPtr)( *micro_rtx)(0x1D)	
@@ -612,7 +612,7 @@ extern int _trapCode_[];
 /* MidiCall( TaskPtr proc, long date, short refNum, long a1, long a2, long a3) */
 #define MidiCall(a,b,c,d,e,f)		(void)( *micro_rtx)(0x2C,a,b,c,d,e,f)
 
-/* extensions taches diff�r�es */
+/* extensions taches différées */
 
 /* MidiTask( TaskPtr proc, long date, short refNum, long a1, long a2, long a3) => MidiEvPtr */
 #define MidiTask(a,b,c,d,e,f)		(MidiEvPtr)( *micro_rtx)(0x2D,a,b,c,d,e,f)
@@ -640,11 +640,11 @@ extern int _trapCode_[];
 
 /* MidiGrowSpace( long space) => long */
 #define MidiGrowSpace(a)			(long)( *micro_rtx)(0x37, a)
-/* ATTENTION : MidiGrowSpace ne peut etre appel� que par un 
+/* ATTENTION : MidiGrowSpace ne peut etre appelé que par un 
    accessoire de bureau ! */
 
 /*---------------------Controle MidiShare---------------------------------*/
-extern Boolean MidiShare(void);	/* BD: void eingesetzt f�r PureC */
+extern Boolean MidiShare(void);	/* BD: void eingesetzt für PureC */
 
 #endif
 

@@ -52,13 +52,13 @@
 #define FLAGS  (WI_RESIDENT | WI_MOUSE | WI_NOSCROLL)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                        /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                        /* X-Einheiten für Scrolling */
+#define YUNITS 1                        /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (57 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  (20 * gl_hbox)           /* Anfangsh�he in Pixel */
-#define MILLI  100							/* Millisekunden f�r Zeitablauf */
+#define INITH  (20 * gl_hbox)           /* Anfangshöhe in Pixel */
+#define MILLI  100							/* Millisekunden für Zeitablauf */
 
 #define MOD_RSC_NAME "EC4_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -70,7 +70,7 @@ typedef struct setup *SET_P;
 typedef struct setup
 {
 	VOID *dummy;
-} SETUP;		/* Enth�lt alle Parameter einer kompletten EC4-Einstellung */
+} SETUP;		/* Enthält alle Parameter einer kompletten EC4-Einstellung */
 
 typedef struct status *STAT_P;
 typedef struct status
@@ -83,8 +83,8 @@ typedef struct status
 
 /****** VARIABLES ************************************************************/
 /* Resource */
-PRIVATE WORD	ec4_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*ec4_rsc_ptr = &ec4_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	ec4_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*ec4_rsc_ptr = &ec4_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *ec4_setup;
 PRIVATE OBJECT *ec4_cue;
 PRIVATE OBJECT *ec4_help;
@@ -94,7 +94,7 @@ PRIVATE OBJECT *ec4_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 20;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "EC4";		/* Name, f�r Extension etc. */
+PRIVATE CONST STRING module_name = "EC4";		/* Name, für Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 
@@ -144,7 +144,7 @@ PRIVATE VOID    get_dbox_editor	(RTMCLASSP module)
 	GetPFloat (ec4_cue, EC4SPEEDZ, &event->speed.z);
 	GetPWord (ec4_cue, EC4VOLUME, &event->volume);
 
-	/* Info f�r 1. Signal */
+	/* Info für 1. Signal */
 	GetPWord (ec4_cue, EC4SIG1CHANNEL, &event->input_ch[0]);
 	event->input_ch[0]--;
 	GetPFloat (ec4_cue, EC4POSX, &event->position[0].x);
@@ -184,7 +184,7 @@ PRIVATE VOID    set_dbox_editor	(RTMCLASSP module)
 	SetPFloat (ec4_cue, EC4SPEEDZ, event->speed.z);
 	SetPWord (ec4_cue, EC4VOLUME, event->volume);
 
-	/* Info f�r 1. Signal */
+	/* Info für 1. Signal */
 	SetPWord (ec4_cue, EC4SIG1CHANNEL, event->input_ch[0]+1);
 	SetPFloat (ec4_cue, EC4POSX, event->position[0].x);
 	SetPFloat (ec4_cue, EC4POSY, event->position[0].y);
@@ -375,7 +375,7 @@ PUBLIC VOID	GetFirstEvent (RTMCLASSP module)
 
 	msg.in1 = &status->event;
 	
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 	ed4_module->message (ed4_module, GET_FIRST_EVENT, &msg);
 
 	/* Copy Event Info */
@@ -390,7 +390,7 @@ PUBLIC VOID	GetPrevEvent (RTMCLASSP module)
 
 	msg.in1 = &status->event;
 	
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 	ed4_module->message (ed4_module, GET_PREV_EVENT, &msg);
 
 	/* Copy Event Info */
@@ -405,7 +405,7 @@ PUBLIC VOID	GetNextEvent (RTMCLASSP module)
 
 	msg.in1 = &status->event;
 	
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 	ed4_module->message (ed4_module, GET_NEXT_EVENT, &msg);
 
 	/* Copy Event Info */
@@ -420,7 +420,7 @@ PUBLIC VOID	ModifyEvent (RTMCLASSP module)
 
 	msg.in1 = &status->event;
 	
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 	ed4_module->message (ed4_module, MODIFY_EVENT, &msg);
 
 } /* ModifyEvent */
@@ -432,7 +432,7 @@ PUBLIC VOID	InsertEvent (RTMCLASSP module)
 
 	msg.in1 = &status->event;
 	
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 	ed4_module->message (ed4_module, INSERT_EVENT, &msg);
 
 } /* InsertEvent */
@@ -444,7 +444,7 @@ PUBLIC VOID	DeleteEvent (RTMCLASSP module)
 
 	msg.in1 = &status->event;
 	
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 	ed4_module->message (ed4_module, DELETE_EVENT, &msg);
 
 } /* DeleteEvent */
@@ -455,7 +455,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 
 #if false
 	if (window)
-		window->milli = 1; 	/* Update so schnell wie m�glich */
+		window->milli = 1; 	/* Update so schnell wie möglich */
 #endif
 	return event;
 } /* apply */
@@ -469,7 +469,7 @@ PUBLIC VOID		reset	(RTMCLASSP module)
 
 	status->new = TRUE;
 	if (window)
-		window->milli = 1; 	/* Update so schnell wie m�glich */
+		window->milli = 1; 	/* Update so schnell wie möglich */
 		
 } /* reset */
 
@@ -499,7 +499,7 @@ PUBLIC VOID    send_messages	(RTMCLASSP module)
 } /* send_messages */
 
 /*****************************************************************************/
-/* �ffne Fenster                                                             */
+/* Öffne Fenster                                                             */
 /*****************************************************************************/
 
 GLOBAL VOID wi_open_mod (window)
@@ -571,7 +571,7 @@ WINDOWP window;
 } /* wi_draw_mod */
 
 /*****************************************************************************/
-/* Vor zeichnen Status ver�ndern                                             */
+/* Vor zeichnen Status verändern                                             */
 /*****************************************************************************/
 
 PRIVATE VOID wi_start_mod (window)
@@ -620,7 +620,7 @@ WINDOWP window;
 } /* wi_start_mod */
 
 /*****************************************************************************/
-/* Nach zeichnen Status ver�ndern                                            */
+/* Nach zeichnen Status verändern                                            */
 /*****************************************************************************/
 
 PRIVATE VOID wi_finished_mod (window)
@@ -633,7 +633,7 @@ WINDOWP window;
 } /* wi_finished_mod */
 
 /*****************************************************************************/
-/* Zeitablauf f�r Fenster                                                    */
+/* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -715,7 +715,7 @@ WORD   icon;
 		sprintf (window->info, "   Cue-Time     Entry-Time    Exit-Time   Spd  Ch Vol   X    Y  ");
 	} /* if */
 	
-	return (window);                      /* Fenster zur�ckgeben */
+	return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 PRIVATE WORD ComputeNumDO (WINDOWP window)
@@ -758,7 +758,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 	else
 		h = 8;
 	
-	/* Liste der Display-Objekte durchgehen und l�schen */
+	/* Liste der Display-Objekte durchgehen und löschen */
 	header = window->dispobjs;
 	element = list_next(header);
 	while (element != header) {
@@ -767,7 +767,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 		element = list_next(element);
 	} /* while */
 
-	/* Alle objekte l�schen */
+	/* Alle objekte löschen */
 	list_empty (window->dispobjs);
 	
 	num_displayobs = ComputeNumDO (window);
@@ -791,7 +791,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 } /* create_displayobs */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -924,7 +924,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Pr�fen, ob DEFAULT-Datei vorhanden */
+		/* Prüfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */

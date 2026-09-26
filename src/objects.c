@@ -8,14 +8,14 @@
 /*****************************************************************************/
 
 /*****************************************************************************
-- speicher mit mem_lset gel�scht in set_setnr_obj, 02.02.95
+- speicher mit mem_lset gelöscht in set_setnr_obj, 02.02.95
 - load_obj und save_obj ohne ftell und relativen seek, 24.01.95
-- get/set_setnr_obj vor �berlauf auch bei SETUPS_EXTERN gesch�tzt, 18.01.95
+- get/set_setnr_obj vor Überlauf auch bei SETUPS_EXTERN geschützt, 18.01.95
 - Fehler-Meldungen auf ERR_Mxxx umgestellt in get/set_setnr_obj sowie load_obj und save_obj, 18.01.95
 28.11.94
 - EC4 eingebaut
 - ED4 eingebaut
-- mem_lset f�r rtmmodule initialisierung in init_modules
+- mem_lset für rtmmodule initialisierung in init_modules
 24.08.94
 - CMO ans Ende der Initialisierung
 03.05.94
@@ -27,16 +27,16 @@
 - CMO-Modul eingebaut
 - Standard-Funktionen in module_create
 - test umgebaut
-- destroy_obj mit mem_free f�r Datenstruktur-Pointer
+- destroy_obj mit mem_free für Datenstruktur-Pointer
 - create_window_obj eingebaut
 - save_obj ohne set_dakstat(0)
 - showhelp_obj und help_obj getrennt
 24.06.93
 - RTMCLASS Manipulation eingebaut
 - copy_icon bei init eingebaut
-- help_obj mit NULL-�berpr�fung
+- help_obj mit NULL-Überprüfung
 17.04.93
-- MSH als eigenst�ndiges Modul, �bernimmt MidiShare Start und Initialisierung
+- MSH als eigenständiges Modul, übernimmt MidiShare Start und Initialisierung
 *****************************************************************************/
 
 #include "import.h"
@@ -49,7 +49,7 @@
 
 #include "realtim5.h"
 #include "realtspc.h"
-#include <msh_unit.h>					/* Deklarationen f�r MidiShare */
+#include <msh_unit.h>					/* Deklarationen für MidiShare */
 
 #include "var.h"
 
@@ -84,7 +84,7 @@
 #include "objects.h"
 
 /****** DEFINES **************************************************************/
-/* Macro f�r Setup Addressierung, ersetzt setup[setupnr] */
+/* Macro für Setup Addressierung, ersetzt setup[setupnr] */
 #define Setup(setupnr) (VOID *)((BYTE *)module->setups + (module->setup_length * setupnr))
 
 /****** TYPES ****************************************************************/
@@ -131,7 +131,7 @@ GLOBAL VOID	set_edit_obj		(RTMCLASSP module)
 
 GLOBAL BOOLEAN	get_setnr_obj	(RTMCLASSP module, LONG setupnr)
 {
-	/* Setup-Speicher auf Platte / im RAM mit neuer Einstellung f�llen */
+	/* Setup-Speicher auf Platte / im RAM mit neuer Einstellung füllen */
 	/* akt->setups[] , bzw. akt->Datei */
 	
 	ED_P		actual = module->actual;
@@ -169,7 +169,7 @@ GLOBAL BOOLEAN	get_setnr_obj	(RTMCLASSP module, LONG setupnr)
 #endif
 					if (ok)
 					{
-						/* fwrite liefert Anzhal der geschriebenen Records zur�ck */
+						/* fwrite liefert Anzhal der geschriebenen Records zurück */
 						ok =  fwrite(akt, module->setup_length, 1, module->file_pointer);
 						if (ok)
 						{
@@ -188,7 +188,7 @@ GLOBAL BOOLEAN	get_setnr_obj	(RTMCLASSP module, LONG setupnr)
 	} /* if */
 	else
 	{
-		/* Standard-Setup ist unver�nderlich */
+		/* Standard-Setup ist unveränderlich */
 		ok = FALSE;
 		hndl_alert_obj (module, ERR_STANDARD);
 	} /* else */
@@ -197,7 +197,7 @@ GLOBAL BOOLEAN	get_setnr_obj	(RTMCLASSP module, LONG setupnr)
 
 GLOBAL BOOLEAN	set_setnr_obj	(RTMCLASSP module, LONG setupnr)
 {
-	/* Akt. Setup von Platte / aus RAM mit neuer Einstellung f�llen */
+	/* Akt. Setup von Platte / aus RAM mit neuer Einstellung füllen */
 	/* setups[]->akt , bzw. Datei->akt */
 	
 	ED_P	actual = module->actual;
@@ -240,9 +240,9 @@ GLOBAL BOOLEAN	set_setnr_obj	(RTMCLASSP module, LONG setupnr)
 #endif
 					if (ok)
 					{
-						/* Vorsichtshalber Speicherbereich l�schen */
+						/* Vorsichtshalber Speicherbereich löschen */
 						mem_lset(actual->setup, 0, module->setup_length);
-						/* fread liefert Anzahl der geschriebenen Records zur�ck */
+						/* fread liefert Anzahl der geschriebenen Records zurück */
 						ok =  fread(akt, module->setup_length, 1, module->file_pointer);
 						if (ok)
 						{
@@ -357,7 +357,7 @@ GLOBAL VOID set_cancel_obj (WINDOWP window)
 
 	module->set_edit(module);
 	module->set_dbox(module);
-	/* draw_object(window, ROOT); nicht n�tig, wird von WINDOWS �bernommen */
+	/* draw_object(window, ROOT); nicht nötig, wird von WINDOWS übernommen */
 } /* set_ok_obj */
 
 GLOBAL VOID set_standard_obj (WINDOWP window)
@@ -398,14 +398,14 @@ GLOBAL BOOLEAN	load_obj	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 
 	if (ok)
 	{
-		/* Alte Datei schliessen,  wenn n�tig */
+		/* Alte Datei schliessen,  wenn nötig */
 		if (module->file_status & FILE_OPENED)
 		{
 			module->file_status &= ~FILE_OPENED;
 			fclose (module->file_pointer);
 		} /* if */
 
-		/* Datei �ffnen f�r lesen+schreiben, wenn vorhanden */
+		/* Datei öffnen für lesen+schreiben, wenn vorhanden */
 		in = fopen(module->file_name, "r+b");
 		if(in == 0)
 		{	
@@ -433,7 +433,7 @@ GLOBAL BOOLEAN	load_obj	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 								if (x % 100 == 0)
 									set_daktstat((WORD)(x*100/max_setups));
 							} /* for */
-							/* Datei schliessen, Schutz vor Abst�rzen */
+							/* Datei schliessen, Schutz vor Abstürzen */
 							fclose (module->file_pointer);
 							if (ok)
 								set_daktstat(100);
@@ -563,7 +563,7 @@ GLOBAL BOOLEAN	save_obj	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					fclose(module->file_pointer);
 					set_daktstat(100);
 					close_daktstat();
-					/* Datei gleich wieder �ffnen zur Weiterverwendung */
+					/* Datei gleich wieder öffnen zur Weiterverwendung */
 					module->file_pointer = fopen(module->file_name, "r+b");
 				} /* if */
 				break;
@@ -577,7 +577,7 @@ GLOBAL BOOLEAN	test_obj		(RTMCLASSP module, WORD action)
 	switch (action)
 	{
 		case DO_DELETE:
-			/* Pr�fung vor DELETE des Modules */
+			/* Prüfung vor DELETE des Modules */
 			switch (module->location)
 			{
 				case SETUPS_INTERN:
@@ -655,7 +655,7 @@ GLOBAL WORD hndl_alert_obj (RTMCLASSP module, WORD alert_id)
 } /* hndl_alert_obj */
 
 /*****************************************************************************/
-/* Men�behandlung                                                            */
+/* Menübehandlung                                                            */
 /*****************************************************************************/
 
 GLOBAL VOID update_menu_obj (window)
@@ -741,7 +741,7 @@ WORD    action;
 } /* wi_test_obj */
 
 /*****************************************************************************/
-/* �ffne Fenster                                                             */
+/* Öffne Fenster                                                             */
 /*****************************************************************************/
 
 GLOBAL VOID wi_open_obj (window)
@@ -752,7 +752,7 @@ WINDOWP window;
 } /* wi_open_obj */
 
 /*****************************************************************************/
-/* Schlie�e Fenster                                                          */
+/* Schließe Fenster                                                          */
 /*****************************************************************************/
 
 GLOBAL VOID wi_close_obj (window)
@@ -762,7 +762,7 @@ WINDOWP window;
 } /* wi_close_obj */
 
 /*****************************************************************************/
-/* L�sche Fenster                                                            */
+/* Lösche Fenster                                                            */
 /*****************************************************************************/
 
 GLOBAL VOID wi_delete_obj (window)
@@ -794,12 +794,12 @@ LONG    oldpos, newpos;
   LONG delta;
 
   w     = window->scroll.w / window->xfac;      /* Breite in Zeichen */
-  h     = window->scroll.h / window->yfac;      /* H�he in Zeichen */
+  h     = window->scroll.h / window->yfac;      /* Höhe in Zeichen */
   delta = newpos - oldpos;
 
   if (dir & HORIZONTAL)         /* Horizontale Pfeile und Schieber */
   {
-    if (delta != 0)                                    /* Scrolling n�tkg */
+    if (delta != 0)                                    /* Scrolling nötkg */
     {
       if (delta > 0)                                   /* Links-Scrolling */
       {
@@ -816,12 +816,12 @@ LONG    oldpos, newpos;
   } /* if */
   else                          /* Vertikale Pfeile und Schieber */
   {
-    if (delta != 0)                                    /* Scrolling n�tig */
+    if (delta != 0)                                    /* Scrolling nötig */
     {
-      if (delta > 0)                                   /* Aufw�rts-Scrolling */
+      if (delta > 0)                                   /* Aufwärts-Scrolling */
       {
       } /* if */
-      else                                             /* Abw�rts-Scrolling */
+      else                                             /* Abwärts-Scrolling */
       {
       } /* else */
 
@@ -938,7 +938,7 @@ WINDOWP window;
 } /* wi_unclick_obj */
 
 /*****************************************************************************/
-/* Taste f�r Fenster                                                         */
+/* Taste für Fenster                                                         */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN wi_key_obj (window, mk)
@@ -952,7 +952,7 @@ MKINFO  *mk;
 } /* wi_key_obj */
 
 /*****************************************************************************/
-/* Zeitablauf f�r Fenster                                                    */
+/* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
 GLOBAL VOID wi_timer_obj (window)
@@ -982,7 +982,7 @@ WINDOWP window;
 } /* wi_untop_obj */
 
 /*****************************************************************************/
-/* Cut/Copy/Paste f�r Fenster                                                */
+/* Cut/Copy/Paste für Fenster                                                */
 /*****************************************************************************/
 
 GLOBAL VOID wi_edit_obj (window, action)
@@ -1052,7 +1052,7 @@ WORD    icon;
 	
 	if (window)
 	{
-		for (i = 0; window->name[i] == ' '; i++); 	/* Space �berspringen */
+		for (i = 0; window->name[i] == ' '; i++); 	/* Space überspringen */
 		strcpy (name, window->name+i);		/* Name kopieren */
 		c = strchr (name, ' ');				/* Space	suchen */
 		if (c) *c = 0;							/* String abschneiden */
@@ -1173,7 +1173,7 @@ GLOBAL WINDOWP create_window_obj (UWORD kind, WORD class)
 } /* create_window_obj */
 
 /*****************************************************************************/
-/* L�sche Objekt                                                            */
+/* Lösche Objekt                                                            */
 /*****************************************************************************/
 GLOBAL VOID destroy_obj (module)
 RTMCLASSP module;
@@ -1201,7 +1201,7 @@ GLOBAL RTMCLASSP create_module (CHAR *module_name, WORD instance_count)
 	/* REG */ RTMCLASSP module;
 	/* REG */ WORD i;
 	
-	module = NULL;                /* Zun�chst kein Modul zur Verf�gung */
+	module = NULL;                /* Zunächst kein Modul zur Verfügung */
 	
 	for (i = 0; (i < max_rtmmodules) && setin (used_rtmmodules, i); i++);
 	
@@ -1245,11 +1245,11 @@ GLOBAL RTMCLASSP create_module (CHAR *module_name, WORD instance_count)
 		module->help				= help_obj;
 	} /* else */
 	
-	return (module);              /* Gib kreiertes Modul zur�ck */
+	return (module);              /* Gib kreiertes Modul zurück */
 } /* create_module */
 
 /*****************************************************************************/
-/* L�sche Modul                                                            */
+/* Lösche Modul                                                            */
 /*****************************************************************************/
 
 GLOBAL VOID delete_module (module)
@@ -1266,9 +1266,9 @@ RTMCLASSP module;
     if (cont)
     {
 
-        /* close_rtmmodule (module); */                  /* Schlie�e Modul */
+        /* close_rtmmodule (module); */                  /* Schließe Modul */
 
-      slot = find_moduleslot (module);               /* Nicht nur oberstes Modul kann gel�scht werden */
+      slot = find_moduleslot (module);               /* Nicht nur oberstes Modul kann gelöscht werden */
 
       for (i = slot + 1; i < rtmtop; i++) rtmmodules [i - 1] = rtmmodules [i];
 
@@ -1301,7 +1301,7 @@ GLOBAL BOOLEAN term_modules ()
 			if (module->term != 0)       	/* Term vorhanden? */
 				ok &= (module->term) ();	/* Modul beenden */
 			if (module->destroy)
-				module->destroy(module);	/* Komplett l�schen */
+				module->destroy(module);	/* Komplett löschen */
 		} /* if */
 	} /* for */
 

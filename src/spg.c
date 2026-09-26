@@ -9,7 +9,7 @@
 
 /*****************************************************************************
 V 0.13
-- apply Funkionalit�t aus RTM 3 eingebaut, 19.02.95
+- apply Funkionalität aus RTM 3 eingebaut, 19.02.95
 V 0.12
 - ClickSetupField eingebaut, 30.01.95
 V 0.11
@@ -62,13 +62,13 @@ V 0.09
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                        /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                        /* X-Einheiten für Scrolling */
+#define YUNITS 1                        /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh�he in Pixel */
-#define MILLI  0                     	/* Millisekunden f�r Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshöhe in Pixel */
+#define MILLI  0                     	/* Millisekunden für Zeitablauf */
 
 #define MOD_RSC_NAME "SPG_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -82,21 +82,21 @@ typedef struct spg_single
 	WORD	drehung_x,		/* Drehung um die X-Achse */
 			drehung_y,
 			drehung_z,
-			winkel_xy,		/* Winkel gegen XY-Fl�che */
-			winkel_xz,		/* Winkel gegen XZ-Fl�che */
-			winkel_yz;		/* Winkel gegen YZ-Fl�che */
-	UINT	prop_dx : 1,	/* Proportional f�r Drehung X */
+			winkel_xy,		/* Winkel gegen XY-Fläche */
+			winkel_xz,		/* Winkel gegen XZ-Fläche */
+			winkel_yz;		/* Winkel gegen YZ-Fläche */
+	UINT	prop_dx : 1,	/* Proportional für Drehung X */
 			prop_dy : 1,	/* usw. */
 			prop_dz : 1,
 			prop_wxy : 1,
 			prop_wxz : 1,
 			prop_wyz : 1;
-} SPG_SINGLE;				/* Enth�lt alle SPG-Parameter eines einzelnen Signals */
+} SPG_SINGLE;				/* Enthält alle SPG-Parameter eines einzelnen Signals */
 
 typedef struct setup
 {
-	SPG_SINGLE	spg_single [MAXSIGNALS];	/* Enth�lt die SPG-Informationen f�r die einzelnen Kan�le */
-} SETUP;		/* Enth�lt alle Parameter einer kompletten SPG-Einstellung */
+	SPG_SINGLE	spg_single [MAXSIGNALS];	/* Enthält die SPG-Informationen für die einzelnen Kanäle */
+} SETUP;		/* Enthält alle Parameter einer kompletten SPG-Einstellung */
 
 typedef struct status
 {
@@ -104,8 +104,8 @@ typedef struct status
 } STATUS;
 /****** VARIABLES ************************************************************/
 /* Resource */
-PRIVATE WORD	spg_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*spg_rsc_ptr = &spg_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	spg_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*spg_rsc_ptr = &spg_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *spg_setup;
 PRIVATE OBJECT *spg_help;
 PRIVATE OBJECT *spg_desk;
@@ -114,7 +114,7 @@ PRIVATE OBJECT *spg_info;
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 20;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "SPG";		/* Name, f�r Extension etc. */
+PRIVATE CONST STRING module_name = "SPG";		/* Name, für Extension etc. */
 
 /****** FUNCTIONS ************************************************************/
 /* Interne SPG-Funktionen */
@@ -222,7 +222,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 			dy=sqrt(x*x+z*z);
 			dz=sqrt(x*x+y*y);
 	
-			/* Winkel in der XY-Fl�che berechnen f�r Drehung um Z-Achse */
+			/* Winkel in der XY-Fläche berechnen für Drehung um Z-Achse */
 			if (x < 0)
 				wz=180+Deg(atan((FLOAT)y/(FLOAT)x));	
 			else if (x > 0)
@@ -230,7 +230,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 			else
 				wz=Sign(y)*90;
 	
-			/* Winkel in der XZ-Fl�che berechnen f�r Drehung um Y-Achse */
+			/* Winkel in der XZ-Fläche berechnen für Drehung um Y-Achse */
 			if (x < 0)
 				wy=180+Deg(atan((FLOAT)z/(FLOAT)x));	
 			else if (x > 0)
@@ -238,7 +238,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 			else
 				wy=Sign(z)*90;
 	
-			/* Winkel in der YZ-Fl�che berechnen f�r Drehung um X-Achse */
+			/* Winkel in der YZ-Fläche berechnen für Drehung um X-Achse */
 			if (y< 0)
 				wx=180+Deg(atan((FLOAT)z/(FLOAT)y));	
 			else if (y > 0)
@@ -248,7 +248,7 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 	
 			dxyz = sqrt(x*x+y*y+z*z);
 	
-			/*  Winkel Y-Achse gegen X-Z-Fl�che */
+			/*  Winkel Y-Achse gegen X-Z-Fläche */
 	   	if (!dy)
 		   	wxz=Sign(y)*90;
 			else
@@ -317,7 +317,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 		else
 		{
 			module->import_status |= FILE_OPENED;
-			/* Zeiger auf erstes Setup nochmal holen, wegen Supervisor-M�ll in file_split */
+			/* Zeiger auf erstes Setup nochmal holen, wegen Supervisor-Müll in file_split */
 			akt = module->actual->setup;
 			daktstatus(" SPG-Datei wird importiert ... ", module->import_name);
 			module->flags |= FLAG_IMPORTING;
@@ -330,12 +330,12 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 					ok = fscanf(in, "%d", &single->drehung_x);
 					ok = fscanf(in, "%d", &single->winkel_xz);
 					ok = fscanf(in, "%d", &single->drehung_z);
-					single++;	/* Auf Info f�r n�chste Signal zeigen */
+					single++;	/* Auf Info für nächste Signal zeigen */
 				} /* for */
 #if false
 				/* ok = fscanf(in, "%s", s);	/* Leerzeile */ */
 #endif
-				/* Setup speichern und n�chstes Setup anw�hlen */
+				/* Setup speichern und nächstes Setup anwählen */
 				if (! module->get_setnr(module, setnr))
 					ok = EOF;	/* Import beenden */
 				if (setnr % 20 == 0)
@@ -357,7 +357,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* Zur�cksetzen von Werten */
+	/* Zurücksetzen von Werten */
 } /* reset */
 
 PUBLIC VOID		precalc	(RTMCLASSP module)
@@ -499,11 +499,11 @@ WORD   icon;
     sprintf (window->info, spg_text [FSPGI].ob_spec.free_string, 0);
   } /* if */
 
-  return (window);                      /* Fenster zur�ckgeben */
+  return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -653,7 +653,7 @@ PRIVATE	RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Pr�fen, ob DEFAULT-Datei vorhanden */
+		/* Prüfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
