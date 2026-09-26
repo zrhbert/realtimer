@@ -20,7 +20,7 @@
 /****** FUNCTIONS ************************************************************/
 
 /***************************************************************************/
-/* Vorw�rtsreferenzen                                                      */
+/* Vorwärtsreferenzen                                                      */
 /***************************************************************************/
 
 LOCAL VOID fix_tree    _((WORD gl_hbox, WORD gl_wbox, WORD n_tree, OBJECT **rs_trindex, OBJECT *rs_object));

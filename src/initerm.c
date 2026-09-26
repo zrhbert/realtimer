@@ -7,10 +7,10 @@
 
 /*****************************************************************************
 - Icons hidden wenn disabled, 09.01.95
-- Icon/Men� aktivierung f�r Module eingebaut in init_initerm, 08.01.95
+- Icon/Menü aktivierung für Module eingebaut in init_initerm, 08.01.95
 - dlogin eingebaut, 04.01.95
 25.12.94
-- terminierungs-Reihenfolge f�r realtspc, objects und dispobj umgestellt, 25.12.94
+- terminierungs-Reihenfolge für realtspc, objects und dispobj umgestellt, 25.12.94
 - printer, edit, meta, clipboard, image und trash rausgenommen, 30.11.94
 - ERR_NOSCRAP wird unterbunden 
 09.03.94
@@ -18,7 +18,7 @@
 - init/term_dispobj eingebaut
 03.06.93
 - MAXRESWINDOWS auf 200 gesetzt
-- Dummy Definitionen f�r setup und status eingebaut
+- Dummy Definitionen für setup und status eingebaut
 *****************************************************************************/
 
 #include "import.h"
@@ -58,8 +58,8 @@
 /****** DEFINES **************************************************************/
 
 #define ACC_MENU        "  Realtimer"
-#define MAX_RESWIND     200 /* 40 GEM-Fenster f�r A3D, 40 andere etc. */ 
-#define CLASS_HELP      2               /* Mu� in HELP.H, falls ein Help-Modul exisiert */
+#define MAX_RESWIND     200 /* 40 GEM-Fenster für A3D, 40 andere etc. */ 
+#define CLASS_HELP      2               /* Muß in HELP.H, falls ein Help-Modul exisiert */
 
 #ifndef ALERT_NAME
 #define ALERT_NAME      "realtim5.err"
@@ -94,7 +94,7 @@ typedef struct status
 LOCAL BOOLEAN gl_ok;            /* Initialisierung von global ok? */
 LOCAL BOOLEAN rsc_ok;           /* Initialisierung von resource ok ? */
 LOCAL BOOLEAN alert_ok;         /* Initialisierung von alert ok ? */
-LOCAL BYTE	  *l_alert_msgs;		/* Lokale Definition f�r init */
+LOCAL BYTE	  *l_alert_msgs;		/* Lokale Definition für init */
 /****** FUNCTIONS ************************************************************/
 
 LOCAL LONG    file_length _((BYTE *filename));
@@ -204,7 +204,7 @@ LOCAL BOOLEAN read_alerts ()
           if (*s != EOS)
           {
             p = s;
-            while ((p = strchr (p, SEP_CLOSE)) != NULL) /* Separatoren z�hlen */
+            while ((p = strchr (p, SEP_CLOSE)) != NULL) /* Separatoren zählen */
             {
               p++;
               count++;
@@ -269,7 +269,7 @@ BYTE *argv [];
   
   gl_ok = init_global (argc, argv, ACC_MENU, CLASS_DESK); /* Initialisiere global */
 
-  if (! gl_ok) return (FALSE);                  /* Keine Applikation mehr m�glich */
+  if (! gl_ok) return (FALSE);                  /* Keine Applikation mehr möglich */
 
   rsc_ok = init_resource ();                    /* Initialisiere resource */
 
@@ -299,7 +299,7 @@ BYTE *argv [];
   ok &= init_dispobj ();	                    	/* Initialisiere Display-Objekte */
   ok &= init_modules ();                     	/* Initialisiere RTM-Module */
 	
-	/* Icons und Men�s aller Module aktivieren */
+	/* Icons und Menüs aller Module aktivieren */
 	for (i = 0; i < max_rtmmodules; i++)         	
 	{
 		module = rtmmodules [i];
@@ -321,12 +321,12 @@ BYTE *argv [];
     {
       wind_update (BEG_UPDATE);                 /* Benutzer darf nicht agieren */
       busy_mouse ();                            /* Biene zeigen */
-      if (menu_fits) menu_bar (menu, TRUE);     /* Men�zeile darstellen */
-      open_desktop (NIL);                       /* Desktop �ffnen */
+      if (menu_fits) menu_bar (menu, TRUE);     /* Menüzeile darstellen */
+      open_desktop (NIL);                       /* Desktop öffnen */
 #if false
-      open_clipbrd (ICLIPBRD);                  /* Klemmbrett �ffnen */
+      open_clipbrd (ICLIPBRD);                  /* Klemmbrett öffnen */
 #endif
-      if (*tail)                                /* Paramter�bergabe */
+      if (*tail)                                /* Paramterübergabe */
       {
         p          = tail;
         prefix [0] = EOS;
@@ -343,7 +343,7 @@ BYTE *argv [];
 
           file_split (s, &drive, path, filename, ext);
 
-          if (*prefix == EOS)                           /* Merke Pr�fix */
+          if (*prefix == EOS)                           /* Merke Präfix */
           {
             strcpy (prefix, "A:");
             prefix [0] += (BYTE)drive;
@@ -369,7 +369,7 @@ BYTE *argv [];
           */
         } /* while */
 
-        tail [0] = EOS;                                 /* Nicht mehr ben�tigt */
+        tail [0] = EOS;                                 /* Nicht mehr benötigt */
       } /* if */
 
 #if INCLUDE_RTM_BASE_MODULES
@@ -382,7 +382,7 @@ BYTE *argv [];
 
 #if false
 	if (ok)
-		ok = dlogin();		/* Login durchf�hren */
+		ok = dlogin();		/* Login durchführen */
 #endif
   return (ok);                                  /* Alles gut verlaufen */
 } /* init_initerm */
@@ -411,14 +411,14 @@ LOCAL VOID place_icons ()
 				y = desktop [FKEYS].ob_y;
 				
 				/* Erstes Icon in oberste Reihe, links */
-				/*   H�he  mal (Anzahl       + Rundung)                   pro Zeile */
+				/*   Höhe  mal (Anzahl       + Rundung)                   pro Zeile */
 				y -= iconh * (((FKEYS-ITRASH)+(iconr-((FKEYS-ITRASH+1)%(iconr+1)))) / iconr);
-				/* Evtl. n�chste Zeile */
+				/* Evtl. nächste Zeile */
 				y += iconh * (((count-ITRASH)/ iconr)-1);
 				/* y -= 4; */                         /* 4 Bits freilassen */
 				y -= odd (y);                   /* nur gerade Zahlen */
 				desktop [i].ob_y = y;
-				/* ... und immer sch�n nebeneinander */
+				/* ... und immer schön nebeneinander */
 				desktop [i].ob_x = iconw * ((count-ITRASH) % iconr);
 				count++;
 			} /* else */
@@ -445,7 +445,7 @@ GLOBAL BOOLEAN term_initerm ()
     wind_update (BEG_UPDATE);
     busy_mouse ();
 
-    if (*called_by)                             /* Zur�ck zum Aufrufer bzw. an OUTPUT */
+    if (*called_by)                             /* Zurück zum Aufrufer bzw. an OUTPUT */
     {
       sep [0] = PROGSEP;
       sep [1] = EOS;
@@ -459,7 +459,7 @@ GLOBAL BOOLEAN term_initerm ()
       shel_write (TRUE, TRUE, 1, called_by, s);
     } /* if */
 
-    if (menu_fits) menu_bar (menu, FALSE);      /* Men�zeile freigeben */
+    if (menu_fits) menu_bar (menu, FALSE);      /* Menüzeile freigeben */
 #if false
     ok &= term_edit ();                         /* Terminiere edit */
     ok &= term_meta ();                         /* Terminiere meta */

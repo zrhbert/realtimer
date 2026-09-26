@@ -8,7 +8,7 @@
 
 /*****************************************************************************
 V 1.04
-- 0-Unterdr�ckung in set_dbox, 19.02.95
+- 0-Unterdrückung in set_dbox, 19.02.95
 - ClickSetupField eingebaut, 30.01.95
 - GetP auf 3. Parameter umgestellt
 V 1.03
@@ -19,7 +19,7 @@ V 1.03
 V 1.02 4.3.94
 - load_create_infos und instance_count eingebaut
 - window->module eingebaut
-- module-type f�r setup in define_setup nun other
+- module-type für setup in define_setup nun other
 - Umbau auf create_window_obj
 - Bug in create (module->window) beseitigt
 - import_status in import
@@ -61,13 +61,13 @@ V 1.01
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                        /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                        /* X-Einheiten für Scrolling */
+#define YUNITS 1                        /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh�he in Pixel */
-#define MILLI  1000                     /* Millisekunden f�r Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshöhe in Pixel */
+#define MILLI  1000                     /* Millisekunden für Zeitablauf */
 
 #define MOD_RSC_NAME "GEN_MOD.RSC"		/* Name der Resource-Datei */
 #define MAXSETUPS 50000L			/* Anzahl der GEN-Setups */
@@ -83,7 +83,7 @@ typedef struct setup
 			spg_setup,
 			spo_setup,
 			sps_setup,
-			gep_setup,				/* General-F�hrungspunkt */
+			gep_setup,				/* General-Führungspunkt */
 			rot_setup,
 			man_setup,
 			var_setup;
@@ -95,7 +95,7 @@ typedef struct setup
 			spg_prop,
 			spo_prop,
 			sps_prop,
-			rel_mtr_lfo,			/* Verh�ltnis LFO zu MTR-Speed */
+			rel_mtr_lfo,			/* Verhältnis LFO zu MTR-Speed */
 			zoom_prop;				/* Zoom Proport-Faktor */
 } SETUP;	/* Datenstruktur zum merken eines einzelnen General-Setups */
 
@@ -110,11 +110,11 @@ typedef struct status
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "GEN";		/* Name, f�r Extension etc. */
+PRIVATE CONST STRING module_name = "GEN";		/* Name, für Extension etc. */
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	gen_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*gen_rsc_ptr = &gen_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	gen_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*gen_rsc_ptr = &gen_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *gen_setup;
 PRIVATE OBJECT *gen_help;
 PRIVATE OBJECT *gen_desk;
@@ -419,7 +419,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 		else
 		{
 			module->import_status |= FILE_OPENED;
-			akt = module->actual->setup; /* Zeiger auf erstes Setup nochmal holen, wegen Supervisor-M�ll in file_split */
+			akt = module->actual->setup; /* Zeiger auf erstes Setup nochmal holen, wegen Supervisor-Müll in file_split */
 			
 			daktstatus(" GEN-Datei wird importiert ... ", module->import_name);
 			module->flags |= FLAG_IMPORTING;
@@ -470,7 +470,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 				*spg_prop	= 100;
 				*spo_prop	= 100;
 				*sps_prop	= 100;
-				*gep_setup	= 0;		/* General-F�hrungspunkt */
+				*gep_setup	= 0;		/* General-Führungspunkt */
 				*man_setup	= 0;
 				*rot_setup	= 0;
 				*var_setup	= 0;
@@ -552,7 +552,7 @@ MKINFO  *mk;
 } /* wi_click_mod */
 
 /*****************************************************************************/
-/* Zeitablauf f�r Fenster                                                    */
+/* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -611,11 +611,11 @@ WORD   icon;
 		
 	} /* if */
 	
-  return (window);                      /* Fenster zur�ckgeben */
+  return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -762,7 +762,7 @@ GLOBAL	RTMCLASSP create_gen ()
 		else
 		{
 		} /* else */
-		/* Pr�fen, ob DEFAULT-Datei vorhanden */
+		/* Prüfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -811,7 +811,7 @@ PRIVATE BOOLEAN init_standard (RTMCLASSP module)
 	standard->spg_prop = 100;
 	standard->spo_prop = 100;
 	standard->sps_prop = 100;
-	standard->rel_mtr_lfo = 0;			/* Verh�ltnis LFO zu MTR-Speed */
+	standard->rel_mtr_lfo = 0;			/* Verhältnis LFO zu MTR-Speed */
 	standard->zoom_prop = 100;				/* Zoom Proport-Faktor */
 	
 	return TRUE;

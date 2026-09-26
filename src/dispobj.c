@@ -10,18 +10,18 @@
 
 /*****************************************************************************
 V 0.05
-- var und text f�r Bar, 20.02.95
+- var und text für Bar, 20.02.95
 - ClickPushObject eingebaut, 18.02.95
 - Quadro repariert, 09.02.95
 - Bug in KeyValueObject beseitigt, 03.02.95
 - Update-Bug in ClickValueObject beseitigt, 03.02.95
 - Bar modifiziert, 15.01.95
 - bug in ClickTimeObject beseitigt, 08.01.95
-- delay in ClickValueObject und ClickTimeObject eingef�hrt
+- delay in ClickValueObject und ClickTimeObject eingeführt
 - dzahl in ClickTimeObject eingebaut, 23.12.94
 - Setup-Class in dsetup auf CLASS_xxx umgestellt
 - Volume in Space eingebaut
-- Bug in �bernahme der display Flags bereinigt
+- Bug in Übernahme der display Flags bereinigt
 - KeyValueObject modifiziert und eingebaut
 V 0.04 28.08.94
 - modified some FLOATS to INTs
@@ -49,7 +49,7 @@ V 0.02
 #if INCLUDE_RTM_UNUSED_MODULES
 #include "ed4.h"			/* wg. soundobjekten */
 #endif /* INCLUDE_RTM_UNUSED_MODULES */
-#include <msh_unit.h>		/* Deklarationen f�r MidiShare Library */
+#include <msh_unit.h>		/* Deklarationen für MidiShare Library */
 #include "msh.h"			/* wg. Time-Funktionen */
 
 #include "export.h"
@@ -62,7 +62,7 @@ V 0.02
 /****** TYPES ****************************************************************/
 
 /****** VARIABLES ************************************************************/
-LOCAL CONST LONG	aspect_x  = 120L,		/* Default-Werte f�r Space */
+LOCAL CONST LONG	aspect_x  = 120L,		/* Default-Werte für Space */
 						aspect_y  =-120L;		/* Verzerrung x/y/z */
 LOCAL CONST LONG	persp 	 = 12L;		/* Perspektive */
 
@@ -593,7 +593,7 @@ LOCAL BOOL KeyValueObject (DISPOBJP dispobj, MKINFO *mk)
 				window->milli = 1;
 				return TRUE;
 			case	PLUS	:
-				/* Wert um 1 vergr��ern und rausschicken */
+				/* Wert um 1 vergrößern und rausschicken */
 				GetPLong (window->object, status->object, &x);
 				x++;
 				send_variable (dispobj->var[0], x);
@@ -748,11 +748,11 @@ PRIVATE VOID ClickValueObject (DISPOBJP dispobj, MKINFO *mk)
 			dispobj->new = TRUE;
 			send_variable (dispobj->var[0], x);
 			timer_all(1);
-			/* Pr�fen ob Taste gedr�ckt */
+			/* Prüfen ob Taste gedrückt */
 			mkstate(mk);
 			if (mk->mobutton>0 && mk->momask>0)
 				delay (150);
-			/* Pr�fen ob Taste immernoch gedr�ckt */
+			/* Prüfen ob Taste immernoch gedrückt */
 			mkstate(mk);
 			repeat =  (mk->mobutton>0 && mk->momask>0);
 		} while (repeat);
@@ -813,11 +813,11 @@ PRIVATE VOID ClickTimeObject (DISPOBJP dispobj, MKINFO *mk)
 				send_variable (dispobj->var[0], x);
 				dispobj->timer (dispobj);
 				timer_all(1);
-				/* Pr�fen ob Taste gedr�ckt */
+				/* Prüfen ob Taste gedrückt */
 				mkstate(mk);
 				if (mk->mobutton>0 && mk->momask>0)
 					delay (200);
-				/* Pr�fen ob Taste immernoch gedr�ckt */
+				/* Prüfen ob Taste immernoch gedrückt */
 				mkstate(mk);
 				repeat =  (mk->mobutton>0 && mk->momask>0);
 			} while (repeat);
@@ -855,7 +855,7 @@ PRIVATE VOID ClickPushObject (DISPOBJP dispobj, MKINFO *mk)
 		
 	x = get_checkbox (window->object, status->object);
 
-	/* Objekt kann nur eingedr�ckt werden */
+	/* Objekt kann nur eingedrückt werden */
 	if (!x)
 	{
 		x = TRUE;
@@ -1171,7 +1171,7 @@ LOCAL VOID FinishBar (DISPOBJP dispobj)
 {
 	BARSTATP	status = &dispobj->status->bar;
 
-	/* Neue Koordinaten �bernehmen */
+	/* Neue Koordinaten übernehmen */
 	mem_move(&status->pos_alt, &status->position,(UWORD)sizeof(POS_1D) * MAXPOS); 
 
 	dispobj->new = FALSE;
@@ -1636,7 +1636,7 @@ LOCAL BOOL	SetUniSpace	(DISPOBJP dispobj, INT id, LONG uni)
 				case DOUniRotationY:
 				case DOUniRotationZ:
 				case DOUniSpacePerspective:
-					/* Hat sich die Persp ge�ndert? */
+					/* Hat sich die Persp geändert? */
 					if (dispobj->new && 	!status->initializing)
 						compute_persp_lookups (dispobj);
 					break;
@@ -1661,7 +1661,7 @@ LOCAL BOOL	SetTypeSpace	(DISPOBJP dispobj, INT id, INT type)
 			dispobj->new = TRUE;
 			break;
 		case DOTypeSpaceMode:
-			/* Zeichenroutine f�r Linien festlegen */
+			/* Zeichenroutine für Linien festlegen */
 			status->numpoints = 8;
 			switch (type)
 			{
@@ -1704,7 +1704,7 @@ LOCAL BOOL	SetTypeCMOSpace	(DISPOBJP dispobj, INT id, INT type)
 			dispobj->new = TRUE;
 			break;
 		case DOTypeSpaceMode:
-			/* Zeichenroutine f�r Linien festlegen */
+			/* Zeichenroutine für Linien festlegen */
 			switch (type)
 			{
 				case MONO:			
@@ -1854,7 +1854,7 @@ LOCAL VOID StartSpace (DISPOBJP dispobj)
 	StartDispobj (dispobj);
 	
 	/* Direkt die Koordinaten aus den VAR's in den Positionsspeicher
-		�bertragen. */
+		übertragen. */
 	for (signal = 0; signal < MAXSIGNALS; signal++)
 	{
 		position[signal].x = var_get_value(var_module, VAR_PUF_KOORX0 + signal) * 100 / MAXKOOR;
@@ -1874,7 +1874,7 @@ LOCAL VOID StartCMOSpace (DISPOBJP dispobj)
 	StartDispobj (dispobj);
 	
 	/* Koordinaten werden direkt vom CMO Modul in die Status-Register 
-		�bertragen. */
+		übertragen. */
 
 } /* StartCMOSpace */
 	
@@ -1882,7 +1882,7 @@ LOCAL VOID FinishSpace (DISPOBJP dispobj)
 {
 	SPACESTATP	status = &dispobj->status->space;
 
-	/* Neue Koordinaten �bernehmen */
+	/* Neue Koordinaten übernehmen */
 	mem_move(&status->pos_alt, &status->position,(UWORD)sizeof(POS_3D) * MAXPOS); 
 	mem_move(&status->vol_alt, &status->volume,(UWORD)sizeof(WORD) * MAXPOS); 
 
@@ -2009,7 +2009,7 @@ LOCAL  VOID Project3DNeu (DISPOBJP dispobj, POS_3DP point, POINT_2DP proj)
 	else if (yz < DMAXDOKOOR)
 		yz = -DMAXDOKOOR;
 
-		/* Umrechnen von xz und yz auf Objektgr��e */
+		/* Umrechnen von xz und yz auf Objektgröße */
 		*x = status->xoffset + xz * work->w * aspect_x / 20000L;
 		*y = status->xoffset + yz * work->h * aspect_y / 20000L;
 #endif
@@ -2058,10 +2058,10 @@ LOCAL  VOID text_3d (DISPOBJP dispobj, POS_3D *point, STRING text)
 LOCAL  VOID multiline_3d (DISPOBJP dispobj, POS_3D *point[], WORD points)
 {
 	/* Zeichnet einen 3-D Linienzug mit maximal 64 Eckpunkten */
-	/* *point[] enth�lt Zeiger auf die 3D-Koordinaten, ab *point[0]! */
-	POINT_2D		proj;					/* Merker f�r Projektionsdaten */
-	WORD 			count;					/* Laufender Z�hler */
-	INT			pxyarray[128];			/* VDI-�bergabe-Array */
+	/* *point[] enthält Zeiger auf die 3D-Koordinaten, ab *point[0]! */
+	POINT_2D		proj;					/* Merker für Projektionsdaten */
+	WORD 			count;					/* Laufender Zähler */
+	INT			pxyarray[128];			/* VDI-Übergabe-Array */
 	SPACESTATP	status = &dispobj->status->space;
 	ProjectFn	*projection = status->projection;
 	
@@ -2098,7 +2098,7 @@ LOCAL  VOID draw_polygon	(DISPOBJP dispobj, POLY_P poly)
 	
 	for (e = 0; e < num_edges; e++) {
 
-		/* Linien-Attribute setzen, wenn n�tig */
+		/* Linien-Attribute setzen, wenn nötig */
 		if (line_style != edge->line_style)
 			vsl_type (vdi_handle, edge->line_style);
 		if ((begin_style != edge->begin_style) ||
@@ -2109,14 +2109,14 @@ LOCAL  VOID draw_polygon	(DISPOBJP dispobj, POLY_P poly)
 		if (width != edge->width)
 			vsl_width (vdi_handle, edge->width);
 
-		/* Punkte einsetzen f�r v_pline */
+		/* Punkte einsetzen für v_pline */
 		pxyarray[0] = proj[edge->from].x;
 		pxyarray[1] = proj[edge->from].y;
 		pxyarray[2] = proj[edge->to].x;
 		pxyarray[3] = proj[edge->to].y;
 		
 		v_pline( vdi_handle, 2, pxyarray );
-		edge++;	/* N�chste Kante */
+		edge++;	/* Nächste Kante */
 	} /* for edge */
 	
 } /* draw_polygon */
@@ -2126,11 +2126,11 @@ LOCAL  VOID draw_polygon	(DISPOBJP dispobj, POLY_P poly)
 LOCAL VOID DrawED4Cursors (DISPOBJP dispobj)
 {
 	SPACESTATP	status = &dispobj->status->space;
-	BOOL			xneu,  yneu,  zneu;		/* Merker f�r Koor-�nderung */
+	BOOL			xneu,  yneu,  zneu;		/* Merker für Koor-Änderung */
 	POS_3DP		pos_alt = status->pos_alt,
 					position = status->position;
-	REG POS_3DP palt, pneu;				/* Zeiger f�r alte Werte */
-	POS_3D 		p1, p2;					/* Variablen f�r Koor-�bergabe */
+	REG POS_3DP palt, pneu;				/* Zeiger für alte Werte */
+	POS_3D 		p1, p2;					/* Variablen für Koor-Übergabe */
 	WORD			signal, breite, numpoints = status->numpoints;
 	BOOL			new = dispobj->new;
 	WORD			z, zalt;
@@ -2160,11 +2160,11 @@ LOCAL VOID DrawED4Cursors (DISPOBJP dispobj)
 		
 		if (!new)
 		{
-			/* Alte Linie l�schen */
+			/* Alte Linie löschen */
 			SetPoint( p1, palt->x, -breite, -breite);
 			SetPoint( p2, palt->x,  breite, -breite);
 
-			line_3d (dispobj,  &p1, &p2);	/* Alte Linie l�schen */
+			line_3d (dispobj,  &p1, &p2);	/* Alte Linie löschen */
 		} /* if */
 	} /* if */
 
@@ -2179,7 +2179,7 @@ LOCAL VOID DrawED4Cursors (DISPOBJP dispobj)
 
 		if (!new)
 		{
-			/* Alte Linie l�schen */
+			/* Alte Linie löschen */
 			SetPoint( p1, -breite, palt->y, -breite);
 			SetPoint( p2,  breite, palt->y, -breite);
 
@@ -2219,7 +2219,7 @@ LOCAL VOID DrawED4Cursors (DISPOBJP dispobj)
 
 		if (!new)
 		{
-			/* Alte Linie l�schen */
+			/* Alte Linie löschen */
 			SetPoint( p1, -breite, -breite, zalt);
 			SetPoint( p2, -breite,  breite, zalt);
 			line_3d (dispobj,  &p1, &p2);
@@ -2244,11 +2244,11 @@ LOCAL VOID DrawED4Cursors (DISPOBJP dispobj)
 LOCAL  VOID crosshairs (DISPOBJP dispobj)
 {
 	SPACESTATP	status = &dispobj->status->space;
-	BOOL			xneu,  yneu,  zneu;		/* Merker f�r Koor-�nderung */
+	BOOL			xneu,  yneu,  zneu;		/* Merker für Koor-Änderung */
 	POS_3DP		pos_alt = status->pos_alt,
 					position = status->position;
-	REG POS_3DP palt, pneu;				/* Zeiger f�r alte Werte */
-	POS_3D 		p1, p2;					/* Variablen f�r Koor-�bergabe */
+	REG POS_3DP palt, pneu;				/* Zeiger für alte Werte */
+	POS_3D 		p1, p2;					/* Variablen für Koor-Übergabe */
 	WORD			signal, breite, numpoints = status->numpoints;
 	BOOL			new = dispobj->new;
 	
@@ -2277,10 +2277,10 @@ LOCAL  VOID crosshairs (DISPOBJP dispobj)
 				
 				if (!new)
 				{
-					/* Alte Linie l�schen */
+					/* Alte Linie löschen */
 					SetPoint (p1, palt->x, palt->y, -breite);
 					SetPoint (p2, palt->x, palt->y, breite);
-					line_3d (dispobj,  &p1, &p2);	/* Alte Linie l�schen */
+					line_3d (dispobj,  &p1, &p2);	/* Alte Linie löschen */
 				} /* if */
 			} /* if */
 		
@@ -2292,7 +2292,7 @@ LOCAL  VOID crosshairs (DISPOBJP dispobj)
 				
 				if (!new)
 				{
-					/* Alte Linie l�schen */
+					/* Alte Linie löschen */
 					SetPoint (p1, -breite, palt->y, palt->z);
 					SetPoint (p2,  breite, palt->y, palt->z);
 					line_3d (dispobj,  &p1, &p2);
@@ -2307,7 +2307,7 @@ LOCAL  VOID crosshairs (DISPOBJP dispobj)
 				
 				if (!new)
 				{
-					/* Alte Linie l�schen */
+					/* Alte Linie löschen */
 					SetPoint (p1, palt->x, -breite, palt->z);
 					SetPoint (p2, palt->x, breite, palt->z);
 					line_3d (dispobj,  &p1, &p2);
@@ -2339,7 +2339,7 @@ LOCAL  VOID VolSpace (DISPOBJP dispobj)
 	{
 		if (status->vol_line[signal+base])
 		{
-			/* H�he berechnen */
+			/* Höhe berechnen */
 			pos.y = MAXDOKOOR - (numpoints - signal) * vheight;
 			orig.y = pos.y;
 			
@@ -2384,7 +2384,7 @@ LOCAL  VOID mono (DISPOBJP dispobj)
 			{
 				palt = &pos_alt[signal+base];
 				neu_k  = pneu->x != palt->x;		/* Feststellen, ob neu gezeichnet */
-				neu_k |= pneu->y != palt->y;		/* werden mu� */
+				neu_k |= pneu->y != palt->y;		/* werden muß */
 				neu_k |= pneu->z != palt->z;
 				if (neu_k) 		line_3d(dispobj, &null, palt);
 			} /* if */
@@ -2416,10 +2416,10 @@ LOCAL  VOID stereo (DISPOBJP dispobj)
 				alt1 = &pos_alt[signal+base];
 				alt2 = &pos_alt[signal+base+1];
 				neu_k  = akt1->x != alt1->x;	/* Feststellen, ob neu gezeichnet */
-				neu_k |= akt1->y != alt1->y;	/* werden mu� wg. 1. Signal */
+				neu_k |= akt1->y != alt1->y;	/* werden muß wg. 1. Signal */
 				neu_k |= akt1->z != alt1->z;
 				neu_k |= akt2->x != alt2->x;	/* Feststellen, ob neu gezeichnet */
-				neu_k |= akt2->y != alt2->y;	/* werden mu� wg. 2. Signal*/
+				neu_k |= akt2->y != alt2->y;	/* werden muß wg. 2. Signal*/
 				neu_k |= akt2->z != alt2->z;
 				if (neu_k)		line_3d(dispobj, alt1, alt2);
 			} /* if */
@@ -2434,8 +2434,8 @@ LOCAL  VOID quadro (DISPOBJP dispobj)
 	SPACESTATP	status = &dispobj->status->space;
 	POS_3DP 		position = status->position,
 		 			pos_alt = status->pos_alt,
-					points_akt[MAXPOS], /* Zeiger-Array f�r �bergabe */
-					points_alt[MAXPOS]; /* Zeiger-Array f�r �bergabe */
+					points_akt[MAXPOS], /* Zeiger-Array für Übergabe */
+					points_alt[MAXPOS]; /* Zeiger-Array für Übergabe */
 	WORD			signal, offset, numpoints = status->numpoints;
 	WORD			base = status->base;
 	BOOL		new = dispobj->new;
@@ -2446,7 +2446,7 @@ LOCAL  VOID quadro (DISPOBJP dispobj)
 		neu = FALSE;
 		for (signal = 0; signal < numpoints; signal++)
 		{
-			/* Pr�fen, ob irgendeine Koordinate gezeichnet werden mu� */
+			/* Prüfen, ob irgendeine Koordinate gezeichnet werden muß */
 			neu = neu || status->display[offset+signal+base];
 			/* Koordinaten immer in den Puffer kopieren */
 			points_akt[signal]= &position[offset+signal+base];
@@ -2466,8 +2466,8 @@ LOCAL  VOID okto (DISPOBJP dispobj)
 	SPACESTATP	status = &dispobj->status->space;
 	POS_3DP 	position = status->position,
 				pos_alt = status->pos_alt,
-				points_akt[MAXPOS], /* Zeiger-Array f�r �bergabe */
-				points_alt[MAXPOS]; /* Zeiger-Array f�r �bergabe */
+				points_akt[MAXPOS], /* Zeiger-Array für Übergabe */
+				points_alt[MAXPOS]; /* Zeiger-Array für Übergabe */
 	WORD		signal, numpoints = status->numpoints;
 	WORD			base = status->base;
 	BOOL	new = dispobj->new;
@@ -3022,7 +3022,7 @@ LOCAL  VOID define_quadrophon ()
 
 LOCAL VOID time_str (STRING timestr, LONG time)
 {
-	/* Wandelt einen Long-Wert f�r die Anzahl der Millisekunden */
+	/* Wandelt einen Long-Wert für die Anzahl der Millisekunden */
 	/* in eine Kette von Zahlen der Form hh:mm:ss:ll um */
 	REG LONG temp;
 	REG WORD hh, mm, ss, ll;
@@ -3050,7 +3050,7 @@ LOCAL VOID time_str (STRING timestr, LONG time)
 LOCAL LONG str_time (STRING timestr)
 {
 	/* Wandelt eine Kette von Zahlen der Form hhmmssll */
-	/* in einen Long-Wert f�r die Anzahl der Millisekunden um */
+	/* in einen Long-Wert für die Anzahl der Millisekunden um */
 	REG LONG time;
 	LONG hh = 0L, mm = 0L, ss = 0L, ll = 0L;
 	STRING s, trenn = ":. ";

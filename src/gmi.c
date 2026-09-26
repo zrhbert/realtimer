@@ -8,9 +8,9 @@
 
 /*****************************************************************************
 V 1.01
-- wi_click_mod �ffnet nun die entsprechenden Editoren bei click auf die Namen, 24.01.95
+- wi_click_mod öffnet nun die entsprechenden Editoren bei click auf die Namen, 24.01.95
 V 1.00
-- GEN-Mini aus GEN herausgel�st
+- GEN-Mini aus GEN herausgelöst
 *****************************************************************************/
 #ifndef XRSC_CREATE
 /*#define XRSC_CREATE TRUE*/                    /* X-Resource-File im Code */
@@ -48,13 +48,13 @@ V 1.00
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                        /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                        /* X-Einheiten für Scrolling */
+#define YUNITS 1                        /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh�he in Pixel */
-#define MILLI  1000                     /* Millisekunden f�r Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshöhe in Pixel */
+#define MILLI  1000                     /* Millisekunden für Zeitablauf */
 
 #define MOD_RSC_NAME "GMI_MOD.RSC"		/* Name der Resource-Datei */
 #define MAXSETUPS 1L							/* Anzahl der GMI-Setups */
@@ -76,11 +76,11 @@ typedef struct status
 
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "GMI";		/* Name, f�r Extension etc. */
+PRIVATE CONST STRING module_name = "GMI";		/* Name, für Extension etc. */
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	gmi_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*gmi_rsc_ptr = &gmi_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	gmi_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*gmi_rsc_ptr = &gmi_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *gmi_setup;
 PRIVATE OBJECT *gmi_help;
 PRIVATE OBJECT *gmi_desk;
@@ -265,7 +265,7 @@ MKINFO  *mk;
 	{
 		rtmmodule = rtmmodules [i];
 
-		/* Suche passendes Modul und �ffne */
+		/* Suche passendes Modul und öffne */
 		if (rtmmodule->icon_position == icon)
 			ok = rtmmodule->open (icon);
 	} /* for i */
@@ -275,7 +275,7 @@ MKINFO  *mk;
 } /* wi_click_mod */
 
 /*****************************************************************************/
-/* Zeitablauf f�r Fenster                                                    */
+/* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -339,7 +339,7 @@ WORD   icon;
 		create_displayobs (window);
 	} /* if */
 	
-  return (window);                      /* Fenster zur�ckgeben */
+  return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 PRIVATE VOID create_displayobs (WINDOWP window)
@@ -360,7 +360,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 } /* create_displayobs */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -507,7 +507,7 @@ GLOBAL	RTMCLASSP create_gmi ()
 		else
 		{
 		} /* else */
-		/* Pr�fen, ob DEFAULT-Datei vorhanden */
+		/* Prüfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */

@@ -46,13 +46,13 @@
 #define FLAGS  (WI_RESIDENT)
 #define XFAC   gl_wbox                  /* X-Faktor */
 #define YFAC   gl_hbox                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                        /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                        /* X-Einheiten für Scrolling */
+#define YUNITS 1                        /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 2 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (36 * gl_wbox)           /* Anfangsbreite in Pixel */
-#define INITH  ( 8 * gl_hbox)           /* Anfangsh�he in Pixel */
-#define MILLI  0                        /* Millisekunden f�r Zeitablauf */
+#define INITH  ( 8 * gl_hbox)           /* Anfangshöhe in Pixel */
+#define MILLI  0                        /* Millisekunden für Zeitablauf */
 
 #define MOD_RSC_NAME "VAR_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -79,8 +79,8 @@ typedef struct sysvar
 	WORD		type;				/* Typ: Grad, Prozent, Zeit, Faktor */
 	CHAR		name [16];		/* Nur 10 benutzen wg. LFO, Name dieser Variablen */
 	UWORD		varnumber;		/* evtl. Verweis auf andere Variable */
-	LIST_P	header;			/* Zeiger auf Liste f�r message-Routinen */
-	BOOLEAN	new;				/* Wert hat sich seit letztem Update ver�ndert */
+	LIST_P	header;			/* Zeiger auf Liste für message-Routinen */
+	BOOLEAN	new;				/* Wert hat sich seit letztem Update verändert */
 	clock_t	modified,		/* Letzte Modifikation */
 				updated;			/* Letztes Update im System */
 } SYSVAR;
@@ -97,23 +97,23 @@ typedef struct status *STAT_P;
 
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	var_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*var_rsc_ptr = &var_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	var_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*var_rsc_ptr = &var_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *var_setup;
 PRIVATE OBJECT *var_help;
 PRIVATE OBJECT *var_desk;
 PRIVATE OBJECT *var_text;
 PRIVATE OBJECT *var_info;
 
-PRIVATE WORD		iterations;	/* Anzahl Iterationen f�r VAR-Update */
+PRIVATE WORD		iterations;	/* Anzahl Iterationen für VAR-Update */
 PRIVATE WORD		instance_count = 0;			/* Anzahl der RTM Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "VAR";		/* Name, f�r Extension etc. */
+PRIVATE CONST STRING module_name = "VAR";		/* Name, für Extension etc. */
 
 PRIVATE RTMCLASSP	modulep[MAXMSAPPLS];		/* Zeiger auf Modul-Strukturen */
 PRIVATE WORD		refNums[1];					/* Referenznummern */
 
-PRIVATE BOOL		var_watch = 0;				/* VAR �berpr�fen auf min/max etc. */
+PRIVATE BOOL		var_watch = 0;				/* VAR überprüfen auf min/max etc. */
 PRIVATE BOOL		var_msgs = 0;				/* Anzahl der Message-Routinen */
 /****** FUNCTIONS ************************************************************/
 /* MidiShare Funktionen */
@@ -185,7 +185,7 @@ PRIVATE VOID InstallFilter (SHORT refNum)
 
 	for (i = 0; i<256; i++)
 	{ 										
-		AcceptBit(filter->evType,i);		/* accepte tous les types d'�v�nements	*/
+		AcceptBit(filter->evType,i);		/* accepte tous les types d'événements	*/
 		AcceptBit(filter->port,i);		/* en provenance de tous les ports		*/
 	} /* for */
 											
@@ -203,7 +203,7 @@ GLOBAL VOID send_variable	(UWORD variable, LONG value)
 {
 	/* Sendet eine Nachricht an das VAR-Modul, um eine
 		Variable auf einen neuen Wert zu setzen.
-		Dies ist die Standard-Methode um System-Variablen zu �ndern */
+		Dies ist die Standard-Methode um System-Variablen zu ändern */
 		
 	MidiSTPtr 	e;
 	SHORT			refNum = refNums[1];
@@ -236,7 +236,7 @@ GLOBAL VOID send_variable	(UWORD variable, LONG value)
 
 GLOBAL CHAR	*var_get_name	(RTMCLASSP module, UWORD variable, STRING s)
 {
-	/* VAR-Name in string kopieren und Pointer auf den String zur�ckgeben */
+	/* VAR-Name in string kopieren und Pointer auf den String zurückgeben */
 	if (variable < MAXSYSVARS)
 		strcpy (s, module->status->sysvar[variable].name);
 	else
@@ -286,7 +286,7 @@ GLOBAL VOID		var_set_type	(RTMCLASSP module, UWORD variable, WORD type)
 
 GLOBAL LONG	var_get_value	(RTMCLASSP module, UWORD variable)
 {
-	/* Wert einer Systemvariablen zur�ckgeben, interrupt-tauglich */
+	/* Wert einer Systemvariablen zurückgeben, interrupt-tauglich */
 	if (variable < MAXSYSVARS)
 		return module->status->sysvar[variable].value;
 	else
@@ -295,7 +295,7 @@ GLOBAL LONG	var_get_value	(RTMCLASSP module, UWORD variable)
 
 GLOBAL FLOAT	var_get_relvalue	(RTMCLASSP module, UWORD variable)
 {
-	/* Wert einer Systemvariablen zur�ckgeben, interrupt-tauglich */
+	/* Wert einer Systemvariablen zurückgeben, interrupt-tauglich */
 	if (variable < MAXSYSVARS)
 		return module->status->sysvar[variable].rel_value;
 	else
@@ -306,14 +306,14 @@ GLOBAL FLOAT	var_get_relvalue	(RTMCLASSP module, UWORD variable)
 
 GLOBAL VOID	var_add_rcv		(RTMCLASSP module, UWORD variable, RTMCLASSP refmodule)
 {
-	/* Modulfunktion in VAR-Updateliste einf�gen */
+	/* Modulfunktion in VAR-Updateliste einfügen */
 	/* Liste erweitern */
 	add_link (module, variable, refmodule);
 	
 	/* Aktuellen Wert an Modul senden */
 	send_var (module, variable, refmodule);
 
-	/* Debug: Z�hlen der Messages */
+	/* Debug: Zählen der Messages */
 	var_msgs++;
 } /* var_add_rcv */
 
@@ -322,7 +322,7 @@ GLOBAL VOID	var_del_rcv		(RTMCLASSP module, UWORD variable, RTMCLASSP refmodule)
 	/* Modulfunktion aus VAR-Updateliste herausnehmen */
 	del_link (module, variable, refmodule);
 
-	/* Debug: Z�hlen der Messages */
+	/* Debug: Zählen der Messages */
 	var_msgs--;
 } /* var_del_rcv */
 
@@ -354,7 +354,7 @@ PRIVATE VOID	add_link		(RTMCLASSP module, UWORD variable, KEYTYPE key)
 	element = list_search (header, key);
 	if (element == header)
 	{
-		/* Nur einf�var, wenn noch nicht drin */
+		/* Nur einfüvar, wenn noch nicht drin */
 		element = list_create();
 		element->key		= key;
 		list_insert (header, element);	
@@ -403,7 +403,7 @@ GLOBAL VOID	update_var		(RTMCLASSP module, UWORD variable, LONG value, BOOL rese
 	{
 		modified = var->modified;
 		updated	= var->updated;
-		/* Nur Update durchf�hren, wenn Wert neuer als letztes Update ist */
+		/* Nur Update durchführen, wenn Wert neuer als letztes Update ist */
 
 		if (modified > updated || var->value != value || resend)
 		{
@@ -430,16 +430,16 @@ GLOBAL VOID	update_var		(RTMCLASSP module, UWORD variable, LONG value, BOOL rese
 					} /* if message */
 				} /* if mod */
 				
-				/* Pr�fen, ob sich Wert ver�ndert hat, z.B. durch minmaxsetup */
+				/* Prüfen, ob sich Wert verändert hat, z.B. durch minmaxsetup */
 #if true
 				if (var->value != value)
-					return;	/* Sofort beenden, weil rekursiv aufgerufen und schon ge�ndert! */
+					return;	/* Sofort beenden, weil rekursiv aufgerufen und schon geändert! */
 				else
-					element = element->next;	/* N�chstes Element */
+					element = element->next;	/* Nächstes Element */
 #else
 				if (var->value != value && iterations < MAXITERATIONS )
 				{
-					/* Neuen Wert �bernehmen */
+					/* Neuen Wert übernehmen */
 					SetValueVar (var, value);
 					msg->value = value;
 					/* Liste noch einmal durcharbeiten */
@@ -447,7 +447,7 @@ GLOBAL VOID	update_var		(RTMCLASSP module, UWORD variable, LONG value, BOOL rese
 					iterations++;
 				} /* if modified */
 				else
-					element = element->next;	/* N�chstes Element */
+					element = element->next;	/* Nächstes Element */
 #endif
 			} /* while */
 			
@@ -459,7 +459,7 @@ GLOBAL VOID	update_var		(RTMCLASSP module, UWORD variable, LONG value, BOOL rese
 		} /* if modified */
 		else
 			var->updated	= Timestamp();
-	} /* if g�ltig */
+	} /* if gültig */
 	else if (var_watch)
 		hndl_alert_obj (module, ERR_NOMEMORY);	/* Dummy Fehlermeldung */
 } /* update_var */
@@ -470,7 +470,7 @@ PRIVATE VOID send_var	(RTMCLASSP module, UWORD variable, RTMCLASSP destmodule)
 	
 	MSG_SET_VAR		message, *msg = &message;
 	
-	if (module != destmodule)	/* Nicht im eigenen Modul schicken, da unn�tig */
+	if (module != destmodule)	/* Nicht im eigenen Modul schicken, da unnötig */
 	{
 	/* Message Passing vorbereiten */
 		msg->variable	= variable;
@@ -523,7 +523,7 @@ PRIVATE VOID    set_dbox	(RTMCLASSP module)
 
 PRIVATE WORD doffset(UWORD var)
 {
-	/* Display Offset f�r eine Anzeige mit vier Reihen berechnen */
+	/* Display Offset für eine Anzeige mit vier Reihen berechnen */
 	switch (var*4/MAXSETVARS)
 	{
 		case 0:
@@ -552,16 +552,16 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 		alt = akt->quelle[variable];	/* Alte Zuweisung */
 		neu = ed->quelle[variable];	/* Neue Zuweisung */
 		
-		/* Schauen, ob sich die Zuweisung zu den sysvars ge�ndert hat */
+		/* Schauen, ob sich die Zuweisung zu den sysvars geändert hat */
 		if (neu < MAXSYSVARS)
 		{
-			/* Alte Nummer zul�ssig? */
+			/* Alte Nummer zulässig? */
 			if (alt < MAXSYSVARS)
 			{
 				/* Ist noch die alte Nummer eingetragen, 
-					d. h. noch nicht von einer anderen Var. �berschrieben? */
+					d. h. noch nicht von einer anderen Var. überschrieben? */
 				if(sysvar[alt].varnumber == variable)
-					sysvar[alt].varnumber = 0;		/* Alte Nummer l�schen */
+					sysvar[alt].varnumber = 0;		/* Alte Nummer löschen */
 			} /* if */
 			/* Neue Nummer eintragen */
 			sysvar[neu].varnumber 	= variable;
@@ -576,7 +576,7 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 			sysvar[variable].modified		= sysvar[neu].modified;
 			sysvar[variable].varnumber		= 0;
 
-			/* Wert �bernehmen, aktualisieren und weitergeben */
+			/* Wert übernehmen, aktualisieren und weitergeben */
 			update_var(module, variable, sysvar[neu].value, TRUE);
 		} /* if */
 	} /* for */
@@ -596,7 +596,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 		case SET_VAR:
 			/* Systemvariable auf neuen Wert setzen */
 			
-			/* Wert ver�ndern und Msg. senden */
+			/* Wert verändern und Msg. senden */
 			update_var (module, ((MSG_SET_VAR *)msg)->variable,
 				((MSG_SET_VAR *)msg)->value, FALSE);
 			
@@ -605,7 +605,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			/* Wert einer Systemvariablen abfragen */
 			
 			/* Der Wert wird in der durch den value-Zeiger angegebenen
-				Adresse zur�ckgeliefert */
+				Adresse zurückgeliefert */
 			((MSG_GET_VAR *)msg)->value =
 				sysvar[((MSG_GET_VAR *)msg)->variable].value;
 			
@@ -614,19 +614,19 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			/* Name einer Systemvariablen holen */
 			
 			/* Der Name wird in der durch den name-Zeiger angegebenen
-				Adresse zur�ckgeliefert */
+				Adresse zurückgeliefert */
 			strcpy(((MSG_GET_VARNAME *)msg)->name, sysvar[((MSG_GET_VARNAME *)msg)->variable].name);
 			
 			break;
 		case SET_VARNAME:
 			/* Name einer Systemvariablen setzen */
 			
-			/* Den String aus msg->name als neuen Namen �bernehmen */
+			/* Den String aus msg->name als neuen Namen übernehmen */
 			strcpy(sysvar[((MSG_SET_VARNAME *)msg)->variable].name, (((MSG_SET_VARNAME *)msg)->name));
 			
 			break;
 		case ADD_VAR_RCV:
-			/* Modulfunktion in VAR-Updateliste einf�gen */
+			/* Modulfunktion in VAR-Updateliste einfügen */
 			
 			ref_module 	= ((MSG_ADD_VAR_RCV *)msg)->module;
 			variable		= ((MSG_ADD_VAR_RCV *)msg)->variable;
@@ -727,7 +727,7 @@ MKINFO  *mk;
 							module->set_dbox(module);
 							draw_object(window, VARQUELLE1 + offset);
 							draw_object(window, VARQUELLNAME1 + offset);
-							/* Maus noch gedr�ckt? */
+							/* Maus noch gedrückt? */
 							/* if(mk->mobutton>0 && mk->momask>0) */
 								graf_mkstate(&ret, &ret, &mk->mobutton, &ret);
 						} while (mk->mobutton>0 && mk->momask>0);
@@ -738,7 +738,7 @@ MKINFO  *mk;
 } /* wi_click_mod */
 
 /*****************************************************************************/
-/* Zeitablauf f�r Fenster                                                    */
+/* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
 GLOBAL VOID wi_timer_mod (window)
@@ -754,7 +754,7 @@ WINDOWP window;
 	var = module->status->sysvar;
 	for (variable = 0; variable < MAXSYSVARS; variable++)
 	{
-		/* Variable wurde ge�ndert oder noch nie herausgeschickt */
+		/* Variable wurde geändert oder noch nie herausgeschickt */
 		if (var->modified > var->updated || var->updated == 0)
 			update_var (module, variable, var->value, FALSE);
 		var++;
@@ -809,11 +809,11 @@ WORD   icon;
     sprintf (window->info, var_text [FVARI].ob_spec.free_string, 0);
   } /* if */
 
-  return (window);                      /* Fenster zur�ckgeben */
+  return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -956,7 +956,7 @@ PRIVATE RTMCLASSP create ()
 		else
 		{
 		} /* else */
-		/* Pr�fen, ob DEFAULT-Datei vorhanden */
+		/* Prüfen, ob DEFAULT-Datei vorhanden */
 		if((fp=fopen(module->file_name, "rb"))!=0)
 		{
 			/* Wenn vorhanden, laden */
@@ -964,7 +964,7 @@ PRIVATE RTMCLASSP create ()
 			module->load(module, module->file_name, FALSE);
 		} /* if */
 
-		/* Speicher allozieren f�r alle Header-Nodes */
+		/* Speicher allozieren für alle Header-Nodes */
 		sysvar = module->status->sysvar;
 		mem_lset (sysvar, 0, sizeof (SYSVAR) * MAXSYSVARS);
 		
@@ -977,10 +977,10 @@ PRIVATE RTMCLASSP create ()
 			sysvar[x].header	= element;
 			sysvar[x].new 		= FALSE;
 			sysvar[x].value	= 0;
-			element++;			/* Auf n�chsten Header-Node zeigen */
+			element++;			/* Auf nächsten Header-Node zeigen */
 		} /* for */
 
-		/* Namen f�r Variablen initialisieren */
+		/* Namen für Variablen initialisieren */
 		init_variables (module);
 		init_standard(module);
 		
@@ -1008,7 +1008,7 @@ PRIVATE RTMCLASSP create ()
 } /* create */
 
 /*****************************************************************************/
-/* L�sche Objekt                                                            */
+/* Lösche Objekt                                                            */
 /*****************************************************************************/
 PUBLIC VOID destroy_mod (module)
 RTMCLASSP module;
@@ -1035,8 +1035,8 @@ RTMCLASSP module;
 
 PRIVATE SHORT init_midishare ()
 {
-	/* Meldet ein neues Modul bei MidiShare an und gibt die refNum zur�ck */
-	SHORT		ref, refNum = 0;			/* tempor�re Referenznummer */
+	/* Meldet ein neues Modul bei MidiShare an und gibt die refNum zurück */
+	SHORT		ref, refNum = 0;			/* temporäre Referenznummer */
 	STRING	s;
 
 	if (msh_available)
@@ -1051,20 +1051,20 @@ PRIVATE SHORT init_midishare ()
 					sprintf (s, "VAR %d", instance_count + 1);
 				refNum = MidiGetNamedAppl(s); /* Alte Applikation schliessen */
 				if (refNum > 0) MidiClose(refNum);
-				refNum = MidiOpen(s);				/* Applikation f�r MidiShare �ffnen	*/
+				refNum = MidiOpen(s);				/* Applikation für MidiShare öffnen	*/
 			} /* if */
 		} /* if */
 		
 		if (refNum == 0)
 			 hndl_alert (ERR_NOMIDISHARE);
-		else if (refNum == MIDIerrSpace)			/* Pr�fen genug Platz war */
+		else if (refNum == MIDIerrSpace)			/* Prüfen genug Platz war */
 			 hndl_alert (ERR_MIDISHAREFULL);
-		else if (refNum > 0)							/* Pr�fen ob alles klar */
+		else if (refNum > 0)							/* Prüfen ob alles klar */
 		{
 			instance_count++;
-			refNums[instance_count] = refNum;				/* Merken f�r term_mod */
+			refNums[instance_count] = refNum;				/* Merken für term_mod */
 			MidiSetRcvAlarm(refNum, receive_evts_var);	/* Interrupt-Handler */		
-			/* An alle anschlie�en */
+			/* An alle anschließen */
 			try_all_connect (refNum);
 		} /* if */
 		
@@ -1376,7 +1376,7 @@ PRIVATE BOOLEAN init_rsc ()
   alevarsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
 #endif
 #if false
-	var_menu  = (OBJECT *)rs_trindex [VAR_SETUP]; /* Adresse des VAR-Men�s */
+	var_menu  = (OBJECT *)rs_trindex [VAR_SETUP]; /* Adresse des VAR-Menüs */
 #endif
 	var_setup = (OBJECT *)rs_trindex [VAR_SETUP]; /* Adresse der VAR-Parameter-Box */
 	var_help  = (OBJECT *)rs_trindex [VAR_HELP];	/* Adresse der VAR-Hilfe */
@@ -1399,7 +1399,7 @@ PRIVATE BOOLEAN init_rsc ()
 	 while (TRUE) evnt_timer (65536L);             /* Lasse andere Prozesse ran */
 } /* if */
 /*
-	rs_gaddr (var_rsc_ptr, R_TREE,  VAR_SETUP,	&var_menu);    /* Adresse des VAR-Men�s */
+	rs_gaddr (var_rsc_ptr, R_TREE,  VAR_SETUP,	&var_menu);    /* Adresse des VAR-Menüs */
 */
 	rs_gaddr (var_rsc_ptr, R_TREE,  VAR_SETUP,	&var_setup);   /* Adresse der VAR-Parameter-Box */
 	rs_gaddr (var_rsc_ptr, R_TREE,  VAR_HELP,	&var_help);    /* Adresse der VAR-Hilfe */

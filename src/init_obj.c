@@ -8,7 +8,7 @@
 
 #include "realtim5.h"
 #include "realtspc.h"
-#include <msh_unit.h>					/* Deklarationen f�r MidiShare */
+#include <msh_unit.h>					/* Deklarationen für MidiShare */
 #include "OBJECTS.H"
 #include "var.h"
 
@@ -45,7 +45,7 @@
 #include "init_obj.h"
 
 /*****************************************************************************/
-/* Initialisierung f�r alle Module                                           */
+/* Initialisierung für alle Module                                           */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN init_modules ()
@@ -127,7 +127,7 @@ GLOBAL BOOLEAN init_modules ()
 /* MAN als letztes initialisieren, braucht Obj-Infos der anderen Module */
 	if(init_man) ok &= init_man ();		/* Initialisiere man */
 
-/* Ganz zum Schlu� die MidiShare-Applikationen */
+/* Ganz zum Schluß die MidiShare-Applikationen */
 	if(init_tra) ok &= init_tra ();		/* Initialisiere tra */
 	if(init_puf) ok &= init_puf ();		/* Initialisiere puf */
 	if(init_cmo) ok &= init_cmo ();		/* Initialisiere cmo */

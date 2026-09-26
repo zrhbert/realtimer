@@ -27,23 +27,23 @@
 #define FLAGS    (WI_RESIDENT)
 #define XFAC     gl_wbox                /* X-Faktor */
 #define YFAC     2                      /* Y-Faktor */
-#define XUNITS   1                      /* X-Einheiten f�r Scrolling */
-#define YUNITS   (gl_hbox / YFAC)       /* Y-Einheiten f�r Scrolling */
-#define MILLI    0                      /* Millisekunden f�r Zeitablauf */
+#define XUNITS   1                      /* X-Einheiten für Scrolling */
+#define YUNITS   (gl_hbox / YFAC)       /* Y-Einheiten für Scrolling */
+#define MILLI    0                      /* Millisekunden für Zeitablauf */
 
-#define MINBUT   6                      /* Mindestens 6 Buchstaben f�r Buttons */
-#define ALT_CHAR '~'                    /* Zeichen f�r Alternate-Bedienung */
+#define MINBUT   6                      /* Mindestens 6 Buchstaben für Buttons */
+#define ALT_CHAR '~'                    /* Zeichen für Alternate-Bedienung */
 
 /****** TYPES ****************************************************************/
 
 /****** VARIABLES ************************************************************/
 
 LOCAL HELPFUNC helpfunc = NULL; /* Zeiger auf Help-Funktion */
-LOCAL OBJECT   *alert_tree;     /* Objekt-Baum f�r alerts */
+LOCAL OBJECT   *alert_tree;     /* Objekt-Baum für alerts */
 LOCAL WORD     alert_index;     /* Resource-Index des Objekt-Baums */
-LOCAL BYTE     *alert_title;    /* Titel f�r Fehlermeldungsfenster */
-LOCAL WORD     alert_exit;      /* Angew�hlter Exit-Button der Alert-Box */
-LOCAL STRING   alert_help;      /* Hilfsstring f�r Alert */
+LOCAL BYTE     *alert_title;    /* Titel für Fehlermeldungsfenster */
+LOCAL WORD     alert_exit;      /* Angewählter Exit-Button der Alert-Box */
+LOCAL STRING   alert_help;      /* Hilfsstring für Alert */
 LOCAL BOOLEAN  alert_mode = FALSE;      /* TRUE, wenn Fehler als Dialogbox ausgegeben werden soll */
 
 /****** FUNCTIONS ************************************************************/
@@ -245,11 +245,11 @@ UWORD  flags;
     } /* if */
   } /* if */
 
-  return (window);                      /* Fenster zur�ckgeben */
+  return (window);                      /* Fenster zurückgeben */
 } /* crt_dialog */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 GLOBAL BOOLEAN open_dialog (icon)
@@ -378,7 +378,7 @@ BYTE *alertmsg;
 
       alert_tree [i].ob_type &= 0xFF;
       alert_tree [i].ob_type |= ((j + 1) << 8); /* Position merken */
-      strcpy (s + j, s + j + 1);                /* Zeichen rausl�schen */
+      strcpy (s + j, s + j + 1);                /* Zeichen rauslöschen */
     } /* if */
 
     maxbut = max (maxbut, strlen (alert_tree [i].ob_spec.free_string));
@@ -414,7 +414,7 @@ BYTE *alertmsg;
   p  = strchr (alert_help, SEP_CLOSE);
   *p = EOS;
 
-  maxbut = max (maxbut, MINBUT);               /* Minimale Breite der Kn�pfe */
+  maxbut = max (maxbut, MINBUT);               /* Minimale Breite der Knöpfe */
 
   for (i = button1, x = gl_wbox, maxbut += 2; i - button1 < num_buttons; i++)
   {
@@ -484,14 +484,14 @@ BOOLEAN use_timer;
   WORD    event;                        /* Eingetretenes Ereignis */
   WORD    msgbuff [8];                  /* Event Message Puffer */
   WORD    locked;                       /* Anzahl gelockter Fenster */
-  WORD    act_hidden;                   /* Anzahl versteckter M�use */
+  WORD    act_hidden;                   /* Anzahl versteckter Mäuse */
   WORD    act_busy;                     /* Aktuelle Anzahl Busy-Calls */
   WORD    act_number;                   /* Aktuelle Mausform-Nummer */
   MFORM   *act_form;                    /* Aktuelle Mausform */
   WORD    i;                            /* Hilfsvariable */
   WORD    ret;                          /* Dummy Return-Wert */
   MKINFO  mk;                           /* Maus und Tastatur Info */
-  WINDOWP window;                       /* F�r Top-Window */
+  WINDOWP window;                       /* Für Top-Window */
   WORD    tophandle;                    /* Handle von Top-Window */
 
   locked    = num_locked ();
@@ -549,7 +549,7 @@ BOOLEAN use_timer;
     if (event & MU_TIMER ) hndl_timer (millisecs);
 
     if (deskacc && done)
-      close_all (FALSE, TRUE);          /* Schlie�e alle Fenster */
+      close_all (FALSE, TRUE);          /* Schließe alle Fenster */
 
     wind_update (END_UPDATE);           /* Benutzer darf wieder agieren */
     modal_done = (find_window (tophandle) == NULL) || (num_locked () < locked);
@@ -589,7 +589,7 @@ BOOLEAN grow;
 } /* box */
 
 /*****************************************************************************/
-/* �ffne Fenster                                                             */
+/* Öffne Fenster                                                             */
 /*****************************************************************************/
 
 LOCAL VOID wi_open (window)
@@ -600,7 +600,7 @@ WINDOWP window;
 } /* wi_open */
 
 /*****************************************************************************/
-/* Schlie�e Fenster                                                          */
+/* Schließe Fenster                                                          */
 /*****************************************************************************/
 
 LOCAL VOID wi_close (window)

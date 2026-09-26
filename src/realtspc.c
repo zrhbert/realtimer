@@ -26,14 +26,14 @@
 - SetVertex etc. eingebaut, 20.12.94
 17.01.94
 - controller_out eingebaut
-- update_text und update_window gegen window=0 gesch�tzt
-- akstatus mit malloc f�r window->special
+- update_text und update_window gegen window=0 geschützt
+- akstatus mit malloc für window->special
 24.06.93
 - Help mit Space-Stripping
 - copy_icon modifiziert
 - daktstat mit Mindestzeit
-- Definitionen f�r SETUP und STATUS eingebaut
-- Help-Funktion f�r Alert-Boxen eingeklinkt
+- Definitionen für SETUP und STATUS eingebaut
+- Help-Funktion für Alert-Boxen eingeklinkt
 
 *****************************************************************************/
 
@@ -88,8 +88,8 @@ typedef struct aktstatus
 } AKTSTATUS;
 
 /****** VARIABLES ************************************************************/
-LOCAL WORD	spc_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-LOCAL WORD	*spc_rsc_ptr = &spc_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+LOCAL WORD	spc_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+LOCAL WORD	*spc_rsc_ptr = &spc_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 
 LOCAL OBJECT *zahl;
 LOCAL OBJECT *zeit;
@@ -97,7 +97,7 @@ LOCAL OBJECT *save;
 LOCAL OBJECT *login;
 LOCAL OBJECT *aktstat;
 
-LOCAL WORD     edit_inx;        /* Index Passwort f�r edit_noecho */
+LOCAL WORD     edit_inx;        /* Index Passwort für edit_noecho */
 LOCAL BYTE     password [MAX_PASSWORD + 1];
 LOCAL BYTE     user [MAX_PASSWORD + 1];
 LOCAL WORD     log_count;			/* Anzahl der Login Versuche */
@@ -144,7 +144,7 @@ LOCAL BOOLEAN	term_rsc_realtspc _((VOID));
 
 LOCAL VOID time_strings (STRING hours, STRING minutes, STRING seconds, STRING milli, LONG time)
 {
-	/* Wandelt einen Long-Wert f�r die Anzahl der Millisekunden */
+	/* Wandelt einen Long-Wert für die Anzahl der Millisekunden */
 	/* in eine Reihe von Zahlen um */
 	REG LONG temp;
 	REG WORD hh, mm, ss, ll;
@@ -174,7 +174,7 @@ LOCAL VOID time_strings (STRING hours, STRING minutes, STRING seconds, STRING mi
 LOCAL LONG strings_time (STRING hours, STRING minutes, STRING seconds, STRING milli)
 {
 	/* Wandelt eine Reihe von Strings */
-	/* in einen Long-Wert f�r die Anzahl der Millisekunden um */
+	/* in einen Long-Wert für die Anzahl der Millisekunden um */
 	REG LONG time;
 	WORD hh = 0, mm = 0, ss = 0, ll = 0;
 
@@ -280,7 +280,7 @@ GLOBAL VOID SetCheck (OBJECT *tree, WORD obj, CONST BOOL val)
 	if (val)
 		tree [obj].ob_state |= SELECTED;         /* Status im Objekt setzen */
 	else
-		tree [obj].ob_state &= ~ SELECTED;       /* Status im Objekt l�schen */
+		tree [obj].ob_state &= ~ SELECTED;       /* Status im Objekt löschen */
 	
 } /* SetCheck */
 
@@ -356,7 +356,7 @@ GLOBAL VOID SetPTime (OBJECT *tree, WORD obj, CONST LONG value)
 
 	time_strings (hours, minutes, seconds, milli, value);
 
-	/* Nur neu einsetzen, wenn ver�ndert */
+	/* Nur neu einsetzen, wenn verändert */
 	if (strcmp (GetPText(tree, obj + 1, s), hours)   != 0) SetPText (tree, obj + 1, hours);
 	if (strcmp (GetPText(tree, obj + 2, s), minutes) != 0) SetPText (tree, obj + 2, minutes);
 	if (strcmp (GetPText(tree, obj + 3, s), seconds) != 0) SetPText (tree, obj + 3, seconds);
@@ -438,7 +438,7 @@ GLOBAL VOID daktstatus (STRING title, STRING text)
 	AKTSTATUS	*status;
 	window = search_window (CLASS_DIALOG, SRCH_ANY, 100+AKTSTAT);
 	
-	/* Leerstellen an Titel anf�gen */
+	/* Leerstellen an Titel anfügen */
 	sprintf(stitle, " %s ", title);
 	if (window == NULL)
 	{
@@ -498,7 +498,7 @@ GLOBAL VOID set_daktstat	(WORD percent)
 	time 					= clock() - start_time;
 	status->time		= time;	/* verbrauchte Zeit */
 
-	/* Pr�fen, ob sich schon etwas getan hat */
+	/* Prüfen, ob sich schon etwas getan hat */
 	if (percent > elapsed_percent && time > elapsed_time)
 	{	
 		/* Vorhersage berechnen */
@@ -523,14 +523,14 @@ GLOBAL VOID set_daktstat	(WORD percent)
 	sprintf (s, "%d%%", percent);
 	set_ptext (aktstat, AKTPROZENT, s);
 	
-	/* Schieberl�nge anpassen */
+	/* Schieberlänge anpassen */
 	temp = (LONG)aktstat[AKTWORKBOX].ob_width;
 	temp *= (LONG)percent;
 	temp /= 100;
 	aktstat[AKTWORKSLIDER].ob_width = (WORD)temp;
 	/* Text im Schieber justieren */
 	if (temp < aktstat[AKTPROZENT].ob_width / 2)
-		temp = 0;	/* Wenn Schieber zu klein f�r Anzeiger */
+		temp = 0;	/* Wenn Schieber zu klein für Anzeiger */
 	aktstat[AKTPROZENT].ob_x = ((WORD)temp)/2 + aktstat[AKTWORKSLIDER].ob_x;
 	
 	if (window != 0)	
@@ -575,7 +575,7 @@ GLOBAL VOID close_daktstat()
 			status = (AKTSTATUS*) window->special;
 			status->close = TRUE;		/* Schliessen befehlen */
 			window->milli = 300;			/* etwas stehen lassen */
-			/* Sp�ter wird per timer_daktstat geschlossen */
+			/* Später wird per timer_daktstat geschlossen */
 		} /* else */
 	} /* if */
 } /* close_daktstat */
@@ -678,7 +678,7 @@ GLOBAL VOID dzahl (LONG *number, INT posx, INT posy, STRING title)
 		
 		if (! open_dialog (100+ZAHL)) hndl_alert (ERR_NOOPEN);
 		
-		/* Zahl �bernehmen klappt nur, wenn D-Box modal! */
+		/* Zahl übernehmen klappt nur, wenn D-Box modal! */
 		switch (window->exit_obj)
 		{
 			case ZAHZAHL :	get_zahl(number);
@@ -728,7 +728,7 @@ GLOBAL VOID dzeit (LONG *time, INT posx, INT posy, STRING title)
 		
 		if (! open_dialog (100+ZEIT)) hndl_alert (ERR_NOOPEN);
 		
-		/* Zahl �bernehmen klappt nur, wenn D-Box modal! */
+		/* Zahl übernehmen klappt nur, wenn D-Box modal! */
 		switch (window->exit_obj)
 		{
 			case ZEIZEIT :	get_zeit(time);
@@ -825,7 +825,7 @@ GLOBAL VOID dsave (STR128 filename, RTMCLASSP module)
 		
 		if (! open_dialog (100+SAVE)) hndl_alert (ERR_NOOPEN);
 		
-		/* Zahl �bernehmen klappt nur, wenn D-Box modal! */
+		/* Zahl übernehmen klappt nur, wenn D-Box modal! */
 		switch (window->exit_obj)
 		{
 			case SAVSAVE   :	(module->save)(module, filename, FALSE);	break;
@@ -923,7 +923,7 @@ GLOBAL BOOL dlogin ()
 			set_login ();
 		} /* if */
 		
-		/* Ergebnis �bernehmen klappt nur, wenn D-Box modal! */
+		/* Ergebnis übernehmen klappt nur, wenn D-Box modal! */
 		while (!window->special && log_count < MAXLOGINTRIALS)
 		{
 			if (! open_dialog (100+LOGIN)) hndl_alert (ERR_NOOPEN);
@@ -1031,7 +1031,7 @@ GLOBAL VOID mkstate( MKINFO *mk)
 
 GLOBAL LONG ClickValueField (WINDOWP window, WORD object, MKINFO *mk, LONG min_val, LONG max_val, UpdateFieldFn update)
 {
-	/* Ein Zahlen-Feld in einer DBOX wird per Mausclick ver�ndert */
+	/* Ein Zahlen-Feld in einer DBOX wird per Mausclick verändert */
 	LONG	x, step;
 	BOOL	repeat;
 	
@@ -1055,23 +1055,23 @@ GLOBAL LONG ClickValueField (WINDOWP window, WORD object, MKINFO *mk, LONG min_v
 					break;
 			} /* switch */
 			
-			/* Grenzen ber�cksichtigen */
+			/* Grenzen berücksichtigen */
 			if (x > max_val) x = min_val;
 			if (x < min_val) x = max_val;
 			update (window, object, x);
 
-			/* Pr�fen ob Taste gedr�ckt */
+			/* Prüfen ob Taste gedrückt */
 			mkstate(mk);
 			if (mk->mobutton>0 && mk->momask>0)	delay (100);
 			
-			/* Pr�fen ob Taste immernoch gedr�ckt */
+			/* Prüfen ob Taste immernoch gedrückt */
 			mkstate(mk);
 			repeat =  (mk->mobutton>0 && mk->momask>0);
 		} while (repeat);
 	} /* if */
 	else if (mk->breturn == 2)
 	{
-		/* Doppel-Click = Eingabe �ber Tastatur */
+		/* Doppel-Click = Eingabe über Tastatur */
 		dzahl (&x, mk->mox, mk->moy, " Zahl ");
 		if (x > max_val) x = max_val;
 		if (x < min_val) x = min_val;
@@ -1109,24 +1109,24 @@ GLOBAL LONG ClickSetupField (WINDOWP window, WORD object, MKINFO *mk)
 					break;
 			} /* switch */
 			
-			/* Grenzen ber�cksichtigen */
+			/* Grenzen berücksichtigen */
 			if (x > max_val) x = 0;
 			if (x < 0) x = max_val;
 			module->set_nr (window, x);
 			timer_all(1);
 
-			/* Pr�fen ob Taste gedr�ckt */
+			/* Prüfen ob Taste gedrückt */
 			mkstate(mk);
 			if (mk->mobutton>0 && mk->momask>0)	delay (100);
 			
-			/* Pr�fen ob Taste immernoch gedr�ckt */
+			/* Prüfen ob Taste immernoch gedrückt */
 			mkstate(mk);
 			repeat =  (mk->mobutton>0 && mk->momask>0);
 		} while (repeat);
 	} /* if */
 	else if (mk->breturn == 2)
 	{
-		/* Doppel-Click = Eingabe �ber Tastatur */
+		/* Doppel-Click = Eingabe über Tastatur */
 		GetPLong (window->object, object, &x);
 		/*
 			dzahl (&x, mk->mox, mk->moy, " Zahl ");
@@ -1139,8 +1139,8 @@ GLOBAL LONG ClickSetupField (WINDOWP window, WORD object, MKINFO *mk)
 
 GLOBAL VOID UpdateValueField (WINDOWP window, WORD obj, LONG value)
 {
-	/* Standard-Funktion f�r Werte-Update,
-		Setzt neuen Wert in DBOX ein und f�r Update auf Screen durch */
+	/* Standard-Funktion für Werte-Update,
+		Setzt neuen Wert in DBOX ein und für Update auf Screen durch */
 		
 	SetPLong (window->object, obj, value);
 	draw_object(window, obj);
@@ -1148,7 +1148,7 @@ GLOBAL VOID UpdateValueField (WINDOWP window, WORD obj, LONG value)
 
 GLOBAL LONG ClickTimeField (WINDOWP window, WORD object, MKINFO *mk, LONG min_val, LONG max_val, UpdateFieldFn update)
 {
-	/* Ein Zeit-Feld in einer DBOX wird per Mausclick ver�ndert */
+	/* Ein Zeit-Feld in einer DBOX wird per Mausclick verändert */
 	LONG	x, step, unit;
 	BOOL	repeat;
 	
@@ -1192,24 +1192,24 @@ GLOBAL LONG ClickTimeField (WINDOWP window, WORD object, MKINFO *mk, LONG min_va
 			
 			if (max_val > min_val)
 			{
-				/* Grenzen ber�cksichtigen */
+				/* Grenzen berücksichtigen */
 				if (x > max_val) x = min_val;
 				if (x < min_val) x = max_val;
 			} /* if */
 			update (window, object, x);
 
-			/* Pr�fen ob Taste gedr�ckt */
+			/* Prüfen ob Taste gedrückt */
 			mkstate(mk);
 			if (mk->mobutton>0 && mk->momask>0)	delay (100);
 			
-			/* Pr�fen ob Taste immernoch gedr�ckt */
+			/* Prüfen ob Taste immernoch gedrückt */
 			mkstate(mk);
 			repeat =  (mk->mobutton>0 && mk->momask>0);
 		} while (repeat);
 	} /* if */
 	else if (mk->breturn == 2)
 	{
-		/* Doppel-Click = Eingabe �ber Tastatur */
+		/* Doppel-Click = Eingabe über Tastatur */
 		GetPTime (window->object, object, &x);
 		dzeit (&x, mk->mox, mk->moy, " Zahl ");
 		update (window, object, x);
@@ -1220,8 +1220,8 @@ GLOBAL LONG ClickTimeField (WINDOWP window, WORD object, MKINFO *mk, LONG min_va
 
 GLOBAL VOID UpdateTimeField (WINDOWP window, WORD obj, LONG value)
 {
-	/* Standard-Funktion f�r Werte-Update,
-		Setzt neuen Wert in DBOX ein und f�r Update auf Screen durch */
+	/* Standard-Funktion für Werte-Update,
+		Setzt neuen Wert in DBOX ein und für Update auf Screen durch */
 		
 	SetPTime (window->object, obj, value);
 	draw_object(window, obj);
@@ -1234,7 +1234,7 @@ GLOBAL BOOLEAN help_rtm (char *KeyWord  )
 	INT		msg_buff[8], acc_id;
 	BOOLEAN	ok = TRUE;
 	static STRING help_key;		/* Speichert dauerhaft den Helptext 
-											f�r ACC-Zugriff */
+											für ACC-Zugriff */
 	CHAR		*c;
 	INT		i;
 		
@@ -1249,7 +1249,7 @@ GLOBAL BOOLEAN help_rtm (char *KeyWord  )
 	{
 		if (KeyWord)
 		{
-			for (i = 0; KeyWord[i] == ' '; i++); 	/* Space �berspringen */
+			for (i = 0; KeyWord[i] == ' '; i++); 	/* Space überspringen */
 			strcpy (help_key, KeyWord+i);		/* Name kopieren */
 			c = strrchr (help_key, ' ');		/* Hinteres Space	suchen */
 			if (c) *c = 0;							/* String abschneiden */
@@ -1350,7 +1350,7 @@ GLOBAL VOID swap_byte (BYTE *w1, BYTE *w2)
 
 GLOBAL LONG		minmaxsetup _((LONG *value, LONG maxvalue))
 {
-	/* Grenzt Werte ab, �ber maxvalue gibt 0, -1 gibt wieder maxvalue */
+	/* Grenzt Werte ab, über maxvalue gibt 0, -1 gibt wieder maxvalue */
 	*value= (*value<maxvalue) ? *value : 0;
 	*value= (*value>=0)       ? *value : maxvalue+*value;
 	return *value;
@@ -1517,7 +1517,7 @@ LOCAL VOID init_waveform()
 						wave[winkel][waveform] = -WAVEAMPL;
 					break;
 				case WKANTE:
-					/* Spezial-Welle f�r "Kanten-Rotation" */
+					/* Spezial-Welle für "Kanten-Rotation" */
 					if ((winkel <= WAVESTEPS/8) || (winkel > (7*WAVESTEPS)/8))
 						wave[winkel][WKANTE] =   WAVEAMPL;
 					if ((winkel >  WAVESTEPS/8) && (winkel <= (3*WAVESTEPS)/8))
@@ -1538,7 +1538,7 @@ LOCAL VOID init_sinq()
 {
 	WORD winkel;
 	
-	/* Lookup-Tables f�r Sinus und Cosinus generieren */
+	/* Lookup-Tables für Sinus und Cosinus generieren */
 	for (winkel = 0; winkel < 360; winkel++)
 	{
 		sinq[winkel] = sin(Rad(winkel));
@@ -1647,7 +1647,7 @@ GLOBAL BOOLEAN init_realtspc ()
 	init_waveform ();	
 	init_sinq();
 #if false
-    set_helpfunc (help_rtm);		/* Help-Funktion f�r Geiss-Paket einklinken */
+    set_helpfunc (help_rtm);		/* Help-Funktion für Geiss-Paket einklinken */
 #endif
     return (ok);
 } /* init_realtspc */

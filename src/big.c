@@ -54,13 +54,13 @@ V 0.06
 #define FLAGS  (WI_RESIDENT|WI_NOSCROLL)
 #define XFAC   (1000/QUANT)                  /* X-Faktor */
 #define YFAC   BORDERH                  /* Y-Faktor */
-#define XUNITS 1                        /* X-Einheiten f�r Scrolling */
-#define YUNITS 1                        /* Y-Einheiten f�r Scrolling */
+#define XUNITS 1                        /* X-Einheiten für Scrolling */
+#define YUNITS 1                        /* Y-Einheiten für Scrolling */
 #define INITX  ( 2 * gl_wbox)           /* X-Anfangsposition */
 #define INITY  ( 6 * gl_hbox)           /* Y-Anfangsposition */
 #define INITW  (60 * XFAC)           /* Anfangsbreite in Pixel */
-#define INITH  (9 * YFAC)           /* Anfangsh�he in Pixel */
-#define MILLI  100                     /* Millisekunden f�r Zeitablauf */
+#define INITH  (9 * YFAC)           /* Anfangshöhe in Pixel */
+#define MILLI  100                     /* Millisekunden für Zeitablauf */
 
 #define MOD_RSC_NAME "BIG_MOD.RSC"		/* Name der Resource-Datei */
 
@@ -97,9 +97,9 @@ typedef struct _mod_data
 typedef struct _mod_value
 {
 	CHAR	cookie[6];	/* VALU */
-	ULONG	hsize;			/* Gr��e Header */
+	ULONG	hsize;			/* Größe Header */
 	ULONG	flags;			/* Div. Flags z. B. ob x,y,z, ... Wert */
-	ULONG	datasize;		/* L�nge Speicherblock */
+	ULONG	datasize;		/* Länge Speicherblock */
 	VOID	*data;			/* Ptr auf Speicherblock */
 	UWORD	res[16];		/* Res. for future catastrophes */
 } BIG_VALUES;
@@ -108,7 +108,7 @@ typedef struct _mod_value
 typedef struct _mod_track
 {
 	CHAR	cookie[6];	/* TRCK */
-	ULONG	hsize;			/* Gr��e Header */
+	ULONG	hsize;			/* Größe Header */
 	ULONG	flags;			/* Div. Flags */
 	BIG_VALUES	*val_x; /* X-K. gepackt */
 	BIG_VALUES	*val_y;	/* Y-K. gep.	*/
@@ -122,10 +122,10 @@ typedef struct _mod_track
 typedef struct _mod_part
 {
 	CHAR	cookie[6];	/* PART */
-	ULONG	hsize;			/* Gr��e Header */
+	ULONG	hsize;			/* Größe Header */
 	ULONG flags;			/* Div. Flags z. B. GHOST */
 	ULONG	smpte;			/* SMPTE-Startzeit */
-	ULONG	tracks;			/* Bit-Vektor f�r Tracks; 0 => Tracks 0 u. 1 */
+	ULONG	tracks;			/* Bit-Vektor für Tracks; 0 => Tracks 0 u. 1 */
 	BIG_TRACK	*track0;	/* Datenstruktur Track */
 	BIG_TRACK	*track1;	/* --- " --- */
 	struct _mod_part	*link;		/* Zur Verwaltubg von Ghost-Parts */
@@ -175,7 +175,7 @@ typedef	struct status *STAT_P;
 
 typedef	struct status
 {
-	UINT	play			: 1	;	/* PLAY gedr�ckt */
+	UINT	play			: 1	;	/* PLAY gedrückt */
 	UINT	record		: 1	;	/* RTM Record an/aus */
 	UINT	puf_record	: 1	;	/* PUF Record an/aus */
 	UINT	cycle			: 1	;	/* Cycle-Modus an/aus*/
@@ -187,16 +187,16 @@ typedef	struct status
 	BOOLEAN	pause;				/* Pause: Sequencer anhalten */
 	WORD	channel1;				/* Ausgabekanal CMI 1*/
 	WORD	channel2;				/* Ausgabekanal CMI 2*/
-	WORD	port1;					/* Ausgabe-Anschlu� CMI 1*/
-	WORD	port2;					/* Ausgabe-Anschlu� CMI 2*/
+	WORD	port1;					/* Ausgabe-Anschluß CMI 1*/
+	WORD	port2;					/* Ausgabe-Anschluß CMI 2*/
 	TFilter filter;
 	WSTAT_P	winstatus;
 } STATUS;
 
 
 /****** VARIABLES ************************************************************/
-PRIVATE WORD	big_rsc_hdr;					/* Zeigerstruktur f�r RSC-Datei */
-PRIVATE WORD	*big_rsc_ptr = &big_rsc_hdr;		/* Zeigerstruktur f�r RSC-Datei */
+PRIVATE WORD	big_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
+PRIVATE WORD	*big_rsc_ptr = &big_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *big_setup;
 PRIVATE OBJECT *big_help;
 PRIVATE OBJECT *big_desk;
@@ -270,7 +270,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 } /* message */
 
 /*****************************************************************************/
-/* Men�behandlung                                                            */
+/* Menübehandlung                                                            */
 /*****************************************************************************/
 
 PRIVATE VOID update_menu_mod (window)
@@ -427,7 +427,7 @@ BYTE			s[6];
 } /* wi_draw_mod */
 
 /*****************************************************************************/
-/* Zeitablauf f�r Fenster                                                    */
+/* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
 PRIVATE VOID wi_timer_mod (window)
@@ -477,12 +477,12 @@ LONG    oldpos, newpos;
 	winstatus->drawall = TRUE;
 
   w     = window->scroll.w / window->xfac;      /* Breite in Zeichen */
-  h     = window->scroll.h / window->yfac;      /* H�he in Zeichen */
+  h     = window->scroll.h / window->yfac;      /* Höhe in Zeichen */
   delta = newpos - oldpos;
 
   if (dir & HORIZONTAL)         /* Horizontale Pfeile und Schieber */
   {
-    if (delta != 0)                                    /* Scrolling n�tkg */
+    if (delta != 0)                                    /* Scrolling nötkg */
     {
       if (delta > 0)                                   /* Links-Scrolling */
       {
@@ -499,14 +499,14 @@ LONG    oldpos, newpos;
   } /* if */
   else                          /* Vertikale Pfeile und Schieber */
   {
-    if (delta != 0)                                    /* Scrolling n�tig */
+    if (delta != 0)                                    /* Scrolling nötig */
     {
-      if (delta > 0)                                   /* Aufw�rts-Scrolling */
+      if (delta > 0)                                   /* Aufwärts-Scrolling */
       {
       	if(winstatus->trackoff > 0)
 	      	winstatus->trackoff -= 1;
       } /* if */
-      else                                             /* Abw�rts-Scrolling */
+      else                                             /* Abwärts-Scrolling */
       {
       	if(winstatus->trackoff  < MAXTRACKS)
 	      	winstatus->trackoff += 1;
@@ -552,7 +552,7 @@ WORD src_obj, dest_obj;
 } /* icons_mod */
 
 /*****************************************************************************/
-/* �ffnen des Objekts                                                        */
+/* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
 PUBLIC BOOLEAN open_mod (icon)
@@ -746,7 +746,7 @@ WORD   icon;
 		sprintf (window->info, big_text [FBIGI].ob_spec.free_string, 0);
 	} /* if */
 	
-	return (window);                      /* Fenster zur�ckgeben */
+	return (window);                      /* Fenster zurückgeben */
 } /* crt_mod */
 
 /*****************************************************************************/
@@ -833,14 +833,14 @@ PRIVATE BOOLEAN init_rsc ()
 /*
   alertmsg = &rs_strings [FREESTR];             /* Adresse der Fehlermeldungen */
 */
-  /*big_menu  = (OBJECT *)rs_trindex [BIG_SETUP]; /* Adresse des BIG-Men�s */
+  /*big_menu  = (OBJECT *)rs_trindex [BIG_SETUP]; /* Adresse des BIG-Menüs */
   big_setup = (OBJECT *)rs_trindex [BIG_SETUP]; /* Adresse der BIG-Parameter-Box */
 	*/
   big_help  = (OBJECT *)rs_trindex [BIG_HELP];	/* Adresse der BIG-Hilfe */
   big_desk  = (OBJECT *)rs_trindex [BIG_DESK];	/* Adresse des BIG-Desktops */
   big_text  = (OBJECT *)rs_trindex [BIG_TEXT];	/* Adresse der BIG-Texte */
   big_info 	= (OBJECT *)rs_trindex [BIG_INFO];	/* Adresse der BIG-Info-Anzeige */
-  big_menu 	= (OBJECT *)rs_trindex [BIG_MENU];	/* Adresse des BIG-Men�s */
+  big_menu 	= (OBJECT *)rs_trindex [BIG_MENU];	/* Adresse des BIG-Menüs */
 #else
 
   strcpy (rsc_name, MOD_RSC_NAME);                  /* Einsetzen des Modul-Resource-Namens */
@@ -857,13 +857,13 @@ PRIVATE BOOLEAN init_rsc ()
     while (TRUE) evnt_timer (0, 1);             /* Lasse andere Prozesse ran */
   } /* if */
 
-  rs_gaddr (big_rsc_ptr, R_TREE,  BIG_SETUP,	&big_menu);    /* Adresse des BIG-Men�s */ 
+  rs_gaddr (big_rsc_ptr, R_TREE,  BIG_SETUP,	&big_menu);    /* Adresse des BIG-Menüs */ 
   rs_gaddr (big_rsc_ptr, R_TREE,  BIG_SETUP,	&big_setup);   /* Adresse der BIG-Parameter-Box */
   rs_gaddr (big_rsc_ptr, R_TREE,  BIG_HELP,	&big_help);    /* Adresse der BIG-Hilfe */
   rs_gaddr (big_rsc_ptr, R_TREE,  BIG_DESK,	&big_desk);    /* Adresse des BIG-Desktop */
   rs_gaddr (big_rsc_ptr, R_TREE,  BIG_DESK,	&big_text);    /* Adresse der BIG-Texte */
   rs_gaddr (big_rsc_ptr, R_TREE,  BIG_INFO,	&big_info);    /* Adresse der BIG-Info-Anzeige */
-  rs_gaddr (big_rsc_ptr, R_TREE,  BIG_MENU,	&big_menu; 	   /* Adresse der BIG-Men�zeile */
+  rs_gaddr (big_rsc_ptr, R_TREE,  BIG_MENU,	&big_menu; 	   /* Adresse der BIG-Menüzeile */
 #endif
 #if XRSC_CREATE
 
@@ -939,15 +939,15 @@ PUBLIC BOOLEAN term_mod ()
 
 PRIVATE SHORT init_midishare ()
 {
-	/* Meldet ein neues Modul bei MidiShare an und gibt die refNum zur�ck */
-	SHORT		ref, refNum = 0;			/* tempor�re Referenznummer */
+	/* Meldet ein neues Modul bei MidiShare an und gibt die refNum zurück */
+	SHORT		ref, refNum = 0;			/* temporäre Referenznummer */
 	STRING	s;
 	
 	if (MidiShare())
 	{
 		refNum = MidiGetNamedAppl("RTM BIG");
 		if (refNum > 0) MidiClose(refNum);
-		refNum = MidiOpen("RTM BIG");				/* Applikation f�r MidiShare �ffnen	*/
+		refNum = MidiOpen("RTM BIG");				/* Applikation für MidiShare öffnen	*/
 	} /* if */
 
 	/* MSH alert disabled, BD 2026.09.26, as it will not be used for a long time
@@ -955,12 +955,12 @@ PRIVATE SHORT init_midishare ()
 		 hndl_alert (ERR_NOMIDISHARE);
 	*/
 
-	if (refNum == MIDIerrSpace)			/* Pr�fen genug Platz war */
+	if (refNum == MIDIerrSpace)			/* Prüfen genug Platz war */
 	{
 		 hndl_alert (ERR_MIDISHAREFULL);
 	} /* if */
 
-	if (refNum > 0)							/* Pr�fen ob alles klar */
+	if (refNum > 0)							/* Prüfen ob alles klar */
 	{
 		MidiSetRcvAlarm(refNum, receive_evts_big);	/* Interrupt-Handler */		
 		try_all_connect (refNum);
@@ -1060,17 +1060,17 @@ PUBLIC VOID CDECL receive_alarm_mod (SHORT refNum, LONG code)
 /****************************************************************************
 * 							InstallFilter						 *
 *---------------------------------------------------------------------------*
-* Cette proc�dure d�finit les valeurs du filtre de l'application. Un filtre *
-* est compos� de trois parties, qui sont trois tableaux de bool�ens :		 * 
+* Cette procédure définit les valeurs du filtre de l'application. Un filtre *
+* est composé de trois parties, qui sont trois tableaux de booléens :		 * 
 * 															 *
-*		un tableau de 256 bits pour les ports Midi accept�s			 *
-*		un tableau de 256 bits pour les types d'�v�nements accept�s		 *
-*		un tableau de  16 bits pour les canaux Midi accept�s			 *
+*		un tableau de 256 bits pour les ports Midi acceptés			 *
+*		un tableau de 256 bits pour les types d'événements acceptés		 *
+*		un tableau de  16 bits pour les canaux Midi acceptés			 *
 * 															 *
-* Dans le code ci dessous, le filtre est param�tr� pour accepter n'importe	 *
-* quel type d'�v�nement. 										 *
+* Dans le code ci dessous, le filtre est paramétré pour accepter n'importe	 *
+* quel type d'événement. 										 *
 * 															 *
-* Les param�tres de l'appel :										 *
+* Les paramètres de l'appel :										 *
 * ---------------------------										 *
 * 															 *
 *		aucun												 *
@@ -1112,7 +1112,7 @@ PUBLIC VOID CDECL play_task_big (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 		
 	window->milli = 1; /* Updaten */
 
-	/* Zeit weiterz�hlen */
+	/* Zeit weiterzählen */
 	status->posit += QUANT;
 	posit = status->posit;
 
@@ -1121,7 +1121,7 @@ PUBLIC VOID CDECL play_task_big (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 	/* Cycle Restart */
 	if ((status->cycle) && (posit >= right))
 		if ((right > left)								/* Zw. Li und Re cyclen */
-		 || ((left > right)	&& (posit < left)))	/* oder �berspringen */
+		 || ((left > right)	&& (posit < left)))	/* oder überspringen */
 				rtm_pos(refNum, left);
 
 	/* Punch In ? */
@@ -1135,7 +1135,7 @@ PUBLIC VOID CDECL play_task_big (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 #endif
 
 	/* Wenn weiterhin aufgenommen/gespielt werden soll, 
-		mu� der Task wieder eingeklinkt werden */
+		muß der Task wieder eingeklinkt werden */
 	if (status->play && status->sync)
 		myTask = MidiTask(play_task_big, MidiGetTime() + QUANT, refNum, 0, 0, 0);
 
