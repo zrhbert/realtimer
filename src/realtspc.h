@@ -344,7 +344,7 @@ GLOBAL VOID AddVertex (POLY_P poly, FLOAT x, FLOAT y, FLOAT z);
 GLOBAL VOID SetEdge (EDGE_P e, WORD from, WORD to, WORD style, WORD begin, WORD end, WORD color, WORD width);
 GLOBAL VOID AddEdge (POLY_P poly, WORD from, WORD to, WORD style, WORD begin, WORD end, WORD color, WORD width);
 
-GLOBAL VOID daktstatus 		_((STRING title, STRING text));
+GLOBAL VOID daktstatus 		_((const BYTE *title, const BYTE *text));
 GLOBAL VOID close_daktstat _((VOID));
 GLOBAL VOID set_daktstat	_((WORD percent));
 

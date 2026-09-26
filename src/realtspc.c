@@ -428,7 +428,7 @@ GLOBAL VOID AddEdge (POLY_P poly, WORD from, WORD to, WORD style, WORD begin, WO
 
 /***Akt-Status-Window **********************************************************/
 
-GLOBAL VOID daktstatus (STRING title, STRING text)
+GLOBAL VOID daktstatus (const BYTE *title, const BYTE *text)
 {
 	/* Fenster zum Anzeigen des aktuellen Status */
 	WINDOWP	window;
@@ -439,7 +439,7 @@ GLOBAL VOID daktstatus (STRING title, STRING text)
 	window = search_window (CLASS_DIALOG, SRCH_ANY, 100+AKTSTAT);
 	
 	/* Leerstellen an Titel anfügen */
-	sprintf(stitle, " %s ", title);
+	snprintf(stitle, sizeof(stitle), " %s ", title);
 	if (window == NULL)
 	{
 		form_center (aktstat, &ret, &ret, &ret, &ret);
@@ -450,7 +450,7 @@ GLOBAL VOID daktstatus (STRING title, STRING text)
 	
 	if (window != NULL)
 	{
-        sprintf (window->name, "%s", stitle);
+        snprintf (window->name, sizeof(window->name), "%s", stitle);
 		if (window->opened == 0)
 		{
 			window->edit_obj	= NIL;
@@ -469,7 +469,7 @@ GLOBAL VOID daktstatus (STRING title, STRING text)
 		status->start_time= clock();
 		status->time		= 0;
 		status->percent	= 0;
-		sprintf (s, "%s",  text);
+		snprintf (s, sizeof(s), "%s", text);
 		set_ptext (aktstat, AKTTEXT, s);
 		set_daktstat (0);
 				
