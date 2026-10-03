@@ -1,0 +1,37 @@
+# magic-on-linux configuration template for the "Run in MagiC on Linux" launch
+# configuration. The task "MagiC on Linux: write config" substitutes @WORKSPACE@
+# and writes the result to build/magic-on-linux.conf. Generated with
+# "magic-on-linux -c <file> -w" and adapted; see MANUAL.txt of magiclinux.
+[HOST PATHS]
+atari_rootfs_path = "/Users/bertramd/Documents/Development/Hatari/GEMDOS_Disks/MAGICONLINUX_ROOTFS"
+atari_h_home = YES
+atari_h_rdonly = YES
+atari_m_host_root = YES
+atari_m_host_root_rdonly = YES
+atari_temp_path = "/tmp"
+[HOST DEVICES]
+atari_print_cmd = "echo printing not yet implemented"
+atari_serial_dev_path = ""
+[ATARI SCREEN]
+atari_screen_width = 1024
+atari_screen_height = 768
+atari_screen_stretch_x = 1
+atari_screen_stretch_y = 1
+atari_screen_rate_hz = 60
+atari_screen_colour_mode = 0
+# 0:24b 1:16b 2:256 3:16 4:16ip 5:4ip 6:mono
+hide_host_mouse = NO
+relative_mouse = NO
+[SCREEN PLACEMENT]
+app_display_number = 0
+app_window_x = -1
+app_window_y = -1
+[ATARI EMULATION]
+atari_memory_size = 14680064
+atari_language = de
+show_host_menu = YES
+atari_autostart = YES
+[ADDITIONAL ATARI DRIVES]
+# atari_drv_<A..T,V..Z> = flags [1:read-only, 2:8+3, 4:case-insensitive] path or image
+# R: = this workspace, writable, so REALTIM5.PRG finds INFOS\ and SETUPS\ next to it
+atari_drv_r = 4 "@WORKSPACE@"
