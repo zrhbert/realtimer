@@ -111,8 +111,7 @@ LOCAL VOID    unload_fonts   _((WORD vdi_handle));
 
 /*****************************************************************************/
 
-GLOBAL VOID mabout (title)
-WORD title;
+GLOBAL VOID mabout (WORD title)
 
 {
 	WINDOWP	window;
@@ -148,7 +147,7 @@ WORD title;
 
 /*****************************************************************************/
 
-LOCAL VOID get_settings ()
+LOCAL VOID get_settings (VOID)
 {
   STRING s;
 
@@ -161,7 +160,7 @@ LOCAL VOID get_settings ()
 
 /*****************************************************************************/
 
-LOCAL VOID set_settings ()
+LOCAL VOID set_settings (VOID)
 
 {
   STRING s;
@@ -178,9 +177,7 @@ LOCAL VOID set_settings ()
 
 /*****************************************************************************/
 
-LOCAL VOID click_settings (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID click_settings (WINDOWP window, MKINFO *mk)
 
 {
   switch (window->exit_obj)
@@ -200,9 +197,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN key_settings (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN key_settings (WINDOWP window, MKINFO *mk)
 
 {
   BYTE *p;
@@ -227,9 +222,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN help_settings (window, icon)
-WINDOWP window;
-WORD    icon;
+LOCAL BOOLEAN help_settings (WINDOWP window, WORD icon)
 
 {
   BOOLEAN ok;
@@ -262,7 +255,7 @@ WORD    icon;
 
 /*****************************************************************************/
 
-LOCAL VOID msettings ()
+LOCAL VOID msettings (VOID)
 
 {
   WINDOWP window;
@@ -303,8 +296,7 @@ LOCAL VOID msettings ()
 
 /*****************************************************************************/
 
-LOCAL VOID set_fonttable (sel_font)
-WORD sel_font;
+LOCAL VOID set_fonttable (WORD sel_font)
 
 {
   WORD   point, new_point;
@@ -338,9 +330,7 @@ WORD sel_font;
 
 /*****************************************************************************/
 
-LOCAL VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+LOCAL VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -359,7 +349,7 @@ BOOLEAN grow;
 
 /*****************************************************************************/
 
-LOCAL VOID get_font ()
+LOCAL VOID get_font (VOID)
 
 {
   g_font  = font_table [lnames.active];
@@ -368,8 +358,7 @@ LOCAL VOID get_font ()
 
 /*****************************************************************************/
 
-LOCAL VOID set_font (font, point)
-WORD font, point;
+LOCAL VOID set_font (WORD font, WORD point)
 
 {
   WORD size, inx;
@@ -432,8 +421,7 @@ WORD font, point;
 
 /*****************************************************************************/
 
-LOCAL VOID close_font (window)
-WINDOWP window;
+LOCAL VOID close_font (WINDOWP window)
 
 {
   mem_free (fnames);
@@ -447,9 +435,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL VOID click_font (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID click_font (WINDOWP window, MKINFO *mk)
 
 {
   WORD    num_points;
@@ -506,9 +492,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN help_font (window, icon)
-WINDOWP window;
-WORD    icon;
+LOCAL BOOLEAN help_font (WINDOWP window, WORD icon)
 
 {
   BOOLEAN ok;
@@ -541,8 +525,7 @@ WORD    icon;
 
 /*****************************************************************************/
 
-LOCAL VOID draw_font (window)
-WINDOWP window;
+LOCAL VOID draw_font (WINDOWP window)
 
 {
   WORD font, point;
@@ -580,8 +563,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL VOID set_lnames (num_fonts)
-WORD num_fonts;
+LOCAL VOID set_lnames (WORD num_fonts)
 
 {
   WORD   font;
@@ -603,8 +585,7 @@ WORD num_fonts;
 
 /*****************************************************************************/
 
-LOCAL VOID set_lsizes (num_points)
-WORD num_points;
+LOCAL VOID set_lsizes (WORD num_points)
 
 {
   WORD index, point;
@@ -622,8 +603,7 @@ WORD num_points;
 
 /*****************************************************************************/
 
-LOCAL WORD font2inx (font)
-WORD font;
+LOCAL WORD font2inx (WORD font)
 
 {
   WORD i;
@@ -636,8 +616,7 @@ WORD font;
 
 /*****************************************************************************/
 
-LOCAL WORD point2inx (point)
-WORD point;
+LOCAL WORD point2inx (WORD point)
 
 {
   WORD i;
@@ -650,7 +629,7 @@ WORD point;
 
 /*****************************************************************************/
 
-LOCAL VOID mselfont ()
+LOCAL VOID mselfont (VOID)
 
 {
   WINDOWP window;
@@ -693,8 +672,7 @@ LOCAL VOID mselfont ()
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN load_fonts (vdi_handle)
-WORD vdi_handle;
+LOCAL BOOLEAN load_fonts (WORD vdi_handle)
 
 {
   if (! fonts_loaded && gdos_ok ())
@@ -720,8 +698,7 @@ WORD vdi_handle;
 
 /*****************************************************************************/
 
-LOCAL VOID unload_fonts (vdi_handle)
-WORD vdi_handle;
+LOCAL VOID unload_fonts (WORD vdi_handle)
 
 {
   if (fonts_loaded && gdos_ok ())
@@ -737,8 +714,7 @@ WORD vdi_handle;
 /* Menü-Verarbeitung                                                         */
 /*****************************************************************************/
 
-GLOBAL VOID updt_menu (window)
-WINDOWP window;
+GLOBAL VOID updt_menu (WINDOWP window)
 
 {
   WORD    i;
@@ -801,9 +777,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-GLOBAL VOID hndl_menu (window, title, item)
-WINDOWP window;
-WORD    title, item;
+GLOBAL VOID hndl_menu (WINDOWP window, WORD title, WORD item)
 
 {
   WINDOWP top;
@@ -1057,7 +1031,7 @@ WORD    title, item;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_menu ()
+GLOBAL BOOLEAN init_menu (VOID)
 
 {
   WORD   title, menubox, i;
@@ -1176,7 +1150,7 @@ GLOBAL BOOLEAN init_menu ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_menu ()
+GLOBAL BOOLEAN term_menu (VOID)
 
 {
   unload_fonts (vdi_handle);

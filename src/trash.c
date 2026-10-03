@@ -63,9 +63,7 @@ LOCAL VOID    wi_edit     _((WINDOWP window, WORD action));
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-LOCAL VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+LOCAL VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -86,8 +84,7 @@ BOOLEAN grow;
 /* ™ffne Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_open (window)
-WINDOWP window;
+LOCAL VOID wi_open (WINDOWP window)
 
 {
   box (window, TRUE);
@@ -97,8 +94,7 @@ WINDOWP window;
 /* Schlieže Fenster                                                          */
 /*****************************************************************************/
 
-LOCAL VOID wi_close (window)
-WINDOWP window;
+LOCAL VOID wi_close (WINDOWP window)
 
 {
   box (window, FALSE);
@@ -108,8 +104,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-LOCAL VOID wi_draw (window)
-WINDOWP window;
+LOCAL VOID wi_draw (WINDOWP window)
 
 {
   clr_scroll (window);
@@ -119,10 +114,7 @@ WINDOWP window;
 /* Reagiere auf Pfeile                                                       */
 /*****************************************************************************/
 
-LOCAL VOID wi_arrow (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+LOCAL VOID wi_arrow (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
   LONG delta;
@@ -155,10 +147,7 @@ LONG    oldpos, newpos;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-LOCAL VOID wi_snap (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+LOCAL VOID wi_snap (WINDOWP window, RECT *new, WORD mode)
 
 {
   RECT r, diff;
@@ -199,11 +188,7 @@ WORD    mode;
 /* Ziehen in das Fenster                                                     */
 /*****************************************************************************/
 
-LOCAL WORD wi_drag (src_window, src_obj, dest_window, dest_obj)
-WINDOWP src_window;
-WORD    src_obj;
-WINDOWP dest_window;
-WORD    dest_obj;
+LOCAL WORD wi_drag (WINDOWP src_window, WORD src_obj, WINDOWP dest_window, WORD dest_obj)
 
 {
   WORD action;
@@ -235,9 +220,7 @@ WORD    dest_obj;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_trash (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+GLOBAL WINDOWP crt_trash (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
   WINDOWP window;
@@ -304,8 +287,7 @@ WORD   icon;
 /* ™ffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_trash (icon)
-WORD icon;
+GLOBAL BOOLEAN open_trash (WORD icon)
 
 {
   BOOLEAN ok;
@@ -333,9 +315,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_trash (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_trash (WINDOWP window, WORD icon)
 
 {
   LONGSTR s, d;
@@ -357,9 +337,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_trash (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN help_trash (WINDOWP window, WORD icon)
 
 {
   hndl_alert (ERR_HELPTRAS);
@@ -370,7 +348,7 @@ WORD    icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_trash ()
+GLOBAL BOOLEAN init_trash (VOID)
 
 {
   return (crt_trash (NULL, NULL, ITRASH) != NULL);
@@ -380,7 +358,7 @@ GLOBAL BOOLEAN init_trash ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_trash ()
+GLOBAL BOOLEAN term_trash (VOID)
 
 {
   return (TRUE);

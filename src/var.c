@@ -651,9 +651,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-PRIVATE VOID wi_click_mod (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+PRIVATE VOID wi_click_mod (WINDOWP window, MKINFO *mk)
 {
 	UWORD			i, item, variable;
 	STRING		s;
@@ -741,8 +739,7 @@ MKINFO  *mk;
 /* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
-GLOBAL VOID wi_timer_mod (window)
-WINDOWP window;
+GLOBAL VOID wi_timer_mod (WINDOWP window)
 
 {
 	RTMCLASSP	module = Module(window);
@@ -765,9 +762,7 @@ WINDOWP window;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-PUBLIC WINDOWP crt_mod (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+PUBLIC WINDOWP crt_mod (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
   WINDOWP window;
@@ -816,8 +811,7 @@ WORD   icon;
 /* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN open_mod (icon)
-WORD icon;
+PUBLIC BOOLEAN open_mod (WORD icon)
 {
 	BOOLEAN ok;
 	WINDOWP window;
@@ -851,9 +845,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN info_mod (window, icon)
-WINDOWP window;
-WORD    icon;
+PUBLIC BOOLEAN info_mod (WINDOWP window, WORD icon)
 
 {
 	WORD		ret;
@@ -892,7 +884,7 @@ WORD    icon;
 } /* info_mod */
 
 /*****************************************************************************/
-PRIVATE RTMCLASSP create ()
+PRIVATE RTMCLASSP create (VOID)
 {
 	RTMCLASSP 	module;
 	WORD 			x;
@@ -1010,8 +1002,7 @@ PRIVATE RTMCLASSP create ()
 /*****************************************************************************/
 /* Lösche Objekt                                                            */
 /*****************************************************************************/
-PUBLIC VOID destroy_mod (module)
-RTMCLASSP module;
+PUBLIC VOID destroy_mod (RTMCLASSP module)
 {
 	INT	refNum;
 	
@@ -1033,7 +1024,7 @@ RTMCLASSP module;
 /* MidiShare initialisieren                                                  */
 /*****************************************************************************/
 
-PRIVATE SHORT init_midishare ()
+PRIVATE SHORT init_midishare (VOID)
 {
 	/* Meldet ein neues Modul bei MidiShare an und gibt die refNum zurück */
 	SHORT		ref, refNum = 0;			/* temporäre Referenznummer */
@@ -1357,7 +1348,7 @@ PRIVATE VOID init_variables (RTMCLASSP module)
 	
 } /* init_var_names */
 /*****************************************************************************/
-PRIVATE BOOLEAN init_rsc ()
+PRIVATE BOOLEAN init_rsc (VOID)
 
 {
   WORD   i;
@@ -1434,7 +1425,7 @@ for (i = 0; i < NUM_OBS; i++)
 /* RSC freigeben                                                      		  */
 /*****************************************************************************/
 
-PRIVATE BOOLEAN term_rsc ()
+PRIVATE BOOLEAN term_rsc (VOID)
 
 {
   BOOLEAN ok;
@@ -1452,7 +1443,7 @@ PRIVATE BOOLEAN term_rsc ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_var ()
+GLOBAL BOOLEAN init_var (VOID)
 {
 	BOOLEAN	ok = TRUE;
 	
@@ -1466,7 +1457,7 @@ GLOBAL BOOLEAN init_var ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN term_mod ()
+PUBLIC BOOLEAN term_mod (VOID)
 {
 	BOOLEAN	ok = TRUE;
 

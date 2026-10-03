@@ -198,7 +198,7 @@ LOCAL VOID graf_shrinkbox _((WORD orgx, WORD orgy, WORD orgw, WORD orgh, WORD x,
 /* Öffne virtuelle Workstation                                               */
 /*****************************************************************************/
 
-GLOBAL VOID open_vwork ()
+GLOBAL VOID open_vwork (VOID)
 
 {
   WORD i;
@@ -227,7 +227,7 @@ GLOBAL VOID open_vwork ()
 /* Schließe virtuelle Workstation                                            */
 /*****************************************************************************/
 
-GLOBAL VOID close_vwork ()
+GLOBAL VOID close_vwork (VOID)
 
 {
   if (vdi_handle != phys_handle)                /* Virtuelle Workstation ist offen */
@@ -241,9 +241,7 @@ GLOBAL VOID close_vwork ()
 /* Öffne Workstation                                                         */
 /*****************************************************************************/
 
-GLOBAL WORD open_work (device, dev_info)
-WORD    device;
-DEVINFO *dev_info;
+GLOBAL WORD open_work (WORD device, DEVINFO *dev_info)
 
 {
   WORD i;
@@ -281,8 +279,7 @@ DEVINFO *dev_info;
 /* Schließe Workstation                                                      */
 /*****************************************************************************/
 
-GLOBAL VOID close_work (device, out_handle)
-WORD device, out_handle;
+GLOBAL VOID close_work (WORD device, WORD out_handle)
 
 {
   if (device >= PRINTER)
@@ -293,7 +290,7 @@ WORD device, out_handle;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN gdos_ok ()
+GLOBAL BOOLEAN gdos_ok (VOID)
 
 {
 #if GEMDOS
@@ -311,9 +308,7 @@ GLOBAL BOOLEAN gdos_ok ()
 /* Maus-Routinen                                                             */
 /*****************************************************************************/
 
-GLOBAL VOID set_mouse (number, addr)
-WORD  number;
-MFORM *addr;
+GLOBAL VOID set_mouse (WORD number, MFORM *addr)
 
 {
   last_mousenumber = mousenumber;
@@ -325,7 +320,7 @@ MFORM *addr;
 
 /*****************************************************************************/
 
-GLOBAL VOID last_mouse ()
+GLOBAL VOID last_mouse (VOID)
 
 {
   set_mouse (last_mousenumber, last_mouseform);
@@ -333,7 +328,7 @@ GLOBAL VOID last_mouse ()
 
 /*****************************************************************************/
 
-GLOBAL VOID hide_mouse ()
+GLOBAL VOID hide_mouse (VOID)
 
 {
   if (hidden == 0) graf_mouse (M_OFF, NULL);
@@ -342,7 +337,7 @@ GLOBAL VOID hide_mouse ()
 
 /*****************************************************************************/
 
-GLOBAL VOID show_mouse ()
+GLOBAL VOID show_mouse (VOID)
 
 {
   hidden--;
@@ -351,7 +346,7 @@ GLOBAL VOID show_mouse ()
 
 /*****************************************************************************/
 
-GLOBAL VOID busy_mouse ()
+GLOBAL VOID busy_mouse (VOID)
 
 {
   if (busy == 0) set_mouse (HOURGLASS, NULL);
@@ -360,7 +355,7 @@ GLOBAL VOID busy_mouse ()
 
 /*****************************************************************************/
 
-GLOBAL VOID arrow_mouse ()
+GLOBAL VOID arrow_mouse (VOID)
 
 {
   busy--;
@@ -371,10 +366,7 @@ GLOBAL VOID arrow_mouse ()
 /* Objekt-Routinen                                                           */
 /*****************************************************************************/
 
-GLOBAL VOID do_state (tree, obj, state)
-OBJECT *tree;
-WORD   obj;
-UWORD  state;
+GLOBAL VOID do_state (OBJECT *tree, WORD obj, UWORD state)
 
 {
   tree [obj].ob_state |= state;         /* Status im Objekt setzen */
@@ -382,10 +374,7 @@ UWORD  state;
 
 /*****************************************************************************/
 
-GLOBAL VOID undo_state (tree, obj, state)
-OBJECT *tree;
-WORD   obj;
-UWORD  state;
+GLOBAL VOID undo_state (OBJECT *tree, WORD obj, UWORD state)
 
 {
   tree [obj].ob_state &= ~ state;       /* Status im Objekt löschen */
@@ -393,10 +382,7 @@ UWORD  state;
 
 /*****************************************************************************/
 
-GLOBAL VOID flip_state (tree, obj, state)
-OBJECT *tree;
-WORD   obj;
-UWORD  state;
+GLOBAL VOID flip_state (OBJECT *tree, WORD obj, UWORD state)
 
 {
   tree [obj].ob_state ^= state;         /* Status im Objekt invertieren */
@@ -404,10 +390,7 @@ UWORD  state;
 
 /*****************************************************************************/
 
-GLOBAL WORD find_state (tree, obj, state)
-OBJECT *tree;
-WORD   obj;
-UWORD  state;
+GLOBAL WORD find_state (OBJECT *tree, WORD obj, UWORD state)
 
 {
   do
@@ -420,10 +403,7 @@ UWORD  state;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN is_state (tree, obj, state)
-OBJECT *tree;
-WORD   obj;
-UWORD  state;
+GLOBAL BOOLEAN is_state (OBJECT *tree, WORD obj, UWORD state)
 
 {
   return ((tree [obj].ob_state & state) != 0);
@@ -431,10 +411,7 @@ UWORD  state;
 
 /*****************************************************************************/
 
-GLOBAL VOID do_flags (tree, obj, flags)
-OBJECT *tree;
-WORD   obj;
-UWORD  flags;
+GLOBAL VOID do_flags (OBJECT *tree, WORD obj, UWORD flags)
 
 {
   tree [obj].ob_flags |= flags;         /* Flags im Objekt setzen */
@@ -442,10 +419,7 @@ UWORD  flags;
 
 /*****************************************************************************/
 
-GLOBAL VOID undo_flags (tree, obj, flags)
-OBJECT *tree;
-WORD   obj;
-UWORD  flags;
+GLOBAL VOID undo_flags (OBJECT *tree, WORD obj, UWORD flags)
 
 {
   tree [obj].ob_flags &= ~ flags;       /* Flags im Objekt löschen */
@@ -453,10 +427,7 @@ UWORD  flags;
 
 /*****************************************************************************/
 
-GLOBAL VOID flip_flags (tree, obj, flags)
-OBJECT *tree;
-WORD   obj;
-UWORD  flags;
+GLOBAL VOID flip_flags (OBJECT *tree, WORD obj, UWORD flags)
 
 {
   tree [obj].ob_flags ^= flags;         /* Flags im Objekt invertieren */
@@ -464,10 +435,7 @@ UWORD  flags;
 
 /*****************************************************************************/
 
-GLOBAL WORD find_flags (tree, obj, flags)
-OBJECT *tree;
-WORD   obj;
-UWORD  flags;
+GLOBAL WORD find_flags (OBJECT *tree, WORD obj, UWORD flags)
 
 {
   do
@@ -480,10 +448,7 @@ UWORD  flags;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN is_flags (tree, obj, flags)
-OBJECT *tree;
-WORD   obj;
-UWORD  flags;
+GLOBAL BOOLEAN is_flags (OBJECT *tree, WORD obj, UWORD flags)
 
 {
   return ((tree [obj].ob_flags & flags) != 0);
@@ -491,10 +456,7 @@ UWORD  flags;
 
 /*****************************************************************************/
 
-GLOBAL WORD find_type (tree, obj, type)
-OBJECT *tree;
-WORD   obj;
-UWORD  type;
+GLOBAL WORD find_type (OBJECT *tree, WORD obj, UWORD type)
 
 {
   do
@@ -507,10 +469,7 @@ UWORD  type;
 
 /*****************************************************************************/
 
-GLOBAL VOID set_checkbox (tree, obj, selected)
-OBJECT  *tree;
-WORD    obj;
-BOOLEAN selected;
+GLOBAL VOID set_checkbox (OBJECT *tree, WORD obj, BOOLEAN selected)
 
 {
   if (selected)
@@ -521,9 +480,7 @@ BOOLEAN selected;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN get_checkbox (tree, obj)
-OBJECT *tree;
-WORD   obj;
+GLOBAL BOOLEAN get_checkbox (OBJECT *tree, WORD obj)
 
 {
   return (is_state (tree, obj, SELECTED));
@@ -531,9 +488,7 @@ WORD   obj;
 
 /*****************************************************************************/
 
-GLOBAL VOID set_rbutton (tree, obj, lower, upper)
-OBJECT *tree;
-WORD   obj, lower, upper;
+GLOBAL VOID set_rbutton (OBJECT *tree, WORD obj, WORD lower, WORD upper)
 
 {
   REG WORD i;
@@ -548,9 +503,7 @@ WORD   obj, lower, upper;
 
 /*****************************************************************************/
 
-GLOBAL WORD get_rbutton (tree, obj)
-OBJECT *tree;
-WORD   obj;
+GLOBAL WORD get_rbutton (OBJECT *tree, WORD obj)
 
 {
   return (find_state (tree, obj, SELECTED));
@@ -558,10 +511,7 @@ WORD   obj;
 
 /*****************************************************************************/
 
-GLOBAL VOID set_ptext (tree, obj, s)
-OBJECT *tree;
-WORD   obj;
-BYTE   *s;
+GLOBAL VOID set_ptext (OBJECT *tree, WORD obj, BYTE *s)
 
 {
   TEDINFO *ptedinfo;
@@ -573,10 +523,7 @@ BYTE   *s;
 
 /*****************************************************************************/
 
-GLOBAL VOID get_ptext (tree, obj, s)
-OBJECT *tree;
-WORD   obj;
-BYTE   *s;
+GLOBAL VOID get_ptext (OBJECT *tree, WORD obj, BYTE *s)
 
 {
   TEDINFO *ptedinfo;
@@ -587,10 +534,7 @@ BYTE   *s;
 
 /*****************************************************************************/
 
-GLOBAL VOID menu_check (tree, obj, checkit)
-OBJECT  *tree;
-WORD    obj;
-BOOLEAN checkit;
+GLOBAL VOID menu_check (OBJECT *tree, WORD obj, BOOLEAN checkit)
 
 {
 #if GEM & XGEM
@@ -605,10 +549,7 @@ BOOLEAN checkit;
 
 /*****************************************************************************/
 
-GLOBAL VOID menu_enable (tree, obj, enableit)
-OBJECT  *tree;
-WORD    obj;
-BOOLEAN enableit;
+GLOBAL VOID menu_enable (OBJECT *tree, WORD obj, BOOLEAN enableit)
 
 {
 #if GEM & XGEM
@@ -623,11 +564,7 @@ BOOLEAN enableit;
 
 /*****************************************************************************/
 
-GLOBAL VOID objc_rect (tree, obj, rect, calc_border)
-OBJECT  *tree;
-WORD     obj;
-RECT    *rect;
-BOOLEAN calc_border;
+GLOBAL VOID objc_rect (OBJECT *tree, WORD obj, RECT *rect, BOOLEAN calc_border)
 
 {
   WORD border, diff;
@@ -679,10 +616,7 @@ BOOLEAN calc_border;
 
 /*****************************************************************************/
 
-LOCAL VOID vdi_fix (pfd, theaddr, wb, h)
-MFDB *pfd;
-VOID *theaddr;
-WORD wb, h;
+LOCAL VOID vdi_fix (MFDB *pfd, VOID *theaddr, WORD wb, WORD h)
 
 {
   pfd->mp  = theaddr;
@@ -694,12 +628,7 @@ WORD wb, h;
 
 /*****************************************************************************/
 
-LOCAL VOID vdi_trans (saddr, swb, daddr, dwb, h)
-WORD *saddr;
-WORD swb;
-WORD *daddr;
-WORD dwb;
-WORD h;
+LOCAL VOID vdi_trans (WORD *saddr, WORD swb, WORD *daddr, WORD dwb, WORD h)
 
 {
   MFDB src, dst;
@@ -715,9 +644,7 @@ WORD h;
 
 /*****************************************************************************/
 
-GLOBAL VOID trans_gimage (tree, obj)
-OBJECT *tree;
-WORD   obj;
+GLOBAL VOID trans_gimage (OBJECT *tree, WORD obj)
 
 {
   ICONBLK *piconblk;
@@ -754,8 +681,7 @@ WORD   obj;
 /* Default-Attribute für Linie setzen                                        */
 /*****************************************************************************/
 
-GLOBAL VOID line_default (vdi_handle)
-WORD vdi_handle;
+GLOBAL VOID line_default (WORD vdi_handle)
 
 {
   vswr_mode (vdi_handle, MD_REPLACE);
@@ -769,8 +695,7 @@ WORD vdi_handle;
 /* Default-Attribute für Text setzen                                         */
 /*****************************************************************************/
 
-GLOBAL VOID text_default (vdi_handle)
-WORD vdi_handle;
+GLOBAL VOID text_default (WORD vdi_handle)
 
 {
   WORD ret;
@@ -788,10 +713,7 @@ WORD vdi_handle;
 /* Text ausgeben (> 127 Zeichen)                                             */
 /*****************************************************************************/
 
-GLOBAL VOID v_text (vdi_handle, x, y, string, charwidth)
-WORD vdi_handle, x, y;
-BYTE *string;
-WORD charwidth;
+GLOBAL VOID v_text (WORD vdi_handle, WORD x, WORD y, BYTE *string, WORD charwidth)
 
 {
   WORD len, minlen;
@@ -811,11 +733,7 @@ WORD charwidth;
 /* Dialog-Verarbeitung                                                       */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN background (tree, obj, get, screen, buffer)
-OBJECT  *tree;
-WORD    obj;
-BOOLEAN get;
-MFDB    *screen, *buffer;
+GLOBAL BOOLEAN background (OBJECT *tree, WORD obj, BOOLEAN get, MFDB *screen, MFDB *buffer)
 
 {
   RECT  box;
@@ -883,11 +801,7 @@ MFDB    *screen, *buffer;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN opendial (tree, grow, size, screen, buffer)
-OBJECT  *tree;
-BOOLEAN grow;
-RECT    *size;
-MFDB    *screen, *buffer;
+GLOBAL BOOLEAN opendial (OBJECT *tree, BOOLEAN grow, RECT *size, MFDB *screen, MFDB *buffer)
 
 {
   BOOLEAN ok;
@@ -918,11 +832,7 @@ MFDB    *screen, *buffer;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN closedial (tree, shrink, size, screen, buffer)
-OBJECT  *tree;
-BOOLEAN shrink;
-RECT    *size;
-MFDB    *screen, *buffer;
+GLOBAL BOOLEAN closedial (OBJECT *tree, BOOLEAN shrink, RECT *size, MFDB *screen, MFDB *buffer)
 
 {
   BOOLEAN ok;
@@ -953,12 +863,12 @@ MFDB    *screen, *buffer;
 
 /*****************************************************************************/
 
-GLOBAL WORD hndl_dial (tree, def, grow_shrink, save_back, size, ok)
-OBJECT  *tree;
-WORD    def;
-BOOLEAN grow_shrink, save_back;
-RECT    *size;
-BOOLEAN *ok;
+GLOBAL WORD hndl_dial (OBJECT *tree,
+                       WORD def,
+                       BOOLEAN grow_shrink,
+                       BOOLEAN save_back,
+                       RECT *size,
+                       BOOLEAN *ok)
 
 {
   RECT r;
@@ -996,9 +906,7 @@ BOOLEAN *ok;
 
 /*****************************************************************************/
 
-LOCAL WORD find_obj (tree, start_obj, which)
-OBJECT *tree;
-WORD   start_obj, which;
+LOCAL WORD find_obj (OBJECT *tree, WORD start_obj, WORD which)
 
 {
   WORD obj, theflag, thestate, flag, inc;
@@ -1036,9 +944,7 @@ WORD   start_obj, which;
 
 /*****************************************************************************/
 
-LOCAL WORD fm_inifld (tree, start_fld)
-OBJECT *tree;
-WORD   start_fld;
+LOCAL WORD fm_inifld (OBJECT *tree, WORD start_fld)
 
 {
   if (start_fld == 0) start_fld = find_obj (tree, 0, FMD_FORWARD);
@@ -1047,9 +953,7 @@ WORD   start_fld;
 
 /*****************************************************************************/
 
-GLOBAL WORD formdo (tree, start)
-OBJECT *tree;
-WORD   start;
+GLOBAL WORD formdo (OBJECT *tree, WORD start)
 
 {
   WORD    edit_obj;
@@ -1162,9 +1066,7 @@ WORD   start;
 
 /*****************************************************************************/
 
-GLOBAL VOID blink (tree, obj, blinkrate)
-OBJECT *tree;
-WORD   obj, blinkrate;
+GLOBAL VOID blink (OBJECT *tree, WORD obj, WORD blinkrate)
 
 {
   REG WORD i;
@@ -1183,11 +1085,13 @@ WORD   obj, blinkrate;
 
 /*****************************************************************************/
 
-GLOBAL WORD popup_menu (tree, obj, x, y, center_obj, relative, bmsk)
-OBJECT  *tree;
-WORD    obj, x, y, center_obj;
-BOOLEAN relative;
-WORD    bmsk;
+GLOBAL WORD popup_menu (OBJECT *tree,
+                        WORD obj,
+                        WORD x,
+                        WORD y,
+                        WORD center_obj,
+                        BOOLEAN relative,
+                        WORD bmsk)
 
 {
   MFDB    screen, buffer;
@@ -1321,10 +1225,7 @@ WORD    bmsk;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN is_menu_key (menu, mk, title, item)
-OBJECT *menu;
-MKINFO *mk;
-WORD   *title, *item;
+GLOBAL BOOLEAN is_menu_key (OBJECT *menu, MKINFO *mk, WORD *title, WORD *item)
 
 {
   REG WORD  ltitle, litem;
@@ -1423,9 +1324,7 @@ WORD   *title, *item;
 
 /*****************************************************************************/
 
-GLOBAL WORD check_alt (tree, mk)
-OBJECT *tree;
-MKINFO *mk;
+GLOBAL WORD check_alt (OBJECT *tree, MKINFO *mk)
 
 {
   WORD  obj, pos;
@@ -1461,8 +1360,7 @@ MKINFO *mk;
 
 /*****************************************************************************/
 
-GLOBAL VOID draw_oblines (tree)
-OBJECT *tree;
+GLOBAL VOID draw_oblines (OBJECT *tree)
 
 {
   WORD obj;
@@ -1477,9 +1375,7 @@ OBJECT *tree;
 
 /*****************************************************************************/
 
-GLOBAL VOID draw_obline (tree, obj)
-OBJECT *tree;
-WORD   obj;
+GLOBAL VOID draw_obline (OBJECT *tree, WORD obj)
 
 {
   WORD pos;
@@ -1519,8 +1415,7 @@ WORD   obj;
 /* Rechteck-Routinen                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN rc_equal (p1, p2)
-CONST RECT *p1, *p2;
+GLOBAL BOOLEAN rc_equal (CONST RECT *p1, CONST RECT *p2)
 
 {
   return ((p1->x == p2->x) && (p1->y == p2->y) &&
@@ -1529,9 +1424,7 @@ CONST RECT *p1, *p2;
 
 /*****************************************************************************/
 
-GLOBAL VOID rc_copy (ps, pd)
-CONST RECT *ps;
-RECT       *pd;
+GLOBAL VOID rc_copy (CONST RECT *ps, RECT *pd)
 
 {
   pd->x = ps->x;
@@ -1542,9 +1435,7 @@ RECT       *pd;
 
 /*****************************************************************************/
 
-GLOBAL VOID rc_union (p1, p2)
-CONST RECT *p1;
-RECT       *p2;
+GLOBAL VOID rc_union (CONST RECT *p1, RECT *p2)
 
 {
   RECT r;
@@ -1564,9 +1455,7 @@ RECT       *p2;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN rc_intersect (p1, p2)
-CONST RECT *p1;
-RECT       *p2;
+GLOBAL BOOLEAN rc_intersect (CONST RECT *p1, RECT *p2)
 
 {
   REG WORD tx, ty, tw, th;
@@ -1586,9 +1475,7 @@ RECT       *p2;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN inside (x, y, r)
-WORD       x, y;
-CONST RECT *r;
+GLOBAL BOOLEAN inside (WORD x, WORD y, CONST RECT *r)
 
 {
   return ((x >= r->x) && (y >= r->y) && (x < r->x + r->w) && (y < r->y + r->h));
@@ -1596,9 +1483,7 @@ CONST RECT *r;
 
 /*****************************************************************************/
 
-GLOBAL VOID rect2array (rect, array)
-CONST RECT *rect;
-WORD       *array;
+GLOBAL VOID rect2array (CONST RECT *rect, WORD *array)
 
 {
   *array++ = rect->x;
@@ -1609,9 +1494,7 @@ WORD       *array;
 
 /*****************************************************************************/
 
-GLOBAL VOID array2rect (array, rect)
-CONST WORD *array;
-RECT       *rect;
+GLOBAL VOID array2rect (CONST WORD *array, RECT *rect)
 
 {
   rect->x = min (array [0], array [2]);
@@ -1622,9 +1505,7 @@ RECT       *rect;
 
 /*****************************************************************************/
 
-GLOBAL VOID xywh2array  (x, y, w, h, array)
-WORD x, y, w, h;
-WORD *array;
+GLOBAL VOID xywh2array  (WORD x, WORD y, WORD w, WORD h, WORD *array)
 
 {
   *array++ = x;
@@ -1635,9 +1516,7 @@ WORD *array;
 
 /*****************************************************************************/
 
-GLOBAL VOID array2xywh  (array, x, y, w, h)
-CONST WORD *array;
-WORD       *x, *y, *w, *h;
+GLOBAL VOID array2xywh  (CONST WORD *array, WORD *x, WORD *y, WORD *w, WORD *h)
 
 {
   *x = *array++;
@@ -1648,9 +1527,7 @@ WORD       *x, *y, *w, *h;
 
 /*****************************************************************************/
 
-GLOBAL VOID xywh2rect (x, y, w, h, rect)
-WORD x, y, w, h;
-RECT *rect;
+GLOBAL VOID xywh2rect (WORD x, WORD y, WORD w, WORD h, RECT *rect)
 
 {
   rect->x = x;
@@ -1661,9 +1538,7 @@ RECT *rect;
 
 /*****************************************************************************/
 
-GLOBAL VOID rect2xywh (rect, x, y, w, h)
-CONST RECT *rect;
-WORD       *x, *y, *w, *h;
+GLOBAL VOID rect2xywh (CONST RECT *rect, WORD *x, WORD *y, WORD *w, WORD *h)
 
 {
   *x = rect->x;
@@ -1674,9 +1549,7 @@ WORD       *x, *y, *w, *h;
 
 /*****************************************************************************/
 
-GLOBAL VOID set_clip (clipflag, size)
-BOOLEAN     clipflag;
-CONST RECT *size;
+GLOBAL VOID set_clip (BOOLEAN clipflag, CONST RECT *size)
 
 {
   RECT r;
@@ -1700,9 +1573,7 @@ CONST RECT *size;
 /*****************************************************************************/
 
 #if GEM & (GEM2 | GEM3 | XGEM)
-LOCAL VOID graf_growbox (orgx, orgy, orgw, orgh, x, y, w, h)
-WORD orgx, orgy, orgw, orgh;
-WORD x, y, w, h;
+LOCAL VOID graf_growbox (WORD orgx, WORD orgy, WORD orgw, WORD orgh, WORD x, WORD y, WORD w, WORD h)
 
 {
   WORD  cx, cy, cnt, xstep, ystep;
@@ -1714,9 +1585,14 @@ WORD x, y, w, h;
 
 /*****************************************************************************/
 
-LOCAL VOID graf_shrinkbox (orgx, orgy, orgw, orgh, x, y, w, h)
-WORD orgx, orgy, orgw, orgh;
-WORD x, y, w, h;
+LOCAL VOID graf_shrinkbox (WORD orgx,
+                           WORD orgy,
+                           WORD orgw,
+                           WORD orgh,
+                           WORD x,
+                           WORD y,
+                           WORD w,
+                           WORD h)
 
 {
   WORD cx, cy, cnt, xstep, ystep;
@@ -1729,8 +1605,7 @@ WORD x, y, w, h;
 
 /*****************************************************************************/
 
-GLOBAL VOID growbox (st, fin)
-CONST RECT *st, *fin;
+GLOBAL VOID growbox (CONST RECT *st, CONST RECT *fin)
 
 {
   RECT r;
@@ -1751,8 +1626,7 @@ CONST RECT *st, *fin;
 
 /*****************************************************************************/
 
-GLOBAL VOID shrinkbox (fin, st)
-CONST RECT *fin, *st;
+GLOBAL VOID shrinkbox (CONST RECT *fin, CONST RECT *st)
 
 {
   RECT r;
@@ -1775,7 +1649,7 @@ CONST RECT *fin, *st;
 /* Fehlerbehandlung                                                          */
 /*****************************************************************************/
 
-GLOBAL VOID beep ()
+GLOBAL VOID beep (VOID)
 
 {
   if (ring_bell)
@@ -1792,9 +1666,7 @@ GLOBAL VOID beep ()
 
 /*****************************************************************************/
 
-GLOBAL WORD note (button, index, helpinx, helptree)
-WORD   button, index, helpinx;
-OBJECT *helptree;
+GLOBAL WORD note (WORD button, WORD index, WORD helpinx, OBJECT *helptree)
 
 {
   WORD    ret;
@@ -1818,9 +1690,7 @@ OBJECT *helptree;
 
 /*****************************************************************************/
 
-GLOBAL WORD error (button, index, helpinx, helptree)
-WORD   button, index, helpinx;
-OBJECT *helptree;
+GLOBAL WORD error (WORD button, WORD index, WORD helpinx, OBJECT *helptree)
 
 {
   beep ();
@@ -1831,8 +1701,7 @@ OBJECT *helptree;
 /* Speicher-Routinen                                                         */
 /*****************************************************************************/
 
-GLOBAL VOID *mem_alloc (mem)
-LONG mem;
+GLOBAL VOID *mem_alloc (LONG mem)
 
 {
     VOID *ret = NULL;
@@ -1865,8 +1734,7 @@ LONG mem;
 
 /*****************************************************************************/
 
-GLOBAL VOID mem_free (memptr)
-VOID *memptr;
+GLOBAL VOID mem_free (VOID *memptr)
 
 {
   BOOLEAN ok;
@@ -1878,7 +1746,7 @@ VOID *memptr;
 
 /*****************************************************************************/
 
-GLOBAL LONG mem_avail ()
+GLOBAL LONG mem_avail (VOID)
 
 {
     LONG ret;
@@ -1896,10 +1764,7 @@ GLOBAL LONG mem_avail ()
 
 /*****************************************************************************/
 
-GLOBAL VOID *mem_set (dest, val, len)
-VOID  *dest;
-WORD  val;
-UWORD len;
+GLOBAL VOID *mem_set (VOID *dest, WORD val, UWORD len)
 
 {
 #if DR_C | LASER_C | LATTICE_C
@@ -1915,10 +1780,7 @@ UWORD len;
 
 /*****************************************************************************/
 
-GLOBAL VOID *mem_move (dest, src, len)
-VOID       *dest;
-CONST VOID *src;
-UWORD      len;
+GLOBAL VOID *mem_move (VOID *dest, CONST VOID *src, UWORD len)
 
 {
 #if DR_C | LASER_C | LATTICE_C | HIGH_C
@@ -1942,10 +1804,7 @@ UWORD      len;
 
 /*****************************************************************************/
 
-GLOBAL VOID *mem_lset (dest, val, len)
-VOID  *dest;
-WORD  val;
-ULONG len;
+GLOBAL VOID *mem_lset (VOID *dest, WORD val, ULONG len)
 
 {
 #if MSDOS | FLEXOS | DR_C | LASER_C | LATTICE_C | MW_C
@@ -1965,10 +1824,7 @@ ULONG len;
 
 /*****************************************************************************/
 
-GLOBAL VOID *mem_lmove (dest, src, len)
-VOID       *dest;
-CONST VOID *src;
-ULONG      len;
+GLOBAL VOID *mem_lmove (VOID *dest, CONST VOID *src, ULONG len)
 
 {
 #if MSDOS | FLEXOS | DR_C | LASER_C | LATTICE_C | MW_C
@@ -2000,8 +1856,7 @@ ULONG      len;
 /* Zeichenketten-Routinen                                                    */
 /*****************************************************************************/
 
-GLOBAL BYTE *str_upper (s)
-BYTE *s;
+GLOBAL BYTE *str_upper (BYTE *s)
 
 {
 #if MS_C | TURBO_C
@@ -2015,8 +1870,7 @@ BYTE *s;
 
 /*****************************************************************************/
 
-GLOBAL BYTE *str_lower (s)
-BYTE *s;
+GLOBAL BYTE *str_lower (BYTE *s)
 
 {
 #if MS_C | TURBO_C
@@ -2032,8 +1886,7 @@ BYTE *s;
 /* Mengen-Routinen                                                           */
 /*****************************************************************************/
 
-GLOBAL VOID setcpy (set1, set2)
-SET set1, set2;
+GLOBAL VOID setcpy (SET set1, SET set2)
 
 {
   mem_move (set1, set2, SETSIZE * sizeof (ULONG));
@@ -2041,8 +1894,7 @@ SET set1, set2;
 
 /*****************************************************************************/
 
-GLOBAL VOID setall (set)
-SET set;
+GLOBAL VOID setall (SET set)
 
 {
   mem_set (set, 0xFF, SETSIZE * sizeof (ULONG));
@@ -2050,8 +1902,7 @@ SET set;
 
 /*****************************************************************************/
 
-GLOBAL VOID setclr (set)
-SET set;
+GLOBAL VOID setclr (SET set)
 
 {
   mem_set (set, 0x00, SETSIZE * sizeof (ULONG));
@@ -2059,8 +1910,7 @@ SET set;
 
 /*****************************************************************************/
 
-GLOBAL VOID setnot (set)
-SET set;
+GLOBAL VOID setnot (SET set)
 
 {
   REG WORD i;
@@ -2070,8 +1920,7 @@ SET set;
 
 /*****************************************************************************/
 
-GLOBAL VOID setand (set1, set2)
-SET set1, set2;
+GLOBAL VOID setand (SET set1, SET set2)
 
 {
   REG WORD i;
@@ -2081,8 +1930,7 @@ SET set1, set2;
 
 /*****************************************************************************/
 
-GLOBAL VOID setor (set1, set2)
-SET set1, set2;
+GLOBAL VOID setor (SET set1, SET set2)
 
 {
   REG WORD i;
@@ -2092,8 +1940,7 @@ SET set1, set2;
 
 /*****************************************************************************/
 
-GLOBAL VOID setxor (set1, set2)
-SET set1, set2;
+GLOBAL VOID setxor (SET set1, SET set2)
 
 {
   REG WORD i;
@@ -2103,9 +1950,7 @@ SET set1, set2;
 
 /*****************************************************************************/
 
-GLOBAL VOID setincl (set, elt)
-SET  set;
-WORD elt;
+GLOBAL VOID setincl (SET set, WORD elt)
 
 {
   if ((0 <= elt) && (elt <= SETMAX)) set [elt / 32] |= (1L << (elt % 32));
@@ -2113,9 +1958,7 @@ WORD elt;
 
 /*****************************************************************************/
 
-GLOBAL VOID setexcl (set, elt)
-SET  set;
-WORD elt;
+GLOBAL VOID setexcl (SET set, WORD elt)
 
 {
   if ((0 <= elt) && (elt <= SETMAX)) set [elt / 32] &= (~ (1L << (elt % 32)));
@@ -2123,9 +1966,7 @@ WORD elt;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN setin (set, elt)
-SET  set;
-WORD elt;
+GLOBAL BOOLEAN setin (SET set, WORD elt)
 
 {
   if ((0 <= elt) && (elt <= SETMAX))
@@ -2136,8 +1977,7 @@ WORD elt;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN setcmp (set1, set2)
-SET set1, set2;
+GLOBAL BOOLEAN setcmp (SET set1, SET set2)
 
 {
   REG WORD    i;
@@ -2151,8 +1991,7 @@ SET set1, set2;
 
 /*****************************************************************************/
 
-GLOBAL WORD setcard (set)
-SET set;
+GLOBAL WORD setcard (SET set)
 
 {
   REG WORD i, j, card;
@@ -2172,10 +2011,7 @@ SET set;
 /* Verschiedenes                                                             */
 /*****************************************************************************/
 
-GLOBAL VOID file_split (fullname, drive, path, filename, ext)
-BYTE *fullname;
-WORD *drive;
-BYTE *path, *filename, *ext;
+GLOBAL VOID file_split (BYTE *fullname, WORD *drive, BYTE *path, BYTE *filename, BYTE *ext)
 
 {
   STR128 s;
@@ -2248,9 +2084,7 @@ BYTE *path, *filename, *ext;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN get_path (path, drive)
-BYTE *path;
-WORD drive;
+GLOBAL BOOLEAN get_path (BYTE *path, WORD drive)
 
 {
   BYTE s [64], sep [2];
@@ -2284,8 +2118,7 @@ WORD drive;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN set_path (path)
-CONST BYTE *path;
+GLOBAL BOOLEAN set_path (CONST BYTE *path)
 
 {
   BYTE s [64];
@@ -2313,8 +2146,7 @@ CONST BYTE *path;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN file_exist (filename)
-CONST BYTE *filename;
+GLOBAL BOOLEAN file_exist (CONST BYTE *filename)
 
 {
   BOOLEAN result;
@@ -2338,8 +2170,7 @@ CONST BYTE *filename;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN path_exist (pathname)
-CONST BYTE *pathname;
+GLOBAL BOOLEAN path_exist (CONST BYTE *pathname)
 
 {
   BOOLEAN result;
@@ -2369,8 +2200,7 @@ CONST BYTE *pathname;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN select_file (name, path, suffix, label, filename)
-BYTE *name, *path, *suffix, *label, *filename;
+GLOBAL BOOLEAN select_file (BYTE *name, BYTE *path, BYTE *suffix, BYTE *label, BYTE *filename)
 
 {
   BYTE   *p;
@@ -2443,11 +2273,7 @@ BYTE *name, *path, *suffix, *label, *filename;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_global (argc, argv, acc_menu, class)
-INT  argc;
-BYTE *argv [];
-BYTE *acc_menu;
-WORD class;
+GLOBAL BOOLEAN init_global (INT argc, BYTE *argv[], BYTE *acc_menu, WORD class)
 
 {
   WORD    i;
@@ -2665,7 +2491,7 @@ WORD class;
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_global ()
+GLOBAL BOOLEAN term_global (VOID)
 
 {
   if (gl_apid >= 0)

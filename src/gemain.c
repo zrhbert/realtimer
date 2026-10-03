@@ -44,7 +44,7 @@ UWORD _stklen = 12288;            /* 12 KBytes Stack fr Turbo C */
 
 #if GEM & XGEM
 
-GLOBAL WORD GEMAIN ()
+GLOBAL WORD GEMAIN (VOID)
 {
   if (init_initerm (0, NULL)) hndl_events ();    /* Alles ok => multi */
   term_initerm ();                               /* Terminierungsschritte */
@@ -55,9 +55,7 @@ GLOBAL WORD GEMAIN ()
 
 /*****************************************************************************/
 
-GLOBAL WORD main (argc, argv)
-INT  argc;
-char *argv [];
+GLOBAL WORD main (INT argc, char *argv[])
 
 {
 

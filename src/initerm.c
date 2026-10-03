@@ -104,8 +104,7 @@ LOCAL VOID place_icons 		(VOID);
 
 /*****************************************************************************/
 
-LOCAL LONG file_length (filename)
-BYTE *filename;
+LOCAL LONG file_length (BYTE *filename)
 
 {
   LONG    length;
@@ -132,10 +131,7 @@ BYTE *filename;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN text_rdln (file, s, maxlen)
-FILE *file;
-BYTE *s;
-WORD maxlen;
+LOCAL BOOLEAN text_rdln (FILE *file, BYTE *s, WORD maxlen)
 
 {
   BYTE *res;
@@ -153,7 +149,7 @@ WORD maxlen;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN read_alerts ()
+LOCAL BOOLEAN read_alerts (VOID)
 {
   BOOLEAN  ok;
   LONG     len;
@@ -248,9 +244,7 @@ LOCAL BOOLEAN read_alerts ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_initerm (argc, argv)
-INT  argc;
-BYTE *argv [];
+GLOBAL BOOLEAN init_initerm (INT argc, BYTE *argv[])
 
 {
   BOOLEAN ok;
@@ -388,7 +382,7 @@ BYTE *argv [];
 } /* init_initerm */
 
 
-LOCAL VOID place_icons ()
+LOCAL VOID place_icons (VOID)
 {
 	WINDOWP	desk_win = find_desk ();
 	WORD iconw, iconh, iconr, i, y, count = 0;
@@ -431,7 +425,7 @@ LOCAL VOID place_icons ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_initerm ()
+GLOBAL BOOLEAN term_initerm (VOID)
 
 {
   BOOLEAN ok;

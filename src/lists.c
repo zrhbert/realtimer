@@ -295,7 +295,7 @@ GLOBAL VOID list_destroy_el (LIST_P element)
   free(element);
 } /* list_destroy_el */
 
-GLOBAL LIST_P list_create ()
+GLOBAL LIST_P list_create (VOID)
 {
   /* create a new list, with a header element */
   LIST_P header;

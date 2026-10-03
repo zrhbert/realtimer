@@ -658,17 +658,14 @@ GLOBAL WORD hndl_alert_obj (RTMCLASSP module, WORD alert_id)
 /* Menübehandlung                                                            */
 /*****************************************************************************/
 
-GLOBAL VOID update_menu_obj (window)
-WINDOWP window;
+GLOBAL VOID update_menu_obj (WINDOWP window)
 
 {
 } /* update_menu_obj */
 
 /*****************************************************************************/
 
-GLOBAL VOID handle_menu_obj (window, title, item)
-WINDOWP window;
-WORD    title, item;
+GLOBAL VOID handle_menu_obj (WINDOWP window, WORD title, WORD item)
 
 {
   if (window != NULL)
@@ -692,9 +689,7 @@ WORD    title, item;
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-GLOBAL VOID box_obj (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+GLOBAL VOID box_obj (WINDOWP window, BOOLEAN grow)
 {
   RECT l, b;
 
@@ -714,9 +709,7 @@ BOOLEAN grow;
 /* Teste Fenster                                                             */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN wi_test_obj (window, action)
-WINDOWP window;
-WORD    action;
+GLOBAL BOOLEAN wi_test_obj (WINDOWP window, WORD action)
 
 {
   BOOLEAN ret, ext;
@@ -744,8 +737,7 @@ WORD    action;
 /* Öffne Fenster                                                             */
 /*****************************************************************************/
 
-GLOBAL VOID wi_open_obj (window)
-WINDOWP window;
+GLOBAL VOID wi_open_obj (WINDOWP window)
 
 {
   box (window, TRUE);
@@ -755,8 +747,7 @@ WINDOWP window;
 /* Schließe Fenster                                                          */
 /*****************************************************************************/
 
-GLOBAL VOID wi_close_obj (window)
-WINDOWP window;
+GLOBAL VOID wi_close_obj (WINDOWP window)
 {
   box (window, FALSE);
 } /* wi_close_obj */
@@ -765,8 +756,7 @@ WINDOWP window;
 /* Lösche Fenster                                                            */
 /*****************************************************************************/
 
-GLOBAL VOID wi_delete_obj (window)
-WINDOWP window;
+GLOBAL VOID wi_delete_obj (WINDOWP window)
 {
 } /* wi_delete_obj */
 
@@ -774,8 +764,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-GLOBAL VOID wi_draw_obj (window)
-WINDOWP window;
+GLOBAL VOID wi_draw_obj (WINDOWP window)
 {
   /* clr_scroll (window); */
 } /* wi_draw_obj */
@@ -784,10 +773,7 @@ WINDOWP window;
 /* Reagiere auf Pfeile                                                       */
 /*****************************************************************************/
 
-GLOBAL VOID wi_arrow_obj (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+GLOBAL VOID wi_arrow_obj (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
   WORD w, h;
@@ -837,10 +823,7 @@ LONG    oldpos, newpos;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-GLOBAL VOID wi_snap_obj (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+GLOBAL VOID wi_snap_obj (WINDOWP window, RECT *new, WORD mode)
 
 {
 	RECT r, diff;
@@ -899,10 +882,7 @@ WORD    mode;
 /* Objektoperationen von Fenster                                             */
 /*****************************************************************************/
 
-GLOBAL VOID wi_objop_obj (window, objs, action)
-WINDOWP window;
-SET     objs;
-WORD    action;
+GLOBAL VOID wi_objop_obj (WINDOWP window, SET objs, WORD action)
 
 {
 } /* wi_objop_obj */
@@ -911,11 +891,7 @@ WORD    action;
 /* Ziehen in das Fenster                                                     */
 /*****************************************************************************/
 
-GLOBAL WORD wi_drag_obj (src_window, src_obj, dest_window, dest_obj)
-WINDOWP src_window;
-WORD    src_obj;
-WINDOWP dest_window;
-WORD    dest_obj;
+GLOBAL WORD wi_drag_obj (WINDOWP src_window, WORD src_obj, WINDOWP dest_window, WORD dest_obj)
 
 {
   if (src_window->handle == dest_window->handle) return (DRAG_SWIND); /* Im gleichen Fenster */
@@ -931,8 +907,7 @@ GLOBAL VOID wi_click_obj (WINDOWP window, MKINFO *mk)
 
 /*****************************************************************************/
 
-GLOBAL VOID wi_unclick_obj (window)
-WINDOWP window;
+GLOBAL VOID wi_unclick_obj (WINDOWP window)
 
 {
 } /* wi_unclick_obj */
@@ -941,9 +916,7 @@ WINDOWP window;
 /* Taste für Fenster                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN wi_key_obj (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+GLOBAL BOOLEAN wi_key_obj (WINDOWP window, MKINFO *mk)
 
 {
   if (menu_key (window, mk)) return (TRUE);
@@ -955,8 +928,7 @@ MKINFO  *mk;
 /* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
-GLOBAL VOID wi_timer_obj (window)
-WINDOWP window;
+GLOBAL VOID wi_timer_obj (WINDOWP window)
 
 {
 } /* wi_timer_obj */
@@ -965,8 +937,7 @@ WINDOWP window;
 /* Fenster nach oben gebracht                                                */
 /*****************************************************************************/
 
-GLOBAL VOID wi_top_obj (window)
-WINDOWP window;
+GLOBAL VOID wi_top_obj (WINDOWP window)
 
 {
 } /* wi_top_obj */
@@ -975,8 +946,7 @@ WINDOWP window;
 /* Fenster nach unten gebracht                                               */
 /*****************************************************************************/
 
-GLOBAL VOID wi_untop_obj (window)
-WINDOWP window;
+GLOBAL VOID wi_untop_obj (WINDOWP window)
 
 {
 } /* wi_untop_obj */
@@ -985,9 +955,7 @@ WINDOWP window;
 /* Cut/Copy/Paste für Fenster                                                */
 /*****************************************************************************/
 
-GLOBAL VOID wi_edit_obj (window, action)
-WINDOWP window;
-WORD    action;
+GLOBAL VOID wi_edit_obj (WINDOWP window, WORD action)
 
 {
   BOOLEAN ext;
@@ -1009,8 +977,7 @@ WORD    action;
 /* Iconbehandlung                                                            */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN icons_obj (src_obj, dest_obj)
-WORD src_obj, dest_obj;
+GLOBAL BOOLEAN icons_obj (WORD src_obj, WORD dest_obj)
 
 {
   BOOLEAN result;
@@ -1040,9 +1007,7 @@ WORD src_obj, dest_obj;
 /* Hilfen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN showhelp_obj (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN showhelp_obj (WINDOWP window, WORD icon)
 {
 	RTMCLASSP	module;
 	STRING		name;
@@ -1086,9 +1051,7 @@ GLOBAL BOOLEAN help_obj (RTMCLASSP module)
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-PRIVATE VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+PRIVATE VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -1109,8 +1072,7 @@ BOOLEAN grow;
 /* Suche Slot einer Klasse                                                   */
 /*****************************************************************************/
 
-GLOBAL WORD find_classlot (rtmclass)
-INT rtmclass;
+GLOBAL WORD find_classlot (INT rtmclass)
 {
 	INT slot;
 	
@@ -1128,8 +1090,7 @@ INT rtmclass;
 /* Suche Slot von Modul                                                      */
 /*****************************************************************************/
 
-LOCAL WORD find_moduleslot (module)
-RTMCLASSP module;
+LOCAL WORD find_moduleslot (RTMCLASSP module)
 {
   REG WORD slot;
 
@@ -1175,8 +1136,7 @@ GLOBAL WINDOWP create_window_obj (UWORD kind, WORD class)
 /*****************************************************************************/
 /* Lösche Objekt                                                            */
 /*****************************************************************************/
-GLOBAL VOID destroy_obj (module)
-RTMCLASSP module;
+GLOBAL VOID destroy_obj (RTMCLASSP module)
 {
 	if (module)
 	{
@@ -1252,8 +1212,7 @@ GLOBAL RTMCLASSP create_module (CHAR *module_name, WORD instance_count)
 /* Lösche Modul                                                            */
 /*****************************************************************************/
 
-GLOBAL VOID delete_module (module)
-RTMCLASSP module;
+GLOBAL VOID delete_module (RTMCLASSP module)
 
 {
   WORD    slot, i;
@@ -1284,7 +1243,7 @@ RTMCLASSP module;
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_modules ()
+GLOBAL BOOLEAN term_modules (VOID)
 
 {
 	BOOLEAN ok = TRUE;
@@ -1404,7 +1363,7 @@ GLOBAL WORD load_create_infos (CreateFn *create, CONST CHAR *type, CONST WORD ma
 	return instance-1;	
 } /* load_create_infos */
 
-GLOBAL BOOLEAN open_module_windows ()
+GLOBAL BOOLEAN open_module_windows (VOID)
 {
 	BOOLEAN ok = TRUE;
 	REG WORD i;

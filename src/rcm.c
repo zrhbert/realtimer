@@ -32,10 +32,11 @@ LOCAL VOID fix_frimg   _((WORD object, LONG *rs_frimg, BITBLK *rs_bitblk, RS_IMD
 
 /***************************************************************************/
 
-LOCAL VOID fix_tree (gl_wbox, gl_hbox, n_tree, rs_trindex, rs_object)
-REG WORD   gl_wbox, gl_hbox, n_tree;
-REG OBJECT **rs_trindex;
-REG OBJECT *rs_object;
+LOCAL VOID fix_tree (REG WORD gl_wbox,
+                     REG WORD gl_hbox,
+                     REG WORD n_tree,
+                     REG OBJECT **rs_trindex,
+                     REG OBJECT *rs_object)
 
 {
   REG WORD   tree;     /* index for trees */
@@ -70,11 +71,10 @@ REG OBJECT *rs_object;
 
 /***************************************************************************/
 
-LOCAL VOID fix_tedinfo (object, rs_object, rs_tedinfo, rs_strings)
-REG WORD    object;
-REG OBJECT  *rs_object;
-REG TEDINFO *rs_tedinfo;
-REG BYTE    **rs_strings;
+LOCAL VOID fix_tedinfo (REG WORD object,
+                        REG OBJECT *rs_object,
+                        REG TEDINFO *rs_tedinfo,
+                        REG BYTE **rs_strings)
 
 {
   REG WORD index;
@@ -89,11 +89,10 @@ REG BYTE    **rs_strings;
 
 /***************************************************************************/
 
-LOCAL VOID fix_bitblk (object, rs_object, rs_bitblk, rs_imdope)
-REG WORD      object;
-REG OBJECT    *rs_object;
-REG BITBLK    *rs_bitblk;
-REG RS_IMDOPE *rs_imdope;
+LOCAL VOID fix_bitblk (REG WORD object,
+                       REG OBJECT *rs_object,
+                       REG BITBLK *rs_bitblk,
+                       REG RS_IMDOPE *rs_imdope)
 
 {
   REG WORD index1;
@@ -108,10 +107,7 @@ REG RS_IMDOPE *rs_imdope;
 
 /***************************************************************************/
 
-LOCAL VOID fix_string (object, rs_object, rs_strings)
-REG WORD    object;
-REG OBJECT  *rs_object;
-REG BYTE    **rs_strings;
+LOCAL VOID fix_string (REG WORD object, REG OBJECT *rs_object, REG BYTE **rs_strings)
 
 {
   rs_object [object].ob_spec.index = (LONG)rs_strings [(WORD)rs_object [object].ob_spec.index];
@@ -119,12 +115,11 @@ REG BYTE    **rs_strings;
 
 /***************************************************************************/
 
-LOCAL VOID fix_iconblk (object, rs_object, rs_iconblk, rs_imdope, rs_strings)
-REG WORD      object;
-REG OBJECT    *rs_object;
-REG ICONBLK   *rs_iconblk;
-REG RS_IMDOPE *rs_imdope;
-REG BYTE      **rs_strings;
+LOCAL VOID fix_iconblk (REG WORD object,
+                        REG OBJECT *rs_object,
+                        REG ICONBLK *rs_iconblk,
+                        REG RS_IMDOPE *rs_imdope,
+                        REG BYTE **rs_strings)
 
 {
   REG WORD index1;
@@ -146,11 +141,10 @@ REG BYTE      **rs_strings;
 
 /***************************************************************************/
 
-LOCAL VOID fix_frimg (object, rs_frimg, rs_bitblk, rs_imdope)
-REG WORD      object;
-REG LONG      *rs_frimg;
-REG BITBLK    *rs_bitblk;
-REG RS_IMDOPE *rs_imdope;
+LOCAL VOID fix_frimg (REG WORD object,
+                      REG LONG *rs_frimg,
+                      REG BITBLK *rs_bitblk,
+                      REG RS_IMDOPE *rs_imdope)
 
 {
   REG WORD index1;
@@ -165,20 +159,21 @@ REG RS_IMDOPE *rs_imdope;
 
 /***************************************************************************/
 
-GLOBAL VOID rsc_create (gl_wbox, gl_hbox, n_tree, n_obs, n_frstr, n_frimg,
-                        rs_strings, rs_frstr, rs_bitblk, rs_frimg, rs_iconblk,
-                        rs_tedinfo, rs_object, rs_trindex, rs_imdope)
-WORD      gl_wbox, gl_hbox;
-WORD      n_tree, n_obs, n_frstr, n_frimg;
-BYTE      **rs_strings;
-LONG      *rs_frstr;
-BITBLK    *rs_bitblk;
-LONG      *rs_frimg;
-ICONBLK   *rs_iconblk;
-TEDINFO   *rs_tedinfo;
-OBJECT    *rs_object;
-OBJECT    **rs_trindex;
-RS_IMDOPE *rs_imdope;
+GLOBAL VOID rsc_create (WORD gl_wbox,
+                        WORD gl_hbox,
+                        WORD n_tree,
+                        WORD n_obs,
+                        WORD n_frstr,
+                        WORD n_frimg,
+                        BYTE **rs_strings,
+                        LONG *rs_frstr,
+                        BITBLK *rs_bitblk,
+                        LONG *rs_frimg,
+                        ICONBLK *rs_iconblk,
+                        TEDINFO *rs_tedinfo,
+                        OBJECT *rs_object,
+                        OBJECT **rs_trindex,
+                        RS_IMDOPE *rs_imdope)
 
 {
   REG WORD object; /* index for objects */

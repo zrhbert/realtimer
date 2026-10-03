@@ -204,9 +204,7 @@ PRIVATE VOID    set_dbox_editor	(RTMCLASSP module)
 	
 } /* set_dbox_editor */
 
-PRIVATE VOID wi_click_editor (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+PRIVATE VOID wi_click_editor (WINDOWP window, MKINFO *mk)
 {
 	RTMCLASSP	module = Module(window);
 	STAT_P		status = module->status;
@@ -502,8 +500,7 @@ PUBLIC VOID    send_messages	(RTMCLASSP module)
 /* Öffne Fenster                                                             */
 /*****************************************************************************/
 
-GLOBAL VOID wi_open_mod (window)
-WINDOWP window;
+GLOBAL VOID wi_open_mod (WINDOWP window)
 
 {
 	/* box (window, TRUE); */
@@ -514,9 +511,7 @@ WINDOWP window;
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-PRIVATE VOID wi_click_mod (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+PRIVATE VOID wi_click_mod (WINDOWP window, MKINFO *mk)
 {
 	RTMCLASSP	module = Module(window);
 	STAT_P		status = module->status;
@@ -556,8 +551,7 @@ MKINFO  *mk;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-PRIVATE VOID wi_draw_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_draw_mod (WINDOWP window)
 
 {	
 	RTMCLASSP	module = Module(window);
@@ -574,8 +568,7 @@ WINDOWP window;
 /* Vor zeichnen Status verändern                                             */
 /*****************************************************************************/
 
-PRIVATE VOID wi_start_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_start_mod (WINDOWP window)
 
 {	
 	RTMCLASSP	module = Module(window);
@@ -623,8 +616,7 @@ WINDOWP window;
 /* Nach zeichnen Status verändern                                            */
 /*****************************************************************************/
 
-PRIVATE VOID wi_finished_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_finished_mod (WINDOWP window)
 
 {	
 	STAT_P	status = Status(window);
@@ -636,8 +628,7 @@ WINDOWP window;
 /* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_timer_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_timer_mod (WINDOWP window)
 {
 
 	redraw_window(window, &window->scroll);
@@ -650,10 +641,7 @@ WINDOWP window;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_snap_mod (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+PRIVATE VOID wi_snap_mod (WINDOWP window, RECT *new, WORD mode)
 
 {
 	STAT_P		status = Status(window);
@@ -666,9 +654,7 @@ WORD    mode;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-PUBLIC WINDOWP crt_mod (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+PUBLIC WINDOWP crt_mod (OBJECT *obj, OBJECT *menu, WORD icon)
 {
 	WINDOWP	window;
 	WORD		menu_height;
@@ -794,8 +780,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 /* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN open_mod (icon)
-WORD icon;
+PUBLIC BOOLEAN open_mod (WORD icon)
 {
 	BOOLEAN ok;
 	WINDOWP window;
@@ -824,9 +809,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN info_mod (window, icon)
-WINDOWP window;
-WORD    icon;
+PUBLIC BOOLEAN info_mod (WINDOWP window, WORD icon)
 {
 	RTMCLASSP	module = Module(window);
 	WORD		ret;
@@ -864,7 +847,7 @@ WORD    icon;
 } /* info_mod */
 
 /*****************************************************************************/
-PRIVATE	RTMCLASSP create ()
+PRIVATE	RTMCLASSP create (VOID)
 {
 	WINDOWP		window;
 	RTMCLASSP 	module;
@@ -957,7 +940,7 @@ PRIVATE	RTMCLASSP create ()
 } /* create */
 
 /*****************************************************************************/
-PRIVATE BOOLEAN init_rsc ()
+PRIVATE BOOLEAN init_rsc (VOID)
 
 {
   WORD   i, y, iconw, iconh, iconr;
@@ -1033,7 +1016,7 @@ for (i = 0; i < NUM_OBS; i++)
 /* RSC freigeben                                                      		  */
 /*****************************************************************************/
 
-PRIVATE BOOLEAN term_rsc ()
+PRIVATE BOOLEAN term_rsc (VOID)
 
 {
 	BOOLEAN ok = TRUE;
@@ -1049,7 +1032,7 @@ PRIVATE BOOLEAN term_rsc ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_ec4 ()
+GLOBAL BOOLEAN init_ec4 (VOID)
 {
 	WORD					x;
 	BOOLEAN				ok = TRUE;
@@ -1065,7 +1048,7 @@ GLOBAL BOOLEAN init_ec4 ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN term_mod ()
+PUBLIC BOOLEAN term_mod (VOID)
 {
 	BOOLEAN ok = TRUE;
 	

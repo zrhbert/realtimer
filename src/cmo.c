@@ -692,9 +692,7 @@ PUBLIC VOID    send_messages_setup	(RTMCLASSP module)
 			(refmodule->send_messages) (refmodule); 
 } /* send_messages */
 
-LOCAL VOID click_setup (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID click_setup (WINDOWP window, MKINFO *mk)
 {
 	RTMCLASSP	module = Module(window);
 	ED_P			edited 	= module->edited;
@@ -856,8 +854,7 @@ PUBLIC BOOLEAN	set_setnr_setup	(RTMCLASSP module, LONG setupnr)
 /* Menübehandlung                                                            */
 /*****************************************************************************/
 
-PRIVATE VOID update_menu_mod (window)
-WINDOWP window;
+PRIVATE VOID update_menu_mod (WINDOWP window)
 {
 	SET_P		akt = Akt(window);
 	STAT_P	status = Status(window);
@@ -896,9 +893,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-PRIVATE VOID handle_menu_mod (window, title, item)
-WINDOWP window;
-WORD    title, item;
+PRIVATE VOID handle_menu_mod (WINDOWP window, WORD title, WORD item)
 
 {
 	RTMCLASSP	module = Module(window);
@@ -1005,9 +1000,7 @@ WORD    title, item;
 /* Taste für Fenster                                                         */
 /*****************************************************************************/
 
-PRIVATE BOOLEAN wi_key_mod (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+PRIVATE BOOLEAN wi_key_mod (WINDOWP window, MKINFO *mk)
 
 {
 	RTMCLASSP	module = Module(window);
@@ -1055,8 +1048,7 @@ MKINFO  *mk;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-PRIVATE VOID wi_draw_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_draw_mod (WINDOWP window)
 
 {	
 	RTMCLASSP	module = Module(window);
@@ -1073,8 +1065,7 @@ WINDOWP window;
 /* Vor zeichnen Status verändern                                             */
 /*****************************************************************************/
 
-PRIVATE VOID wi_start_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_start_mod (WINDOWP window)
 
 {	
 	RTMCLASSP	module = Module(window);
@@ -1197,8 +1188,7 @@ WINDOWP window;
 /* Nach zeichnen Status verändern                                            */
 /*****************************************************************************/
 
-PRIVATE VOID wi_finished_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_finished_mod (WINDOWP window)
 
 {	
 	STAT_P	status = Status(window);
@@ -1211,9 +1201,7 @@ WINDOWP window;
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-PRIVATE VOID wi_click_mod (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+PRIVATE VOID wi_click_mod (WINDOWP window, MKINFO *mk)
 {
 	RTMCLASSP	module = Module(window);
 	STAT_P		status = module->status;
@@ -1229,10 +1217,7 @@ MKINFO  *mk;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_snap_mod (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+PRIVATE VOID wi_snap_mod (WINDOWP window, RECT *new, WORD mode)
 
 {
 	STAT_P		status = Status(window);
@@ -1245,8 +1230,7 @@ WORD    mode;
 /* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_timer_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_timer_mod (WINDOWP window)
 {
 	redraw_window(window, &window->scroll);
 	window->milli = 0; 			/* keine Timer-Funktion mehr bis
@@ -1257,9 +1241,7 @@ WINDOWP window;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-PUBLIC WINDOWP crt_mod (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+PUBLIC WINDOWP crt_mod (OBJECT *obj, OBJECT *menu, WORD icon)
 {
 	WINDOWP window;
 	WORD    menu_height, inx;
@@ -1468,8 +1450,7 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 /* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN open_mod (icon)
-WORD icon;
+PUBLIC BOOLEAN open_mod (WORD icon)
 {
 	BOOLEAN 	ok;
 	WINDOWP 	window;
@@ -1497,9 +1478,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN info_mod (window, icon)
-WINDOWP window;
-WORD    icon;
+PUBLIC BOOLEAN info_mod (WINDOWP window, WORD icon)
 {
 	RTMCLASSP	module = Module(window);
 	WINDOWP		refwindow = window;
@@ -1538,7 +1517,7 @@ WORD    icon;
 } /* info_cmo */
 
 /*****************************************************************************/
-PRIVATE	RTMCLASSP create ()
+PRIVATE	RTMCLASSP create (VOID)
 {
 	RTMCLASSP 	module;
 	WINDOWP		window;
@@ -1675,7 +1654,7 @@ PRIVATE	RTMCLASSP create ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-PRIVATE	VOID init_fader ()
+PRIVATE	VOID init_fader (VOID)
 {
 	INT 	x, input, output;
 	LONG	i;
@@ -1724,7 +1703,7 @@ PRIVATE	VOID init_fader ()
 
 /*****************************************************************************/
 
-PRIVATE BOOLEAN init_rsc ()
+PRIVATE BOOLEAN init_rsc (VOID)
 
 {
   WORD   i, iconw, iconh, iconr;
@@ -1804,7 +1783,7 @@ for (i = 0; i < NUM_OBS; i++)
 /* RSC freigeben                                                      		  */
 /*****************************************************************************/
 
-PRIVATE BOOLEAN term_rsc ()
+PRIVATE BOOLEAN term_rsc (VOID)
 
 {
   BOOLEAN ok;
@@ -1822,7 +1801,7 @@ PRIVATE BOOLEAN term_rsc ()
 /* MidiShare initialisieren                                                  */
 /*****************************************************************************/
 
-PRIVATE WORD init_midishare ()
+PRIVATE WORD init_midishare (VOID)
 {
 	SHORT		ref, refNum = 0;			/* temporäre Referenznummer */
 	STRING	s;
@@ -1870,7 +1849,7 @@ PRIVATE WORD init_midishare ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_cmo ()
+GLOBAL BOOLEAN init_cmo (VOID)
 {
 	BOOLEAN	ok = TRUE;
 
@@ -1885,7 +1864,7 @@ GLOBAL BOOLEAN init_cmo ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN term_mod ()
+PUBLIC BOOLEAN term_mod (VOID)
 {
 	return (term_rsc ());
 } /* term_mod */

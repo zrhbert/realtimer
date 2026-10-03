@@ -340,9 +340,7 @@ PRIVATE WORD get_sps_macro (SPS_SINGLE *single)
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-PRIVATE VOID wi_click_mod (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+PRIVATE VOID wi_click_mod (WINDOWP window, MKINFO *mk)
 {
 	STRING	s;
 	UWORD		signal, offset;
@@ -454,9 +452,7 @@ MKINFO  *mk;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-PUBLIC WINDOWP crt_mod (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+PUBLIC WINDOWP crt_mod (OBJECT *obj, OBJECT *menu, WORD icon)
 {
   WINDOWP window;
   WORD    menu_height;
@@ -508,8 +504,7 @@ WORD   icon;
 /* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN open_mod (icon)
-WORD icon;
+PUBLIC BOOLEAN open_mod (WORD icon)
 {
 	BOOLEAN ok;
 	WINDOWP window;
@@ -542,9 +537,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN info_mod (window, icon)
-WINDOWP window;
-WORD    icon;
+PUBLIC BOOLEAN info_mod (WINDOWP window, WORD icon)
 {
 	WORD		ret;
 	STRING	s;
@@ -583,7 +576,7 @@ WORD    icon;
 } /* info_mod */
 
 /*****************************************************************************/
-PRIVATE	RTMCLASSP create ()
+PRIVATE	RTMCLASSP create (VOID)
 {
 	WINDOWP		window;
 	RTMCLASSP 	module;
@@ -674,7 +667,7 @@ PRIVATE	RTMCLASSP create ()
 } /* create */
 
 /*****************************************************************************/
-PRIVATE BOOLEAN init_rsc ()
+PRIVATE BOOLEAN init_rsc (VOID)
 
 {
   WORD   i, y, iconw, iconh, iconr;
@@ -745,7 +738,7 @@ for (i = 0; i < NUM_OBS; i++)
 /* RSC freigeben                                                      		  */
 /*****************************************************************************/
 
-PRIVATE BOOLEAN term_rsc ()
+PRIVATE BOOLEAN term_rsc (VOID)
 
 {
   BOOLEAN ok;
@@ -763,7 +756,7 @@ PRIVATE BOOLEAN term_rsc ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_sps ()
+GLOBAL BOOLEAN init_sps (VOID)
 {
 	BOOLEAN ok = TRUE;
 
@@ -777,7 +770,7 @@ GLOBAL BOOLEAN init_sps ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN term_mod ()
+PUBLIC BOOLEAN term_mod (VOID)
 {
 	BOOLEAN ok = TRUE;
 

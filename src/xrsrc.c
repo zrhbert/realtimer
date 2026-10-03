@@ -418,7 +418,7 @@ LOCAL VOID fix_object (VOID)
 
 /*****************************************************************************/
 
-LOCAL VOID fix_tedinfo()
+LOCAL VOID fix_tedinfo(VOID)
 {
 	LONG		count;
 	TEDINFO *tedinfo;

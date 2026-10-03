@@ -98,16 +98,14 @@ LOCAL VOID    wi_edit     _((WINDOWP window, WORD action));
 
 /*****************************************************************************/
 
-GLOBAL WINDOWP find_desk ()
+GLOBAL WINDOWP find_desk (VOID)
 {
   return (search_window (class_desk, SRCH_ANY, NIL));
 } /* find_desk */
 
 /*****************************************************************************/
 
-GLOBAL VOID get_dxywh (obj, border)
-WORD obj;
-RECT *border;
+GLOBAL VOID get_dxywh (WORD obj, RECT *border)
 
 {
   get_border (find_desk (), obj, border);
@@ -115,8 +113,7 @@ RECT *border;
 
 /*****************************************************************************/
 
-GLOBAL VOID set_func (keys)
-CONST BYTE *keys;
+GLOBAL VOID set_func (CONST BYTE *keys)
 
 {
   WORD    num, p, obj;
@@ -156,7 +153,7 @@ CONST BYTE *keys;
 
 /*****************************************************************************/
 
-GLOBAL VOID draw_func ()
+GLOBAL VOID draw_func (VOID)
 
 {
   draw_dobj (FKEYS);
@@ -164,8 +161,7 @@ GLOBAL VOID draw_func ()
 
 /*****************************************************************************/
 
-GLOBAL VOID draw_key (key)
-WORD key;
+GLOBAL VOID draw_key (WORD key)
 
 {
   WINDOWP desk;
@@ -189,9 +185,7 @@ WORD key;
 
 /*****************************************************************************/
 
-GLOBAL VOID set_deskinfo (info, center)
-CONST BYTE *info;
-BOOLEAN    center;
+GLOBAL VOID set_deskinfo (CONST BYTE *info, BOOLEAN center)
 
 {
   WINDOWP window;
@@ -237,7 +231,7 @@ BOOLEAN    center;
 
 /*****************************************************************************/
 
-GLOBAL VOID set_meminfo ()
+GLOBAL VOID set_meminfo (VOID)
 
 {
   WINDOWP desk;
@@ -285,8 +279,7 @@ GLOBAL VOID set_meminfo ()
 
 /*****************************************************************************/
 
-LOCAL VOID draw_dobj (obj)
-WORD obj;
+LOCAL VOID draw_dobj (WORD obj)
 
 {
   draw_object (find_desk (), obj);
@@ -294,11 +287,7 @@ WORD obj;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN drag_react (src_window, src_obj, dest_window, dest_obj)
-WINDOWP src_window;
-WORD    src_obj;
-WINDOWP dest_window;
-WORD    dest_obj;
+LOCAL BOOLEAN drag_react (WINDOWP src_window, WORD src_obj, WINDOWP dest_window, WORD dest_obj)
 
 {
 /*
@@ -311,10 +300,7 @@ WORD    dest_obj;
 
 /*****************************************************************************/
 
-LOCAL VOID drag_objs (window, obj, objs)
-WINDOWP window;
-WORD    obj;
-SET     objs;
+LOCAL VOID drag_objs (WINDOWP window, WORD obj, SET objs)
 
 {
 #if true
@@ -425,10 +411,7 @@ SET     objs;
 
 /*****************************************************************************/
 
-LOCAL VOID fill_select (window, objs, area)
-WINDOWP window;
-SET     objs;
-RECT    *area;
+LOCAL VOID fill_select (WINDOWP window, SET objs, RECT *area)
 
 {
   REG WORD i;
@@ -448,9 +431,7 @@ RECT    *area;
 
 /*****************************************************************************/
 
-LOCAL VOID invert_objs (window, objs)
-WINDOWP window;
-SET     objs;
+LOCAL VOID invert_objs (WINDOWP window, SET objs)
 
 {
   REG WORD i;
@@ -465,9 +446,7 @@ SET     objs;
 
 /*****************************************************************************/
 
-LOCAL VOID rubber_objs (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID rubber_objs (WINDOWP window, MKINFO *mk)
 
 {
   RECT r;
@@ -519,10 +498,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN in_icon (mox, moy, icon, r)
-WORD    mox, moy;
-ICONBLK *icon;
-RECT    *r;
+LOCAL BOOLEAN in_icon (WORD mox, WORD moy, ICONBLK *icon, RECT *r)
 
 {
   BOOLEAN ok;
@@ -559,8 +535,7 @@ RECT    *r;
 /* Schließe Fenster                                                          */
 /*****************************************************************************/
 
-LOCAL VOID wi_close (window)
-WINDOWP window;
+LOCAL VOID wi_close (WINDOWP window)
 
 {
   if (! deskacc && (window->menu != NULL))      /* Menüzeile im Desktop-Fenster */
@@ -574,8 +549,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-LOCAL VOID wi_draw (window)
-WINDOWP window;
+LOCAL VOID wi_draw (WINDOWP window)
 
 {
   WORD pxy [4];
@@ -597,10 +571,7 @@ WINDOWP window;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-LOCAL VOID wi_snap (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+LOCAL VOID wi_snap (WINDOWP window, RECT *new, WORD mode)
 
 {
   RECT r, diff;
@@ -618,10 +589,7 @@ WORD    mode;
 /* Objektoperationen von Fenster                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_objop (window, objs, action)
-WINDOWP window;
-SET     objs;
-WORD    action;
+LOCAL VOID wi_objop (WINDOWP window, SET objs, WORD action)
 
 {
   WORD    i;
@@ -715,11 +683,7 @@ WORD    action;
 /* Ziehen in das Fenster                                                     */
 /*****************************************************************************/
 
-LOCAL WORD wi_drag (src_window, src_obj, dest_window, dest_obj)
-WINDOWP src_window;
-WORD    src_obj;
-WINDOWP dest_window;
-WORD    dest_obj;
+LOCAL WORD wi_drag (WINDOWP src_window, WORD src_obj, WINDOWP dest_window, WORD dest_obj)
 
 {
 
@@ -737,9 +701,7 @@ WORD    dest_obj;
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-LOCAL VOID wi_click (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID wi_click (WINDOWP window, MKINFO *mk)
 
 {
   WORD   obj, func;
@@ -838,8 +800,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL VOID wi_unclick (window)
-WINDOWP window;
+LOCAL VOID wi_unclick (WINDOWP window)
 
 {
   if (window->object != NULL) invert_objs (window, sel_objs);
@@ -849,9 +810,7 @@ WINDOWP window;
 /* Taste für Fenster                                                         */
 /*****************************************************************************/
 
-LOCAL BOOLEAN wi_key (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN wi_key (WINDOWP window, MKINFO *mk)
 
 {
   WORD    func, obj, i;
@@ -910,8 +869,7 @@ MKINFO  *mk;
 /* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_timer (window)
-WINDOWP window;
+PRIVATE VOID wi_timer (WINDOWP window)
 {
 
 } /* wi_timer */
@@ -920,9 +878,7 @@ WINDOWP window;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_desktop (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+GLOBAL WINDOWP crt_desktop (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
   WINDOWP window;
@@ -1018,8 +974,7 @@ WORD   icon;
 /* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_desktop (icon)
-WORD icon;
+GLOBAL BOOLEAN open_desktop (WORD icon)
 
 {
   BOOLEAN ok;
@@ -1060,9 +1015,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_desktop (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_desktop (WINDOWP window, WORD icon)
 
 {
 
@@ -1088,9 +1041,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_desktop (window, icon)
-WINDOWP window;
-WORD icon;
+GLOBAL BOOLEAN help_desktop (WINDOWP window, WORD icon)
 
 {
 #if INCLUDE_RTM_BASE_MODULES
@@ -1105,7 +1056,7 @@ WORD icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_desktop ()
+GLOBAL BOOLEAN init_desktop (VOID)
 
 {
   return (TRUE);
@@ -1115,7 +1066,7 @@ GLOBAL BOOLEAN init_desktop ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_desktop ()
+GLOBAL BOOLEAN term_desktop (VOID)
 
 {
   return (TRUE);

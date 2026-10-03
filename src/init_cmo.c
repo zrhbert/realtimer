@@ -68,7 +68,7 @@ typedef struct status
 /* Initialisierung fÅr alle Module                                           */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_modules ()
+GLOBAL BOOLEAN init_modules (VOID)
 
 {	
 	WORD i;

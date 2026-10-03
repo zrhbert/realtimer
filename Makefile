@@ -2,8 +2,13 @@ ifdef OS
 	WINDOWS = 1
 endif
 
+# Cross toolchain prefix. Defaults to the standalone universal (x86_64/arm64)
+# GCC 15 m68k-atari-mintelf toolchain from tho-otto.m68k.eu installed in
+# /opt/cross-mint. To build with the compiler bundled in the VS Code
+# extension instead (x86_64 only, needs Rosetta on Apple Silicon):
+#   make TOOLCHAIN=$(SDK)/opt/cross-mint
 SDK ?= /Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin
-TOOLCHAIN = $(SDK)/opt/cross-mint
+TOOLCHAIN ?= /opt/cross-mint
 CC = $(TOOLCHAIN)/bin/m68k-atari-mintelf-gcc
 OBJCOPY = $(TOOLCHAIN)/bin/m68k-atari-mintelf-objcopy
 SDK_ROOT = $(TOOLCHAIN)/m68k-atari-mintelf/sys-root
@@ -16,7 +21,7 @@ CFLAGS = --sysroot=$(SDK_ROOT) -D__GEMLIB_OLDNAMES \
 LDFLAGS = $(SDK_USR)/lib/crt0.o -nostdlib -L$(SDK_USR)/lib \
 	-lgem -lm -lc -lgcc
 
-BUILD_DIR = build
+BUILD_DIR ?= build
 TARGET = realtim5.prg
 
 # A symbol-stripped copy of TARGET, loaded into Hatari during debug sessions

@@ -75,7 +75,7 @@ typedef struct status
 /* Initialisierung für alle Module                                           */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_modules ()
+GLOBAL BOOLEAN init_modules (VOID)
 
 {	
 	BOOLEAN ok = TRUE;

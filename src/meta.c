@@ -206,8 +206,7 @@ LOCAL VOID    wi_edit         _((WINDOWP window, WORD action));
 
 /*****************************************************************************/
 
-GLOBAL VOID print_meta (filename)
-BYTE *filename;
+GLOBAL VOID print_meta (BYTE *filename)
 
 {
   WINDOW   window;
@@ -267,9 +266,7 @@ BYTE *filename;
 
 /*****************************************************************************/
 
-LOCAL VOID get_screen_info (meta_inf, vdi_handle)
-META_INF *meta_inf;
-WORD     vdi_handle;
+LOCAL VOID get_screen_info (META_INF *meta_inf, WORD vdi_handle)
 
 {
   WORD work_out [57];
@@ -305,8 +302,7 @@ WORD     vdi_handle;
 
 /*****************************************************************************/
 
-LOCAL VOID meta_info (window)
-WINDOWP window;
+LOCAL VOID meta_info (WINDOWP window)
 
 {
   WORD     page_w, page_h;
@@ -358,8 +354,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL UWORD flip_word (w)
-UWORD w;
+LOCAL UWORD flip_word (UWORD w)
 
 {
   return ((w << 8) | (w >> 8));
@@ -367,8 +362,7 @@ UWORD w;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN read_meta (meta_inf)
-META_INF *meta_inf;
+LOCAL BOOLEAN read_meta (META_INF *meta_inf)
 
 {
   WORD    f;
@@ -428,7 +422,7 @@ META_INF *meta_inf;
 
 /*****************************************************************************/
 
-LOCAL WORD fetch_word ()
+LOCAL WORD fetch_word (VOID)
 
 {
   if (meta_index == meta_buflen) /* Puffer fllen */
@@ -446,7 +440,7 @@ LOCAL WORD fetch_word ()
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN get_code ()
+LOCAL BOOLEAN get_code (VOID)
 
 {
   WORD i;
@@ -471,8 +465,7 @@ LOCAL BOOLEAN get_code ()
 
 /*****************************************************************************/
 
-LOCAL WORD new_width (width)
-WORD width;
+LOCAL WORD new_width (WORD width)
 
 {
   width = width * dst_factor * aspect_factor.w;
@@ -483,8 +476,7 @@ WORD width;
 
 /*****************************************************************************/
 
-LOCAL WORD new_height (height)
-WORD height;
+LOCAL WORD new_height (WORD height)
 
 {
   height = height * dst_factor * aspect_factor.h;
@@ -495,7 +487,7 @@ WORD height;
 
 /*****************************************************************************/
 
-LOCAL VOID transform ()
+LOCAL VOID transform (VOID)
 
 {
   REG WORD    px, py;
@@ -587,8 +579,7 @@ LOCAL VOID transform ()
 
 /*****************************************************************************/
 
-LOCAL VOID get_header_info (window)
-WINDOWP window;
+LOCAL VOID get_header_info (WINDOWP window)
 
 {
   META_INF    *meta_inf;
@@ -688,8 +679,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL VOID do_command (device)
-WORD device;
+LOCAL VOID do_command (WORD device)
 
 {
   WORD esc;
@@ -758,8 +748,7 @@ WORD device;
 
 /*****************************************************************************/
 
-LOCAL VOID show_meta (window)
-WINDOWP window;
+LOCAL VOID show_meta (WINDOWP window)
 
 {
   LONG     command;
@@ -804,9 +793,7 @@ WINDOWP window;
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-LOCAL VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+LOCAL VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -827,8 +814,7 @@ BOOLEAN grow;
 /* ™ffne Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_open (window)
-WINDOWP window;
+LOCAL VOID wi_open (WINDOWP window)
 
 {
   box (window, TRUE);
@@ -838,8 +824,7 @@ WINDOWP window;
 /* Schlieže Fenster                                                          */
 /*****************************************************************************/
 
-LOCAL VOID wi_close (window)
-WINDOWP window;
+LOCAL VOID wi_close (WINDOWP window)
 
 {
   box (window, FALSE);
@@ -849,8 +834,7 @@ WINDOWP window;
 /* L”sche Fenster                                                            */
 /*****************************************************************************/
 
-LOCAL VOID wi_delete (window)
-WINDOWP window;
+LOCAL VOID wi_delete (WINDOWP window)
 
 {
   META_INF *meta_inf;
@@ -866,8 +850,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-LOCAL VOID wi_draw (window)
-WINDOWP window;
+LOCAL VOID wi_draw (WINDOWP window)
 
 {
 /*  if (is_top (window)) set_clip (TRUE, &window->scroll);*/
@@ -880,10 +863,7 @@ WINDOWP window;
 /* Reagiere auf Pfeile                                                       */
 /*****************************************************************************/
 
-LOCAL VOID wi_arrow (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+LOCAL VOID wi_arrow (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
   LONG delta;
@@ -916,10 +896,7 @@ LONG    oldpos, newpos;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-LOCAL VOID wi_snap (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+LOCAL VOID wi_snap (WINDOWP window, RECT *new, WORD mode)
 
 {
   RECT     r, diff;
@@ -976,9 +953,7 @@ WORD    mode;
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-LOCAL VOID wi_click (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID wi_click (WINDOWP window, MKINFO *mk)
 
 {
   WORD     item;
@@ -1015,8 +990,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL VOID wi_unclick (window)
-WINDOWP window;
+LOCAL VOID wi_unclick (WINDOWP window)
 
 {
 } /* wi_unclick */
@@ -1025,9 +999,7 @@ WINDOWP window;
 /* Taste fr Fenster                                                         */
 /*****************************************************************************/
 
-LOCAL BOOLEAN wi_key (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN wi_key (WINDOWP window, MKINFO *mk)
 
 {
   if (mk->ascii_code == ESC)
@@ -1043,10 +1015,7 @@ MKINFO  *mk;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_meta (obj, menu, icon, filename)
-OBJECT *obj, *menu;
-WORD   icon;
-BYTE   *filename;
+GLOBAL WINDOWP crt_meta (OBJECT *obj, OBJECT *menu, WORD icon, BYTE *filename)
 
 {
   WINDOWP  window;
@@ -1159,9 +1128,7 @@ BYTE   *filename;
 /* ™ffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_meta (icon, filename)
-WORD icon;
-BYTE *filename;
+GLOBAL BOOLEAN open_meta (WORD icon, BYTE *filename)
 
 {
   BOOLEAN  ok;
@@ -1197,9 +1164,7 @@ BYTE *filename;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_meta (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_meta (WINDOWP window, WORD icon)
 
 {
   meta_info (window);
@@ -1210,9 +1175,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_meta (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN help_meta (WINDOWP window, WORD icon)
 
 {
   hndl_alert (ERR_HELPMETA);
@@ -1223,7 +1186,7 @@ WORD    icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_meta ()
+GLOBAL BOOLEAN init_meta (VOID)
 
 {
   return (TRUE);
@@ -1233,7 +1196,7 @@ GLOBAL BOOLEAN init_meta ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_meta ()
+GLOBAL BOOLEAN term_meta (VOID)
 
 {
   return (TRUE);

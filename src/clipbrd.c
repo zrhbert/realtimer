@@ -171,8 +171,7 @@ LOCAL VOID    wi_edit     _((WINDOWP window, WORD action));
 /* Angepaûte Scrap-Routinen                                                  */
 /*****************************************************************************/
 
-GLOBAL WORD scrap_read (pscrap)
-BYTE *pscrap;
+GLOBAL WORD scrap_read (BYTE *pscrap)
 
 {
     WORD    result;
@@ -230,8 +229,7 @@ BYTE *pscrap;
 
 /*****************************************************************************/
 
-GLOBAL WORD scrap_write (pscrap)
-BYTE *pscrap;
+GLOBAL WORD scrap_write (BYTE *pscrap)
 
 {
     return (scrp_write (pscrap));
@@ -239,7 +237,7 @@ BYTE *pscrap;
 
 /*****************************************************************************/
 
-GLOBAL WORD scrap_clear ()
+GLOBAL WORD scrap_clear (VOID)
 
 {
     WORD    result;
@@ -301,9 +299,7 @@ GLOBAL WORD scrap_clear ()
 
 /*****************************************************************************/
 
-GLOBAL VOID get_clipxywh (obj, border)
-WORD obj;
-RECT *border;
+GLOBAL VOID get_clipxywh (WORD obj, RECT *border)
 
 {
     WINDOWP window;
@@ -318,9 +314,7 @@ RECT *border;
 
 /*****************************************************************************/
 
-GLOBAL VOID print_clipfiles (window, objs)
-WINDOWP window;
-SET     objs;
+GLOBAL VOID print_clipfiles (WINDOWP window, SET objs)
 
 {
     WORD       i;
@@ -349,9 +343,7 @@ SET     objs;
 
 /*****************************************************************************/
 
-LOCAL BYTE *get_spec (which, s)
-WORD which;
-BYTE *s;
+LOCAL BYTE *get_spec (WORD which, BYTE *s)
 
 {
     BYTE *p;
@@ -367,8 +359,7 @@ BYTE *s;
 
 /*****************************************************************************/
 
-LOCAL WORD compare (arg1, arg2)
-SCRAP_FILE *arg1, *arg2;
+LOCAL WORD compare (SCRAP_FILE *arg1, SCRAP_FILE *arg2)
 
 {
     STRING s1, s2;
@@ -391,9 +382,7 @@ SCRAP_FILE *arg1, *arg2;
 
 /*****************************************************************************/
 
-LOCAL WORD read_scrap (files, len)
-SCRAP_FILE *files;
-LONG       *len;
+LOCAL WORD read_scrap (SCRAP_FILE *files, LONG *len)
 
 {
     WORD       result = 0, i;
@@ -470,8 +459,7 @@ LONG       *len;
 
 /*****************************************************************************/
 
-LOCAL VOID show_scrap (window)
-WINDOWP window;
+LOCAL VOID show_scrap (WINDOWP window)
 
 {
     if (window != NULL)
@@ -493,10 +481,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL VOID get_rect (window, obj, rect)
-WINDOWP window;
-WORD    obj;
-RECT    *rect;
+LOCAL VOID get_rect (WINDOWP window, WORD obj, RECT *rect)
 
 {
     xywh2rect (0, 0, 0, 0, rect);
@@ -520,10 +505,7 @@ RECT    *rect;
 
 /*****************************************************************************/
 
-LOCAL VOID drag_objs (window, obj, objs)
-WINDOWP window;
-WORD    obj;
-SET     objs;
+LOCAL VOID drag_objs (WINDOWP window, WORD obj, SET objs)
 
 {
     RECT    r, bound;
@@ -571,10 +553,7 @@ SET     objs;
 
 /*****************************************************************************/
 
-LOCAL VOID fill_select (window, objs, area)
-WINDOWP window;
-SET     objs;
-RECT    *area;
+LOCAL VOID fill_select (WINDOWP window, SET objs, RECT *area)
 
 {
     REG WORD i;
@@ -593,9 +572,7 @@ RECT    *area;
 
 /*****************************************************************************/
 
-LOCAL VOID invert_objs (window, objs)
-WINDOWP window;
-SET     objs;
+LOCAL VOID invert_objs (WINDOWP window, SET objs)
 
 {
     REG WORD       i, obj;
@@ -659,9 +636,7 @@ SET     objs;
 
 /*****************************************************************************/
 
-LOCAL VOID rubber_objs (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID rubber_objs (WINDOWP window, MKINFO *mk)
 
 {
     RECT r;
@@ -713,10 +688,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN in_icon (mox, moy, icon, r)
-WORD    mox, moy;
-ICONBLK *icon;
-RECT    *r;
+LOCAL BOOLEAN in_icon (WORD mox, WORD moy, ICONBLK *icon, RECT *r)
 
 {
     BOOLEAN ok;
@@ -753,8 +725,7 @@ RECT    *r;
 /* MenÅbehandlung                                                            */
 /*****************************************************************************/
 
-LOCAL VOID mclipinfo (window)
-WINDOWP window;
+LOCAL VOID mclipinfo (WINDOWP window)
 
 {
     LONGSTR s;
@@ -770,8 +741,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL VOID masicon (window)
-WINDOWP window;
+LOCAL VOID masicon (WINDOWP window)
 
 {
     as_icons      = TRUE;
@@ -789,8 +759,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL VOID mastext (window)
-WINDOWP window;
+LOCAL VOID mastext (WINDOWP window)
 
 {
     as_icons      = FALSE;
@@ -808,9 +777,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL VOID mshow (window, item)
-WINDOWP window;
-WORD    item;
+LOCAL VOID mshow (WINDOWP window, WORD item)
 
 {
     STRING s;
@@ -828,10 +795,7 @@ WORD    item;
 
 /*****************************************************************************/
 
-LOCAL VOID mcut (window, objs, ext)
-WINDOWP window;
-SET     objs;
-BOOLEAN ext;
+LOCAL VOID mcut (WINDOWP window, SET objs, BOOLEAN ext)
 
 {
     WORD       i;
@@ -883,10 +847,7 @@ BOOLEAN ext;
 
 /*****************************************************************************/
 
-LOCAL VOID mcopy (window, objs, ext)
-WINDOWP window;
-SET     objs;
-BOOLEAN ext;
+LOCAL VOID mcopy (WINDOWP window, SET objs, BOOLEAN ext)
 
 {
     WORD       i;
@@ -980,9 +941,7 @@ BOOLEAN ext;
 
 /*****************************************************************************/
 
-LOCAL VOID mclear (window, objs)
-WINDOWP window;
-SET     objs;
+LOCAL VOID mclear (WINDOWP window, SET objs)
 
 {
     WORD       i;
@@ -1014,8 +973,7 @@ SET     objs;
 
 /*****************************************************************************/
 
-LOCAL VOID mselall (window)
-WINDOWP window;
+LOCAL VOID mselall (WINDOWP window)
 
 {
     WORD i;
@@ -1028,17 +986,14 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL VOID update_menu (window)
-WINDOWP window;
+LOCAL VOID update_menu (WINDOWP window)
 
 {
 } /* update_menu */
 
 /*****************************************************************************/
 
-LOCAL VOID handle_menu (window, title, item)
-WINDOWP window;
-WORD    title, item;
+LOCAL VOID handle_menu (WINDOWP window, WORD title, WORD item)
 
 {
     if (window != NULL)
@@ -1071,9 +1026,7 @@ WORD    title, item;
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-LOCAL VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+LOCAL VOID box (WINDOWP window, BOOLEAN grow)
 
 {
     RECT l, b;
@@ -1094,9 +1047,7 @@ BOOLEAN grow;
 /* Teste Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL BOOLEAN wi_test (window, action)
-WINDOWP window;
-WORD    action;
+LOCAL BOOLEAN wi_test (WINDOWP window, WORD action)
 
 {
     BOOLEAN ret, ext;
@@ -1123,8 +1074,7 @@ WORD    action;
 /* ôffne Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_open (window)
-WINDOWP window;
+LOCAL VOID wi_open (WINDOWP window)
 
 {
     show_scrap (window);      /* Beim ôffnen Inhalt einlesen */
@@ -1135,8 +1085,7 @@ WINDOWP window;
 /* Schlieûe Fenster                                                          */
 /*****************************************************************************/
 
-LOCAL VOID wi_close (window)
-WINDOWP window;
+LOCAL VOID wi_close (WINDOWP window)
 
 {
     box (window, FALSE);
@@ -1146,8 +1095,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-LOCAL VOID wi_draw (window)
-WINDOWP window;
+LOCAL VOID wi_draw (WINDOWP window)
 
 {
     WORD       x, y, w, h, i, obj;
@@ -1243,10 +1191,7 @@ WINDOWP window;
 /* Reagiere auf Pfeile                                                       */
 /*****************************************************************************/
 
-LOCAL VOID wi_arrow (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+LOCAL VOID wi_arrow (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
     LONG delta;
@@ -1279,10 +1224,7 @@ LONG    oldpos, newpos;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-LOCAL VOID wi_snap (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+LOCAL VOID wi_snap (WINDOWP window, RECT *new, WORD mode)
 
 {
     RECT r, diff;
@@ -1324,10 +1266,7 @@ WORD    mode;
 /* Objektoperationen von Fenster                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_objop (window, objs, action)
-WINDOWP window;
-SET     objs;
-WORD    action;
+LOCAL VOID wi_objop (WINDOWP window, SET objs, WORD action)
 
 {
     WORD       i;
@@ -1376,9 +1315,7 @@ WORD    action;
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-LOCAL VOID wi_click (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID wi_click (WINDOWP window, MKINFO *mk)
 
 {
     WORD       obj, i, maxlen;
@@ -1470,8 +1407,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL VOID wi_unclick (window)
-WINDOWP window;
+LOCAL VOID wi_unclick (WINDOWP window)
 
 {
     if (! done) tail [0] = EOS;
@@ -1483,9 +1419,7 @@ WINDOWP window;
 /* Taste fÅr Fenster                                                         */
 /*****************************************************************************/
 
-LOCAL BOOLEAN wi_key (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN wi_key (WINDOWP window, MKINFO *mk)
 
 {
     if (menu_key (window, mk)) return (TRUE);
@@ -1503,9 +1437,7 @@ MKINFO  *mk;
 /* Cut/Copy/Paste fÅr Fenster                                                */
 /*****************************************************************************/
 
-LOCAL VOID wi_edit (window, action)
-WINDOWP window;
-WORD    action;
+LOCAL VOID wi_edit (WINDOWP window, WORD action)
 
 {
     BOOLEAN ext;
@@ -1527,8 +1459,7 @@ WORD    action;
 /* Iconbehandlung                                                            */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN icons_clipbrd (src_obj, dest_obj)
-WORD src_obj, dest_obj;
+GLOBAL BOOLEAN icons_clipbrd (WORD src_obj, WORD dest_obj)
 
 {
     BOOLEAN result;
@@ -1565,9 +1496,7 @@ WORD src_obj, dest_obj;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_clipbrd (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+GLOBAL WINDOWP crt_clipbrd (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
     WINDOWP window;
@@ -1638,8 +1567,7 @@ WORD   icon;
 /* ôffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_clipbrd (icon)
-WORD icon;
+GLOBAL BOOLEAN open_clipbrd (WORD icon)
 
 {
     BOOLEAN ok;
@@ -1667,9 +1595,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_clipbrd (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_clipbrd (WINDOWP window, WORD icon)
 
 {
     if (icon != NIL)
@@ -1683,9 +1609,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_clipbrd (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN help_clipbrd (WINDOWP window, WORD icon)
 
 {
     hndl_alert (ERR_HELPCLIP);
@@ -1696,7 +1620,7 @@ WORD    icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_clipbrd ()
+GLOBAL BOOLEAN init_clipbrd (VOID)
 
 {
     WORD i;
@@ -1713,7 +1637,7 @@ GLOBAL BOOLEAN init_clipbrd ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_clipbrd ()
+GLOBAL BOOLEAN term_clipbrd (VOID)
 
 {
     return (TRUE);

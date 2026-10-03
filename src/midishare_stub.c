@@ -23,8 +23,7 @@
  * old-style/K&R function, not a function-pointer variable), so it must be
  * defined here as a real function. It should never actually be called since
  * every call site checks MidiShare() first. */
-unsigned long micro_rtx (number)
-int number;
+unsigned long micro_rtx (int number)
 {
 	number = number;
 	return 0L;
@@ -39,7 +38,7 @@ Boolean MidiShare (void)
  * helper; only ever invoked after that helper is launched via Pexec(), which
  * never happens on this toolchain. Declared/called implicitly (no
  * prototype) in MSH.C, hence the plain K&R-style definition here. */
-int TCMidiRestore ()
+int TCMidiRestore (VOID)
 {
 	return 0;
 } /* TCMidiRestore */

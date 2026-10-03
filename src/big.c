@@ -273,17 +273,14 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 /* Menübehandlung                                                            */
 /*****************************************************************************/
 
-PRIVATE VOID update_menu_mod (window)
-WINDOWP window;
+PRIVATE VOID update_menu_mod (WINDOWP window)
 
 {
 } /* update_menu */
 
 /*****************************************************************************/
 
-PRIVATE VOID handle_menu_mod (window, title, item)
-WINDOWP window;
-WORD    title, item;
+PRIVATE VOID handle_menu_mod (WINDOWP window, WORD title, WORD item)
 
 {
 RTMCLASSP	module = (RTMCLASSP)window->module;
@@ -319,8 +316,7 @@ WSTAT_P		winstatus	= module->status->winstatus;
 } /* handle_menu */
 
 
-PRIVATE VOID wi_start_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_start_mod (WINDOWP window)
 
 {
 RTMCLASSP	module = (RTMCLASSP)window->module;
@@ -336,8 +332,7 @@ WSTAT_P		winstatus	= module->status->winstatus;
 }
 
 
-PRIVATE VOID wi_finished_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_finished_mod (WINDOWP window)
 
 {
 RTMCLASSP	module = (RTMCLASSP)window->module;
@@ -357,8 +352,7 @@ WSTAT_P		winstatus	= module->status->winstatus;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-PRIVATE VOID wi_draw_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_draw_mod (WINDOWP window)
 
 {
 RTMCLASSP	module = (RTMCLASSP)window->module;
@@ -430,8 +424,7 @@ BYTE			s[6];
 /* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_timer_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_timer_mod (WINDOWP window)
 
 {
 	RTMCLASSP	module = (RTMCLASSP)window->module;
@@ -463,10 +456,7 @@ WINDOWP window;
 /* Reagiere auf Pfeile                                                       */
 /*****************************************************************************/
 
-GLOBAL VOID wi_arrow_mod (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+GLOBAL VOID wi_arrow_mod (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
 	RTMCLASSP	module = (RTMCLASSP)window->module;
@@ -524,8 +514,7 @@ LONG    oldpos, newpos;
 /* Iconbehandlung                                                            */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN icons_mod (src_obj, dest_obj)
-WORD src_obj, dest_obj;
+PUBLIC BOOLEAN icons_mod (WORD src_obj, WORD dest_obj)
 
 {
   BOOLEAN result;
@@ -555,8 +544,7 @@ WORD src_obj, dest_obj;
 /* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN open_mod (icon)
-WORD icon;
+PUBLIC BOOLEAN open_mod (WORD icon)
 
 {
 	BOOLEAN ok;
@@ -583,9 +571,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN info_mod (window, icon)
-WINDOWP window;
-WORD    icon;
+PUBLIC BOOLEAN info_mod (WINDOWP window, WORD icon)
 
 {
 	WORD		ret;
@@ -626,10 +612,7 @@ WORD    icon;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_snap_mod (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+PRIVATE VOID wi_snap_mod (WINDOWP window, RECT *new, WORD mode)
 
 {
   RECT r, diff;
@@ -681,8 +664,7 @@ PRIVATE VOID wi_click_mod (WINDOWP window, MKINFO *mk)
 
 /*****************************************************************************/
 
-PRIVATE VOID wi_unclick_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_unclick_mod (WINDOWP window)
 
 {
 	form_alert(1, "[1][UnClick][OK]");
@@ -692,9 +674,7 @@ WINDOWP window;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-PUBLIC WINDOWP crt_mod (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+PUBLIC WINDOWP crt_mod (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
 	WINDOWP window;
@@ -750,7 +730,7 @@ WORD   icon;
 } /* crt_mod */
 
 /*****************************************************************************/
-PRIVATE	RTMCLASSP create ()
+PRIVATE	RTMCLASSP create (VOID)
 {
 	RTMCLASSP 	module;
 	STRING		s;
@@ -815,7 +795,7 @@ PRIVATE	RTMCLASSP create ()
 
 /*****************************************************************************/
 
-PRIVATE BOOLEAN init_rsc ()
+PRIVATE BOOLEAN init_rsc (VOID)
 
 {
   WORD   i, y, iconw, iconh, iconr;
@@ -891,7 +871,7 @@ for (i = 0; i < NUM_OBS; i++)
 /* RSC freigeben                                                      		  */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN term_rsc ()
+PUBLIC BOOLEAN term_rsc (VOID)
 
 {
   BOOLEAN ok;
@@ -909,7 +889,7 @@ PUBLIC BOOLEAN term_rsc ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_big ()
+GLOBAL BOOLEAN init_big (VOID)
 
 {
 	BOOLEAN		ok = TRUE;
@@ -923,7 +903,7 @@ GLOBAL BOOLEAN init_big ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN term_mod ()
+PUBLIC BOOLEAN term_mod (VOID)
 
 {
   BOOLEAN ok = TRUE;
@@ -937,7 +917,7 @@ PUBLIC BOOLEAN term_mod ()
 /* MidiShare initialisieren                                                  */
 /*****************************************************************************/
 
-PRIVATE SHORT init_midishare ()
+PRIVATE SHORT init_midishare (VOID)
 {
 	/* Meldet ein neues Modul bei MidiShare an und gibt die refNum zurück */
 	SHORT		ref, refNum = 0;			/* temporäre Referenznummer */
@@ -1145,8 +1125,7 @@ PUBLIC VOID CDECL play_task_big (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 /* Manage  Locator                                                           */
 /*****************************************************************************/
 
-PRIVATE VOID handle_loc (window)
-WINDOWP window;
+PRIVATE VOID handle_loc (WINDOWP window)
 
 {
 RTMCLASSP	module = (RTMCLASSP)window->module;
@@ -1189,9 +1168,7 @@ LONG 			ppos = posit / QUANT;
 /* Zeichne Locator                                                           */
 /*****************************************************************************/
 
-PRIVATE VOID draw_loc (flag, pxyarray)
-INT flag;
-INT *pxyarray;
+PRIVATE VOID draw_loc (INT flag, INT *pxyarray)
 
 {
 INT 			pxy[4];
@@ -1219,8 +1196,7 @@ INT 			pxy[4];
 /* Show  Locator                                                           */
 /*****************************************************************************/
 
-PRIVATE VOID hide_loc (window)
-WINDOWP window;
+PRIVATE VOID hide_loc (WINDOWP window)
 
 {
 RTMCLASSP	module = (RTMCLASSP)window->module;
@@ -1255,8 +1231,7 @@ ULONG			leftposit, rightposit;
 /* Hide  Locator                                                           */
 /*****************************************************************************/
 
-PRIVATE VOID show_loc (window)
-WINDOWP window;
+PRIVATE VOID show_loc (WINDOWP window)
 
 {
 RTMCLASSP	module = (RTMCLASSP)window->module;
