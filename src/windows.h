@@ -173,6 +173,7 @@ GLOBAL WORD    num_windows    _((WORD class, WORD mode, WINDOWP winds []));
 GLOBAL WORD    num_locked     _((VOID));
 
 GLOBAL WINDOWP create_window  _((UWORD kind, WORD class));
+GLOBAL BOOLEAN window_exists  _((WINDOWP window));
 GLOBAL VOID    delete_window  _((WINDOWP window));
 GLOBAL BOOLEAN open_window    _((WINDOWP window));
 GLOBAL VOID    close_window   _((WINDOWP window));

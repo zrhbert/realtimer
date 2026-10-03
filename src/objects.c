@@ -1243,12 +1243,36 @@ GLOBAL VOID delete_module (RTMCLASSP module)
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
+GLOBAL VOID save_infos_obj (VOID)
+
+{
+	/* Write the .INF file of every module that owns a window. Must run
+		while the modules are still alive, i.e. before term_modules()
+		destroys them; the windows themselves are closed later. */
+	REG WORD			i;
+	REG RTMCLASSP	module;
+	WINDOWP			window;
+
+	if (rtmmodules == NULL) return;
+
+	for (i = 0; i < max_rtmmodules; i++)
+	{
+		module = rtmmodules [i];
+		window = Window(module);
+		if (module && window && module->actual && module->info_name[0])
+			save_info_obj (module->info_name, module->file_name, module->actual->number, &window->scroll, window->opened);
+	} /* for */
+} /* save_infos_obj */
+
 GLOBAL BOOLEAN term_modules (VOID)
 
 {
 	BOOLEAN ok = TRUE;
 	REG WORD i;
 	REG RTMCLASSP module;
+	WINDOWP window;
+
+	save_infos_obj ();					/* Einstellungen sichern, solange die Module noch leben */
 	
 	for (i = 0; i < max_rtmmodules; i++)         	/* Untersuche alle Module */
 	{
@@ -1257,6 +1281,13 @@ GLOBAL BOOLEAN term_modules (VOID)
 		{
 			if (module->test != 0)       	/* Test vorhanden? */
 				ok &= (module->test) (module, DO_DELETE);	/* Beenden vorbereiten */
+			/* Fenster des Moduls jetzt schließen und löschen, solange Modul,
+				Resourcen und Objektbäume noch existieren. term_windows() würde
+				es sonst später über dann ungültige Zeiger abräumen. */
+			window = Window(module);
+			if (window_exists (window))
+				delete_window (window);
+			module->window = NULL;
 			if (module->term != 0)       	/* Term vorhanden? */
 				ok &= (module->term) ();	/* Modul beenden */
 			if (module->destroy)
@@ -1266,6 +1297,8 @@ GLOBAL BOOLEAN term_modules (VOID)
 
 	if (rtmmrec != NULL) mem_free (rtmmrec); /* Speicher freigeben */
 	if (rtmmodules != NULL) mem_free (rtmmodules); /* Speicher freigeben */
+	rtmmrec    = NULL;						/* Module sind weg: keine Zugriffe mehr */
+	rtmmodules = NULL;
 	return ( ok );
 } /* term_modules */
 
@@ -1284,8 +1317,8 @@ GLOBAL BOOL load_info_obj (CONST CHAR *file_name, CHAR *setup_name, LONG *setup_
 		
 		fscanf (info, "%s",	setup_name);
 		fscanf (info, "%ld",		setup_nr);
-		fscanf (info, "%d %d %d %d",	&scroll->x, &scroll->y, &scroll->w, &scroll->h);
-		fscanf (info, "%d",	opened);
+		fscanf (info, "%hd %hd %hd %hd",	&scroll->x, &scroll->y, &scroll->w, &scroll->h);
+		fscanf (info, "%hd",	opened);
 
 		fclose (info);
 		return TRUE;

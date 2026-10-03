@@ -965,9 +965,9 @@ PRIVATE VOID    get_dbox	(RTMCLASSP module)
 	ed->anz_vol = get_checkbox (puf_setup, PUFANZVOL);
 	
 	get_ptext (puf_setup, PUFBREITE, s);
-	sscanf (s, "%d", &ed->breite);
+	sscanf (s, "%hd", &ed->breite);
 	get_ptext (puf_setup, PUFHOEHE, s);
-	sscanf (s, "%d", &ed->hoehe);
+	sscanf (s, "%hd", &ed->hoehe);
 
 	if (get_checkbox (puf_setup, PUFREIHENFSIG + 0)) ed->reihenfolge = RSIGNALE;
 	if (get_checkbox (puf_setup, PUFREIHENFKOOR + 0)) ed->reihenfolge = RKOOR;

@@ -158,7 +158,7 @@ PRIVATE VOID    get_dbox	(RTMCLASSP module)
 {
 	STAT_P	status = module->status;
 	SET_P		ed = module->edited->setup;
-	STRING 	s, format = "%4d";
+	STRING 	s, format = "%4hd";
 
 	get_ptext (pow_setup, POWROTX, s);
 	sscanf (s, format, &ed->rotx);

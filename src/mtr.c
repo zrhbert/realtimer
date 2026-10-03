@@ -568,8 +568,8 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 				single = akt->single;
 				for (signal = 0; signal < MAXSIGNALS; signal++)
 				{
-					ok = fscanf(in, "%d", &single->ebene);
-					ok = fscanf(in, "%d", &single->richtung);
+					ok = fscanf(in, "%hd", &single->ebene);
+					ok = fscanf(in, "%hd", &single->richtung);
 					switch(single->richtung)
 					{
 						case 0:
@@ -583,7 +583,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 							single->richtung = MTR_UHRZ;
 							break;
 					} /* switch */
-					ok = fscanf(in, "%d", &(single->modus));
+					ok = fscanf(in, "%hd", &(single->modus));
 					switch(single->modus)
 					{
 						case 0:
@@ -597,14 +597,14 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 							single->modus = MTR_DURCHLAUF;
 							break;
 					} /* switch */
-					ok = fscanf(in, "%d", &single->speed);
-					ok = fscanf(in, "%d", &single->phase);
-					ok = fscanf(in, "%d", &single->winkel);
+					ok = fscanf(in, "%hd", &single->speed);
+					ok = fscanf(in, "%hd", &single->phase);
+					ok = fscanf(in, "%hd", &single->winkel);
 					single->radius_x = UMKREIS;	/* neu in RTM4 */
 					single->radius_y = UMKREIS;	/* neu in RTM4 */
 					single++;	/* Auf Info fr n„chste Signal zeigen */
 				} /* for */
-				ok = fscanf(in, "%d", &(akt->form));	/* Kreis/Kante */
+				ok = fscanf(in, "%hd", &(akt->form));	/* Kreis/Kante */
 
 				/* Setup speichern und n„chstes Setup anw„hlen */
 				if (! module->get_setnr(module, setnr))

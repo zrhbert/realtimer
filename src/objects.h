@@ -326,6 +326,7 @@ PRIVATE VOID    wi_edit     _((struct window* window, WORD action));
 
 GLOBAL BOOL load_info_obj (CONST CHAR *file_name, CHAR *setup_name, LONG *setup_nr, RECT *scroll, BOOL *opened);
 GLOBAL BOOL save_info_obj (CONST CHAR *file_name, CONST CHAR *setup_name, CONST LONG setup_nr, CONST RECT *scroll, BOOL opened);
+GLOBAL VOID save_infos_obj (VOID);
 GLOBAL WORD load_create_infos (CreateFn *create, CONST CHAR *type, CONST WORD max_instances);
 GLOBAL BOOLEAN open_module_windows (VOID);
 

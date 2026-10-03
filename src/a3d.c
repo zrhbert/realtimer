@@ -170,13 +170,13 @@ PRIVATE VOID    get_dbox	(RTMCLASSP module)
 	} /* for */
 
 	get_ptext (a3d_setup, A3DGRAFIKX, s);
-	sscanf (s, "%d", &ed->rot_x);
+	sscanf (s, "%hd", &ed->rot_x);
 	get_ptext (a3d_setup, A3DGRAFIKY, s);
-	sscanf (s, "%d", &ed->rot_y);
+	sscanf (s, "%hd", &ed->rot_y);
 	get_ptext (a3d_setup, A3DGRAFIKZ, s);
-	sscanf (s, "%d", &ed->rot_z);
+	sscanf (s, "%hd", &ed->rot_z);
 	get_ptext (a3d_setup, A3DGRAFIKPERSP, s);
-	sscanf (s, "%d", &ed->persp);
+	sscanf (s, "%hd", &ed->persp);
 
 	ed->innenraum = get_checkbox (a3d_setup, A3DINNENRAUM);
 

@@ -549,16 +549,16 @@ PRIVATE VOID    get_dbox	(RTMCLASSP module)
 	WORD	signal, offset;
 
 	get_ptext (cmo_setup, CMOGRAFIKX, s);
-	sscanf (s, "%d", &ed->rot_x);
+	sscanf (s, "%hd", &ed->rot_x);
 	get_ptext (cmo_setup, CMOGRAFIKY, s);
-	sscanf (s, "%d", &ed->rot_y);
+	sscanf (s, "%hd", &ed->rot_y);
 	get_ptext (cmo_setup, CMOGRAFIKZ, s);
-	sscanf (s, "%d", &ed->rot_z);
+	sscanf (s, "%hd", &ed->rot_z);
 	get_ptext (cmo_setup, CMOGRAFIKPERSP, s);
-	sscanf (s, "%d", &ed->persp);
+	sscanf (s, "%hd", &ed->persp);
 
 	get_ptext (cmo_setup, CMOMASTERLEVEL, s);
-	sscanf (s, "%d", &ed->master);
+	sscanf (s, "%hd", &ed->master);
 
 	ed->innenraum = get_checkbox (cmo_setup, CMOINNENRAUM);
 

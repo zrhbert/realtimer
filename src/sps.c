@@ -252,7 +252,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 				single = akt->sps_single;
 				for (signal = 0; signal < MAXSIGNALS; signal++)
 				{
-					ok = fscanf(in, "%d", &x);
+					ok = fscanf(in, "%hd", &x);
 
 					/* Erste Info war Mausmodus */
 					if (signal > 0)
@@ -403,7 +403,7 @@ PRIVATE VOID wi_click_mod (WINDOWP window, MKINFO *mk)
 				{
 					case SPSSINGLENR:
 						get_ptext (sps_setup, SPSSINGLENR, s);
-						sscanf (s, "%d", &macro);
+						sscanf (s, "%hd", &macro);
 						set_sps_flags(sps_s, macro);
 						module->set_dbox(module);
 	               undo_state (window->object, window->exit_obj, SELECTED);

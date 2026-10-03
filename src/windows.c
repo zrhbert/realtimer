@@ -495,6 +495,16 @@ GLOBAL WINDOWP create_window (UWORD kind, WORD class)
 /* Lösche Fenster                                                            */
 /*****************************************************************************/
 
+GLOBAL BOOLEAN window_exists (WINDOWP window)
+
+{
+  return ((window != NULL) && (find_wslot (window) != FAILURE));
+} /* window_exists */
+
+/*****************************************************************************/
+/* Lösche Fenster                                                            */
+/*****************************************************************************/
+
 GLOBAL VOID delete_window (WINDOWP window)
 
 {
@@ -804,17 +814,9 @@ GLOBAL VOID close_all (BOOLEAN delete, BOOLEAN close_desk)
 
     wind_update (BEG_UPDATE);                              /* Keine Aktion zulassen */
 
-		x = top;
-		for (x = top; x >= 0; x--)
-		{
 #if INCLUDE_RTM_BASE_MODULES
-			module = Module(windows[x]);
-			/* Einstellungen sichern */
-			if (module)
-				if (module->info_name)
-					save_info_obj (module->info_name, module->file_name, module->actual->number, &windows[x]->scroll, windows[x]->opened);
+    save_infos_obj ();                                     /* Einstellungen sichern, solange die Module leben */
 #endif /* INCLUDE_RTM_BASE_MODULES */
-        } /* for */			
 
     while ((top > bound) && (windows [bound]->opened > 0))
     {

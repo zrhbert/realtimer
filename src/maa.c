@@ -131,7 +131,7 @@ PRIVATE VOID    get_dbox	(RTMCLASSP module)
 {
 	ED_P		edited = module->edited;
 	SET_P		ed = edited->setup;
-	STRING 	s, format = "%4d";
+	STRING 	s, format = "%4hd";
 
 	get_ptext (maa_setup, MAAROTX, s);
 	sscanf (s, format, &ed->rotx);
@@ -162,7 +162,7 @@ PRIVATE VOID    set_dbox	(RTMCLASSP module)
 {
 	ED_P		edited = module->edited;
 	SET_P		ed = edited->setup;
-	STRING 	s, format = "%4d";
+	STRING 	s, format = "%4hd";
 
 	sprintf (s, format, ed->rotx);
 	set_ptext (maa_setup, MAAROTX, s);

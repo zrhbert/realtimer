@@ -1025,16 +1025,16 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 				quelle = akt->quelle;
 				for (x = 0; x < MAXLFOS; x++)
 				{
-					ok = fscanf(in, "%d", &(muell));
-					ok = fscanf(in, "%d", &(quelle->form));
-					ok = fscanf(in, "%d", &(quelle->speed));
-					ok = fscanf(in, "%d", &(quelle->phase));
-					ok = fscanf(in, "%d", &(quelle->ampli));
-					ok = fscanf(in, "%d", &(quelle->null));
-					ok = fscanf(in, "%d", &(quelle->pauso_zeit));
-					ok = fscanf(in, "%d", &(quelle->pausu_zeit));
-					ok = fscanf(in, "%d", &(quelle->var));
-					ok = fscanf(in, "%d", &(muell));
+					ok = fscanf(in, "%hd", &(muell));
+					ok = fscanf(in, "%hd", &(quelle->form));
+					ok = fscanf(in, "%hd", &(quelle->speed));
+					ok = fscanf(in, "%hd", &(quelle->phase));
+					ok = fscanf(in, "%hd", &(quelle->ampli));
+					ok = fscanf(in, "%hd", &(quelle->null));
+					ok = fscanf(in, "%hd", &(quelle->pauso_zeit));
+					ok = fscanf(in, "%hd", &(quelle->pausu_zeit));
+					ok = fscanf(in, "%hd", &(quelle->var));
+					ok = fscanf(in, "%hd", &(muell));
 					
 					/* Umwandlung von Quelle und Controller-Daten aus RTM3 */
 					switch(quelle->form)
@@ -1074,17 +1074,17 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 				{
 					/* Signal 0 Info überspringen */
 					if (x == 0) patch = &muell_patch;
-					ok = fscanf(in, "%d", &muell);
-					ok = fscanf(in, "%d", &patch->pan_breite);
-					ok = fscanf(in, "%d", &patch->pan_pos);
-					ok = fscanf(in, "%d", &patch->mtr_spd);
-					ok = fscanf(in, "%d", &patch->volume);
-					ok = fscanf(in, "%d", &patch->zoom);
-					ok = fscanf(in, "%d", &patch->vor_zur);
-					ok = fscanf(in, "%d", &patch->versch_x);
-					ok = fscanf(in, "%d", &patch->versch_y);
-					ok = fscanf(in, "%d", &patch->versch_z);
-					ok = fscanf(in, "%d", &muell);
+					ok = fscanf(in, "%hd", &muell);
+					ok = fscanf(in, "%hd", &patch->pan_breite);
+					ok = fscanf(in, "%hd", &patch->pan_pos);
+					ok = fscanf(in, "%hd", &patch->mtr_spd);
+					ok = fscanf(in, "%hd", &patch->volume);
+					ok = fscanf(in, "%hd", &patch->zoom);
+					ok = fscanf(in, "%hd", &patch->vor_zur);
+					ok = fscanf(in, "%hd", &patch->versch_x);
+					ok = fscanf(in, "%hd", &patch->versch_y);
+					ok = fscanf(in, "%hd", &patch->versch_z);
+					ok = fscanf(in, "%hd", &muell);
 					if (x == 0) patch = akt->patch;
 					patch++;	 /* Auf Info für nächste Signal zeigen */
 				} /* for */

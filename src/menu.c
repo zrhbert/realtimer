@@ -152,7 +152,7 @@ LOCAL VOID get_settings (VOID)
   STRING s;
 
   get_ptext (settings, SETBLINK, s);
-  sscanf (s, "%d", &blinkrate);
+  sscanf (s, "%hd", &blinkrate);
 
   ring_bell   = get_checkbox (settings, SETBEEP);
   grow_shrink = get_checkbox (settings, SETGROW);

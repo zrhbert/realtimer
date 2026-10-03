@@ -274,9 +274,9 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 				single = akt->spo_single;
 				for (signal = 0; signal < MAXSIGNALS; signal++)
 				{
-					ok = fscanf(in, "%d", &single->offset_x);
-					ok = fscanf(in, "%d", &single->offset_y);
-					ok = fscanf(in, "%d", &single->offset_z);
+					ok = fscanf(in, "%hd", &single->offset_x);
+					ok = fscanf(in, "%hd", &single->offset_y);
+					ok = fscanf(in, "%hd", &single->offset_z);
 					single++;	/* Auf Info für nächstes Signal zeigen */
 				} /* for */
 #if false

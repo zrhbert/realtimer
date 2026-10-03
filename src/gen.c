@@ -457,7 +457,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 				} /* else if */
 				
                 ok = fscanf(in, "%ld", &dummy);				/* 4 Signal-Setup */
-				ok = fscanf(in, "%d", rel_mtr_lfo);			/* 5 Rel. MTR-LFO */
+				ok = fscanf(in, "%hd", rel_mtr_lfo);			/* 5 Rel. MTR-LFO */
 				
 				/* Rest */
 				*lfa_prop	= 100;

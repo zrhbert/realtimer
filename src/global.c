@@ -1275,7 +1275,7 @@ GLOBAL BOOLEAN is_menu_key (OBJECT *menu, MKINFO *mk, WORD *title, WORD *item)
             } /* if */
             else
             {
-              if (c == FUNC_CHAR) sscanf (s + i + 1, "%d", &func); /* Funktionstaste */
+              if (c == FUNC_CHAR) sscanf (s + i + 1, "%hd", &func); /* Funktionstaste */
 
               switch (sign)
               {

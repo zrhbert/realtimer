@@ -360,7 +360,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 				/* Zeiger auf Info des ersten Signals */
 				for (signal = 0; signal < MAXSIGNALS; signal++)
 				{
-					ok = fscanf(in, "%d", &input[signal]);
+					ok = fscanf(in, "%hd", &input[signal]);
 					if (ok) input[signal] -= 1;
 				} /* for */
                 /* Leerzeile */

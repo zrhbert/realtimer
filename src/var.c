@@ -492,7 +492,7 @@ PRIVATE VOID    get_dbox	(RTMCLASSP module)
 	{
 		offset = doffset(variable);
 		get_ptext (var_setup, VARQUELLE1 + offset, s);
-		sscanf (s, "%d", &ed->quelle[VAR_VAR0 + variable]);
+		sscanf (s, "%hu", &ed->quelle[VAR_VAR0 + variable]);
 	} /* for */
 } /* get_dbox */
 

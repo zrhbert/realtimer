@@ -327,9 +327,9 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 				single = akt->spg_single;
 				for (signal = 0; signal < MAXSIGNALS; signal++)
 				{
-					ok = fscanf(in, "%d", &single->drehung_x);
-					ok = fscanf(in, "%d", &single->winkel_xz);
-					ok = fscanf(in, "%d", &single->drehung_z);
+					ok = fscanf(in, "%hd", &single->drehung_x);
+					ok = fscanf(in, "%hd", &single->winkel_xz);
+					ok = fscanf(in, "%hd", &single->drehung_z);
 					single++;	/* Auf Info für nächste Signal zeigen */
 				} /* for */
 #if false
