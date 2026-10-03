@@ -2523,7 +2523,7 @@ LOCAL  VOID arrows (DISPOBJP dispobj)
 
 } /* arrows */
 
-LOCAL  VOID define_sechskanal ()
+LOCAL  VOID define_sechskanal (VOID)
 {	
 	POLY_P	space;
 	WORD		innen, p = MAXDOKOOR,
@@ -2628,7 +2628,7 @@ LOCAL  VOID wuerfel_innen (POLY_P space)
 
 } /* wuerfel_innen */
 
-LOCAL  VOID define_wuerfel ()
+LOCAL  VOID define_wuerfel (VOID)
 {	
 	POLY_P	space;
 	WORD		innen, p = MAXDOKOOR,
@@ -2694,7 +2694,7 @@ LOCAL  VOID define_wuerfel ()
 } /* define_wuerfel */
 
 
-LOCAL  VOID define_wuerfel_hoch ()
+LOCAL  VOID define_wuerfel_hoch (VOID)
 {	
 	POLY_P	space;
 	WORD		innen, x, p = MAXDOKOOR,
@@ -2775,7 +2775,7 @@ LOCAL  VOID define_wuerfel_hoch ()
 
 } /* define_wuerfel_hoch */
 
-LOCAL  VOID define_wuerfel_lang ()
+LOCAL  VOID define_wuerfel_lang (VOID)
 {	
 	POLY_P	space;
 	WORD		innen, x, p = MAXDOKOOR,
@@ -2850,7 +2850,7 @@ LOCAL  VOID define_wuerfel_lang ()
 
 } /* define_wuerfel_lang */
 
-LOCAL  VOID define_wuerfel_mitte ()
+LOCAL  VOID define_wuerfel_mitte (VOID)
 {	
 	POLY_P	space;
 	WORD		innen, p = MAXDOKOOR,
@@ -2920,7 +2920,7 @@ LOCAL  VOID define_wuerfel_mitte ()
 		
 } /* define_wuerfel_mitte */
 
-LOCAL  VOID define_tetraeder ()
+LOCAL  VOID define_tetraeder (VOID)
 {	
 	POLY_P	space;
 	WORD		innen, p = MAXDOKOOR, p3 = p/3,
@@ -2970,7 +2970,7 @@ LOCAL  VOID define_tetraeder ()
 
 } /* define_tetraeder */
 
-LOCAL  VOID define_quadrophon ()
+LOCAL  VOID define_quadrophon (VOID)
 {	
 	POLY_P	space;
 	WORD		innen, p = MAXDOKOOR, p3 = p/3,
@@ -3087,7 +3087,7 @@ LOCAL LONG str_time (STRING timestr)
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-LOCAL VOID define_forms ()
+LOCAL VOID define_forms (VOID)
 {
 	/* Init der Raumformen */
 
@@ -3104,7 +3104,7 @@ LOCAL VOID define_forms ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOL init_dispobj ()
+GLOBAL BOOL init_dispobj (VOID)
 {
 	BOOL	ok = TRUE;
 
@@ -3113,7 +3113,7 @@ GLOBAL BOOL init_dispobj ()
 	return ok;
 } /* init_dispobj */
 
-GLOBAL BOOL term_dispobj ()
+GLOBAL BOOL term_dispobj (VOID)
 {
 	BOOL	ok = TRUE;
 

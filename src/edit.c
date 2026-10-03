@@ -92,10 +92,7 @@ LOCAL VOID    wi_edit     _((WINDOWP window, WORD action));
 /* Textpuffer-Funktionen                                                     */
 /*****************************************************************************/
 
-LOCAL VOID get_line (edit_inf, line, buffer)
-EDIT_INF *edit_inf;
-LONG     line;
-BYTE     *buffer;
+LOCAL VOID get_line (EDIT_INF *edit_inf, LONG line, BYTE *buffer)
 
 {
   REG WORD i, j;
@@ -134,8 +131,7 @@ BYTE     *buffer;
 /* Info-MenÅ                                                                 */
 /*****************************************************************************/
 
-LOCAL VOID mtextinfo (window)
-WINDOWP window;
+LOCAL VOID mtextinfo (WINDOWP window)
 
 {
   LONGSTR  s;
@@ -149,8 +145,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN read_edit (edit_inf)
-EDIT_INF *edit_inf;
+LOCAL BOOLEAN read_edit (EDIT_INF *edit_inf)
 
 {
   REG LONG    i, file_size, lines;
@@ -252,9 +247,7 @@ EDIT_INF *edit_inf;
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-LOCAL VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+LOCAL VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -275,8 +268,7 @@ BOOLEAN grow;
 /* ôffne Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_open (window)
-WINDOWP window;
+LOCAL VOID wi_open (WINDOWP window)
 
 {
   box (window, TRUE);
@@ -286,8 +278,7 @@ WINDOWP window;
 /* Schlieûe Fenster                                                          */
 /*****************************************************************************/
 
-LOCAL VOID wi_close (window)
-WINDOWP window;
+LOCAL VOID wi_close (WINDOWP window)
 
 {
   box (window, FALSE);
@@ -297,8 +288,7 @@ WINDOWP window;
 /* Lîsche Fenster                                                            */
 /*****************************************************************************/
 
-LOCAL VOID wi_delete (window)
-WINDOWP window;
+LOCAL VOID wi_delete (WINDOWP window)
 
 {
   EDIT_INF *edit_inf;
@@ -314,8 +304,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-LOCAL VOID wi_draw (window)
-WINDOWP window;
+LOCAL VOID wi_draw (WINDOWP window)
 
 {
   REG LONG     i;
@@ -355,10 +344,7 @@ WINDOWP window;
 /* Reagiere auf Pfeile                                                       */
 /*****************************************************************************/
 
-LOCAL VOID wi_arrow (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+LOCAL VOID wi_arrow (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
   LONG delta;
@@ -391,10 +377,7 @@ LONG    oldpos, newpos;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-LOCAL VOID wi_snap (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+LOCAL VOID wi_snap (WINDOWP window, RECT *new, WORD mode)
 
 {
   RECT r, diff;
@@ -435,8 +418,7 @@ WORD    mode;
 
 /*****************************************************************************/
 
-GLOBAL VOID print_edit (filename)
-BYTE *filename;
+GLOBAL VOID print_edit (BYTE *filename)
 
 {
   STRING outname;
@@ -492,10 +474,7 @@ BYTE *filename;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_edit (obj, menu, icon, filename)
-OBJECT *obj, *menu;
-WORD   icon;
-BYTE   *filename;
+GLOBAL WINDOWP crt_edit (OBJECT *obj, OBJECT *menu, WORD icon, BYTE *filename)
 
 {
   WINDOWP  window;
@@ -600,9 +579,7 @@ BYTE   *filename;
 /* ôffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_edit (icon, filename)
-WORD icon;
-BYTE *filename;
+GLOBAL BOOLEAN open_edit (WORD icon, BYTE *filename)
 
 {
   BOOLEAN ok;
@@ -630,9 +607,7 @@ BYTE *filename;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_edit (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_edit (WINDOWP window, WORD icon)
 
 {
   if (icon != NIL)
@@ -646,9 +621,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_edit (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN help_edit (WINDOWP window, WORD icon)
 
 {
   hndl_alert (ERR_HELPEDIT);
@@ -659,7 +632,7 @@ WORD    icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_edit ()
+GLOBAL BOOLEAN init_edit (VOID)
 
 {
   return (TRUE);
@@ -669,7 +642,7 @@ GLOBAL BOOLEAN init_edit ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_edit ()
+GLOBAL BOOLEAN term_edit (VOID)
 
 {
   return (TRUE);

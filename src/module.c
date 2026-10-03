@@ -60,17 +60,14 @@ LOCAL VOID    wi_edit     _((WINDOWP window, WORD action));
 /* MenÅbehandlung                                                            */
 /*****************************************************************************/
 
-LOCAL VOID update_menu (window)
-WINDOWP window;
+LOCAL VOID update_menu (WINDOWP window)
 
 {
 } /* update_menu */
 
 /*****************************************************************************/
 
-LOCAL VOID handle_menu (window, title, item)
-WINDOWP window;
-WORD    title, item;
+LOCAL VOID handle_menu (WINDOWP window, WORD title, WORD item)
 
 {
   if (window != NULL)
@@ -84,9 +81,7 @@ WORD    title, item;
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-LOCAL VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+LOCAL VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -107,9 +102,7 @@ BOOLEAN grow;
 /* Teste Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL BOOLEAN wi_test (window, action)
-WINDOWP window;
-WORD    action;
+LOCAL BOOLEAN wi_test (WINDOWP window, WORD action)
 
 {
   BOOLEAN ret, ext;
@@ -136,8 +129,7 @@ WORD    action;
 /* ôffne Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_open (window)
-WINDOWP window;
+LOCAL VOID wi_open (WINDOWP window)
 
 {
   box (window, TRUE);
@@ -147,8 +139,7 @@ WINDOWP window;
 /* Schlieûe Fenster                                                          */
 /*****************************************************************************/
 
-LOCAL VOID wi_close (window)
-WINDOWP window;
+LOCAL VOID wi_close (WINDOWP window)
 
 {
   box (window, FALSE);
@@ -158,8 +149,7 @@ WINDOWP window;
 /* Lîsche Fenster                                                            */
 /*****************************************************************************/
 
-LOCAL VOID wi_delete (window)
-WINDOWP window;
+LOCAL VOID wi_delete (WINDOWP window)
 
 {
 } /* wi_delete */
@@ -168,8 +158,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-LOCAL VOID wi_draw (window)
-WINDOWP window;
+LOCAL VOID wi_draw (WINDOWP window)
 
 {
   clr_scroll (window);
@@ -179,10 +168,7 @@ WINDOWP window;
 /* Reagiere auf Pfeile                                                       */
 /*****************************************************************************/
 
-LOCAL VOID wi_arrow (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+LOCAL VOID wi_arrow (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
   WORD w, h;
@@ -232,10 +218,7 @@ LONG    oldpos, newpos;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-LOCAL VOID wi_snap (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+LOCAL VOID wi_snap (WINDOWP window, RECT *new, WORD mode)
 
 {
   RECT r, diff;
@@ -278,10 +261,7 @@ WORD    mode;
 /* Objektoperationen von Fenster                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_objop (window, objs, action)
-WINDOWP window;
-SET     objs;
-WORD    action;
+LOCAL VOID wi_objop (WINDOWP window, SET objs, WORD action)
 
 {
 } /* wi_objopen */
@@ -290,11 +270,7 @@ WORD    action;
 /* Ziehen in das Fenster                                                     */
 /*****************************************************************************/
 
-LOCAL WORD wi_drag (src_window, src_obj, dest_window, dest_obj)
-WINDOWP src_window;
-WORD    src_obj;
-WINDOWP dest_window;
-WORD    dest_obj;
+LOCAL WORD wi_drag (WINDOWP src_window, WORD src_obj, WINDOWP dest_window, WORD dest_obj)
 
 {
   if (src_window->handle == dest_window->handle) return (DRAG_SWIND); /* Im gleichen Fenster */
@@ -307,9 +283,7 @@ WORD    dest_obj;
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-LOCAL VOID wi_click (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID wi_click (WINDOWP window, MKINFO *mk)
 
 {
   if (sel_window != window) unclick_window (sel_window); /* Deselektieren */
@@ -317,8 +291,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL VOID wi_unclick (window)
-WINDOWP window;
+LOCAL VOID wi_unclick (WINDOWP window)
 
 {
 } /* wi_unclick */
@@ -327,9 +300,7 @@ WINDOWP window;
 /* Taste fÅr Fenster                                                         */
 /*****************************************************************************/
 
-LOCAL BOOLEAN wi_key (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN wi_key (WINDOWP window, MKINFO *mk)
 
 {
   if (menu_key (window, mk)) return (TRUE);
@@ -341,8 +312,7 @@ MKINFO  *mk;
 /* Zeitablauf fÅr Fenster                                                    */
 /*****************************************************************************/
 
-LOCAL VOID wi_timer (window)
-WINDOWP window;
+LOCAL VOID wi_timer (WINDOWP window)
 
 {
   if (is_top (window))
@@ -354,8 +324,7 @@ WINDOWP window;
 /* Fenster nach oben gebracht                                                */
 /*****************************************************************************/
 
-LOCAL VOID wi_top (window)
-WINDOWP window;
+LOCAL VOID wi_top (WINDOWP window)
 
 {
 } /* wi_top */
@@ -364,8 +333,7 @@ WINDOWP window;
 /* Fenster nach unten gebracht                                               */
 /*****************************************************************************/
 
-LOCAL VOID wi_untop (window)
-WINDOWP window;
+LOCAL VOID wi_untop (WINDOWP window)
 
 {
 } /* wi_untop */
@@ -374,9 +342,7 @@ WINDOWP window;
 /* Cut/Copy/Paste fÅr Fenster                                                */
 /*****************************************************************************/
 
-LOCAL VOID wi_edit (window, action)
-WINDOWP window;
-WORD    action;
+LOCAL VOID wi_edit (WINDOWP window, WORD action)
 
 {
   BOOLEAN ext;
@@ -398,8 +364,7 @@ WORD    action;
 /* Iconbehandlung                                                            */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN icons_module (src_obj, dest_obj)
-WORD src_obj, dest_obj;
+GLOBAL BOOLEAN icons_module (WORD src_obj, WORD dest_obj)
 
 {
   BOOLEAN result;
@@ -431,9 +396,7 @@ WORD src_obj, dest_obj;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_module (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+GLOBAL WINDOWP crt_module (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
   WINDOWP window;
@@ -505,8 +468,7 @@ WORD   icon;
 /* ôffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_module (icon)
-WORD icon;
+GLOBAL BOOLEAN open_module (WORD icon)
 
 {
   BOOLEAN ok;
@@ -526,9 +488,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_module (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_module (WINDOWP window, WORD icon)
 
 {
   if (icon != NIL)
@@ -546,9 +506,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_module (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN help_module (WINDOWP window, WORD icon)
 
 {
 #if false
@@ -561,7 +519,7 @@ WORD    icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_module ()
+GLOBAL BOOLEAN init_module (VOID)
 
 {
   return (TRUE);
@@ -571,7 +529,7 @@ GLOBAL BOOLEAN init_module ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_module ()
+GLOBAL BOOLEAN term_module (VOID)
 
 {
   return (TRUE);

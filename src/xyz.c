@@ -230,17 +230,14 @@ PUBLIC BOOLEAN	test_xyz		(RTMCLASSP rtmmodule, WORD action)
 /* Menübehandlung                                                            */
 /*****************************************************************************/
 
-PRIVATE VOID update_menu (window)
-WINDOWP window;
+PRIVATE VOID update_menu (WINDOWP window)
 
 {
 } /* update_menu */
 
 /*****************************************************************************/
 
-PRIVATE VOID handle_menu (window, title, item)
-WINDOWP window;
-WORD    title, item;
+PRIVATE VOID handle_menu (WINDOWP window, WORD title, WORD item)
 
 {
   if (window != NULL)
@@ -264,9 +261,7 @@ WORD    title, item;
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-PRIVATE VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+PRIVATE VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -287,9 +282,7 @@ BOOLEAN grow;
 /* Teste Fenster                                                             */
 /*****************************************************************************/
 
-PRIVATE BOOLEAN wi_test (window, action)
-WINDOWP window;
-WORD    action;
+PRIVATE BOOLEAN wi_test (WINDOWP window, WORD action)
 
 {
   BOOLEAN ret, ext;
@@ -316,8 +309,7 @@ WORD    action;
 /* Öffne Fenster                                                             */
 /*****************************************************************************/
 
-PRIVATE VOID wi_open (window)
-WINDOWP window;
+PRIVATE VOID wi_open (WINDOWP window)
 
 {
   box (window, TRUE);
@@ -327,8 +319,7 @@ WINDOWP window;
 /* Schließe Fenster                                                          */
 /*****************************************************************************/
 
-PRIVATE VOID wi_close (window)
-WINDOWP window;
+PRIVATE VOID wi_close (WINDOWP window)
 
 {
   box (window, FALSE);
@@ -338,8 +329,7 @@ WINDOWP window;
 /* Lösche Fenster                                                            */
 /*****************************************************************************/
 
-PRIVATE VOID wi_delete (window)
-WINDOWP window;
+PRIVATE VOID wi_delete (WINDOWP window)
 
 {
 } /* wi_delete */
@@ -348,8 +338,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-PRIVATE VOID wi_draw (window)
-WINDOWP window;
+PRIVATE VOID wi_draw (WINDOWP window)
 
 {
 	/* clr_scroll (window); */
@@ -359,10 +348,7 @@ WINDOWP window;
 /* Reagiere auf Pfeile                                                       */
 /*****************************************************************************/
 
-PRIVATE VOID wi_arrow (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+PRIVATE VOID wi_arrow (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
   WORD w, h;
@@ -412,10 +398,7 @@ LONG    oldpos, newpos;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_snap (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+PRIVATE VOID wi_snap (WINDOWP window, RECT *new, WORD mode)
 
 {
   RECT r, diff;
@@ -458,10 +441,7 @@ WORD    mode;
 /* Objektoperationen von Fenster                                             */
 /*****************************************************************************/
 
-PRIVATE VOID wi_objop (window, objs, action)
-WINDOWP window;
-SET     objs;
-WORD    action;
+PRIVATE VOID wi_objop (WINDOWP window, SET objs, WORD action)
 
 {
 } /* wi_objopen */
@@ -470,11 +450,7 @@ WORD    action;
 /* Ziehen in das Fenster                                                     */
 /*****************************************************************************/
 
-PRIVATE WORD wi_drag (src_window, src_obj, dest_window, dest_obj)
-WINDOWP src_window;
-WORD    src_obj;
-WINDOWP dest_window;
-WORD    dest_obj;
+PRIVATE WORD wi_drag (WINDOWP src_window, WORD src_obj, WINDOWP dest_window, WORD dest_obj)
 
 {
   if (src_window->handle == dest_window->handle) return (DRAG_SWIND); /* Im gleichen Fenster */
@@ -487,9 +463,7 @@ WORD    dest_obj;
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-PRIVATE VOID wi_click (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+PRIVATE VOID wi_click (WINDOWP window, MKINFO *mk)
 
 {
 	WORD   i, item;
@@ -589,8 +563,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-PRIVATE VOID wi_unclick (window)
-WINDOWP window;
+PRIVATE VOID wi_unclick (WINDOWP window)
 
 {
 } /* wi_unclick */
@@ -599,9 +572,7 @@ WINDOWP window;
 /* Taste für Fenster                                                         */
 /*****************************************************************************/
 
-PRIVATE BOOLEAN wi_key (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+PRIVATE BOOLEAN wi_key (WINDOWP window, MKINFO *mk)
 
 {
   if (menu_key (window, mk)) return (TRUE);
@@ -613,8 +584,7 @@ MKINFO  *mk;
 /* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_timer (window)
-WINDOWP window;
+PRIVATE VOID wi_timer (WINDOWP window)
 
 {
   if (is_top (window))
@@ -626,8 +596,7 @@ WINDOWP window;
 /* Fenster nach oben gebracht                                                */
 /*****************************************************************************/
 
-PRIVATE VOID wi_top (window)
-WINDOWP window;
+PRIVATE VOID wi_top (WINDOWP window)
 
 {
 } /* wi_top */
@@ -636,8 +605,7 @@ WINDOWP window;
 /* Fenster nach unten gebracht                                               */
 /*****************************************************************************/
 
-PRIVATE VOID wi_untop (window)
-WINDOWP window;
+PRIVATE VOID wi_untop (WINDOWP window)
 
 {
 } /* wi_untop */
@@ -646,9 +614,7 @@ WINDOWP window;
 /* Cut/Copy/Paste für Fenster                                                */
 /*****************************************************************************/
 
-PRIVATE VOID wi_edit (window, action)
-WINDOWP window;
-WORD    action;
+PRIVATE VOID wi_edit (WINDOWP window, WORD action)
 
 {
   BOOLEAN ext;
@@ -670,8 +636,7 @@ WORD    action;
 /* Iconbehandlung                                                            */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN icons_xyz (src_obj, dest_obj)
-WORD src_obj, dest_obj;
+PUBLIC BOOLEAN icons_xyz (WORD src_obj, WORD dest_obj)
 
 {
   BOOLEAN result;
@@ -701,9 +666,7 @@ WORD src_obj, dest_obj;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-PUBLIC WINDOWP crt_xyz (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+PUBLIC WINDOWP crt_xyz (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
   WINDOWP window;
@@ -772,8 +735,7 @@ WORD   icon;
 /* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN open_xyz (icon)
-WORD icon;
+PUBLIC BOOLEAN open_xyz (WORD icon)
 
 {
   BOOLEAN ok;
@@ -814,9 +776,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN info_xyz (window, icon)
-WINDOWP window;
-WORD    icon;
+PUBLIC BOOLEAN info_xyz (WINDOWP window, WORD icon)
 
 {
 	WORD		ret;
@@ -854,9 +814,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN help_xyz (window, icon)
-WINDOWP window;
-WORD    icon;
+PUBLIC BOOLEAN help_xyz (WINDOWP window, WORD icon)
 
 {
   help ("XYZ-Setup");
@@ -865,7 +823,7 @@ WORD    icon;
 } /* help_xyz */
 
 /*****************************************************************************/
-PRIVATE	BOOLEAN create_xyz ()
+PRIVATE	BOOLEAN create_xyz (VOID)
 {
 	RTMCLASSP 	rtmmodule;
 	BOOLEAN		ok;
@@ -918,7 +876,7 @@ PRIVATE	BOOLEAN create_xyz ()
 }
 
 /*****************************************************************************/
-PRIVATE BOOLEAN init_rsc_xyz ()
+PRIVATE BOOLEAN init_rsc_xyz (VOID)
 
 {
   WORD   i, y, iconw, iconh, iconr;
@@ -995,7 +953,7 @@ for (i = 0; i < NUM_OBS; i++)
 /* RSC freigeben                                                      		  */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN term_rsc_xyz ()
+PUBLIC BOOLEAN term_rsc_xyz (VOID)
 
 {
   BOOLEAN ok;
@@ -1013,7 +971,7 @@ PUBLIC BOOLEAN term_rsc_xyz ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_xyz ()
+GLOBAL BOOLEAN init_xyz (VOID)
 
 {
 	STR128	s;
@@ -1051,7 +1009,7 @@ GLOBAL BOOLEAN init_xyz ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN term_xyz ()
+PUBLIC BOOLEAN term_xyz (VOID)
 {
 	BOOLEAN ok = TRUE;
 	ok &= term_rsc_xyz ();

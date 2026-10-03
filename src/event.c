@@ -46,9 +46,7 @@ LOCAL VOID hndl_m1 _((WINDOWP top, UWORD *m1flags));
 /* Ereignis-Verarbeitung                                                     */
 /*****************************************************************************/
 
-LOCAL VOID hndl_m1 (top, m1flags)
-WINDOWP top;
-UWORD   *m1flags;
+LOCAL VOID hndl_m1 (WINDOWP top, UWORD *m1flags)
 
 {
   if (*m1flags)
@@ -61,8 +59,7 @@ UWORD   *m1flags;
 
 /*****************************************************************************/
 
-GLOBAL VOID hndl_keybd (mk)
-MKINFO *mk;
+GLOBAL VOID hndl_keybd (MKINFO *mk)
 
 {
   WORD    title, item;
@@ -104,8 +101,7 @@ MKINFO *mk;
 
 /*****************************************************************************/
 
-GLOBAL VOID hndl_button (mk)
-MKINFO *mk;
+GLOBAL VOID hndl_button (MKINFO *mk)
 
 {
   WORD    wh;
@@ -141,8 +137,7 @@ MKINFO *mk;
 
 /*****************************************************************************/
 
-GLOBAL VOID hndl_mesag (msgbuff)
-WORD *msgbuff;
+GLOBAL VOID hndl_mesag (WORD *msgbuff)
 
 {
   WORD    wh;                           /* Aktuelles Window Handle */
@@ -181,8 +176,7 @@ WORD *msgbuff;
 
 /*****************************************************************************/
 
-GLOBAL VOID hndl_timer (millisecs)
-LONG millisecs;
+GLOBAL VOID hndl_timer (LONG millisecs)
 
 {
   if (millisecs == 0) millisecs = 1;    /* Mindestens 1 Millisekunde vergangen */
@@ -192,7 +186,7 @@ LONG millisecs;
 
 /*****************************************************************************/
 
-GLOBAL VOID hndl_events ()
+GLOBAL VOID hndl_events (VOID)
 
 {
   WORD    event;                        /* Eingetretenes Ereignis */
@@ -293,7 +287,7 @@ GLOBAL VOID hndl_events ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_event ()
+GLOBAL BOOLEAN init_event (VOID)
 
 {
   events    = EVENTS;                   /* Warte auf einzutretende Ereigneisse */
@@ -316,7 +310,7 @@ GLOBAL BOOLEAN init_event ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_event ()
+GLOBAL BOOLEAN term_event (VOID)
 
 {
   return (TRUE);

@@ -1059,9 +1059,7 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 } /* send_messages */
 /*****************************************************************************/
 
-LOCAL VOID click_setup (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID click_setup (WINDOWP window, MKINFO *mk)
 
 {
 	RTMCLASSP	module = Module(window);
@@ -1286,9 +1284,7 @@ PRIVATE RTMCLASSP define_setup (WINDOWP window, RTMCLASSP refmodule)
 
 /*****************************************************************************/
 
-PRIVATE VOID handle_menu_mod (window, title, item)
-WINDOWP window;
-WORD    title, item;
+PRIVATE VOID handle_menu_mod (WINDOWP window, WORD title, WORD item)
 
 {
 	RTMCLASSP	module 	= Module(window);
@@ -1349,8 +1345,7 @@ WORD    title, item;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-GLOBAL VOID wi_draw_mod (window)
-WINDOWP window;
+GLOBAL VOID wi_draw_mod (WINDOWP window)
 {
 	RTMCLASSP	module = Module (window);
 	RECT		r;
@@ -1383,8 +1378,7 @@ WINDOWP window;
 /* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_timer_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_timer_mod (WINDOWP window)
 {
 	RTMCLASSP	module = Module (window);
 	SHORT			refNum = (SHORT)module->special;
@@ -1422,9 +1416,7 @@ WINDOWP window;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-PUBLIC WINDOWP crt_mod (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+PUBLIC WINDOWP crt_mod (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
 	WINDOWP window;
@@ -1479,8 +1471,7 @@ WORD   icon;
 /* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN open_mod (icon)
-WORD icon;
+PUBLIC BOOLEAN open_mod (WORD icon)
 {
 	BOOLEAN ok;
 	WINDOWP window;
@@ -1505,9 +1496,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN info_mod (window, icon)
-WINDOWP window;
-WORD    icon;
+PUBLIC BOOLEAN info_mod (WINDOWP window, WORD icon)
 {
 	RTMCLASSP	module = Module(window);
 	WORD			ret;
@@ -1548,7 +1537,7 @@ WORD    icon;
 /*****************************************************************************/
 /* Kreiere Modul                                                             */
 /*****************************************************************************/
-PRIVATE	RTMCLASSP create ()
+PRIVATE	RTMCLASSP create (VOID)
 {
 	RTMCLASSP 	module;
 	WINDOWP		window;
@@ -1681,8 +1670,7 @@ PRIVATE	RTMCLASSP create ()
 /*****************************************************************************/
 /* Lösche Objekt                                                            */
 /*****************************************************************************/
-PUBLIC VOID destroy_mod (module)
-RTMCLASSP module;
+PUBLIC VOID destroy_mod (RTMCLASSP module)
 {
 	STRING 	s;
 	INT		refNum;
@@ -1733,7 +1721,7 @@ RTMCLASSP module;
 /* MidiShare initialisieren                                                  */
 /*****************************************************************************/
 
-PRIVATE SHORT init_midishare ()
+PRIVATE SHORT init_midishare (VOID)
 {
 	/* Meldet ein neues Modul bei MidiShare an und gibt die refNum zurück */
 	SHORT		refNum = 0;			/* temporäre Referenznummer */
@@ -1936,7 +1924,7 @@ PRIVATE VOID init_events (RTMCLASSP module)
 	close_daktstat();
 } /* init_events */
 
-PRIVATE PUFEVP CreateEvent ()
+PRIVATE PUFEVP CreateEvent (VOID)
 {
 	PUFEVP 	event;
 	BOOL		ok;
@@ -2023,7 +2011,7 @@ PRIVATE PUFEVP PrevEvent (PUFEVP event)
 /* RSC öffnen                                                      		     */
 /*****************************************************************************/
 
-PRIVATE BOOLEAN init_rsc ()
+PRIVATE BOOLEAN init_rsc (VOID)
 
 {
   WORD   i, y, iconw, iconh, iconr;
@@ -2099,7 +2087,7 @@ for (i = 0; i < NUM_OBS; i++)
 /* RSC freigeben                                                      		  */
 /*****************************************************************************/
 
-PRIVATE BOOLEAN term_rsc ()
+PRIVATE BOOLEAN term_rsc (VOID)
 {
   BOOLEAN ok = TRUE;
 
@@ -2114,7 +2102,7 @@ PRIVATE BOOLEAN term_rsc ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_puf ()
+GLOBAL BOOLEAN init_puf (VOID)
 
 {
 	BOOLEAN		ok = TRUE;
@@ -2130,7 +2118,7 @@ GLOBAL BOOLEAN init_puf ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN term_mod ()
+PUBLIC BOOLEAN term_mod (VOID)
 {
 	BOOLEAN ok = TRUE;
 

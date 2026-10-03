@@ -749,7 +749,7 @@ GLOBAL BOOLEAN try_all_connect	 (SHORT refnum)
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_msh ()
+GLOBAL BOOLEAN init_msh (VOID)
 {
 	STRING	s;
 	BOOLEAN	ok;
@@ -810,7 +810,7 @@ GLOBAL BOOLEAN init_msh ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_msh ()
+GLOBAL BOOLEAN term_msh (VOID)
 {
 	BOOLEAN ok = TRUE;
 	return (ok);

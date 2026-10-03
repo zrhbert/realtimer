@@ -127,8 +127,7 @@ LOCAL VOID    fix_menu     _((WINDOWP window));
 /* Suche nach Fenster mit Fensterklasse                                      */
 /*****************************************************************************/
 
-GLOBAL WINDOWP search_window (class, mode, icon)
-WORD class, mode, icon;
+GLOBAL WINDOWP search_window (WORD class, WORD mode, WORD icon)
 
 {
   REG WORD    slot;
@@ -155,8 +154,7 @@ WORD class, mode, icon;
 /* Suche Fenster von Fenster-Handle                                          */
 /*****************************************************************************/
 
-GLOBAL WINDOWP find_window (wh)
-WORD wh;
+GLOBAL WINDOWP find_window (WORD wh)
 
 {
   REG WORD slot;
@@ -171,7 +169,7 @@ WORD wh;
 /* Suche oberstes Fenster                                                    */
 /*****************************************************************************/
 
-GLOBAL WINDOWP find_top ()
+GLOBAL WINDOWP find_top (VOID)
 
 {
   WINDOWP topwin;
@@ -187,8 +185,7 @@ GLOBAL WINDOWP find_top ()
 /* Teste, ob Fenster ganz oben liegt                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN is_top (window)
-WINDOWP window;
+GLOBAL BOOLEAN is_top (WINDOWP window)
 
 {
   WORD wh, ret;
@@ -202,8 +199,7 @@ WINDOWP window;
 /* Teste, ob Fenster offen sind                                              */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN any_open (incl_desk, incl_closer, incl_modal)
-BOOLEAN incl_desk, incl_closer, incl_modal;
+GLOBAL BOOLEAN any_open (BOOLEAN incl_desk, BOOLEAN incl_closer, BOOLEAN incl_modal)
 
 {
   REG BOOLEAN is_open;
@@ -223,9 +219,7 @@ BOOLEAN incl_desk, incl_closer, incl_modal;
 /* Zähle Anzahl vorhandener Fenster einer Klasse                             */
 /*****************************************************************************/
 
-GLOBAL WORD num_windows (class, mode, winds)
-WORD    class, mode;
-WINDOWP winds [];
+GLOBAL WORD num_windows (WORD class, WORD mode, WINDOWP winds[])
 
 {
   REG WORD    slot, num;
@@ -253,7 +247,7 @@ WINDOWP winds [];
 
 /*****************************************************************************/
 
-GLOBAL WORD num_locked ()
+GLOBAL WORD num_locked (VOID)
 
 {
   WORD slot, num;
@@ -268,8 +262,7 @@ GLOBAL WORD num_locked ()
 /* Suche Slot von Fenster-Handle                                             */
 /*****************************************************************************/
 
-LOCAL WORD find_slot (wh)
-WORD wh;
+LOCAL WORD find_slot (WORD wh)
 
 {
   REG WORD slot;
@@ -284,8 +277,7 @@ WORD wh;
 /* Suche Slot von Fenster                                                    */
 /*****************************************************************************/
 
-LOCAL WORD find_wslot (window)
-WINDOWP window;
+LOCAL WORD find_wslot (WINDOWP window)
 
 {
   REG WORD slot;
@@ -300,7 +292,7 @@ WINDOWP window;
 /* Verändere Reihenfolge                                                     */
 /*****************************************************************************/
 
-LOCAL VOID sort_order ()
+LOCAL VOID sort_order (VOID)
 
 {
   WORD    i, newtop;
@@ -319,9 +311,7 @@ LOCAL VOID sort_order ()
 
 /*****************************************************************************/
 
-LOCAL VOID move_order (newtop, window)
-WORD    newtop;
-WINDOWP window;
+LOCAL VOID move_order (WORD newtop, WINDOWP window)
 
 {
   REG WORD i;
@@ -337,9 +327,7 @@ WINDOWP window;
 /* Hole Arbeitsbereich des Fensters                                          */
 /*****************************************************************************/
 
-LOCAL VOID get_work (window, work)
-WINDOWP window;
-BOOLEAN work;
+LOCAL VOID get_work (WINDOWP window, BOOLEAN work)
 
 {
   RECT   diff;
@@ -392,9 +380,7 @@ BOOLEAN work;
 /* Editiere Objekt im Fenster                                                */
 /*****************************************************************************/
 
-LOCAL VOID edit_object (window, key, kind)
-WINDOWP window;
-WORD    key, kind;
+LOCAL VOID edit_object (WINDOWP window, WORD key, WORD kind)
 
 {
   BOOLEAN init;
@@ -427,8 +413,7 @@ WORD    key, kind;
 
 /*****************************************************************************/
 
-LOCAL WORD find_first (object)
-OBJECT *object;
+LOCAL WORD find_first (OBJECT *object)
 
 {
   REG WORD obj;
@@ -448,8 +433,7 @@ OBJECT *object;
 
 /*****************************************************************************/
 
-LOCAL WORD find_last (object)
-OBJECT *object;
+LOCAL WORD find_last (OBJECT *object)
 
 {
   REG WORD found, obj;
@@ -472,9 +456,7 @@ OBJECT *object;
 /* Kreiere Fenster                                                           */
 /*****************************************************************************/
 
-GLOBAL WINDOWP create_window (kind, class)
-UWORD kind;
-WORD  class;
+GLOBAL WINDOWP create_window (UWORD kind, WORD class)
 
 {
   REG WINDOWP window;
@@ -513,8 +495,7 @@ WORD  class;
 /* Lösche Fenster                                                            */
 /*****************************************************************************/
 
-GLOBAL VOID delete_window (window)
-WINDOWP window;
+GLOBAL VOID delete_window (WINDOWP window)
 
 {
 	WORD    slot, i, opened;
@@ -571,8 +552,7 @@ WINDOWP window;
 /* Öffne Fenster                                                             */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_window (window)
-WINDOWP window;
+GLOBAL BOOLEAN open_window (WINDOWP window)
 
 {
   WORD    wh, i;
@@ -694,8 +674,7 @@ WINDOWP window;
 /* Schließe Fenster                                                          */
 /*****************************************************************************/
 
-GLOBAL VOID close_window (window)
-WINDOWP window;
+GLOBAL VOID close_window (WINDOWP window)
 
 {
   WORD    wh, i;
@@ -788,7 +767,7 @@ WINDOWP window;
 /* Schließe oberstes Fenster                                                 */
 /*****************************************************************************/
 
-GLOBAL VOID close_top ()
+GLOBAL VOID close_top (VOID)
 
 {
   if (top > 0) close_window (windows [0]);
@@ -798,8 +777,7 @@ GLOBAL VOID close_top ()
 /* Schließe/Lösche alle Fenster                                              */
 /*****************************************************************************/
 
-GLOBAL VOID close_all (delete, close_desk)
-BOOLEAN delete, close_desk;
+GLOBAL VOID close_all (BOOLEAN delete, BOOLEAN close_desk)
 
 {
   WINDOWP 	window;
@@ -854,8 +832,7 @@ BOOLEAN delete, close_desk;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-GLOBAL VOID draw_window (window)
-WINDOWP window;
+GLOBAL VOID draw_window (WINDOWP window)
 
 {
 	LIST_P	header, element;
@@ -893,9 +870,7 @@ WINDOWP window;
 /* Suche und zeichne überlagernde Rechtecke von Fenstern                     */
 /*****************************************************************************/
 
-GLOBAL VOID redraw_window (window, area)
-WINDOWP    window;
-CONST RECT *area;
+GLOBAL VOID redraw_window (WINDOWP window, CONST RECT *area)
 
 {
   WORD    wh, ret;
@@ -976,8 +951,7 @@ CONST RECT *area;
 /* Bringe Fenster nach oben                                                  */
 /*****************************************************************************/
 
-GLOBAL VOID top_window (window)
-WINDOWP window;
+GLOBAL VOID top_window (WINDOWP window)
 
 {
   WORD    wh;
@@ -1048,8 +1022,7 @@ WINDOWP window;
 /* Behandle Fenster, welches nach unten gebracht wurde                       */
 /*****************************************************************************/
 
-GLOBAL VOID untop_window (window)
-WINDOWP window;
+GLOBAL VOID untop_window (WINDOWP window)
 
 {
   if (window != NULL)
@@ -1069,7 +1042,7 @@ WINDOWP window;
 /* Bringe unterstes Fenster nach oben                                        */
 /*****************************************************************************/
 
-GLOBAL VOID cycle_window ()
+GLOBAL VOID cycle_window (VOID)
 
 {
   REG WORD    i;
@@ -1093,10 +1066,7 @@ GLOBAL VOID cycle_window ()
 /* Scrolle den Fensterinhalt                                                 */
 /*****************************************************************************/
 
-GLOBAL VOID scroll_window (window, dir, delta)
-WINDOWP window;
-WORD    dir;
-LONG    delta;
+GLOBAL VOID scroll_window (WINDOWP window, WORD dir, LONG delta)
 
 {
   WORD  wh;
@@ -1209,10 +1179,7 @@ LONG    delta;
 /* Reagiere auf Anklicken eines Pfeils                                       */
 /*****************************************************************************/
 
-LOCAL VOID arrow_object (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+LOCAL VOID arrow_object (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
   LONG delta;
@@ -1243,9 +1210,7 @@ LONG    oldpos, newpos;
 
 /*****************************************************************************/
 
-GLOBAL VOID arrow_window (window, arrow, amount)
-WINDOWP window;
-WORD    arrow, amount;
+GLOBAL VOID arrow_window (WINDOWP window, WORD arrow, WORD amount)
 
 {
   WORD w, h, wbox, hbox, dir;
@@ -1301,9 +1266,7 @@ WORD    arrow, amount;
 /* Reagiere auf Bewegen der Schieber                                         */
 /*****************************************************************************/
 
-GLOBAL VOID h_slider (window, new_value)
-WINDOWP window;
-WORD    new_value;
+GLOBAL VOID h_slider (WINDOWP window, WORD new_value)
 
 {
   WORD w, wbox;
@@ -1331,9 +1294,7 @@ WORD    new_value;
 
 /*****************************************************************************/
 
-GLOBAL VOID v_slider (window, new_value)
-WINDOWP window;
-WORD    new_value;
+GLOBAL VOID v_slider (WINDOWP window, WORD new_value)
 
 {
   WORD h, hbox;
@@ -1363,9 +1324,7 @@ WORD    new_value;
 /* Setze Schieberpositionen und Schiebergröße                                */
 /*****************************************************************************/
 
-GLOBAL VOID set_sliders (window, which, mode)
-WINDOWP window;
-WORD    which, mode;
+GLOBAL VOID set_sliders (WINDOWP window, WORD which, WORD mode)
 
 {
   WORD wh;
@@ -1438,10 +1397,7 @@ WORD    which, mode;
 /* Einschnappen des Fensterinneren auf bestimmte Grenzen                     */
 /*****************************************************************************/
 
-LOCAL VOID snap_object (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+LOCAL VOID snap_object (WINDOWP window, RECT *new, WORD mode)
 
 {
   RECT r;
@@ -1486,10 +1442,7 @@ WORD    mode;
 
 /*****************************************************************************/
 
-GLOBAL VOID snap_window (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+GLOBAL VOID snap_window (WINDOWP window, RECT *new, WORD mode)
 
 {
   if (window != NULL)
@@ -1507,8 +1460,7 @@ WORD    mode;
 /* Vergößere Fenster auf volle Größe bzw. verkleinere Fenster                */
 /*****************************************************************************/
 
-GLOBAL VOID full_window (window)
-WINDOWP window;
+GLOBAL VOID full_window (WINDOWP window)
 
 {
   WORD wh;
@@ -1547,9 +1499,7 @@ WINDOWP window;
 /* Ändere Fenstergröße                                                       */
 /*****************************************************************************/
 
-GLOBAL VOID size_window (window, new)
-WINDOWP    window;
-CONST RECT *new;
+GLOBAL VOID size_window (WINDOWP window, CONST RECT *new)
 
 {
   RECT r;
@@ -1571,9 +1521,7 @@ CONST RECT *new;
 /* Bewege Fenster                                                            */
 /*****************************************************************************/
 
-GLOBAL VOID move_window (window, new)
-WINDOWP    window;
-CONST RECT *new;
+GLOBAL VOID move_window (WINDOWP window, CONST RECT *new)
 
 {
 	LIST_P	header, element;
@@ -1605,12 +1553,12 @@ CONST RECT *new;
 /* Ziehen von Objekten in ein Fenster                                        */
 /*****************************************************************************/
 
-GLOBAL WORD drag_to_window (mox, moy, src_window, src_obj, dest_window, dest_obj)
-WORD    mox, moy;
-WINDOWP src_window;
-WORD    src_obj;
-WINDOWP *dest_window;
-WORD    *dest_obj;
+GLOBAL WORD drag_to_window (WORD mox,
+                            WORD moy,
+                            WINDOWP src_window,
+                            WORD src_obj,
+                            WINDOWP *dest_window,
+                            WORD *dest_obj)
 
 {
   WORD    wh;
@@ -1639,9 +1587,7 @@ WORD    *dest_obj;
 /* Klicken in das Fensterinnere                                              */
 /*****************************************************************************/
 
-GLOBAL VOID click_window (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+GLOBAL VOID click_window (WINDOWP window, MKINFO *mk)
 
 {
   BOOLEAN cont, changed, check;
@@ -1815,8 +1761,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-GLOBAL VOID unclick_window (window)
-WINDOWP window;
+GLOBAL VOID unclick_window (WINDOWP window)
 
 {
   if (window != NULL)
@@ -1830,9 +1775,7 @@ WINDOWP window;
 /* Taste für ein Fenster                                                     */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN key_window (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+GLOBAL BOOLEAN key_window (WINDOWP window, MKINFO *mk)
 
 {
   BOOLEAN res, cont, edit, disabled;
@@ -2120,8 +2063,7 @@ MKINFO  *mk;
 /* Taste für alle Fenster                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN key_all (mk)
-MKINFO *mk;
+GLOBAL BOOLEAN key_all (MKINFO *mk)
 
 {
 		
@@ -2162,8 +2104,7 @@ MKINFO *mk;
 /* Zeitablauf für ein Fenster                                                */
 /*****************************************************************************/
 
-GLOBAL VOID timer_window (window)
-WINDOWP window;
+GLOBAL VOID timer_window (WINDOWP window)
 
 {
 	LIST_P	header, element;
@@ -2185,8 +2126,7 @@ WINDOWP window;
 /* Zeitablauf für alle Fenster                                               */
 /*****************************************************************************/
 
-GLOBAL VOID timer_all (milli)
-LONG milli;
+GLOBAL VOID timer_all (LONG milli)
 
 {
   REG WORD i;
@@ -2218,10 +2158,7 @@ LONG milli;
 /* Fenster-Objektroutinen                                                    */
 /*****************************************************************************/
 
-GLOBAL VOID get_border (window, obj, border)
-WINDOWP window;
-WORD    obj;
-RECT    *border;
+GLOBAL VOID get_border (WINDOWP window, WORD obj, RECT *border)
 
 {
   xywh2rect (0, 0, 0, 0, border);
@@ -2233,9 +2170,7 @@ RECT    *border;
 
 /*****************************************************************************/
 
-GLOBAL VOID draw_object (window, obj)
-WINDOWP window;
-WORD    obj;
+GLOBAL VOID draw_object (WINDOWP window, WORD obj)
 
 {
   WORD    wh, ret;
@@ -2288,9 +2223,7 @@ WORD    obj;
 
 /*****************************************************************************/
 
-GLOBAL VOID set_cursor (window, obj, inx)
-WINDOWP window;
-WORD    obj, inx;
+GLOBAL VOID set_cursor (WINDOWP window, WORD obj, WORD inx)
 
 {
   if ((window != NULL) && (window->object != NULL) && (window->opened > 0))
@@ -2305,10 +2238,7 @@ WORD    obj, inx;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN in_icon (mox, moy, window, obj)
-WORD    mox, moy;
-WINDOWP window;
-WORD    obj;
+LOCAL BOOLEAN in_icon (WORD mox, WORD moy, WINDOWP window, WORD obj)
 
 {
   BOOLEAN ok;
@@ -2347,8 +2277,7 @@ WORD    obj;
 
 /*****************************************************************************/
 
-LOCAL VOID set_style (expr)
-WORD expr;
+LOCAL VOID set_style (WORD expr)
 
 {
   vsl_udsty (vdi_handle, odd (expr) ? 0xAAAA : 0x5555);
@@ -2356,9 +2285,7 @@ WORD expr;
 
 /*****************************************************************************/
 
-LOCAL VOID draw_box (box, x_offset, y_offset)
-CONST RECT *box;
-WORD       x_offset, y_offset;
+LOCAL VOID draw_box (CONST RECT *box, WORD x_offset, WORD y_offset)
 
 {
   WORD xy [10];
@@ -2402,12 +2329,13 @@ WORD       x_offset, y_offset;
 
 /*****************************************************************************/
 
-LOCAL VOID draw_all (num_boxes, boxes, x_offset, y_offset, bound, inner, diff)
-WORD       num_boxes;
-CONST RECT *boxes;
-WORD       x_offset, y_offset;
-CONST RECT *bound, *inner;
-RECT       *diff;
+LOCAL VOID draw_all (WORD num_boxes,
+                     CONST RECT *boxes,
+                     WORD x_offset,
+                     WORD y_offset,
+                     CONST RECT *bound,
+                     CONST RECT *inner,
+                     RECT *diff)
 
 {
   REG WORD i, delta;
@@ -2440,14 +2368,14 @@ RECT       *diff;
 
 /*****************************************************************************/
 
-GLOBAL VOID drag_boxes (num_objs, boxes, inv_window, inv_objs, diff, bound, x_raster, y_raster)
-WORD       num_objs;
-CONST RECT *boxes;
-WINDOWP    inv_window;
-SET        inv_objs;
-RECT       *diff;
-CONST RECT *bound;
-WORD       x_raster, y_raster;
+GLOBAL VOID drag_boxes (WORD num_objs,
+                        CONST RECT *boxes,
+                        WINDOWP inv_window,
+                        SET inv_objs,
+                        RECT *diff,
+                        CONST RECT *bound,
+                        WORD x_raster,
+                        WORD y_raster)
 
 {
   WORD    event, i, obj, last_obj, ret;
@@ -2569,8 +2497,7 @@ WORD       x_raster, y_raster;
 
 /*****************************************************************************/
 
-LOCAL WORD calc_pos (list)
-LISTBOX *list;
+LOCAL WORD calc_pos (LISTBOX *list)
 
 {
   WORD pos, max_pos;
@@ -2592,8 +2519,7 @@ LISTBOX *list;
 
 /*****************************************************************************/
 
-LOCAL WORD calc_size (list)
-LISTBOX *list;
+LOCAL WORD calc_size (LISTBOX *list)
 
 {
   WORD size;
@@ -2610,8 +2536,7 @@ LISTBOX *list;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN in_listbox (list)
-LISTBOX *list;
+LOCAL BOOLEAN in_listbox (LISTBOX *list)
 
 {
   WORD item;
@@ -2622,9 +2547,7 @@ LISTBOX *list;
 
 /*****************************************************************************/
 
-LOCAL WORD item2obj (list, item)
-LISTBOX *list;
-WORD    item;
+LOCAL WORD item2obj (LISTBOX *list, WORD item)
 
 {
   return (item - list->first_item + list->items + 1);
@@ -2632,9 +2555,7 @@ WORD    item;
 
 /*****************************************************************************/
 
-LOCAL WORD obj2item (list, obj)
-LISTBOX *list;
-WORD    obj;
+LOCAL WORD obj2item (LISTBOX *list, WORD obj)
 
 {
   return (list->first_item + obj - list->items - 1);
@@ -2642,10 +2563,7 @@ WORD    obj;
 
 /*****************************************************************************/
 
-GLOBAL VOID draw_listobj (list, obj, flip)
-LISTBOX *list;
-WORD    obj;
-BOOLEAN flip;
+GLOBAL VOID draw_listobj (LISTBOX *list, WORD obj, BOOLEAN flip)
 
 {
   RECT    r, scroll;
@@ -2693,10 +2611,7 @@ BOOLEAN flip;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN listbox (list, flags, mk)
-LISTBOX *list;
-UWORD   flags;
-MKINFO  *mk;
+GLOBAL BOOLEAN listbox (LISTBOX *list, UWORD flags, MKINFO *mk)
 
 {
   BOOLEAN    dbl, to_draw;
@@ -2931,11 +2846,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-GLOBAL VOID edit_noecho (mk, cursor, s, maxlen)
-MKINFO *mk;
-WORD   cursor;
-BYTE   *s;
-WORD   maxlen;
+GLOBAL VOID edit_noecho (MKINFO *mk, WORD cursor, BYTE *s, WORD maxlen)
 
 {
   WORD len;
@@ -2969,9 +2880,7 @@ WORD   maxlen;
 /* Scroll- und Löschroutinen                                                 */
 /*****************************************************************************/
 
-GLOBAL VOID scroll_area (area, dir, delta)
-CONST RECT *area;
-WORD       dir, delta;
+GLOBAL VOID scroll_area (CONST RECT *area, WORD dir, WORD delta)
 
 {
   MFDB  s, d;
@@ -3011,8 +2920,7 @@ WORD       dir, delta;
 
 /*****************************************************************************/
 
-GLOBAL VOID clr_area (area)
-CONST RECT *area;
+GLOBAL VOID clr_area (CONST RECT *area)
 
 {
   WORD xy [4];
@@ -3032,8 +2940,7 @@ CONST RECT *area;
 
 /*****************************************************************************/
 
-GLOBAL VOID clr_work (window)
-WINDOWP window;
+GLOBAL VOID clr_work (WINDOWP window)
 
 {
   RECT r;
@@ -3049,8 +2956,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-GLOBAL VOID clr_scroll (window)
-WINDOWP window;
+GLOBAL VOID clr_scroll (WINDOWP window)
 
 {
   clr_area (&window->scroll);
@@ -3058,8 +2964,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-GLOBAL VOID clr_left (window)
-WINDOWP window;
+GLOBAL VOID clr_left (WINDOWP window)
 
 {
   RECT r;
@@ -3074,8 +2979,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-GLOBAL VOID clr_top (window)
-WINDOWP window;
+GLOBAL VOID clr_top (WINDOWP window)
 
 {
   RECT r;
@@ -3093,8 +2997,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-GLOBAL VOID clr_right (window)
-WINDOWP window;
+GLOBAL VOID clr_right (WINDOWP window)
 
 {
   RECT r;
@@ -3109,8 +3012,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-GLOBAL VOID clr_bottom (window)
-WINDOWP window;
+GLOBAL VOID clr_bottom (WINDOWP window)
 
 {
   RECT r;
@@ -3125,9 +3027,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-GLOBAL VOID set_redraw (window, area)
-WINDOWP    window;
-CONST RECT *area;
+GLOBAL VOID set_redraw (WINDOWP window, CONST RECT *area)
 
 {
   WORD msgbuff [8];
@@ -3148,9 +3048,7 @@ CONST RECT *area;
 /* Fenster-Menüroutinen                                                      */
 /*****************************************************************************/
 
-GLOBAL VOID draw_mtitle (window, title)
-WINDOWP window;
-WORD    title;
+GLOBAL VOID draw_mtitle (WINDOWP window, WORD title)
 
 {
   WORD wh;
@@ -3177,8 +3075,7 @@ WORD    title;
 
 /*****************************************************************************/
 
-GLOBAL VOID draw_mbar (window)
-WINDOWP window;
+GLOBAL VOID draw_mbar (WINDOWP window)
 
 {
   WORD wh;
@@ -3246,10 +3143,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-GLOBAL VOID menu_normal (window, title, normal)
-WINDOWP window;
-WORD    title;
-BOOLEAN normal;
+GLOBAL VOID menu_normal (WINDOWP window, WORD title, BOOLEAN normal)
 
 {
   WORD state;
@@ -3275,9 +3169,7 @@ BOOLEAN normal;
 
 /*****************************************************************************/
 
-LOCAL VOID hndl_mscroll (window, obj, breturn)
-WINDOWP window;
-WORD    obj, breturn;
+LOCAL VOID hndl_mscroll (WINDOWP window, WORD obj, WORD breturn)
 
 {
   WORD old, new, thelast, offset;
@@ -3328,8 +3220,7 @@ WORD    obj, breturn;
 
 /*****************************************************************************/
 
-LOCAL VOID set_menu (enable)
-BOOLEAN enable;
+LOCAL VOID set_menu (BOOLEAN enable)
 
 {
   REG BOOLEAN menu_in_bar;
@@ -3375,8 +3266,7 @@ BOOLEAN enable;
 
 /*****************************************************************************/
 
-LOCAL VOID fix_menu (window)
-WINDOWP window;
+LOCAL VOID fix_menu (WINDOWP window)
 
 {
   OBJECT *menu;
@@ -3440,9 +3330,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN menu_manager (window, mox, moy, mobutton, breturn)
-WINDOWP window;
-WORD    mox, moy, mobutton, breturn;
+GLOBAL BOOLEAN menu_manager (WINDOWP window, WORD mox, WORD moy, WORD mobutton, WORD breturn)
 
 {
   MFDB    screen, buffer;
@@ -3598,9 +3486,7 @@ WORD    mox, moy, mobutton, breturn;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN menu_key (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+GLOBAL BOOLEAN menu_key (WINDOWP window, MKINFO *mk)
 
 {
   OBJECT  *lmenu;
@@ -3633,8 +3519,7 @@ MKINFO  *mk;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_windows (err_nowindow, max_reswind, class_help)
-WORD err_nowindow, max_reswind, class_help;
+GLOBAL BOOLEAN init_windows (WORD err_nowindow, WORD max_reswind, WORD class_help)
 
 {
   BOOLEAN ok;
@@ -3698,7 +3583,7 @@ WORD err_nowindow, max_reswind, class_help;
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_windows ()
+GLOBAL BOOLEAN term_windows (VOID)
 
 {
   close_all (TRUE, TRUE);                  /* Schließe und lösche alle Fenster */

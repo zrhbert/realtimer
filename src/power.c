@@ -73,8 +73,7 @@ LOCAL VOID    wi_edit     _((WINDOWP window, WORD action));
 /* Berechne Potenzen                                                         */
 /*****************************************************************************/
 
-LOCAL LONG power (base, p)
-REG WORD base, p;
+LOCAL LONG power (REG WORD base, REG WORD p)
 
 {
   REG LONG result;
@@ -87,9 +86,7 @@ REG WORD base, p;
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-LOCAL VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+LOCAL VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -110,8 +107,7 @@ BOOLEAN grow;
 /* ôffne Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_open (window)
-WINDOWP window;
+LOCAL VOID wi_open (WINDOWP window)
 
 {
   box (window, TRUE);
@@ -121,8 +117,7 @@ WINDOWP window;
 /* Schlieûe Fenster                                                          */
 /*****************************************************************************/
 
-LOCAL VOID wi_close (window)
-WINDOWP window;
+LOCAL VOID wi_close (WINDOWP window)
 
 {
   box (window, FALSE);
@@ -132,8 +127,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-LOCAL VOID wi_draw (window)
-WINDOWP window;
+LOCAL VOID wi_draw (WINDOWP window)
 
 {
   WORD   i, base;
@@ -168,10 +162,7 @@ WINDOWP window;
 /* Reagiere auf Pfeile                                                       */
 /*****************************************************************************/
 
-LOCAL VOID wi_arrow (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+LOCAL VOID wi_arrow (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
   LONG delta;
@@ -201,10 +192,7 @@ LONG    oldpos, newpos;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-LOCAL VOID wi_snap (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+LOCAL VOID wi_snap (WINDOWP window, RECT *new, WORD mode)
 
 {
   RECT r, diff;
@@ -244,9 +232,7 @@ WORD    mode;
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-LOCAL VOID wi_click (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID wi_click (WINDOWP window, MKINFO *mk)
 
 {
   WORD   i, item;
@@ -272,8 +258,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL VOID wi_unclick (window)
-WINDOWP window;
+LOCAL VOID wi_unclick (WINDOWP window)
 
 {
 } /* wi_unclick */
@@ -282,9 +267,7 @@ WINDOWP window;
 /* Taste fÅr Fenster                                                         */
 /*****************************************************************************/
 
-LOCAL BOOLEAN wi_key (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN wi_key (WINDOWP window, MKINFO *mk)
 
 {
   WORD wh;
@@ -320,9 +303,7 @@ MKINFO  *mk;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_power (obj, menu, icon, font, point)
-OBJECT *obj, *menu;
-WORD   icon, font, point;
+GLOBAL WINDOWP crt_power (OBJECT *obj, OBJECT *menu, WORD icon, WORD font, WORD point)
 
 {
   WINDOWP window;
@@ -398,8 +379,7 @@ WORD   icon, font, point;
 /* ôffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_power (icon, font, point)
-WORD icon, font, point;
+GLOBAL BOOLEAN open_power (WORD icon, WORD font, WORD point)
 
 {
   BOOLEAN ok;
@@ -419,9 +399,7 @@ WORD icon, font, point;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_power (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_power (WINDOWP window, WORD icon)
 
 {
   return (FALSE);
@@ -431,9 +409,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_power (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN help_power (WINDOWP window, WORD icon)
 
 {
   return (FALSE);
@@ -443,7 +419,7 @@ WORD    icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_power ()
+GLOBAL BOOLEAN init_power (VOID)
 
 {
   return (TRUE);
@@ -453,7 +429,7 @@ GLOBAL BOOLEAN init_power ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_power ()
+GLOBAL BOOLEAN term_power (VOID)
 
 {
   return (TRUE);

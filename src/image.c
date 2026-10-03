@@ -111,10 +111,14 @@ LOCAL VOID    wi_edit         _((WINDOWP window, WORD action));
 
 #if GEMDOS /* TURBO-C auf ATARI ST kann v_bit_image nicht direkt aufrufen */
 #if TURBO_C
-LOCAL VOID do_bit_image (handle, filename, aspect, x_scale, y_scale, h_align, v_align, xy)
-      WORD handle, aspect, x_scale, y_scale, h_align, v_align;
-      WORD *xy;
-CONST BYTE *filename;
+LOCAL VOID do_bit_image (WORD handle,
+                         CONST BYTE *filename,
+                         WORD aspect,
+                         WORD x_scale,
+                         WORD y_scale,
+                         WORD h_align,
+                         WORD v_align,
+                         WORD *xy)
 
 {
   WORD i;
@@ -143,8 +147,7 @@ CONST BYTE *filename;
 
 /*****************************************************************************/
 
-GLOBAL VOID print_image (filename)
-BYTE *filename;
+GLOBAL VOID print_image (BYTE *filename)
 
 {
   WORD       xy [4];
@@ -224,10 +227,7 @@ BYTE *filename;
 
 /*****************************************************************************/
 
-LOCAL VOID new_trnfm (source_planes, s, d)
-WORD source_planes;
-MFDB *s;
-MFDB *d;
+LOCAL VOID new_trnfm (WORD source_planes, MFDB *s, MFDB *d)
 
 {
 #if GEMDOS
@@ -257,8 +257,7 @@ MFDB *d;
 
 /*****************************************************************************/
 
-LOCAL VOID flip_word (adr)
-HUPTR adr;
+LOCAL VOID flip_word (HUPTR adr)
 
 {
   REG UBYTE c;
@@ -270,17 +269,15 @@ HUPTR adr;
 
 /*****************************************************************************/
 
-LOCAL VOID conv_bit_image (img_header, img_buffer, raster_buf, raster_ptr,
-                           plane_ptr, max_lines, screen_planes, fww, img_inf)
-IMG_HEADER *img_header;
-HUPTR      img_buffer;
-HUPTR      raster_buf;
-HUPTR      raster_ptr;
-HUPTR      *plane_ptr;
-WORD       max_lines;
-WORD       screen_planes;
-WORD       fww;
-IMG_INF    *img_inf;
+LOCAL VOID conv_bit_image (IMG_HEADER *img_header,
+                           HUPTR img_buffer,
+                           HUPTR raster_buf,
+                           HUPTR raster_ptr,
+                           HUPTR *plane_ptr,
+                           WORD max_lines,
+                           WORD screen_planes,
+                           WORD fww,
+                           IMG_INF *img_inf)
 
 {
   HUPTR img_ptr;
@@ -409,8 +406,7 @@ IMG_INF    *img_inf;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN read_bit_image (img_inf)
-IMG_INF *img_inf;
+LOCAL BOOLEAN read_bit_image (IMG_INF *img_inf)
 
 {
   WORD       handle;
@@ -523,17 +519,14 @@ IMG_INF *img_inf;
 /* MenÅbehandlung                                                            */
 /*****************************************************************************/
 
-LOCAL VOID update_menu (window)
-WINDOWP window;
+LOCAL VOID update_menu (WINDOWP window)
 
 {
 } /* update_menu */
 
 /*****************************************************************************/
 
-LOCAL VOID handle_menu (window, title, item)
-WINDOWP window;
-WORD    title, item;
+LOCAL VOID handle_menu (WINDOWP window, WORD title, WORD item)
 
 {
   if (window != NULL)
@@ -547,9 +540,7 @@ WORD    title, item;
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-LOCAL VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+LOCAL VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -570,8 +561,7 @@ BOOLEAN grow;
 /* ôffne Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_open (window)
-WINDOWP window;
+LOCAL VOID wi_open (WINDOWP window)
 
 {
   box (window, TRUE);
@@ -581,8 +571,7 @@ WINDOWP window;
 /* Schlieûe Fenster                                                          */
 /*****************************************************************************/
 
-LOCAL VOID wi_close (window)
-WINDOWP window;
+LOCAL VOID wi_close (WINDOWP window)
 
 {
   box (window, FALSE);
@@ -592,8 +581,7 @@ WINDOWP window;
 /* Lîsche Fenster                                                            */
 /*****************************************************************************/
 
-LOCAL VOID wi_delete (window)
-WINDOWP window;
+LOCAL VOID wi_delete (WINDOWP window)
 
 {
   IMG_INF *img_inf;
@@ -608,8 +596,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-LOCAL VOID wi_draw (window)
-WINDOWP window;
+LOCAL VOID wi_draw (WINDOWP window)
 
 {
   IMG_INF *img_inf;
@@ -667,10 +654,7 @@ WINDOWP window;
 /* Reagiere auf Pfeile                                                       */
 /*****************************************************************************/
 
-LOCAL VOID wi_arrow (window, dir, oldpos, newpos)
-WINDOWP window;
-WORD    dir;
-LONG    oldpos, newpos;
+LOCAL VOID wi_arrow (WINDOWP window, WORD dir, LONG oldpos, LONG newpos)
 
 {
   LONG delta;
@@ -703,10 +687,7 @@ LONG    oldpos, newpos;
 /* Einrasten des Fensters                                                    */
 /*****************************************************************************/
 
-LOCAL VOID wi_snap (window, new, mode)
-WINDOWP window;
-RECT    *new;
-WORD    mode;
+LOCAL VOID wi_snap (WINDOWP window, RECT *new, WORD mode)
 
 {
   RECT r, diff;
@@ -747,10 +728,7 @@ WORD    mode;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_image (obj, menu, icon, filename)
-OBJECT *obj, *menu;
-WORD   icon;
-BYTE   *filename;
+GLOBAL WINDOWP crt_image (OBJECT *obj, OBJECT *menu, WORD icon, BYTE *filename)
 
 {
   WINDOWP  window;
@@ -854,9 +832,7 @@ BYTE   *filename;
 /* ôffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_image (icon, filename)
-WORD icon;
-BYTE *filename;
+GLOBAL BOOLEAN open_image (WORD icon, BYTE *filename)
 
 {
   BOOLEAN ok;
@@ -884,9 +860,7 @@ BYTE *filename;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_image (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_image (WINDOWP window, WORD icon)
 
 {
   LONGSTR s, d;
@@ -909,9 +883,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_image (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN help_image (WINDOWP window, WORD icon)
 
 {
   hndl_alert (ERR_HELPIMAG);
@@ -922,7 +894,7 @@ WORD    icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_image ()
+GLOBAL BOOLEAN init_image (VOID)
 
 {
   return (TRUE);
@@ -932,7 +904,7 @@ GLOBAL BOOLEAN init_image ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_image ()
+GLOBAL BOOLEAN term_image (VOID)
 
 {
   return (TRUE);

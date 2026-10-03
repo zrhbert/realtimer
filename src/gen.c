@@ -495,9 +495,7 @@ PUBLIC BOOLEAN	import	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)
 /* Selektieren des Fensterinhalts                                            */
 /*****************************************************************************/
 
-PRIVATE VOID wi_click_mod (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+PRIVATE VOID wi_click_mod (WINDOWP window, MKINFO *mk)
 
 {
 	STRING		s;
@@ -555,8 +553,7 @@ MKINFO  *mk;
 /* Zeitablauf für Fenster                                                    */
 /*****************************************************************************/
 
-PRIVATE VOID wi_timer_mod (window)
-WINDOWP window;
+PRIVATE VOID wi_timer_mod (WINDOWP window)
 {
 
 } /* wi_timer_mod */
@@ -565,9 +562,7 @@ WINDOWP window;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-PUBLIC WINDOWP crt_mod (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+PUBLIC WINDOWP crt_mod (OBJECT *obj, OBJECT *menu, WORD icon)
 {
 	WINDOWP window;
 	WORD    menu_height;
@@ -618,8 +613,7 @@ WORD   icon;
 /* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN open_mod (icon)
-WORD icon;
+PUBLIC BOOLEAN open_mod (WORD icon)
 {
 	BOOLEAN ok;
 	WINDOWP window;
@@ -651,9 +645,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN info_mod (window, icon)
-WINDOWP window;
-WORD    icon;
+PUBLIC BOOLEAN info_mod (WINDOWP window, WORD icon)
 {
 	WORD		ret;
 	STRING	s;
@@ -691,7 +683,7 @@ WORD    icon;
 } /* info_mod */
 
 /*****************************************************************************/
-GLOBAL	RTMCLASSP create_gen ()
+GLOBAL	RTMCLASSP create_gen (VOID)
 {
 	WINDOWP		window;
 	RTMCLASSP 	module;
@@ -819,7 +811,7 @@ PRIVATE BOOLEAN init_standard (RTMCLASSP module)
 
 
 /*****************************************************************************/
-PRIVATE BOOLEAN init_rsc ()
+PRIVATE BOOLEAN init_rsc (VOID)
 
 {
   WORD   i, y, iconw, iconh, iconr;
@@ -875,7 +867,7 @@ for (i = 0; i < NUM_OBS; i++)
 /* RSC freigeben                                                      		  */
 /*****************************************************************************/
 
-PRIVATE BOOLEAN term_rsc ()
+PRIVATE BOOLEAN term_rsc (VOID)
 
 {
   BOOLEAN ok;
@@ -893,7 +885,7 @@ PRIVATE BOOLEAN term_rsc ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_gen ()
+GLOBAL BOOLEAN init_gen (VOID)
 {
 	BOOLEAN				ok = TRUE;
 
@@ -907,7 +899,7 @@ GLOBAL BOOLEAN init_gen ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-PUBLIC BOOLEAN term_mod ()
+PUBLIC BOOLEAN term_mod (VOID)
 {
 	BOOLEAN ok = TRUE;
 	ok &= term_rsc ();

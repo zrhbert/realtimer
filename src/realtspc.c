@@ -556,7 +556,7 @@ LOCAL VOID timer_daktstat (WINDOWP window)
 	} /* if */
 } /* timer_daktstat */
 
-GLOBAL VOID close_daktstat()
+GLOBAL VOID close_daktstat(VOID)
 {
 	WINDOWP	window;
 	AKTSTATUS	*status;
@@ -580,8 +580,7 @@ GLOBAL VOID close_daktstat()
 	} /* if */
 } /* close_daktstat */
 /*****************************************************************************/
-LOCAL VOID get_zahl (number)
-LONG *number;
+LOCAL VOID get_zahl (LONG *number)
 {
   STRING s;
 
@@ -592,8 +591,7 @@ LONG *number;
 
 /*****************************************************************************/
 
-LOCAL VOID set_zahl (number)
-LONG number;
+LOCAL VOID set_zahl (LONG number)
 
 {
   STRING s;
@@ -604,18 +602,14 @@ LONG number;
 
 /*****************************************************************************/
 
-LOCAL VOID click_zahl (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID click_zahl (WINDOWP window, MKINFO *mk)
 
 {
 } /* click_zahl */
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN key_zahl (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN key_zahl (WINDOWP window, MKINFO *mk)
 
 {
 
@@ -628,9 +622,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN help_zahl (window, icon)
-WINDOWP window;
-WORD    icon;
+LOCAL BOOLEAN help_zahl (WINDOWP window, WORD icon)
 
 {
 
@@ -758,18 +750,14 @@ LOCAL VOID set_zeit (LONG time)
 
 /*****************************************************************************/
 
-LOCAL VOID click_zeit (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID click_zeit (WINDOWP window, MKINFO *mk)
 
 {
 } /* click_zeit */
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN key_zeit (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN key_zeit (WINDOWP window, MKINFO *mk)
 
 {
 
@@ -782,9 +770,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN help_zeit (window, icon)
-WINDOWP window;
-WORD    icon;
+LOCAL BOOLEAN help_zeit (WINDOWP window, WORD icon)
 
 {
 
@@ -835,7 +821,7 @@ GLOBAL VOID dsave (STR128 filename, RTMCLASSP module)
 	} /* if */
 } /* dsave */
 /*****************************************************************************/
-LOCAL VOID get_save ()
+LOCAL VOID get_save (VOID)
 {
 } /* get_save */
 
@@ -848,18 +834,14 @@ LOCAL VOID set_save (STR128 filename)
 
 /*****************************************************************************/
 
-LOCAL VOID click_save (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID click_save (WINDOWP window, MKINFO *mk)
 
 {
 } /* click_save */
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN key_save (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN key_save (WINDOWP window, MKINFO *mk)
 
 {
 
@@ -872,9 +854,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN help_save (window, icon)
-WINDOWP window;
-WORD    icon;
+LOCAL BOOLEAN help_save (WINDOWP window, WORD icon)
 
 {
 	help_rtm ("SPEICHERN");
@@ -883,7 +863,7 @@ WORD    icon;
 
 /*****************************************************************************/
 
-GLOBAL BOOL dlogin ()
+GLOBAL BOOL dlogin (VOID)
 {
 	WINDOWP window;
 	WORD    ret;
@@ -943,7 +923,7 @@ LOCAL VOID get_login (CHAR *user, CHAR *password)
   /* GetPText (login, LOGPASSWORD, password); */
 } /* get_login */
 
-LOCAL VOID set_login ()
+LOCAL VOID set_login (VOID)
 {
   SetPText (login, LOGUSERNAME, "");
   SetPText (login, LOGPASSWORD, "");
@@ -1395,10 +1375,7 @@ GLOBAL	void	cutpath(char *s)
 /* Speicherverwaltung ohne TOS-Aufrufe                                       */
 /*****************************************************************************/
 
-GLOBAL VOID *mem_setx (dest, val, len)
-VOID  *dest;
-WORD  val;
-UWORD len;
+GLOBAL VOID *mem_setx (VOID *dest, WORD val, UWORD len)
 
 {
   REG UBYTE *d;
@@ -1410,10 +1387,7 @@ UWORD len;
 
 /*****************************************************************************/
 
-GLOBAL VOID *mem_movex (dest, src, len)
-VOID       *dest;
-CONST VOID *src;
-UWORD      len;
+GLOBAL VOID *mem_movex (VOID *dest, CONST VOID *src, UWORD len)
 
 {
   REG UBYTE *s, *d;
@@ -1433,10 +1407,7 @@ UWORD      len;
 
 /*****************************************************************************/
 
-GLOBAL VOID *mem_lsetx (dest, val, len)
-VOID  *dest;
-WORD  val;
-ULONG len;
+GLOBAL VOID *mem_lsetx (VOID *dest, WORD val, ULONG len)
 
 {
   REG UBYTE HUGE *d;
@@ -1452,10 +1423,7 @@ ULONG len;
 
 /*****************************************************************************/
 
-GLOBAL VOID *mem_lmovex (dest, src, len)
-VOID       *dest;
-CONST VOID *src;
-ULONG      len;
+GLOBAL VOID *mem_lmovex (VOID *dest, CONST VOID *src, ULONG len)
 
 {
   REG UBYTE HUGE *s;
@@ -1479,7 +1447,7 @@ ULONG      len;
   return (dest);
 } /* mem_lmovex */
 
-LOCAL VOID init_waveform()
+LOCAL VOID init_waveform(VOID)
 {
 	WORD winkel, waveform;
 	
@@ -1534,7 +1502,7 @@ LOCAL VOID init_waveform()
 	close_daktstat();
 } /* init_waveform */
 
-LOCAL VOID init_sinq()
+LOCAL VOID init_sinq(VOID)
 {
 	WORD winkel;
 	
@@ -1547,7 +1515,7 @@ LOCAL VOID init_sinq()
 } /* init_sinq */
 
 /*****************************************************************************/
-LOCAL BOOLEAN init_rsc_realtspc ()
+LOCAL BOOLEAN init_rsc_realtspc (VOID)
 {
 
   WORD   i, y, iconw, iconh, iconr;
@@ -1623,7 +1591,7 @@ for (i = 0; i < NUM_OBS; i++)
 /* RSC freigeben                                                      		  */
 /*****************************************************************************/
 
-LOCAL BOOLEAN term_rsc_realtspc ()
+LOCAL BOOLEAN term_rsc_realtspc (VOID)
 
 {
   BOOLEAN ok = TRUE;
@@ -1639,7 +1607,7 @@ LOCAL BOOLEAN term_rsc_realtspc ()
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_realtspc ()
+GLOBAL BOOLEAN init_realtspc (VOID)
 
 {
 	BOOLEAN ok = TRUE;
@@ -1656,7 +1624,7 @@ GLOBAL BOOLEAN init_realtspc ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_realtspc ()
+GLOBAL BOOLEAN term_realtspc (VOID)
 {
 	BOOLEAN ok = TRUE;
 	ok &= term_rsc_realtspc ();

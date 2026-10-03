@@ -82,9 +82,7 @@ LOCAL WORD CDECL draw_rbutton  _((FAR PARMBLK *pb));
 
 /*****************************************************************************/
 
-LOCAL VOID get_obinfo (obspec, obinfo)
-LONG   obspec;
-OBINFO *obinfo;
+LOCAL VOID get_obinfo (LONG obspec, OBINFO *obinfo)
 
 {
   WORD colorwd;
@@ -114,12 +112,11 @@ OBINFO *obinfo;
 /*****************************************************************************/
 
 #if MSDOS
-LOCAL WORD draw_checkbox ()
+LOCAL WORD draw_checkbox (VOID)
 {
   PARMBLK *pb = fardr_start();
 #else
-LOCAL WORD CDECL draw_checkbox (pb)
-FAR PARMBLK *pb;
+LOCAL WORD CDECL draw_checkbox (FAR PARMBLK *pb)
 
 {
 #endif
@@ -185,12 +182,11 @@ FAR PARMBLK *pb;
 /*****************************************************************************/
 
 #if MSDOS
-LOCAL WORD draw_rbutton ()
+LOCAL WORD draw_rbutton (VOID)
 {
   PARMBLK *pb = fardr_start();
 #else
-LOCAL WORD CDECL draw_rbutton (pb)
-FAR PARMBLK *pb;
+LOCAL WORD CDECL draw_rbutton (FAR PARMBLK *pb)
 
 {
 #endif
@@ -253,9 +249,7 @@ FAR PARMBLK *pb;
 
 /*****************************************************************************/
 
-GLOBAL VOID fix_objs (tree, is_dialog)
-OBJECT  *tree;
-BOOLEAN is_dialog;
+GLOBAL VOID fix_objs (OBJECT *tree, BOOLEAN is_dialog)
 
 {
   WORD    obj;
@@ -388,7 +382,7 @@ BOOLEAN is_dialog;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_resource ()
+GLOBAL BOOLEAN init_resource (VOID)
 
 {
   WORD   ret, i;
@@ -534,7 +528,7 @@ for (i = 0; i < NUM_OBS; i++)
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_resource ()
+GLOBAL BOOLEAN term_resource (VOID)
 
 {
   BOOLEAN ok;

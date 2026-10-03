@@ -498,7 +498,7 @@ LOCAL VOID fix_object (VOID)
 
 /*****************************************************************************/
 
-LOCAL VOID fix_tedinfo()
+LOCAL VOID fix_tedinfo(VOID)
 {
 	LONG		count;
 	TEDINFO *tedinfo;
@@ -901,7 +901,7 @@ LOCAL WORD xadd_cicon (CICONBLK *cicnblk, OBJECT *obj, WORD nub)
 /* Testen wieviel Bytes pro Pixel im ger„teabh„ngigen Format verwendet werden*/
 /*****************************************************************************/
 
-LOCAL WORD test_rez ()
+LOCAL WORD test_rez (VOID)
 
 {	WORD     i, np, color, pxy[8], rgb[3], bpp = 0;
 	UWORD    backup[32], test[32];
@@ -1000,7 +1000,7 @@ LOCAL WORD test_rez ()
 /* Unter TrueColor Pixelwerte der RGB-Palette ermitteln                      */
 /*****************************************************************************/
 
-LOCAL VOID xfill_farbtbl ()
+LOCAL VOID xfill_farbtbl (VOID)
 
 {	WORD np, color, pxy[8], backup[32], rgb[3];
 	MFDB screen;
@@ -1243,12 +1243,7 @@ LOCAL VOID xfix_cicon (UWORD *col_data, LONG len, WORD old_planes, WORD new_plan
 /* abh„ngige Format (in Aufl”sungen mit >= 16 Planes)                        */
 /*****************************************************************************/
 
-LOCAL VOID std_to_byte (col_data, len, old_planes, farbtbl2, s)
-UWORD *col_data;
-LONG  len;
-WORD  old_planes;
-ULONG *farbtbl2;
-MFDB  *s;
+LOCAL VOID std_to_byte (UWORD *col_data, LONG len, WORD old_planes, ULONG *farbtbl2, MFDB *s)
 
 {	LONG  x, i, mul[32], pos;
 	UWORD np, *new_data, pixel, color, back[32];
@@ -1529,7 +1524,7 @@ GLOBAL BOOLEAN init_xrsrc (WORD vdi_handle, GRECT *desk, WORD gl_wbox, WORD gl_h
 
 /*****************************************************************************/
 
-GLOBAL VOID term_xrsrc ()
+GLOBAL VOID term_xrsrc (VOID)
 
 {
 }

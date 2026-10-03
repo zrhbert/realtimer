@@ -75,11 +75,7 @@ LOCAL VOID    wi_edit     _((WINDOWP window, WORD action));
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_dialog (alerts, tree, index, title)
-BYTE     **alerts;
-OBJECT   *tree;
-WORD     index;
-BYTE     *title;
+GLOBAL BOOLEAN init_dialog (BYTE **alerts, OBJECT *tree, WORD index, BYTE *title)
 
 {
   WORD obj, y;
@@ -119,7 +115,7 @@ BYTE     *title;
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_dialog ()
+GLOBAL BOOLEAN term_dialog (VOID)
 
 {
   return (TRUE);
@@ -127,8 +123,7 @@ GLOBAL BOOLEAN term_dialog ()
 
 /*****************************************************************************/
 
-GLOBAL VOID set_helpfunc (help)
-HELPFUNC help;
+GLOBAL VOID set_helpfunc (HELPFUNC help)
 
 {
   helpfunc = help;
@@ -138,11 +133,7 @@ HELPFUNC help;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_dialog (obj, menu, icon, title, flags)
-OBJECT *obj, *menu;
-WORD   icon;
-BYTE   *title;
-UWORD  flags;
+GLOBAL WINDOWP crt_dialog (OBJECT *obj, OBJECT *menu, WORD icon, BYTE *title, UWORD flags)
 
 {
   WINDOWP window;
@@ -252,8 +243,7 @@ UWORD  flags;
 /* Öffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_dialog (icon)
-WORD icon;
+GLOBAL BOOLEAN open_dialog (WORD icon)
 
 {
   BOOLEAN ok;
@@ -283,8 +273,7 @@ WORD icon;
 
 /*****************************************************************************/
 
-GLOBAL WORD hndl_alert (alert_id)
-WORD alert_id;
+GLOBAL WORD hndl_alert (WORD alert_id)
 
 {
   WORD button;
@@ -298,8 +287,7 @@ WORD alert_id;
 
 /*****************************************************************************/
 
-GLOBAL WORD open_alert (alertmsg)
-BYTE *alertmsg;
+GLOBAL WORD open_alert (BYTE *alertmsg)
 
 {
   WORD    ret, i, j, x, w, w1, w2;
@@ -461,8 +449,7 @@ BYTE *alertmsg;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN set_alert (as_dialog)
-BOOLEAN as_dialog;
+GLOBAL BOOLEAN set_alert (BOOLEAN as_dialog)
 
 {
   BOOLEAN old_mode;
@@ -475,8 +462,7 @@ BOOLEAN as_dialog;
 
 /*****************************************************************************/
 
-GLOBAL VOID hndl_modal (use_timer)
-BOOLEAN use_timer;
+GLOBAL VOID hndl_modal (BOOLEAN use_timer)
 
 {
   BOOLEAN modal_done;                   /* Modale Dialogbox beendet */
@@ -569,9 +555,7 @@ BOOLEAN use_timer;
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-LOCAL VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+LOCAL VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -592,8 +576,7 @@ BOOLEAN grow;
 /* Öffne Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_open (window)
-WINDOWP window;
+LOCAL VOID wi_open (WINDOWP window)
 
 {
   box (window, TRUE);
@@ -603,8 +586,7 @@ WINDOWP window;
 /* Schließe Fenster                                                          */
 /*****************************************************************************/
 
-LOCAL VOID wi_close (window)
-WINDOWP window;
+LOCAL VOID wi_close (WINDOWP window)
 
 {
   box (window, FALSE);
@@ -612,9 +594,7 @@ WINDOWP window;
 
 /*****************************************************************************/
 
-LOCAL VOID click_alert (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL VOID click_alert (WINDOWP window, MKINFO *mk)
 
 {
   if (window->exit_obj > 0)
@@ -634,9 +614,7 @@ MKINFO  *mk;
 
 /*****************************************************************************/
 
-LOCAL BOOLEAN key_alert (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN key_alert (WINDOWP window, MKINFO *mk)
 
 {
   WORD def, next;

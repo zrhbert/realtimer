@@ -37,9 +37,7 @@
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_disk (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+GLOBAL WINDOWP crt_disk (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
   return (NULL);                        /* Fenster zurÅckgeben */
@@ -49,8 +47,7 @@ WORD   icon;
 /* ôffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_disk (icon)
-WORD icon;
+GLOBAL BOOLEAN open_disk (WORD icon)
 
 {
   BOOLEAN ok;
@@ -81,9 +78,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_disk (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_disk (WINDOWP window, WORD icon)
 
 {
   hndl_alert (ERR_INFDISK);
@@ -94,9 +89,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_disk (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN help_disk (WINDOWP window, WORD icon)
 
 {
   hndl_alert (ERR_HELPDISK);
@@ -107,7 +100,7 @@ WORD    icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_disk ()
+GLOBAL BOOLEAN init_disk (VOID)
 
 {
   return (TRUE);
@@ -117,7 +110,7 @@ GLOBAL BOOLEAN init_disk ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_disk ()
+GLOBAL BOOLEAN term_disk (VOID)
 
 {
   return (TRUE);

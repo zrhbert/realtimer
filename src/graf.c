@@ -58,9 +58,7 @@ LOCAL VOID    wi_edit     _((WINDOWP window, WORD action));
 /* Box zeichnen                                                              */
 /*****************************************************************************/
 
-LOCAL VOID box (window, grow)
-WINDOWP window;
-BOOLEAN grow;
+LOCAL VOID box (WINDOWP window, BOOLEAN grow)
 
 {
   RECT l, b;
@@ -81,8 +79,7 @@ BOOLEAN grow;
 /* ôffne Fenster                                                             */
 /*****************************************************************************/
 
-LOCAL VOID wi_open (window)
-WINDOWP window;
+LOCAL VOID wi_open (WINDOWP window)
 
 {
   box (window, TRUE);
@@ -92,8 +89,7 @@ WINDOWP window;
 /* Schlieûe Fenster                                                          */
 /*****************************************************************************/
 
-LOCAL VOID wi_close (window)
-WINDOWP window;
+LOCAL VOID wi_close (WINDOWP window)
 
 {
   box (window, FALSE);
@@ -103,8 +99,7 @@ WINDOWP window;
 /* Zeichne Fensterinhalt                                                     */
 /*****************************************************************************/
 
-LOCAL VOID wi_draw (window)
-WINDOWP window;
+LOCAL VOID wi_draw (WINDOWP window)
 
 {
   WORD style, inx;
@@ -129,9 +124,7 @@ WINDOWP window;
 /* Taste fÅr Fenster                                                         */
 /*****************************************************************************/
 
-LOCAL BOOLEAN wi_key (window, mk)
-WINDOWP window;
-MKINFO  *mk;
+LOCAL BOOLEAN wi_key (WINDOWP window, MKINFO *mk)
 
 {
   WORD wh;
@@ -185,8 +178,7 @@ MKINFO  *mk;
 /* Zeitablauf fÅr Fenster                                                    */
 /*****************************************************************************/
 
-LOCAL VOID wi_timer (window)
-WINDOWP window;
+LOCAL VOID wi_timer (WINDOWP window)
 
 {
   MKINFO mk;
@@ -201,9 +193,7 @@ WINDOWP window;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_graf (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+GLOBAL WINDOWP crt_graf (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
   WINDOWP window;
@@ -270,8 +260,7 @@ WORD   icon;
 /* ôffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_graf (icon)
-WORD icon;
+GLOBAL BOOLEAN open_graf (WORD icon)
 
 {
   BOOLEAN ok;
@@ -291,9 +280,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_graf (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_graf (WINDOWP window, WORD icon)
 
 {
   return (FALSE);
@@ -303,9 +290,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_graf (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN help_graf (WINDOWP window, WORD icon)
 
 {
   return (FALSE);
@@ -315,7 +300,7 @@ WORD    icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_graf ()
+GLOBAL BOOLEAN init_graf (VOID)
 
 {
   return (TRUE);
@@ -325,7 +310,7 @@ GLOBAL BOOLEAN init_graf ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_graf ()
+GLOBAL BOOLEAN term_graf (VOID)
 
 {
   return (TRUE);

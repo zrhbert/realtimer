@@ -34,8 +34,7 @@
 /* Drucker-TestRoutinen                                                      */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN prn_ready (port)
-WORD port;
+GLOBAL BOOLEAN prn_ready (WORD port)
 
 {
   WORD ready;
@@ -77,8 +76,7 @@ WORD port;
 
 /*****************************************************************************/
 
-GLOBAL BOOLEAN prn_check (port)
-WORD port;
+GLOBAL BOOLEAN prn_check (WORD port)
 
 {
   while (! prn_ready (port))
@@ -91,9 +89,7 @@ WORD port;
 /* Kreieren eines Fensters                                                   */
 /*****************************************************************************/
 
-GLOBAL WINDOWP crt_printer (obj, menu, icon)
-OBJECT *obj, *menu;
-WORD   icon;
+GLOBAL WINDOWP crt_printer (OBJECT *obj, OBJECT *menu, WORD icon)
 
 {
   return (NULL);                        /* Fenster zurÅckgeben */
@@ -103,8 +99,7 @@ WORD   icon;
 /* ôffnen des Objekts                                                        */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN open_printer (icon)
-WORD icon;
+GLOBAL BOOLEAN open_printer (WORD icon)
 
 {
   return (FALSE);
@@ -114,9 +109,7 @@ WORD icon;
 /* Info des Objekts                                                          */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN info_printer (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN info_printer (WINDOWP window, WORD icon)
 
 {
   hndl_alert (ERR_INFPRINT);
@@ -127,9 +120,7 @@ WORD    icon;
 /* Hilfe des Objekts                                                         */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN help_printer (window, icon)
-WINDOWP window;
-WORD    icon;
+GLOBAL BOOLEAN help_printer (WINDOWP window, WORD icon)
 
 {
   hndl_alert (ERR_HELPPRIN);
@@ -140,7 +131,7 @@ WORD    icon;
 /* Initialisieren des Moduls                                                 */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN init_printer ()
+GLOBAL BOOLEAN init_printer (VOID)
 
 {
   return (TRUE);
@@ -150,7 +141,7 @@ GLOBAL BOOLEAN init_printer ()
 /* Terminieren des Moduls                                                    */
 /*****************************************************************************/
 
-GLOBAL BOOLEAN term_printer ()
+GLOBAL BOOLEAN term_printer (VOID)
 
 {
   return (TRUE);
