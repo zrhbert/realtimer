@@ -584,7 +584,6 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 	send_variable(VAR_SET_VAR, module->actual->number);
 } /* send_messages */
 
-#if false
 PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 {
 	SYS_P			sysvar = module->status->sysvar;
@@ -645,7 +644,6 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			break;
 	} /* switch */
 } /* message */
-#endif
 
 /*****************************************************************************/
 /* Selektieren des Fensterinhalts                                            */
