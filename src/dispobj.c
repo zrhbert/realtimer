@@ -432,7 +432,7 @@ LOCAL  VOID LineDispobj (DISPOBJP dispobj, POS_2DP p1, POS_2DP p2)
 	SPACESTATP	status = &dispobj->status->space;
 	RECT			*work = &dispobj->work;
 	WORD			xo = 	work->x, yo = work->y, w = work->w, h = work->h; 
-	INT			pxyarray[4];
+	WORD		pxyarray[4];
 	
 	/* Umrechnen von x und y auf Objektgroesse */
 	
@@ -1127,7 +1127,7 @@ LOCAL  POINT_2D ProjBar (DISPOBJP dispobj, POS_1D point)
 LOCAL  VOID line_1d (DISPOBJP dispobj, POS_1D point1, POS_1D point2)
 {
 	POINT_2D		p1, p2;
-	INT			pxyarray[4];
+	WORD		pxyarray[4];
 	BARSTATP		status = &dispobj->status->bar;
 	WORD			width = dispobj->uni[DOSizeWidth];
 	FLOAT 		rotation = dispobj->rotation.z;
@@ -2029,7 +2029,7 @@ LOCAL  VOID Project3DNeu (DISPOBJP dispobj, POS_3DP point, POINT_2DP proj)
 LOCAL  VOID line_3d (DISPOBJP dispobj, POS_3D *point1, POS_3D *point2)
 {
 	POINT_2D		p1, p2;
-	INT			pxyarray[4];
+	WORD		pxyarray[4];
 	SPACESTATP	status = &dispobj->status->space;
 	ProjectFn	*projection = status->projection;
 	
@@ -2061,7 +2061,7 @@ LOCAL  VOID multiline_3d (DISPOBJP dispobj, POS_3D *point[], WORD points)
 	/* *point[] enthält Zeiger auf die 3D-Koordinaten, ab *point[0]! */
 	POINT_2D		proj;					/* Merker für Projektionsdaten */
 	WORD 			count;					/* Laufender Zähler */
-	INT			pxyarray[128];			/* VDI-Übergabe-Array */
+	WORD		pxyarray[128];			/* VDI-Übergabe-Array */
 	SPACESTATP	status = &dispobj->status->space;
 	ProjectFn	*projection = status->projection;
 	
@@ -2084,7 +2084,7 @@ LOCAL  VOID draw_polygon	(DISPOBJP dispobj, POLY_P poly)
 	SPACESTATP	status = &dispobj->status->space;
 	ProjectFn	*projection = status->projection;
 	POINT_2D		proj[MAXVERTEX];
-	INT			pxyarray[4];
+	WORD		pxyarray[4];
 	WORD			line_style = -1,
 					begin_style = -1,
 					end_style = -1,
