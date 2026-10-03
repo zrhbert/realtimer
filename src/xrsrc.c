@@ -104,9 +104,53 @@ GLOBAL WORD xrsrc_saddr (WORD re_stype, WORD re_sindex, VOID *re_saddr)
 
 /*****************************************************************************/
 
+LOCAL BYTE *rs_dupstr (BYTE *s)
+{
+	/* Private, writable copy of a resource string */
+	BYTE *copy;
+
+	if (s == NULL) return (NULL);
+	copy = (BYTE *) mem_alloc ((LONG) strlen (s) + 1);
+	if (copy == NULL) return (s);
+	strcpy (copy, s);
+	return (copy);
+} /* rs_dupstr */
+
 GLOBAL WORD xrsrc_obfix (OBJECT *re_otree, WORD re_oobject)
 {
+	/* Fix one object of a compiled-in resource (.RSH): convert the
+		character coordinates and give the object its own string storage.
+		The .RSH initialises many objects with identical placeholder
+		literals (e.g. all lines of the alert box); the compiler merges
+		those into a single read-only string, so writing one object's text
+		would change them all. */
+	OBJECT	*obj = &re_otree [re_oobject];
+	TEDINFO	*ted;
+	ICONBLK	*icon;
+
 	rs_obfix (re_otree, re_oobject);
+
+	switch (obj->ob_type & 0xFF)
+	{
+		case G_STRING:
+		case G_BUTTON:
+		case G_TITLE:
+			obj->ob_spec.free_string = rs_dupstr (obj->ob_spec.free_string);
+			break;
+		case G_TEXT:
+		case G_BOXTEXT:
+		case G_FTEXT:
+		case G_FBOXTEXT:
+			ted = obj->ob_spec.tedinfo;
+			ted->te_ptext  = rs_dupstr (ted->te_ptext);
+			ted->te_ptmplt = rs_dupstr (ted->te_ptmplt);
+			ted->te_pvalid = rs_dupstr (ted->te_pvalid);
+			break;
+		case G_ICON:
+			icon = obj->ob_spec.iconblk;
+			icon->ib_ptext = rs_dupstr (icon->ib_ptext);
+			break;
+	} /* switch */
 
 	return (TRUE);
 }
