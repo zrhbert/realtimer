@@ -1,6 +1,7 @@
 {
     "atariSTDev.activate": true,
     "atariSTDev.path": "/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin",
+    "realtimer.magicOnLinuxPath": "/Users/bertramd/Documents/Development/magiclinux/build/magic-on-linux",
     "terminal.integrated.env.osx": {
         "PATH": "/opt/cross-mint/bin:/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin/bin:/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin/opt/cross-mint/bin:/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin/opt/cross-mint/m68k-atari-mintelf/bin:${env:PATH}",
         "ATARIST_TOOLS": "/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin"

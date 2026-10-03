@@ -164,6 +164,26 @@
             "logging": {
                 "engineLogging": true
             }
+        },
+        {
+            "name": "Run in MagiC on Linux",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${config:realtimer.magicOnLinuxPath}",
+            "args": [
+                "-c", "${workspaceFolder}/build/magic-on-linux.conf",
+                "R:\\REALTIM5.PRG"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "MagiC on Linux: prepare",
+            "presentation": {
+                "hidden": false,
+                "group": "magic",
+                "order": 10
+            }
         }
     ]
 }

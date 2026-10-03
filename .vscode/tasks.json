@@ -46,6 +46,41 @@
             },
             "detail": "Run PRG from Makefile for Atari ST.",
             "dependsOn": "Atari ST: make"
+        },
+        {
+            "type": "shell",
+            "label": "MagiC on Linux: write config",
+            "command": "mkdir -p build && sed -e 's#@WORKSPACE@#${workspaceFolder}#g' .vscode/magic-on-linux.conf.in > build/magic-on-linux.conf",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Generate build/magic-on-linux.conf from .vscode/magic-on-linux.conf.in with this workspace mapped as drive R:."
+        },
+        {
+            "label": "MagiC on Linux: prepare",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Atari ST: make",
+                "MagiC on Linux: write config"
+            ],
+            "problemMatcher": [],
+            "detail": "Build the PRG and generate the magic-on-linux configuration."
+        },
+        {
+            "type": "shell",
+            "label": "MagiC on Linux: run",
+            "command": "${config:realtimer.magicOnLinuxPath}",
+            "args": [
+                "-c", "${workspaceFolder}/build/magic-on-linux.conf",
+                "R:\\REALTIM5.PRG"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Run REALTIM5.PRG in MagiC on Linux (no debugger).",
+            "dependsOn": "MagiC on Linux: prepare"
         }
     ]
 }

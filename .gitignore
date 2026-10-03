@@ -9,3 +9,7 @@ NEODESK.DAT
 thing.idx
 SOURCE.GRP
 xcuserdata
+
+# GCC build output (objects and generated magic-on-linux.conf)
+build/
+build-*/
