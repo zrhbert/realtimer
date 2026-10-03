@@ -471,14 +471,13 @@ PUBLIC WINDOWP crt_mod (OBJECT *obj, OBJECT *menu, WORD icon)
 
 PRIVATE VOID create_displayobs (WINDOWP window)
 {	
-	WORD		signal, h = gl_hbox, w = gl_wbox, x0, y0, line = 0;
+	WORD		signal, h, w, x0, y0, line = 0;
 	LONGSTR	s;
 	RECT		a;
 	
-	if (desk.h > 400)
-		h = 16;
-	else
-		h = 8;
+	/* Row pitch and column width must match the font the text display
+		objects really draw with, so measure it instead of guessing */
+	TextCellSize (&w, &h);
 		
 	/* 	        0123401234012340123401234012340123401234012340123401234 */
 	strcpy (s, "Sig   X    Y    Z   Zoom VOL  Spd  Pos  CMI");

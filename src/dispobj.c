@@ -981,19 +981,32 @@ LOCAL VOID DrawText (DISPOBJP dispobj)
 
 } /* DrawText */
 
+LOCAL WORD TextFontHeight (VOID)
+{
+	/* Requested pixel height of the font used by text display objects.
+		The VDI substitutes the nearest size it actually has, so callers
+		that lay out rows must measure the result (see TextCellSize). */
+	return (desk.h > 400) ? 14 : 6;
+} /* TextFontHeight */
+
+GLOBAL VOID TextCellSize (WORD *cell_w, WORD *cell_h)
+{
+	/* Select the font text display objects draw with and return the
+		cell size the VDI really uses for it. */
+	WORD	dummy;
+
+	text_default (vdi_handle);
+	vst_height (vdi_handle, TextFontHeight (), &dummy, &dummy, cell_w, cell_h);
+} /* TextCellSize */
+
 LOCAL VOID TextDefaultText (DISPOBJP dispobj)
 {
-	WORD	fontsize, ret;
+	WORD	ret;
 
 	/* Call standard function */
 	TextDefaultDispobj (dispobj);
 
-	if (desk.h > 400)
-		fontsize = 14;
-	else
-		fontsize = 6;
-
-	vst_height (vdi_handle, fontsize, &ret, &ret, &ret, &ret);
+	vst_height (vdi_handle, TextFontHeight (), &ret, &ret, &ret, &ret);
 	
 } /* TextDefaultText */
 

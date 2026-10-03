@@ -324,6 +324,7 @@ typedef struct dispobj
 
 /****** FUNCTIONS ************************************************************/
 GLOBAL DISPOBJP CreateTextDispobj (struct window *parent, WORD type, WORD mode, RECT *area, UWORD var, STRING text);
+GLOBAL VOID     TextCellSize      (WORD *cell_w, WORD *cell_h);
 GLOBAL DISPOBJP CreateObjectDispobj (struct window *parent, WORD object, UINT variable, WORD type, CHAR key);
 GLOBAL DISPOBJP CreateBarDispobj (struct window *parent, WORD type, WORD mode, RECT *area, UWORD var, STRING text);
 GLOBAL DISPOBJP CreateSpaceDispobj (struct window *parent, WORD type, WORD mode, RECT *area);
