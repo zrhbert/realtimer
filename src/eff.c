@@ -271,7 +271,7 @@ PUBLIC BOOLEAN open_mod (WORD icon)
 	/* Wenn nicht gefunden */
 	if (window == NULL)
 	{
-		if (create()>0);	/* Neue Instanz */
+		if (create()>0)	/* Neue Instanz */
 			window = search_window (CLASS_EFF, SRCH_CLOSED, icon);
 	} /* if */
 	
@@ -415,7 +415,7 @@ PRIVATE	RTMCLASSP create (VOID)
 		module->set_setnr(module, 0);		
 	
 		/* Fenster generieren */
-		window = crt_mod (eff_setup, NULL, EFF_SETUP);
+		window = crt_mod (eff_setup, NULL, IEFF);
 		/* Modul-Struktur einbinden */
 		window->module = (VOID*) module;
 		module->window = window;
