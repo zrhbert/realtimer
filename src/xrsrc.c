@@ -407,7 +407,7 @@ LOCAL VOID fix_object (VOID)
 
 	while (count >= 0)
 	{
-		obj = (OBJECT **)get_address (R_OBJECT, count);
+		obj = (OBJECT *)get_address (R_OBJECT, count);
 		rs_obfix (obj, 0);
 		if ((obj->ob_type & 0xff) != G_BOX && (obj->ob_type & 0xff) != G_IBOX && (obj->ob_type & 0xff) != G_BOXCHAR)
 			fix_long ((LONG *)&obj->ob_spec);

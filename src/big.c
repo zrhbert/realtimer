@@ -360,7 +360,7 @@ STAT_P		status = module->status;
 WSTAT_P		winstatus	= module->status->winstatus;
 BOOLEAN		new = winstatus->drawall || (window->flags & WI_JUNK);
 
-INT 			pxyarray[4];
+WORD			pxyarray[4];
 INT 			i,j,k;
 BYTE			s[6];
 
@@ -1132,7 +1132,7 @@ RTMCLASSP	module = (RTMCLASSP)window->module;
 STAT_P		status = module->status;
 WSTAT_P		winstatus	= module->status->winstatus;
 
-INT 			pxyarray[4];
+WORD			pxyarray[4];
 INT 			i,j,k;
 ULONG 		posit = status->posit;
 ULONG			leftposit, rightposit;
@@ -1171,7 +1171,7 @@ LONG 			ppos = posit / QUANT;
 PRIVATE VOID draw_loc (INT flag, INT *pxyarray)
 
 {
-INT 			pxy[4];
+WORD			pxy[4];
 
   vswr_mode (vdi_handle, MD_XOR);
   vsl_color (vdi_handle, BLACK);
@@ -1203,7 +1203,7 @@ RTMCLASSP	module = (RTMCLASSP)window->module;
 STAT_P		status = module->status;
 WSTAT_P		winstatus	= module->status->winstatus;
 
-INT 			pxyarray[4];
+WORD			pxyarray[4];
 INT 			i,j,k;
 ULONG 		posit = status->posit;
 ULONG			leftposit, rightposit;
@@ -1238,7 +1238,7 @@ RTMCLASSP	module = (RTMCLASSP)window->module;
 STAT_P		status = module->status;
 WSTAT_P		winstatus	= module->status->winstatus;
 
-INT 			pxyarray[4];
+WORD			pxyarray[4];
 INT 			i,j,k;
 ULONG 		posit = status->posit;
 ULONG			leftposit, rightposit;

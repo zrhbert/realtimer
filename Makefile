@@ -17,7 +17,7 @@ COMPAT_INCLUDE ?= gcc/include
 
 CFLAGS = --sysroot=$(SDK_ROOT) -D__GEMLIB_OLDNAMES \
 	-Isrc -I$(COMPAT_INCLUDE) -std=c99 -g \
-	-Wno-incompatible-pointer-types -x c
+	-x c
 LDFLAGS = $(SDK_USR)/lib/crt0.o -nostdlib -L$(SDK_USR)/lib \
 	-lgem -lm -lc -lgcc
 
