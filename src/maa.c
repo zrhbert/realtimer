@@ -464,7 +464,6 @@ PUBLIC BOOLEAN open_mod (WORD icon)
 	{
 		if (window->opened == 0)
 		{
-			window->opened = 1;
 			window->edit_obj = find_flags (maa_setup, ROOT, EDITABLE);
 			window->edit_inx = NIL;
 			module = Module(window);
