@@ -1,0 +1,14 @@
+# Smoke test for Realtimer in Hatari, run with:
+#   tools/hatari_control.py --script tools/smoke.hatari
+# Each command is one line; '#' starts a comment. See tools/README.md.
+
+wait 20                     # EmuTOS boot + program start + module init (fast-forward)
+screenshot 01-startup       # desktop with the windows restored from INFOS/*.INF
+key Return                  # dismiss a startup alert, if any
+wait 1
+key F8                      # function key bar: F8 = KOO window
+wait 3
+screenshot 02-after-f8
+debug r                     # CPU registers into the log, as an example of a debugger command
+log 12
+quit

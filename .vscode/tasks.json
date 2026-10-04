@@ -49,6 +49,36 @@
         },
         {
             "type": "shell",
+            "label": "Hatari: control session",
+            "command": "python3",
+            "args": [
+                "tools/hatari_control.py",
+                "--keep-open"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Run the PRG in Hatari with a control socket and an interactive prompt for simulated keys, screenshots and debugger commands (see tools/README.md).",
+            "dependsOn": "Atari ST: make"
+        },
+        {
+            "type": "shell",
+            "label": "Hatari: smoke test",
+            "command": "python3",
+            "args": [
+                "tools/hatari_control.py",
+                "--script", "tools/smoke.hatari"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Boot, screenshot, press F8, screenshot, quit; results in build/hatari-shots/.",
+            "dependsOn": "Atari ST: make"
+        },
+        {
+            "type": "shell",
             "label": "MagiC on Linux: write config",
             "command": "mkdir -p build && sed -e 's#@WORKSPACE@#${workspaceFolder}#g' .vscode/magic-on-linux.conf.in > build/magic-on-linux.conf",
             "options": {
