@@ -111,14 +111,14 @@ PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
 PRIVATE CONST STRING module_name = "VAR";		/* Name, für Extension etc. */
 
 PRIVATE RTMCLASSP	modulep[MAXMSAPPLS];		/* Zeiger auf Modul-Strukturen */
-PRIVATE WORD		refNums[1];					/* Referenznummern */
+PRIVATE WORD		refNums[2];				/* Index 1..max_instances, siehe init_midishare */					/* Referenznummern */
 
 PRIVATE BOOL		var_watch = 0;				/* VAR überprüfen auf min/max etc. */
 PRIVATE BOOL		var_msgs = 0;				/* Anzahl der Message-Routinen */
 /****** FUNCTIONS ************************************************************/
 /* MidiShare Funktionen */
-PUBLIC VOID			CDECL	receive_evts_var	_((SHORT refNum));
-PUBLIC VOID			CDECL play_task_var		_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
+MSH_RCVALARM_PROTO (receive_evts_var);
+/* play_task_var: nicht implementiert */
 PRIVATE VOID		InstallFilter				_((SHORT refNum));
 
 /* Interne VAR-Funktionen */
@@ -137,7 +137,7 @@ PRIVATE FLOAT SetValueVar (SYS_P var, LONG value);
 PRIVATE VOID DefineVar (RTMCLASSP module, LONG var, CONST CHAR* text, WORD index, LONG minimum, LONG maximum, LONG def, WORD t);
 
 /*****************************************************************************/
-PUBLIC VOID CDECL receive_evts_var (SHORT refNum)
+MSH_RCVALARM_CALLBACK (receive_evts_var, refNum)
 {
 	MidiEvPtr	event;
 	LONG 			n;

@@ -58,6 +58,14 @@ the modifiers `shift`, `ctrl`, `alt`. A bare number is taken as a raw ST
 scancode (`key 28` is Return). Positions follow the US layout of the
 bundled `etos512us.img`.
 
+### Driving the transport
+
+The transport bar buttons need the mouse, so the TRA window also reacts
+to **Ctrl+Space** (play / stop) and **Ctrl+R** (record on / off), which
+the tool can send: `key ctrl+space`. Playback needs MidiShare, which the
+program loads itself from `MIDSHARE/MIDSHARE.PRG` next to the PRG at
+start-up; without that folder the sequencer engine stays idle.
+
 ### Limits
 
 Hatari's control socket cannot move the mouse pointer, only press buttons

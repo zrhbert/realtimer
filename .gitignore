@@ -13,3 +13,4 @@ xcuserdata
 # GCC build output (objects and generated magic-on-linux.conf)
 build/
 build-*/
+midisave

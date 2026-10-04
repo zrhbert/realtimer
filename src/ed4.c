@@ -163,7 +163,7 @@ PRIVATE OBJECT *ed4_info;
 PRIVATE OBJECT *ed4_raum;
 
 PRIVATE RTMCLASSP	modulep[MAXMSAPPLS];			/* Zeiger auf Modul-Strukturen */
-PRIVATE WORD		refNums[1];						/* Referenznummern */
+PRIVATE WORD		refNums[2];				/* Index 1..max_instances, siehe init_midishare */						/* Referenznummern */
 
 /****** FUNCTIONS ************************************************************/
 

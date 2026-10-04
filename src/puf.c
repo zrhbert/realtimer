@@ -220,9 +220,9 @@ PRIVATE	VOL_ALL		tmp_volumes;		/* General-Volume aus BIG */
 /****** FUNCTIONS ************************************************************/
 
 /* MidiShare Funktionen */
-PUBLIC VOID			CDECL receive_evts_puf	_((SHORT refNum));
-PUBLIC VOID			CDECL play_task_puf		_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
-PUBLIC VOID			CDECL delayed_task_puf	_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
+MSH_RCVALARM_PROTO (receive_evts_puf);
+MSH_TASK_PROTO (play_task_puf);
+MSH_TASK_PROTO (delayed_task_puf);
 PRIVATE VOID		InstallFilter				_((SHORT refNum));
 
 /* Interne PUF-Funktionen */
@@ -256,7 +256,7 @@ PRIVATE BOOLEAN term_rsc			_((VOID));
 
 /*****************************************************************************/
 
-PUBLIC VOID CDECL receive_evts_puf (SHORT refNum)
+MSH_RCVALARM_CALLBACK (receive_evts_puf, refNum)
 {
 	MidiEvPtr	event;
 	LONG 			n;
@@ -391,7 +391,7 @@ PRIVATE PUFEVP insert_ev_puf(PUFEVP location)
 
 } /* insert_ev_puf */
 
-PUBLIC VOID CDECL delayed_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
+MSH_TASK_CALLBACK (delayed_task_puf, date, refNum, a1, a2, a3)
 {
 	/* Wird aufgerufen, um nicht Echtzeitfähige Funktionen auszuführen */
 	RTMCLASSP	module 	= modulep[refNum];
@@ -408,7 +408,7 @@ PUBLIC VOID CDECL delayed_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, L
 	} /* switch */
 } /* delayed_task_puf */
 
-PUBLIC VOID CDECL play_task_puf (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
+MSH_TASK_CALLBACK (play_task_puf, date, refNum, a1, a2, a3)
 {
 	/* Wird soundso oft aufgerufen, um neue Daten in
 		das Fenster einzublenden und neue Koordinaten zu berechnen und speichern */

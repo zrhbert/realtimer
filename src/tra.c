@@ -193,7 +193,7 @@ PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
 PRIVATE CONST STRING module_name = "TRA";		/* Name, für Extension etc. */
 
 PRIVATE RTMCLASSP	modulep[MAXMSAPPLS];		/* Zeiger auf Modul-Strukturen */
-PRIVATE WORD		refNums[1];					/* Referenznummern */
+PRIVATE WORD		refNums[2];				/* Index 1..max_instances, siehe init_midishare */					/* Referenznummern */
 
 /** Send MTC **/
 /*
@@ -237,10 +237,12 @@ INT 		 frameval[] = { 24, 25, 30, 30, 100 };
 /****** FUNCTIONS ************************************************************/
 
 /* MidiShare Funktionen */
-PUBLIC VOID			CDECL	receive_evts_tra	_((INT refNum));
-PUBLIC VOID			CDECL play_task_tra		_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
-PUBLIC VOID			CDECL delayed_task_tra	_((LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3));
-PUBLIC VOID			CDECL receive_alarm_tra _((SHORT refNum, LONG code));
+MSH_RCVALARM_PROTO (receive_evts_tra);
+MSH_TASK_PROTO (play_task_tra);
+MSH_TASK_PROTO (delayed_task_tra);
+MSH_APPLALARM_PROTO (receive_alarm_tra);
+MSH_TASK_PROTO (sync_send_mtc);
+MSH_TASK_PROTO (sync_receive_mtc);
 PRIVATE VOID		InstallFilter				_((SHORT refNum));
 PRIVATE WORD		init_midishare 			_((VOID));
 
@@ -417,7 +419,7 @@ void send_mtc(RTMCLASSP module )
 	die richtige Sync-Zeit eingeklinkt. 
 **/
 /********************************************************************/
-void CDECL sync_send_mtc (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3 )
+MSH_TASK_CALLBACK (sync_send_mtc, date, refNum, a1, a2, a3)
 {
 	RTMCLASSP	module = modulep[refNum];
 	MidiEvPtr	myTask;
@@ -558,7 +560,7 @@ INT receive_mtc(RTMCLASSP module,  MidiEvPtr e, INT type, INT pitch, INT vel )
 	delay			das übliche Aufruf-Delay von 1 Millisekunde
 **/
 /********************************************************************/
-void CDECL sync_receive_mtc(LONG date, SHORT refNum, LONG a1, LONG a2, LONG delay )
+MSH_TASK_CALLBACK (sync_receive_mtc, date, refNum, a1, a2, delay)
 {
 	RTMCLASSP	module = modulep[refNum];
 	STAT_P		status = module->status;
@@ -627,7 +629,7 @@ void CDECL sync_receive_mtc(LONG date, SHORT refNum, LONG a1, LONG a2, LONG dela
 			}
 			/* Play Task aufrufen, wenn es wieder Zeit ist. */
 			else if (status->mtc_time - posit > QUANT)
-				play_task_tra (posit, refNum, 0L, 0L, 0L);
+				MSH_TASK_FN (play_task_tra) (posit, refNum, 0L, 0L, 0L);
 
 		} /* RCV_MTC_SYNC */
 		
@@ -772,7 +774,7 @@ void init_mtc(RTMCLASSP module)
 
 /*****************************************************************************/
 
-PUBLIC VOID CDECL receive_evts_tra (INT refNum)
+MSH_RCVALARM_CALLBACK (receive_evts_tra, refNum)
 {
 	MidiEvPtr	event, thru_event;
 	LONG 			n;
@@ -863,7 +865,7 @@ PUBLIC VOID CDECL receive_evts_tra (INT refNum)
 	} /* for */
 } /* receive_evts_tra */
 
-PUBLIC VOID CDECL receive_alarm_tra (SHORT refNum, LONG code)
+MSH_APPLALARM_CALLBACK (receive_alarm_tra, refNum, code)
 {
 #ifdef RCV_MTC_BY_MIDI_SHARE
 	RTMCLASSP	module = modulep[refNum];
@@ -936,7 +938,7 @@ PRIVATE VOID InstallFilter (WORD refNum)
 	MidiSetFilter( refNum, filter );   /* installe le filtre				*/
 } /* InstallFilter */
 
-PUBLIC VOID CDECL play_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
+MSH_TASK_CALLBACK (play_task_tra, date, refNum, a1, a2, a3)
 {
 	/* Wird soundso oft aufgerufen, um neue Daten in
 		das Fenster einzublenden */
@@ -989,7 +991,7 @@ PUBLIC VOID CDECL play_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG
 	send_variable(VAR_SMPTE, posit);
 } /* play_task_tra */
 
-PUBLIC VOID CDECL delayed_task_tra (LONG date, SHORT refNum, LONG a1, LONG a2, LONG a3)
+MSH_TASK_CALLBACK (delayed_task_tra, date, refNum, a1, a2, a3)
 {
 	/* Wird aufgerufen, um nicht Echtzeitfähige Funktionen auszuführen */
 	RTMCLASSP	module 	= modulep[refNum];
@@ -1347,6 +1349,14 @@ PRIVATE BOOLEAN wi_key_mod (WINDOWP window, MKINFO *mk)
 			case F8: send_lfo_accel(8); ok = TRUE; break;
 			case F9: send_lfo_accel(9); ok = TRUE; break;
 			case F10: send_lfo_accel(0); ok = TRUE; break;
+			case 0x39:					/* Ctrl+Leertaste: Play / Stop wie die Transportknoepfe */
+				send_variable (status->play ? VAR_TRA_STOP : VAR_TRA_PLAY, TRUE);
+				ok = TRUE;
+				break;
+			case 0x13:					/* Ctrl+R: Aufnahme ein/aus */
+				send_variable (VAR_RECORD, !status->record);
+				ok = TRUE;
+				break;
 		} /* switch scan_code */
 		if (!ok)
 		{

@@ -209,7 +209,7 @@ PRIVATE CONST WORD max_instances = 2;			/* Max Anzahl Instanzen */
 PRIVATE CONST STRING module_name = "CMO";		/* Name, für Extension etc. */
 
 PRIVATE RTMCLASSP	modulep[MAXMSAPPLS];		/* Zeiger auf Modul-Strukturen */
-PRIVATE WORD		refNums[2];					/* Referenznummern */
+PRIVATE WORD		refNums[3];					/* Referenznummern */
 /****** FUNCTIONS ************************************************************/
 
 PRIVATE VOID		dsetup			_((WINDOWP refwindow));
@@ -236,14 +236,14 @@ PRIVATE VOID ComputeWorkDO (WINDOWP window, WORD obj_num, RECT *work);
 PRIVATE VOID create_displayobs (WINDOWP window);
 
 /* MidiShare Funktionen */
-PUBLIC VOID	CDECL	receive_evts_cmo	(SHORT refNum);
-PUBLIC VOID CDECL receive_alarm_cmo (SHORT refNum, LONG code);
+MSH_RCVALARM_PROTO (receive_evts_cmo);
+MSH_APPLALARM_PROTO (receive_alarm_cmo);
 PRIVATE VOID		InstallFilter				_((SHORT refNum));
 PRIVATE WORD		init_midishare 			_((VOID));
 
 /*****************************************************************************/
 
-PUBLIC VOID CDECL receive_evts_cmo (SHORT refNum)
+MSH_RCVALARM_CALLBACK (receive_evts_cmo, refNum)
 {
 	MidiEvPtr	event;
 	LONG 			n;
@@ -305,7 +305,7 @@ PUBLIC VOID CDECL receive_evts_cmo (SHORT refNum)
 	} /* for */
 } /* receive_evts_cmo */
 
-PUBLIC VOID CDECL receive_alarm_cmo (SHORT refNum, LONG code)
+MSH_APPLALARM_CALLBACK (receive_alarm_cmo, refNum, code)
 {
 	RTMCLASSP	module = modulep[refNum];
 	STAT_P		status = module->status;

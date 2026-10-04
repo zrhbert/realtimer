@@ -61,7 +61,7 @@ RTM_BASE_SRCS = \
 	src/msh.c \
 	src/tra.c \
 	src/var.c \
-	src/midishare_stub.c
+	src/midishare.c
 
 SRCS += $(RTM_BASE_SRCS)
 

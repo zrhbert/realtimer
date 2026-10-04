@@ -415,6 +415,9 @@ extern int _trapCode_[];
 /** Zugriff auf die MidiShare-Umgebung **/
 /**************************************************************************/
 
+#ifdef __GNUC__
+#include "msh_gcc.h"	/* Einstiegspunkte als Inline-Funktionen, siehe dort */
+#else
 #define MidiGetVersion() 	(short)( *micro_rtx)(0)
 #define MidiCountAppls() 	(short)( *micro_rtx)(1)
 
@@ -640,6 +643,48 @@ extern int _trapCode_[];
 
 /* MidiGrowSpace( long space) => long */
 #define MidiGrowSpace(a)			(long)( *micro_rtx)(0x37, a)
+#endif /* __GNUC__ */
+
+/**************************************************************************/
+/** Callbacks, die MidiShare aufruft (Tasks, Receive- und Appl-Alarme).
+	Der Kernel ruft sie mit dem Pure-C-Stackaufbau auf (short = 16 Bit).
+	Unter GNU C erzeugt MSH_*_CALLBACK deshalb einen kleinen Assembler-
+	Vorsatz unter dem eigentlichen Namen, der die Argumente in den
+	GCC-Aufbau umsetzt und die C-Funktion <name>_c aufruft. Direkte
+	C-Aufrufe muessen MSH_TASK_FN(name) verwenden.
+**/
+/**************************************************************************/
+#ifdef __GNUC__
+#define MSH_TASK_PROTO(name)		extern void name (void); void name##_c (long, short, long, long, long)
+#define MSH_RCVALARM_PROTO(name)	extern void name (void); void name##_c (short)
+#define MSH_APPLALARM_PROTO(name)	extern void name (void); void name##_c (short, long)
+#define MSH_TASK_FN(name)			name##_c
+#define MSH_TASK_CALLBACK(name, date, refNum, a1, a2, a3) \
+	__asm__ (".text\n\t.even\n" #name ":\n\t" \
+		"move.l 18(%sp),-(%sp)\n\tmove.l 18(%sp),-(%sp)\n\tmove.l 18(%sp),-(%sp)\n\t" \
+		"move.w 20(%sp),%d0\n\text.l %d0\n\tmove.l %d0,-(%sp)\n\tmove.l 20(%sp),-(%sp)\n\t" \
+		"jsr " #name "_c\n\tlea 20(%sp),%sp\n\trts\n"); \
+	void name##_c (long date, short refNum, long a1, long a2, long a3)
+#define MSH_RCVALARM_CALLBACK(name, refNum) \
+	__asm__ (".text\n\t.even\n" #name ":\n\t" \
+		"move.w 4(%sp),%d0\n\text.l %d0\n\tmove.l %d0,-(%sp)\n\t" \
+		"jsr " #name "_c\n\taddq.l #4,%sp\n\trts\n"); \
+	void name##_c (short refNum)
+#define MSH_APPLALARM_CALLBACK(name, refNum, code) \
+	__asm__ (".text\n\t.even\n" #name ":\n\t" \
+		"move.l 6(%sp),-(%sp)\n\tmove.w 8(%sp),%d0\n\text.l %d0\n\tmove.l %d0,-(%sp)\n\t" \
+		"jsr " #name "_c\n\taddq.l #8,%sp\n\trts\n"); \
+	void name##_c (short refNum, long code)
+extern short TCMidiRestore (void);	/* Vektoren aus "midisave" wiederherstellen (MIDISAVE.PRG) */
+#else
+#define MSH_TASK_PROTO(name)		void cdecl name (long date, short refNum, long a1, long a2, long a3)
+#define MSH_RCVALARM_PROTO(name)	void cdecl name (short refNum)
+#define MSH_APPLALARM_PROTO(name)	void cdecl name (short refNum, long code)
+#define MSH_TASK_FN(name)			name
+#define MSH_TASK_CALLBACK(name, date, refNum, a1, a2, a3)	void cdecl name (long date, short refNum, long a1, long a2, long a3)
+#define MSH_RCVALARM_CALLBACK(name, refNum)				void cdecl name (short refNum)
+#define MSH_APPLALARM_CALLBACK(name, refNum, code)		void cdecl name (short refNum, long code)
+#endif
 /* ATTENTION : MidiGrowSpace ne peut etre appelé que par un 
    accessoire de bureau ! */
 
