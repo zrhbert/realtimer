@@ -114,6 +114,7 @@ V 1.00, 17.04.93
 #define INITW  (20 * gl_wbox)          /* Anfangsbreite in Pixel */
 #define INITH  (10 * gl_hbox)          /* Anfangshöhe in Pixel */
 #define MILLI  0								/* Millisekunden für Zeitablauf */
+#define MAX_DTASKS_PER_TIMER 32				/* Delayed-Tasks pro Timer-Aufruf */
 #define PUF_RSC_NAME "PUF_MOD.RSC"		/* Name der Resource-Datei */
 #define MAXSETUPS 20l						/* Anzahl der PUF-Setups */
 enum REIHENFOLGE {RSIGNALE, RKOOR};		/* Anzeige-Reihenfolge */
@@ -131,6 +132,7 @@ typedef	struct status *STAT_P;
 
 typedef	struct status
 {
+	BOOLEAN	precalc_pending;	/* Vorausberechnung im Hauptprogramm nachholen (statt MidiDTask) */
 	UINT	play			: 1	;	/* PLAY gedrückt */
 	UINT	record		: 1	;	/* RTM Record an/aus */
 	UINT	puf_record	: 1	;	/* PUF Record an/aus */
@@ -267,9 +269,11 @@ MSH_RCVALARM_CALLBACK (receive_evts_puf, refNum)
 	WINDOWP		window = module->window;
 	
 	r = refNum;
-	for (n = MidiCountEvs(r); n > 0; --n) 	/* Alle empfangenen Events abarbeiten */
+	/* Bis die Warteschlange leer ist, nicht nach vorher gezaehlter Anzahl: der Alarm kann
+	   waehrend MidiSendIm() erneut aufgerufen werden, dann stimmt der Zaehler nicht mehr
+	   und MidiGetEv() liefert NULL. */
+	while ((event = MidiGetEv (r)) != NULL)
 	{
-		event = MidiGetEv (r);				/*  Information holen */
 		switch (EvType(event))
 		{
 #if false
@@ -449,7 +453,7 @@ MSH_TASK_CALLBACK (play_task_puf, date, refNum, a1, a2, a3)
 		if (status->play)
 		{
 			/* Vor dem nächsten apply die Daten berechnen */
-			myTask = MidiDTask(delayed_task_puf, MidiGetTime() + QUANT/2, refNum, (LONG)PUFDTaskPrecalc, 0, 0);
+			status->precalc_pending = TRUE;	/* precalc() läuft in wi_timer_mod() im Hauptprogramm, nicht im Kernel-Kontext */
 			myTask = MidiTask(play_task_puf, MidiGetTime() + QUANT, refNum, 0, 0, 0);
 		} /* if play */
 		
@@ -468,7 +472,10 @@ MSH_TASK_CALLBACK (play_task_puf, date, refNum, a1, a2, a3)
 				location = header->next;
 			} /* if */
 			else
+			{
 				rtm_stop(refNum, status->posit); /* ... oder anhalten */
+				status->play = FALSE;	/* Puffer-Ende: selbst anhalten, da typeRTMStop-Handler deaktiviert ist */
+			}
 		} /* if */
 		else
 		{
@@ -832,15 +839,15 @@ PRIVATE BOOLEAN send_stop (RTMCLASSP module)
 		e = MidiNewEv (typeStop);
 		if (e)
 		{
+			Port (e) = var_get_value (var_module, VAR_CMI_PORT1);	/* vor dem Senden: danach gehoert das Event dem Kernel */
 			MidiSendIm (refNum, e);
-			Port (e) = var_get_value (var_module, VAR_CMI_PORT1);
 			ret &= TRUE;
 		} /* if */
 		e = MidiNewEv (typeStop);
 		if (e)
 		{
+			Port (e) = var_get_value (var_module, VAR_CMI_PORT2);	/* vor dem Senden: danach gehoert das Event dem Kernel */
 			MidiSendIm (refNum, e);
-			Port (e) = var_get_value (var_module, VAR_CMI_PORT2);
 			ret &= TRUE;
 		} /* if */
 		/* if (!ret)	hndl_alert_obj (module, ERR_MIDISHAREFULL); */
@@ -1382,6 +1389,7 @@ PRIVATE VOID wi_timer_mod (WINDOWP window)
 {
 	RTMCLASSP	module = Module (window);
 	SHORT			refNum = (SHORT)module->special;
+	STAT_P		status = module->status;
 	LONG			numtasks;		
 	
 /* BD 2012_01_21: Midi blockieren*/
@@ -1398,13 +1406,34 @@ PRIVATE VOID wi_timer_mod (WINDOWP window)
 #endif
 
 
-	/* Alle Delayed-Tasks ausführen */
-#if false
-    for (numtasks = MidiCountDTasks (refNum); numtasks > 0; numtasks--)
+	/* Alle Delayed-Tasks ausführen: play_task_puf() reiht pro Takt einen
+		Precalc-Task ein (und Positionswechsel einen Reset-Task). Werden sie
+		nicht hier im Hauptprogramm abgearbeitet, bleiben sie in der
+		MidiShare-Warteschlange liegen und der Speicher der Events ist nach
+		etwa zwei Minuten erschöpft. Begrenzt pro Aufruf, bei Rest sofort
+		wieder dran. */
+	/* Vorausberechnung der Module im Kontext des Hauptprogramms. Frueher
+		per MidiDTask/MidiExec1DTask: der Kernel fuehrt den Task aber im
+		Supervisor-Modus auf dem kleinen Systemstack aus, und die Module
+		(GetPFloat/atof) brauchen dort mehrere KB Stack -> Absturz. */
+	if (status->precalc_pending)
 	{
-		MidiExec1DTask(refNum);
-	} /* for numtasks */
-#endif
+		status->precalc_pending = FALSE;
+		if (module->precalc) module->precalc (module);
+	} /* if */
+	if (refNum > 0)
+	{
+		LONG done = 0;
+		for (numtasks = MidiCountDTasks (refNum); numtasks > 0 && done < MAX_DTASKS_PER_TIMER; numtasks--, done++)
+			MidiExec1DTask (refNum);
+		if (MidiCountDTasks (refNum) > 0)
+		{
+			window->milli = 1;		/* Rest beim nächsten Zeitereignis */
+			if (window->opened > 0)
+				redraw_window (window, &window->scroll);
+			return;
+		} /* if */
+	} /* if */
 	window->milli = 0; /* Timer b.a.w. abschalten */
 
 	if (window->opened >0)

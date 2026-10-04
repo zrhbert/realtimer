@@ -262,7 +262,7 @@ VOID send_track_big (SHORT refnum, WORD signal, PUFEVP start)
 		evp = evp->next;
 		
 	} while (evp != start);
-	MidiSendIm (refbig, e);
+	if (refbig > 0) MidiSendIm (refbig, e); else MidiFreeEv (e);	/* kein BIG: Event verwerfen statt an refNum 0 zu senden */
 } /* send_track_big */
 
 VOID send_part_big (SHORT refnum, PUFEVP start)
@@ -318,7 +318,7 @@ BOOL send_signal_mute_ev_big (SHORT refnum, WORD signal)
 	/* Noch einmal probieren ob BIG inzwischen geladen ist */
 		refbig = try_name_connect (refnum, "BIG");
 
-	MidiSendIm (refbig, e);
+	if (refbig > 0) MidiSendIm (refbig, e); else MidiFreeEv (e);	/* kein BIG: Event verwerfen statt an refNum 0 zu senden */
 	return TRUE;
 } /* send_signal_mute_ev_big */
 
@@ -349,7 +349,7 @@ BOOL send_all_mute_evs_big (SHORT refnum)
 	/* Noch einmal probieren ob BIG inzwischen geladen ist */
 		refbig = try_name_connect (refnum, "BIG");
 
-	MidiSendIm( refbig, e );
+	if (refbig > 0) MidiSendIm (refbig, e); else MidiFreeEv (e);	/* kein BIG: Event verwerfen statt an refNum 0 zu senden */
 	return TRUE;
 } /* send_all_mute_evs_big */
 
@@ -373,7 +373,7 @@ BOOL send_signal_demute_ev_big (SHORT refnum, WORD signal)
 	/* Noch einmal probieren ob BIG inzwischen geladen ist */
 		refbig = try_name_connect (refnum, "BIG");
 
-	MidiSendIm( refbig, e );
+	if (refbig > 0) MidiSendIm (refbig, e); else MidiFreeEv (e);	/* kein BIG: Event verwerfen statt an refNum 0 zu senden */
 	return TRUE;
 } /* send_signal_demute_ev_big */
 
@@ -402,7 +402,7 @@ BOOL send_all_demute_evs_big (SHORT refnum)
 	/* Noch einmal probieren ob BIG inzwischen geladen ist */
 		refbig = try_name_connect (refnum, "BIG");
 
-	MidiSendIm( refbig, e );
+	if (refbig > 0) MidiSendIm (refbig, e); else MidiFreeEv (e);	/* kein BIG: Event verwerfen statt an refNum 0 zu senden */
 	return TRUE;
 } /* send_all_demute_evs_big */
 
@@ -468,7 +468,7 @@ BOOL send_start_ev_big (SHORT refnum, LONG time)
 	/* Noch einmal probieren ob BIG inzwischen geladen ist */
 		refbig = try_name_connect (refnum, "BIG");
 
-	MidiSendIm (refbig, e );
+	if (refbig > 0) MidiSendIm (refbig, e); else MidiFreeEv (e);	/* kein BIG: Event verwerfen statt an refNum 0 zu senden */
 		
 	return TRUE;
 } /* send_start_ev_big */
@@ -492,7 +492,7 @@ BOOL send_stop_ev_big (SHORT refnum, LONG time)
 	/* Noch einmal probieren ob BIG inzwischen geladen ist */
 		refbig = try_name_connect (refnum, "BIG");
 
-	MidiSendIm (refbig, e );
+	if (refbig > 0) MidiSendIm (refbig, e); else MidiFreeEv (e);	/* kein BIG: Event verwerfen statt an refNum 0 zu senden */
 	return TRUE;
 } /* send_stop_ev_big */
 
@@ -704,6 +704,7 @@ GLOBAL SHORT try_name_connect	 (SHORT refnum, STRING name)
 
 GLOBAL SHORT try_num_connect (SHORT refnum, SHORT ref)
 {
+	if (ref == refnum) return ref;			/* nicht mit sich selbst verbinden: eigene Events kaemen sofort wieder herein */
 	if (ref>=0 && refnum >=0) {
 		MidiConnect(ref,refnum,TRUE);				/* Input der Appl. anschliessen */
 		MidiConnect(refnum,ref,TRUE);				/* Output der Appl. anschliessen */

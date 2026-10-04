@@ -258,9 +258,11 @@ MSH_RCVALARM_CALLBACK (receive_evts_cmo, refNum)
 	UBYTE 		pitch, value;
 	
 	r = refNum;
-	for (n = MidiCountEvs(r); n > 0; --n) 	/* Alle empfangenen Events abarbeiten */
+	/* Bis die Warteschlange leer ist, nicht nach vorher gezaehlter Anzahl: der Alarm kann
+	   waehrend MidiSendIm() erneut aufgerufen werden, dann stimmt der Zaehler nicht mehr
+	   und MidiGetEv() liefert NULL. */
+	while ((event = MidiGetEv (r)) != NULL)
 	{
-		event = MidiGetEv (r);				/*  Information holen */
 		switch (EvType(event))
 		{
 			case typeKeyOn:

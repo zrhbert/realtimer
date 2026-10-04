@@ -14,3 +14,5 @@ xcuserdata
 build/
 build-*/
 midisave
+
+tools/__pycache__/
