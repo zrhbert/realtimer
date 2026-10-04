@@ -4,7 +4,7 @@
 *.ACC
 *.PRX
 *.app
-MIDSHARE
+MIDSHARE/.DS_Store
 NEODESK.DAT
 thing.idx
 SOURCE.GRP

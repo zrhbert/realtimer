@@ -1,0 +1,7 @@
+=pcstart.o
+skeleton.c
+libmidi.lib
+pcstdlib.lib
+PCFLTLIB.LIB 
+PCTOSLIB.LIB 
+PCGEMLIB.LIB 
