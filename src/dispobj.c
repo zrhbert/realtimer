@@ -984,9 +984,13 @@ LOCAL VOID DrawText (DISPOBJP dispobj)
 LOCAL WORD TextFontHeight (VOID)
 {
 	/* Requested pixel height of the font used by text display objects.
-		The VDI substitutes the nearest size it actually has, so callers
-		that lay out rows must measure the result (see TextCellSize). */
-	return (desk.h > 400) ? 14 : 6;
+		Must be a height the VDI has a native font for: any other value
+		(the historical 14) makes the VDI software-scale every glyph on
+		every draw, which the TT profile showed as ~6% of all cycles in
+		the ROM's _scale alone plus greatly inflated blitting. gl_hchar
+		is the system font's native character height (13 on a TT), so it
+		never scales; 6 selects the small native font on low screens. */
+	return (desk.h > 400) ? gl_hchar : 6;
 } /* TextFontHeight */
 
 GLOBAL VOID TextCellSize (WORD *cell_w, WORD *cell_h)
