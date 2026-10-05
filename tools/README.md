@@ -72,3 +72,13 @@ Hatari's control socket cannot move the mouse pointer, only press buttons
 where it is, so dialogs are best driven with keyboard shortcuts and
 function keys. The `debug` command needs no special Hatari build, but
 its output appears only in the log, not in the Hatari window.
+
+## bench.py — TT performance benchmark with CPU profile
+
+`tools/bench.py [TAG]` runs the fixed benchmark scenario (record + play
+for a 4200-VBL window, ~59 s, on an emulated TT at normal speed) with
+Hatari's cycle-exact CPU profiler, and prints the top functions by
+exclusive cycles (program, EmuTOS ROM and other-RAM shares separated).
+Results land in `build/bench-TAG.log` and `build/profile-TAG.txt`.
+Compare two runs by tag to judge an optimization. See the module
+docstring for the Hatari quirks the script works around.
