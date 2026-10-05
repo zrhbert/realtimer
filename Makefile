@@ -15,10 +15,24 @@ SDK_ROOT = $(TOOLCHAIN)/m68k-atari-mintelf/sys-root
 SDK_USR = $(SDK_ROOT)/usr
 COMPAT_INCLUDE ?= gcc/include
 
+# Optimization: -O2 for speed (the TT benchmark tools/bench.py measured the
+# unoptimized build at ~87% CPU load during record+play). OPT can be
+# overridden, e.g. "make OPT=-O0" for debugging convenience.
+OPT ?= -O2 -fomit-frame-pointer
+
+# Target CPU: the project is tuned for the Atari TT (68030 + 68882 FPU);
+# -m68020-60 makes GCC emit native FPU instructions instead of libgcc
+# soft-float calls and picks the matching multilib (crt0/libc/libgem).
+# Override with "make CPU=" for a plain-68000 ST build.
+CPU ?= -m68020-60
+
 CFLAGS = --sysroot=$(SDK_ROOT) -D__GEMLIB_OLDNAMES \
-	-Isrc -I$(COMPAT_INCLUDE) -std=c99 -g \
+	-Isrc -I$(COMPAT_INCLUDE) -std=c99 -g $(OPT) $(CPU) \
 	-x c
-LDFLAGS = $(SDK_USR)/lib/crt0.o -nostdlib -L$(SDK_USR)/lib \
+# crt0.o and -L must follow the multilib selected by $(CPU); the gcc
+# driver resolves both when asked.
+CRT0 = $(shell $(CC) --sysroot=$(SDK_ROOT) $(CPU) -print-file-name=crt0.o)
+LDFLAGS = $(CPU) $(CRT0) -nostdlib -L$(dir $(CRT0)) \
 	-lgem -lm -lc -lgcc
 
 BUILD_DIR ?= build
