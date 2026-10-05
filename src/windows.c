@@ -843,6 +843,7 @@ GLOBAL VOID draw_window (WINDOWP window)
 
   if ((window != NULL) && (window->opened > 0))
   {
+    InvalidVdiTextState ();             /* VDI-Textstatus unbekannt (siehe dispobj.c) */
     get_work (window, FALSE);           /* Eventuell Objekte korrigieren */
 
     if (window->object != NULL && (window->flags & (WI_MODAL | WI_MODELESS)))
@@ -2147,11 +2148,15 @@ GLOBAL VOID timer_all (LONG milli)
       window->count += milli;
       
 		/* Änderung: wi_timer-Routine kann wi->milli auf 0 setzen um abzubrechen. BD */
-      while ((window->count >= window->milli)&& (window->milli!=0))    /* Zeitereignis eingetreten */
+		/* Hoechstens EIN Zeitereignis pro Aufruf, Rueckstand verfaellt:
+			die Timer dienen nur der Anzeige, und das alte Aufholen liess
+			ein Fenster mit milli=1 bis zu zehnmal pro Ereignisschleife
+			neu zeichnen (Ereignis-Raster MILLISECS=10). */
+      if (window->count >= window->milli)    /* Zeitereignis eingetreten */
       {
-        window->count -= window->milli;
+        window->count = 0;
         timer_window (window);
-      } /* while */
+      } /* if */
     } /* if */
   } /* for */
 } /* timer_all */

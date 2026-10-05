@@ -237,7 +237,10 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 	WINDOWP	window = module->window;
 	
 
-	window->milli = 1; 	/* Update so schnell wie möglich */
+	/* Anzeige-Takt begrenzen: Timer nur scharf machen, wenn er nicht
+		schon laeuft (max. 5 Hz). milli = 1 bei jedem Datentick liess das
+		Fenster so oft wie moeglich komplett neu zeichnen (~24% CPU). */
+	if (window->milli == 0) window->milli = 200;
 	return event;
 } /* apply */
 
@@ -249,7 +252,7 @@ PUBLIC VOID		reset	(RTMCLASSP module)
 
 	status->reset_flag = TRUE;
 	status->new = TRUE;
-	if (window) window->milli = 1;
+	if (window && window->milli == 0) window->milli = 1;
 } /* reset */
 
 PUBLIC VOID		precalc	(RTMCLASSP module)

@@ -228,9 +228,10 @@ PRIVATE VOID    set_dbox	(RTMCLASSP module)
 
 PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 {
-	WINDOWP	window = module->window;
-
-	window->milli = 1; 	/* Update so schnell wie möglich */
+	/* Kein window->milli = 1 mehr: der Fenster-Timer laeuft staendig mit
+		MILLI und zeichnet dann nur die geaenderten Display-Objekte. Das
+		alte "so schnell wie moeglich" liess das Fenster bei jedem Tick
+		komplett neu zeichnen und saettigte die ganze CPU. */
 	return event;
 } /* apply */
 
@@ -285,7 +286,8 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 				status->var_values[variable - VAR_VAR0] = value;
 			*/
 			
-			if (module->window) module->window->milli = 1;
+			/* Kein milli = 1: der staendig laufende Fenster-Timer (MILLI)
+				nimmt die geaenderten Werte beim naechsten Ablauf mit. */
 			break;
 	} /* switch */
 } /* message */

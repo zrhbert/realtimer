@@ -712,11 +712,19 @@ LOCAL VOID TimerObject (DISPOBJP dispobj)
 {
 	OBJECTSTATP	status = &dispobj->status->object;
 
-	/* Check if something is new */
-	Start1Dispobj (dispobj);
+	/* Werte auffrischen und ggf. neuen Text ins Objekt einsetzen */
+	if (dispobj->start) dispobj->start (dispobj);
 
 	if (dispobj->new)
-		redraw_window(dispobj->parent, &dispobj->work);
+	{
+		/* Nur dieses eine Objekt zeichnen. Der fruehere Umweg ueber
+			redraw_window() lief fuer jede einzelne Wertaenderung durch
+			die komplette Fenster-Maschinerie (Start-Hooks aller Objekte,
+			Rechteckliste, Maus) und war im TT-Profil mit ~3,4-fachen
+			Kosten pro Zeichnung der groesste einzelne Posten. */
+		draw_object (dispobj->parent, status->object);
+		if (dispobj->finished) dispobj->finished (dispobj);
+	} /* if */
 } /* TimerObject */
 
 LOCAL VOID FinishObject (DISPOBJP dispobj)
@@ -993,6 +1001,31 @@ LOCAL WORD TextFontHeight (VOID)
 	return (desk.h > 400) ? gl_hchar : 6;
 } /* TextFontHeight */
 
+/* The VDI text state (font, height, effects, ...) established within the
+	current redraw pass, or -1 when unknown. Re-establishing the full state
+	costs eight VDI traps; doing that before every cell draw was ~18% of all
+	CPU on the TT benchmark. draw_window() invalidates the cache before each
+	pass, so changes made outside a pass (menus, dialogs) cannot leak in. */
+LOCAL WORD	vdi_text_height = -1;
+
+GLOBAL VOID InvalidVdiTextState (VOID)
+{
+	vdi_text_height = -1;
+} /* InvalidVdiTextState */
+
+LOCAL VOID SetVdiTextState (WORD height)
+{
+	WORD	ret;
+
+	if (vdi_text_height != height)
+	{
+		text_default (vdi_handle);			/* sets gl_hchar height among others */
+		if (height != gl_hchar)
+			vst_height (vdi_handle, height, &ret, &ret, &ret, &ret);
+		vdi_text_height = height;
+	} /* if */
+} /* SetVdiTextState */
+
 GLOBAL VOID TextCellSize (WORD *cell_w, WORD *cell_h)
 {
 	/* Select the font text display objects draw with and return the
@@ -1001,17 +1034,12 @@ GLOBAL VOID TextCellSize (WORD *cell_w, WORD *cell_h)
 
 	text_default (vdi_handle);
 	vst_height (vdi_handle, TextFontHeight (), &dummy, &dummy, cell_w, cell_h);
+	InvalidVdiTextState ();		/* measuring may run outside a redraw pass */
 } /* TextCellSize */
 
 LOCAL VOID TextDefaultText (DISPOBJP dispobj)
 {
-	WORD	ret;
-
-	/* Call standard function */
-	TextDefaultDispobj (dispobj);
-
-	vst_height (vdi_handle, TextFontHeight (), &ret, &ret, &ret, &ret);
-	
+	SetVdiTextState (TextFontHeight ());
 } /* TextDefaultText */
 
 /****** Bar ************************************************************/
@@ -1763,11 +1791,8 @@ LOCAL VOID ResetSpace (DISPOBJP dispobj)
 LOCAL VOID TextDefaultSpace (DISPOBJP dispobj)
 {
 	SPACESTATP	status = &dispobj->status->space;
-	WORD			ret;
-	
-	TextDefaultDispobj (dispobj);
-	vst_height (vdi_handle, status->fontsize, &ret, &ret, &ret, &ret);
 
+	SetVdiTextState (status->fontsize);
 } /* TextDefaultSpace */
 
 LOCAL VOID DrawSpace (DISPOBJP dispobj)
