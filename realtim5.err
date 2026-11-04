@@ -39,3 +39,4 @@
 [3][Fehler beim Schreiben|der %s-Datei in| %s][Abbruch][1|1|1|0][Fehler: Setups schreiben]
 [1][Kein BIG-Sequenzer geladen][Abbruch][1|1|1|0][Fehler: Kein BIG-Sequenzer]
 [1][Kein Power-Glove gefunden][Abbruch][1|1|1|0][Fehler: Kein Power-Glove]
+[1][Ende des Aufnahme-Puffers|erreicht.|Transport angehalten.][OK][1|1|1|0][PUF: Puffer-Ende]

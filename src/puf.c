@@ -119,7 +119,7 @@ V 1.00, 17.04.93
 #define MAXSETUPS 20l						/* Anzahl der PUF-Setups */
 enum REIHENFOLGE {RSIGNALE, RKOOR};		/* Anzeige-Reihenfolge */
 
-enum DTaskTypes {PUFDTaskReset, PUFDTaskPrecalc};	/* Delayed Task Typen */
+enum DTaskTypes {PUFDTaskReset, PUFDTaskPrecalc, PUFDTaskBufferFull};	/* Delayed Task Typen */
 
 /* Umwandlung von interner Koordinatendarstellung auf Midi-Format */
 #define INTERN_TO_MIDI(koor) 64 + koor
@@ -415,6 +415,14 @@ MSH_TASK_CALLBACK (delayed_task_puf, date, refNum, a1, a2, a3)
 		case PUFDTaskPrecalc:
 			module->precalc (module);
 			break;
+		case PUFDTaskBufferFull:
+			/* Puffer-Ende: Transport anhalten (haelt auch Record an, wie
+				die Stop-Taste) und den Benutzer informieren. Laeuft im
+				Hauptprogramm, deshalb sind send_variable und der Alert
+				(AES) hier erlaubt. */
+			send_variable (VAR_TRA_STOP, TRUE);
+			hndl_alert (ERR_PUFFULL);
+			break;
 	} /* switch */
 } /* delayed_task_puf */
 
@@ -481,6 +489,10 @@ MSH_TASK_CALLBACK (play_task_puf, date, refNum, a1, a2, a3)
 			{
 				rtm_stop(refNum, status->posit); /* ... oder anhalten */
 				status->play = FALSE;	/* Puffer-Ende: selbst anhalten, da typeRTMStop-Handler deaktiviert ist */
+				/* Transport-Stop und Alert im Hauptprogramm nachholen:
+					hier (Interrupt) sind send_variable/AES nicht erlaubt */
+				myTask = MidiDTask(delayed_task_puf, MidiGetTime(), refNum, (LONG)PUFDTaskBufferFull, 0, 0);
+				if (module->window) module->window->milli = 1;
 			}
 		} /* if */
 		else

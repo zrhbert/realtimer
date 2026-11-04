@@ -39,3 +39,4 @@
 #define ERR_MFWRITE     38
 #define ERR_NOBIG       39
 #define ERR_NOGLOVE     40
+#define ERR_PUFFULL     41
