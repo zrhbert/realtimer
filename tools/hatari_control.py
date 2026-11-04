@@ -47,9 +47,14 @@ import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WORKSPACE = os.path.dirname(HERE)
-DEFAULT_SDK = os.environ.get(
-    "ATARIST_TOOLS",
-    os.path.expanduser("~/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin"))
+def _find_sdk():
+    """Newest installed Atari ST Dev extension SDK (version-independent)."""
+    import glob
+    cands = sorted(glob.glob(os.path.expanduser(
+        "~/.vscode/extensions/dgis.atari-st-dev-*/sdk/darwin")))
+    return cands[-1] if cands else ""
+
+DEFAULT_SDK = os.environ.get("ATARIST_TOOLS", "") or _find_sdk()
 TT_TOS = os.path.expanduser(
     "~/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img")
 
@@ -130,6 +135,7 @@ class Session:
         a = self.args
         tos = a.tos or (TT_TOS if a.machine == "tt" else os.path.join(a.sdk, "hatari", "etos512us.img"))
         cmd = [self.hatari_binary(), "--tos", tos, "--confirm-quit", "no", "--sound", "off",
+               "--vdi", "no",      # a saved user config may enable a VDI screen; keep runs deterministic
                "--fast-forward", "yes" if a.fast else "no",
                "--screenshot-dir", self.shots, "--screenshot-format", "png", "--crop", "yes",
                "--control-socket", self.sock_path]
