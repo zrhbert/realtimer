@@ -238,9 +238,11 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 	
 
 	/* Anzeige-Takt begrenzen: Timer nur scharf machen, wenn er nicht
-		schon laeuft (max. 5 Hz). milli = 1 bei jedem Datentick liess das
-		Fenster so oft wie moeglich komplett neu zeichnen (~24% CPU). */
-	if (window->milli == 0) window->milli = 200;
+		schon laeuft. milli = 1 bei jedem Datentick liess das Fenster so
+		oft wie moeglich komplett neu zeichnen (~24% CPU). 100 ms ergibt
+		effektiv ~2,5 Bilder/s (gemessen; die Ereignisschleife streckt
+		den Zyklus etwa auf das Doppelte) bei ~9% CPU fuer den Wuerfel. */
+	if (window->milli == 0) window->milli = 100;
 	return event;
 } /* apply */
 
