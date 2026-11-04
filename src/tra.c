@@ -443,7 +443,7 @@ MSH_TASK_CALLBACK (sync_send_mtc, date, refNum, a1, a2, a3)
 		/** Send **/
 		send_mtc(module);  
   
-	myTask = MidiTask(sync_send_mtc, MidiGetTime() + SYNC_RESOLUTION, refNum, module, status->posit, 1);
+	myTask = MidiTask(sync_send_mtc, MidiGetTime() + SYNC_RESOLUTION, refNum, (LONG)module, status->posit, 1);
 } /* sync_send_mtc */
 
 /********************************************************************/
@@ -641,7 +641,7 @@ MSH_TASK_CALLBACK (sync_receive_mtc, date, refNum, a1, a2, delay)
 			old_mtc_time = status->mtc_time;
 		}  
 		
-		myTask = MidiTask(sync_receive_mtc, MidiGetTime() + SYNC_RESOLUTION, refNum, module, status->posit,  1);
+		myTask = MidiTask(sync_receive_mtc, MidiGetTime() + SYNC_RESOLUTION, refNum, (LONG)module, status->posit,  1);
 
 #endif RCV_MTC_BY_MIDI_SHARE
 	} /* Sanity Check */
@@ -671,7 +671,7 @@ void StartReceivingMtc(RTMCLASSP module)
 #else
 	status->mtc_time = 0;
 	/* Sync routine einhängen */
-	myTask = MidiTask(sync_receive_mtc, MidiGetTime(), refNum, module, status->posit, 1);
+	myTask = MidiTask(sync_receive_mtc, MidiGetTime(), refNum, (LONG)module, status->posit, 1);
 #endif		
 				
 	old_mtc_time = -1L;
@@ -806,8 +806,8 @@ MSH_RCVALARM_CALLBACK (receive_evts_tra, refNum)
 				myTask = MidiTask(play_task_tra, MidiGetTime() + QUANT, refNum, 0, 0, 0);
 				if (status->sync_in)
 				{
-					myTask = MidiTask(sync_receive_mtc, MidiGetTime(), refNum, module, status->posit, 1);
-					/* myTask = MidiTask(sync_send_mtc, MidiGetTime(), refNum, module, status->posit, 1); */
+					myTask = MidiTask(sync_receive_mtc, MidiGetTime(), refNum, (LONG)module, status->posit, 1);
+					/* myTask = MidiTask(sync_send_mtc, MidiGetTime(), refNum, (LONG)module, status->posit, 1); */
 				}
 				window->milli			= 1;
 				break;
@@ -1071,7 +1071,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			if (status->sync_out)
 			{
 				StartSendingMtc(module, status->posit);
-				myTask = MidiTask(sync_send_mtc, MidiGetTime(), refNum, module, status->posit, 1);
+				myTask = MidiTask(sync_send_mtc, MidiGetTime(), refNum, (LONG)module, status->posit, 1);
 			}
 			window->milli			= 1;
 			break;

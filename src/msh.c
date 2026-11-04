@@ -752,59 +752,13 @@ GLOBAL BOOLEAN try_all_connect	 (SHORT refnum)
 
 GLOBAL BOOLEAN init_msh (VOID)
 {
-	STRING	s;
-	BOOLEAN	ok;
-	VOID		*orig, *temp;
-
-	strcpy (s, midishare_path);
-	strcat (s, "MIDSHARE.PRG");
-
+	/* Interner MIDI-Kernel (midikern.c) statt des residenten MIDSHARE.PRG:
+		kein Pexec, kein midisave, keine Trap-Vektoren mehr. */
 	close_daktstat();					/* Sicherheitshalber */
 
-	
-#ifdef MIDISHARE_SCREEN_CLEAN
-	/* Bildschirm zeitweise umschalten */
-	orig = Logbase ();
-	temp = malloc (1024*1024/8);
-	if (temp)
-		Setscreen (temp, (void*)-1, -1);
-#endif
-		
-	/* Ist MidiShare da? */
-	ok = (Pexec(0, s, "","") >=0 );
+	msh_available = (MidiInternalStart () && MidiShare ());
 
-
-
-	if (ok)
-	{
-		strcpy (s, midishare_path);
-		strcat (s, "MIDISAVE.PRG");
-
-		printf ("MIDISAVE.PRG wird gestartet ...");
-		Pexec(0, s, "","");
-		TCMidiRestore();
-	} /* if */
-
-
-	ok = MidiShare();
-#ifdef MIDISHARE_SCREEN_CLEAN
-	if (temp)
-		Setscreen (orig, (void*)-1, -1);
-#endif
-	
-	if (!ok)							/* Ist MidiShare da? */
-	{
-/* MSH alert disabled, BD 2026.09.26, as it will not be used for a long time */
-/*	if (refNum == 0)
-		hndl_alert (ERR_NOMIDISHARE);
-		*/
-		ok = FALSE;
-		msh_available  = FALSE;
-	} /* if */
-	else
-		msh_available  = TRUE;
-
-	return (TRUE); /* immer TRUE zurückgeben, auch wenn MS nicht da */
+	return (TRUE); /* immer TRUE zurückgeben, auch wenn Start fehlschlug */
 } /* init_msh */
 
 /*****************************************************************************/
@@ -813,6 +767,8 @@ GLOBAL BOOLEAN init_msh (VOID)
 
 GLOBAL BOOLEAN term_msh (VOID)
 {
-	BOOLEAN ok = TRUE;
-	return (ok);
+	/* Timer-Interrupt und midivec wieder aushängen */
+	MidiInternalStop ();
+	msh_available = FALSE;
+	return (TRUE);
 } /* term_msh */

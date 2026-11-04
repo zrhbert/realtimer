@@ -146,7 +146,6 @@ GLOBAL VOID rtm_cycleonoff 	(SHORT refNum, BOOLEAN flag);
 GLOBAL SHORT try_name_connect	 (SHORT refnum, STRING name);
 GLOBAL SHORT try_num_connect 	(SHORT refNum, SHORT ref);
 GLOBAL BOOL	try_all_connect	(SHORT refNum);
-extern BOOL	TCMidiRestore (VOID);
 
 GLOBAL BOOL	init_msh  _((VOID));
 GLOBAL BOOL	term_msh  _((VOID));
