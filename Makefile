@@ -26,8 +26,13 @@ OPT ?= -O2 -fomit-frame-pointer
 # Override with "make CPU=" for a plain-68000 ST build.
 CPU ?= -m68020-60
 
+# -MMD -MP: write header dependency files next to the objects, so that a
+# changed header recompiles every file that includes it. Without this, the
+# MidiShare-removal left modules compiled against the deleted msh_gcc.h
+# (inlined trap #5 calls) in build/, which crashed at runtime.
 CFLAGS = --sysroot=$(SDK_ROOT) -D__GEMLIB_OLDNAMES \
 	-Isrc -I$(COMPAT_INCLUDE) -std=c99 -g $(OPT) $(CPU) \
+	-MMD -MP \
 	-x c
 # crt0.o and -L must follow the multilib selected by $(CPU); the gcc
 # driver resolves both when asked.
@@ -122,6 +127,9 @@ $(TARGET_DEBUG): $(TARGET)
 	$(info Creating symbol-stripped debug-run copy $(TARGET_DEBUG))
 	cp $(TARGET) $(TARGET_DEBUG)
 	$(OBJCOPY) --discard-all $(TARGET_DEBUG)
+
+# header dependencies recorded by -MMD
+-include $(OBJS:.o=.d)
 
 $(BUILD_DIR)/%.o: src/%.c | $(BUILD_DIR)
 	$(info Compiling $<)
