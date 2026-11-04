@@ -1866,9 +1866,14 @@ PRIVATE VOID init_events (RTMCLASSP module)
 						+sizeof(VOL_ALL);
 
 	max_events = mem_avail()/(event_size)/2 ;
-	/* BD 2012_01_21 reduced max size */
-		if (max_events>1000) 
-			max_events = 1000;
+	/* Obergrenze: eine Stunde Aufnahme (8 Ereignisse/s bei QUANT=125ms).
+		Die fruehere harte Grenze von 1000 (BD 2012_01_21) begrenzte die
+		Aufnahme auf 2:05 Minuten; danach blieb der Puffer-Sequenzer
+		stehen, waehrend die Transport-Uhr weiterlief. Auf dem TT regelt
+		ohnehin der Speicher (die Haelfte des freien Heaps, mit
+		Halbierungs-Fallback beim Allozieren). */
+		if (max_events > 3600L*1000L/QUANT)
+			max_events = 3600L*1000L/QUANT;
 		
 	/* Events verketten */
 	sprintf (s, "%ld Events ...", max_events);
