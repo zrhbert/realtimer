@@ -205,6 +205,7 @@ typedef struct status
 typedef struct status *STAT_P;	
 
 /****** VARIABLES ************************************************************/
+LOCAL ULONG lfo_rand_state = 2463534242UL;	/* Zustand der LFO-Zufallsquelle */
 PRIVATE WORD	lfo_rsc_hdr;					/* Zeigerstruktur für RSC-Datei */
 PRIVATE WORD	*lfo_rsc_ptr = &lfo_rsc_hdr;		/* Zeigerstruktur für RSC-Datei */
 PRIVATE OBJECT *lfo_setup;
@@ -511,9 +512,11 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 					temp *= quelle->ampli / 100;
 					break;
 				case LFO_RANDOM:
-					/* random(n) (Turbo-C convenience function) is not available
-					   in the modern C library; emulate it via GEMDOS Random(). */
-					temp = (LONG)((ULONG)Random() % (ULONG)quelle->ampli) - quelle->ampli/2;
+					/* Inline Zufallsquelle statt XBIOS Random(): der Trap pro
+						Tick und Kanal kostete ~3% CPU im TT-Profil. Einfacher
+						LCG, fuer LFO-Rauschen voellig ausreichend. */
+					lfo_rand_state = lfo_rand_state * 1103515245UL + 12345UL;
+					temp = (LONG)((lfo_rand_state >> 8) % (ULONG)quelle->ampli) - quelle->ampli/2;
 					break;
 			} /* switch */
 

@@ -126,7 +126,7 @@ enum RECEIVE_MC_SYNC
 	TRY_RCV_MC_SYNC
 	};
 
-#define SYNC_RESOLUTION 1	 				/* Aufruftakt für sync_send/receive in ms,
+#define SYNC_RESOLUTION 4	 				/* Aufruftakt für sync_send/receive in ms,
 														muß kleiner sein als 1s/25*4 = 10ms (1QF)  */
 #define LOCK_TIME 1000						/* Zeitdifferenz intern/mtc bei der MTC 
 														neu initialisiert wird */

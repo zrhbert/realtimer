@@ -56,8 +56,11 @@
 
 /****** HARDWARE *************************************************************/
 
-#define ACIA_MIDI_CTRL (*(volatile unsigned char *) 0xFFFC04L)
-#define ACIA_MIDI_DATA (*(volatile unsigned char *) 0xFFFC06L)
+/* Full 32-bit addresses: the TT decodes the whole bus, 0x00FFFC04 would
+	bus-error. Only ever touched from interrupt context (supervisor mode);
+	user-mode access to the I/O space is a bus error as well. */
+#define ACIA_MIDI_CTRL (*(volatile unsigned char *) 0xFFFFFC04UL)
+#define ACIA_MIDI_DATA (*(volatile unsigned char *) 0xFFFFFC06UL)
 #define ACIA_TDRE      0x02
 
 /****** TYPES ****************************************************************/
@@ -386,21 +389,37 @@ static void mk_deliver (short refNum, MidiEvPtr e)
 	if (dests & 1)
 		mk_wire_out (e);                     /* destination 0: the MIDI port */
 
-	for (d = 1; d < MK_APPS; d++)
+	/* Which applications accept the event? The last one gets the original
+		instead of a copy: most RTM traffic has exactly one receiver, so
+		this saves the copy and the free on the hot path. */
 	{
-		MKAPP *a = &mk_app [d];
-		MidiEvPtr c;
-		if (!(dests & (1 << d)) || !a->used) continue;
-		if (!mk_filter_ok (a, e)) continue;
-		c = mk_copy_ev (e);
-		if (!c) break;                       /* pool exhausted               */
-		c->link = NULL;
-		if (a->rxTail) a->rxTail->link = c; else a->rxHead = c;
-		a->rxTail = c;
-		a->rxCount++;
-		if (a->rcvAlarm) alarms |= (1 << d);
-	} /* for */
-	mk_free_ev (e);
+		unsigned short accept = 0;
+		short last = 0;
+		for (d = 1; d < MK_APPS; d++)
+		{
+			MKAPP *a = &mk_app [d];
+			if (!(dests & (1 << d)) || !a->used) continue;
+			if (!mk_filter_ok (a, e)) continue;
+			accept |= (1 << d);
+			last = d;
+		} /* for */
+
+		for (d = 1; d < MK_APPS; d++)
+		{
+			MKAPP *a = &mk_app [d];
+			MidiEvPtr c;
+			if (!(accept & (1 << d))) continue;
+			c = (d == last) ? e : mk_copy_ev (e);
+			if (!c) continue;                /* pool exhausted               */
+			c->link = NULL;
+			if (a->rxTail) a->rxTail->link = c; else a->rxHead = c;
+			a->rxTail = c;
+			a->rxCount++;
+			if (a->rcvAlarm) alarms |= (1 << d);
+		} /* for */
+		if (!last)
+			mk_free_ev (e);                  /* nobody listening             */
+	}
 
 	for (d = 1; d < MK_APPS; d++)
 		if (alarms & (1 << d))
@@ -558,9 +577,11 @@ static void mk_run_tasks (void)
 
 static void mk_service (void)
 {
+	/* No mk_drain_tx() here: mk_service also runs in user mode (deferred
+		work in mk_leave) and the ACIA may only be touched in supervisor
+		mode. The timer interrupt drains the ring every millisecond. */
 	mk_run_tasks ();
 	mk_parse_input ();
-	mk_drain_tx ();
 } /* mk_service */
 
 /****** TIMER INTERRUPT ******************************************************/

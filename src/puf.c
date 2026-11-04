@@ -347,11 +347,17 @@ PRIVATE VOID InstallFilter (SHORT refNum)
 
 	register int i;
 
+	/* Nur annehmen, was der Receive-Handler wirklich verarbeitet:
+		alles andere (z.B. die MTC-QuarterFrames des Transports) wurde
+		bisher kopiert, zugestellt und ungenutzt wieder verworfen. */
 	for (i = 0; i<256; i++)
-	{ 										
-		AcceptBit(filter->evType,i);		/* accepte tous les types d'événements	*/
-		AcceptBit(filter->port,i);		/* en provenance de tous les ports		*/
-	} /* for */
+		AcceptBit(filter->port,i);		/* alle Ports */
+	AcceptBit(filter->evType,typeRTMPosit);
+	AcceptBit(filter->evType,typeRTMCont);
+	AcceptBit(filter->evType,typeRTMStop);
+	AcceptBit(filter->evType,typeRTMCycleSet);
+	AcceptBit(filter->evType,typeRTMCycleOnOff);
+	AcceptBit(filter->evType,typeRTMRecordOnOff);
 											
 	for (i = 0; i<16; i++)
 		AcceptBit(filter->channel,i);	/* et sur tous les canaux Midi		*/
