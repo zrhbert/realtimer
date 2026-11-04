@@ -1745,6 +1745,13 @@ GLOBAL VOID click_window (WINDOWP window, MKINFO *mk)
             draw_object (window, prev);
           } /* if */
 
+          /* Checkbox (SELECTABLE G_BOX): form_button hat das SELECTED-Bit
+             umgeschaltet und das Kaestchen von AES schwarz zeichnen lassen.
+             Mit unserem Pfad neu zeichnen -> hohles Kaestchen + X. */
+          if (((window->object [next].ob_type & 0xFF) == G_BOX) &&
+              (window->object [next].ob_flags & SELECTABLE))
+            draw_object (window, next);
+
           slctd2  = obj->ob_state & SELECTED;
           changed = ! (obj->ob_state & DISABLED) &&
                     ((obj->ob_flags & SELECTABLE) && ((slctd1 ^ slctd2) || (mk->breturn == 2)) ||

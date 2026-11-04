@@ -1383,6 +1383,49 @@ GLOBAL VOID draw_obline (OBJECT *tree, WORD obj)
   RECT rect;
   BYTE *p;
 
+  /* Checkbox-Darstellung korrigieren: ein ausgewaehltes (SELECTED)
+     SELECTABLE-G_BOX wird von AES als voll schwarzes Rechteck invertiert
+     (der alte "schwarze Kasten"). Stattdessen soll ein hohles Kaestchen
+     mit Kreuz erscheinen. Der Wert bleibt im SELECTED-Status (alle
+     bestehende Klick-/get_checkbox-Logik unveraendert); hier wird nur die
+     schwarze Flaeche ueberzeichnet und Rahmen + X gezeichnet. */
+  if (((OB_TYPE (tree, obj) & 0xFF) == G_BOX) &&
+      (OB_FLAGS (tree, obj) & SELECTABLE) && is_state (tree, obj, SELECTED))
+  {
+    WORD box [10];
+
+    objc_rect (tree, obj, &rect, FALSE);
+
+    /* schwarze AES-Flaeche loeschen */
+    vswr_mode (vdi_handle, MD_REPLACE);
+    vsf_interior (vdi_handle, FIS_SOLID);
+    vsf_color (vdi_handle, WHITE);
+    vsf_perimeter (vdi_handle, FALSE);
+    rect2array (&rect, xy);
+    v_bar (vdi_handle, xy);
+
+    /* hohler Rahmen */
+    line_default (vdi_handle);
+    vsl_type (vdi_handle, SOLID);
+    vsl_udsty (vdi_handle, 0xFFFF);
+    vsl_width (vdi_handle, 1);
+    vsl_color (vdi_handle, BLACK);
+    box [0] = rect.x;              box [1] = rect.y;
+    box [2] = rect.x + rect.w - 1; box [3] = rect.y;
+    box [4] = rect.x + rect.w - 1; box [5] = rect.y + rect.h - 1;
+    box [6] = rect.x;              box [7] = rect.y + rect.h - 1;
+    box [8] = rect.x;              box [9] = rect.y;
+    v_pline (vdi_handle, 5, box);
+
+    /* Kreuz */
+    xy [0] = rect.x + 1;          xy [1] = rect.y + 1;
+    xy [2] = rect.x + rect.w - 2; xy [3] = rect.y + rect.h - 2;
+    v_pline (vdi_handle, 2, xy);
+    xy [0] = rect.x + rect.w - 2; xy [1] = rect.y + 1;
+    xy [2] = rect.x + 1;          xy [3] = rect.y + rect.h - 2;
+    v_pline (vdi_handle, 2, xy);
+  } /* if checkbox */
+
   if (! is_flags (tree, obj, HIDETREE) && (OB_EXTYPE (tree, obj) != 0))
   {
     line_default (vdi_handle);
