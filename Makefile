@@ -115,9 +115,17 @@ RTM_UNUSED_SRCS = \
 
 OBJS = $(patsubst src/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
-.PHONY: all clean
+.PHONY: all clean st
 
 all: $(TARGET) $(TARGET_DEBUG)
+
+# 68000 / no-FPU variant (plain ST and other machines without a 68882).
+# Own object directory and PRG names, so it coexists with the TT build.
+# Costs ~29 percentage points more CPU than the TT hard-float build in
+# the record+play benchmark (tools/bench.py); see the commit history.
+ST_BUILD_DIR = build-st
+st:
+	$(MAKE) CPU= BUILD_DIR=$(ST_BUILD_DIR) TARGET=rt5st.prg TARGET_DEBUG=rt5strun.prg
 
 $(TARGET): $(OBJS)
 	$(info Linking $(TARGET))
@@ -144,6 +152,6 @@ ifdef WINDOWS
 	@if exist $(BUILD_DIR) rmdir /s /q $(BUILD_DIR)
 	@del /q $(TARGET) $(TARGET_DEBUG)
 else
-	rm -rf $(BUILD_DIR)
-	rm -f $(TARGET) $(TARGET_DEBUG)
+	rm -rf $(BUILD_DIR) $(ST_BUILD_DIR)
+	rm -f $(TARGET) $(TARGET_DEBUG) rt5st.prg rt5strun.prg
 endif
