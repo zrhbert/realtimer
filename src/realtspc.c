@@ -456,12 +456,13 @@ GLOBAL VOID daktstatus (const BYTE *title, const BYTE *text)
 			window->edit_obj	= NIL;
 			window->edit_inx	= NIL;
 			window->timer		= timer_daktstat;
-			window->special	= (LONG)mem_alloc(sizeof(AKTSTATUS));
 			window->milli		= 0;
 		} /* if */
 		else
 			wind_set_str (window->handle, WF_NAME, stitle); /* Name setzen */
 
+		/* Alten Status freigeben statt ihn zu verlieren (Leck) */
+		if (window->special) mem_free ((VOID*)window->special);
 		window->special = (LONG)mem_alloc (sizeof (AKTSTATUS));
 		status = (AKTSTATUS*) window->special;
 		mem_set ((VOID*)status, 0, (UWORD)sizeof (AKTSTATUS));
@@ -476,6 +477,15 @@ GLOBAL VOID daktstatus (const BYTE *title, const BYTE *text)
 		if (! open_dialog (100+AKTSTAT)) hndl_alert (ERR_NOOPEN);
 		
 		draw_object(window, ROOT);
+
+		/* "Ende" ist die Konvention aller Modul-Initialisierungen fuer
+			"fertig": das Schliessen gleich hier vormerken. Es ist um
+			300 ms verzoegert und wird von jedem weiteren daktstatus()
+			storniert, deshalb bleibt das Fenster waehrend des Starts
+			durchgehend stehen und verschwindet erst nach dem letzten
+			Modul - auch bei spaeter, einzeln erzeugten Instanzen. */
+		if (strcmp ((const char *)text, "Ende") == 0)
+			close_daktstat ();
 	} /* if */
 } /* daktstatus */
 

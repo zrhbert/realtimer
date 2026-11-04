@@ -197,6 +197,12 @@ GLOBAL BOOLEAN init_modules (VOID)
 	} /* for */
 #endif /* INCLUDE_RTM_BASE_MODULES */
 
+	/* Status-Fenster ("Initialisierung ...") schliessen: jedes Modul
+		aktualisiert es waehrend seiner Initialisierung, aber nach dem
+		letzten Modul blieb es offen stehen. close_daktstat() laesst es
+		noch 300 ms stehen und schliesst dann ueber den Fenster-Timer. */
+	close_daktstat ();
+
 	return (ok);
 	
 } /* init_modules */
