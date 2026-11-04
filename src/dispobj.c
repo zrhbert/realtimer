@@ -1285,10 +1285,11 @@ LOCAL	BOOL SetWorkSO (DISPOBJP dispobj, RECT *work)
 	/* Call the default function first */
 	SetWorkDispobj (dispobj, work);
 
+	/* Nur native Fonthoehen anfordern (siehe SetVdiTextState): 14 bzw. 4
+		existieren nicht und liessen das VDI jede Ziffer bei jedem Zeichnen
+		skalieren - 68k statt ~20k Zyklen pro Zeichen im TT-Profil. */
 	if (work->h > 200)
-		status->fontsize = 14;
-	else if (work->h < 100)
-		status->fontsize = 4;
+		status->fontsize = gl_hchar;
 	else
 		status->fontsize = 6;
 	
@@ -1583,10 +1584,11 @@ LOCAL	BOOL SetWorkSpace (DISPOBJP dispobj, RECT *work)
 	status->xoffset = work->x + width*0.50;
 	status->yoffset = work->y + height*0.50;
 	
+	/* Nur native Fonthoehen anfordern (siehe SetVdiTextState): 14 bzw. 4
+		existieren nicht und liessen das VDI jede Ziffer bei jedem Zeichnen
+		skalieren - 68k statt ~20k Zyklen pro Zeichen im TT-Profil. */
 	if (work->h > 200)
-		status->fontsize = 14;
-	else if (work->h < 100)
-		status->fontsize = 4;
+		status->fontsize = gl_hchar;
 	else
 		status->fontsize = 6;
 	
@@ -1828,18 +1830,22 @@ LOCAL VOID DrawSpace (DISPOBJP dispobj)
 		/* Volume zeichnen  */
 		if (status->vol_line != 0)
 			status->vol_draw (dispobj);
-
-		if(status->numbers)
-		{
-			/* Nummern */
-			dispobj->text_default (dispobj);
-			for (x = 0; x < status->spaceform->num_numbers; x++)
-			{
-				sprintf (s, "%d", x+1);
-				text_3d (dispobj, &status->spaceform->vertex[x], s);
-			} /* for */
-		} /* if numbers */
 	} /* if new */
+
+	/* Ecken-Nummern nur beim vollstaendigen Neuzeichnen: sie bewegen sich
+		nur mit der Raumform, und die XOR-Marken stellen ueberschriebene
+		Pixel beim Loeschen wieder her. Vorher wurden die acht Ziffern bei
+		jedem Koordinaten-Tick neu gezeichnet (~47% der Zeichenkosten). */
+	if (new && status->numbers)
+	{
+		/* Nummern */
+		dispobj->text_default (dispobj);
+		for (x = 0; x < status->spaceform->num_numbers; x++)
+		{
+			sprintf (s, "%d", x+1);
+			text_3d (dispobj, &status->spaceform->vertex[x], s);
+		} /* for */
+	} /* if numbers */
 
 } /* DrawSpace */
 
@@ -1870,19 +1876,19 @@ LOCAL VOID DrawED4Space (DISPOBJP dispobj)
 
 		if (status->display[0])
 			DrawED4Cursors (dispobj);
-		
-		if(status->numbers)
-		{
-			/* Nummern */
-			dispobj->text_default (dispobj);
-			for (x = 0; x < status->spaceform->num_numbers; x++)
-			{
-				sprintf (s, "%d", x+1);
-				text_3d (dispobj, &status->spaceform->vertex[x], s);
-			} /* for */
-		} /* if numbers */
-
 	} /* if new */
+
+	/* Ecken-Nummern nur beim vollstaendigen Neuzeichnen, siehe DrawSpace */
+	if (new && status->numbers)
+	{
+		/* Nummern */
+		dispobj->text_default (dispobj);
+		for (x = 0; x < status->spaceform->num_numbers; x++)
+		{
+			sprintf (s, "%d", x+1);
+			text_3d (dispobj, &status->spaceform->vertex[x], s);
+		} /* for */
+	} /* if numbers */
 
 } /* DrawED4Space */
 
