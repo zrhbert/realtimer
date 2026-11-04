@@ -48,11 +48,16 @@ import time
 HERE = os.path.dirname(os.path.abspath(__file__))
 WORKSPACE = os.path.dirname(HERE)
 def _find_sdk():
-    """Newest installed Atari ST Dev extension SDK (version-independent)."""
+    """The Atari ST Dev SDK: the stable symlink maintained by
+    tools/atari_sdk_link.sh if it exists, else the most recently
+    installed extension (by mtime, robust against version strings)."""
     import glob
-    cands = sorted(glob.glob(os.path.expanduser(
-        "~/.vscode/extensions/dgis.atari-st-dev-*/sdk/darwin")))
-    return cands[-1] if cands else ""
+    link = os.path.expanduser("~/Documents/Development/Hatari/atari-sdk")
+    if os.path.isdir(link):
+        return link
+    cands = glob.glob(os.path.expanduser(
+        "~/.vscode/extensions/dgis.atari-st-dev-*/sdk/darwin"))
+    return max(cands, key=os.path.getmtime) if cands else ""
 
 DEFAULT_SDK = os.environ.get("ATARIST_TOOLS", "") or _find_sdk()
 TT_TOS = os.path.expanduser(

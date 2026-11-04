@@ -3,6 +3,13 @@
     "tasks": [
         {
             "type": "shell",
+            "label": "Atari ST: sdk link",
+            "command": "${workspaceFolder}/tools/atari_sdk_link.sh",
+            "problemMatcher": [],
+            "detail": "Point the stable atari-sdk symlink at the newest installed Atari ST Dev extension (self-heals after extension updates)."
+        },
+        {
+            "type": "shell",
             "label": "Atari ST: make",
             "command": "make",
             "args": [],
@@ -13,7 +20,8 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "Build PRG from Makefile for Atari ST."
+            "detail": "Build PRG from Makefile for Atari ST.",
+            "dependsOn": "Atari ST: sdk link"
         },
         {
             "type": "shell",
@@ -27,18 +35,18 @@
         {
             "type": "shell",
             "label": "Atari ST: run",
-            "command": "${config:atariSTDev.path}/hatari/hatari",
+            "command": "${config:realtimer.atariSdk}/hatari/hatari",
             "osx": {
-                "command": "${config:atariSTDev.path}/hatari/Hatari.app/Contents/MacOS/Hatari"
+                "command": "${config:realtimer.atariSdk}/hatari/Hatari.app/Contents/MacOS/Hatari"
             },
             "args": [
-                "--tos", "${config:atariSTDev.path}/hatari/etos512us.img",
+                "--tos", "${config:realtimer.atariSdk}/hatari/etos512us.img",
                 "--confirm-quit", "no",
                 "--sound", "off",
                 "--memsize", "4",
                 "--mono",
                 "--fast-forward", "yes",
-                "--parse", "${config:atariSTDev.path}/hatari/db.ini",
+                "--parse", "${config:realtimer.atariSdk}/hatari/db.ini",
                 "${workspaceFolder}${/}realtim5.prg"
             ],
             "options": {

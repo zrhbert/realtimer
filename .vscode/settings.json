@@ -1,10 +1,16 @@
 {
     "atariSTDev.activate": true,
-    "atariSTDev.path": "/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin",
+    // The extension rewrites atariSTDev.path and the terminal env on every
+    // activation with its own (version-specific) install path. Everything of
+    // ours resolves the SDK through realtimer.atariSdk instead: a stable
+    // symlink that tools/atari_sdk_link.sh points at the newest installed
+    // extension before every build, so nothing breaks on extension updates.
+    "realtimer.atariSdk": "/Users/bertramd/Documents/Development/Hatari/atari-sdk",
+    "atariSTDev.path": "/Users/bertramd/Documents/Development/Hatari/atari-sdk",
     "realtimer.magicOnLinuxPath": "/Users/bertramd/Documents/Development/magiclinux/build/magic-on-linux",
     "terminal.integrated.env.osx": {
-        "PATH": "/opt/cross-mint/bin:/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin/bin:/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin/opt/cross-mint/bin:/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin/opt/cross-mint/m68k-atari-mintelf/bin:${env:PATH}",
-        "ATARIST_TOOLS": "/Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin"
+        "PATH": "/opt/cross-mint/bin:/Users/bertramd/Documents/Development/Hatari/atari-sdk/bin:/Users/bertramd/Documents/Development/Hatari/atari-sdk/opt/cross-mint/bin:/Users/bertramd/Documents/Development/Hatari/atari-sdk/opt/cross-mint/m68k-atari-mintelf/bin:${env:PATH}",
+        "ATARIST_TOOLS": "/Users/bertramd/Documents/Development/Hatari/atari-sdk"
     },
     "[m68k]": {
         "editor.rulers": []
