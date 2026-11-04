@@ -870,6 +870,66 @@ GLOBAL VOID draw_window (WINDOWP window)
 } /* draw_window */
 
 /*****************************************************************************/
+/* Nur die Display-Objekte eines Fensters zeichnen (leichter Pfad)           */
+/*                                                                           */
+/* Wie redraw_window, aber ohne die Fenster-Maschinerie: kein wind_update,   */
+/* kein Maus-Verstecken, keine Menuezeile, keine window->start/draw/         */
+/* finished-Hooks und kein Objektbaum. Fuer periodische Anzeige-Updates,     */
+/* bei denen nur Display-Objekte neue Werte zeichnen (z.B. die XOR-Marken    */
+/* der 3D-Ansicht); das Clipping ueber die AES-Rechteckliste bleibt          */
+/* korrekt. Laeuft wie die uebrigen Zeichenpfade innerhalb des BEG_UPDATE    */
+/* der Ereignisschleife.                                                     */
+/*****************************************************************************/
+
+GLOBAL VOID draw_dispobjs (WINDOWP window)
+
+{
+  WORD    wh;
+  RECT    r1, r2;
+	LIST_P	header, element;
+	DISPOBJP	dispobj;
+
+  if ((window != NULL) && (window->opened > 0))
+  {
+		/* Neue Werte holen (setzt die Dirty-Flags der Objekte) */
+		header = window->dispobjs;
+		element = list_next(header);
+		while (element != header) {
+			dispobj = (DISPOBJP) element->key;
+			if (dispobj->start) (*dispobj->start) (dispobj);
+			element = list_next(element);
+		} /* while */
+
+    r2 = window->scroll;
+    wh = window->handle;
+    wind_get (wh, WF_FIRSTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
+
+    while ((r1.w != 0) && (r1.h != 0))
+    {
+      if (rc_intersect (&r2, &r1))
+      {
+        	set_clip (TRUE, &r1);
+			element = list_next(header);
+			while (element != header) {
+				dispobj = (DISPOBJP) element->key;
+				if (dispobj->draw) (*dispobj->draw) (dispobj);
+				element = list_next(element);
+			} /* while */
+      } /* if */
+
+      wind_get (wh, WF_NEXTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
+    } /* while */
+
+		element = list_next(header);
+		while (element != header) {
+			dispobj = (DISPOBJP) element->key;
+			if (dispobj->finished) (*dispobj->finished) (dispobj);
+			element = list_next(element);
+		} /* while */
+  } /* if */
+} /* draw_dispobjs */
+
+/*****************************************************************************/
 /* Suche und zeichne überlagernde Rechtecke von Fenstern                     */
 /*****************************************************************************/
 

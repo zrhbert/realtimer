@@ -180,6 +180,7 @@ GLOBAL VOID    close_window   _((WINDOWP window));
 GLOBAL VOID    close_top      _((VOID));
 GLOBAL VOID    close_all      _((BOOLEAN delete, BOOLEAN close_desk));
 GLOBAL VOID    draw_window    _((WINDOWP window));
+GLOBAL VOID    draw_dispobjs  _((WINDOWP window));
 GLOBAL VOID    redraw_window  _((WINDOWP window, CONST RECT *area));
 GLOBAL VOID    top_window     _((WINDOWP window));
 GLOBAL VOID    untop_window   _((WINDOWP window));

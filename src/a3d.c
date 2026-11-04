@@ -723,7 +723,17 @@ PRIVATE VOID wi_snap_mod (WINDOWP window, RECT *new, WORD mode)
 
 PRIVATE VOID wi_timer_mod (WINDOWP window)
 {
-	redraw_window(window, &window->scroll);
+	RTMCLASSP	module = Module(window);
+	STAT_P		status = module->status;
+
+	if (status->new)
+		redraw_window(window, &window->scroll);	/* voller Neuaufbau */
+	else
+		/* Nur Koordinaten geaendert: die Display-Objekte ziehen ihre
+			XOR-Marken selbst nach; die Fenster-Maschinerie von
+			redraw_window (wind_update, Maus, Menuezeile, alle Hooks)
+			ist dafuer unnoetig. */
+		draw_dispobjs (window);
 	window->milli = 0; 			/* keine Timer-Funktion mehr bis
 										zur nächsten Änderung */
 } /* wi_timer_mod */
