@@ -561,10 +561,7 @@ for (i = 0; i < NUM_OBS; i++)
 	fix_objs (syn_text, TRUE);
 	fix_objs (syn_info, TRUE);
 	
-	/*
 	do_flags (syn_setup, SYNCANCEL, UNDO_FLAG);
-	do_flags (syn_setup, SYNHELP, HELP_FLAG);
-	*/
 	menu_enable(menu, MSYN, TRUE);
 
 	return (TRUE);

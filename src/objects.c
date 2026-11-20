@@ -347,6 +347,7 @@ GLOBAL VOID set_ok_obj (WINDOWP window)
 	module->set_edit(module);
 	module->set_dbox(module);
 	draw_object(window, ROOT);
+	window->flags |= WI_DLCLOSE;
 } /* set_ok_obj */
 
 GLOBAL VOID set_cancel_obj (WINDOWP window)
@@ -358,7 +359,8 @@ GLOBAL VOID set_cancel_obj (WINDOWP window)
 	module->set_edit(module);
 	module->set_dbox(module);
 	/* draw_object(window, ROOT); nicht nötig, wird von WINDOWS übernommen */
-} /* set_ok_obj */
+	window->flags |= WI_DLCLOSE;
+} /* set_cancel_obj */
 
 GLOBAL VOID set_standard_obj (WINDOWP window)
 {
