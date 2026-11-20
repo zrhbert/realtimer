@@ -73,6 +73,21 @@ where it is, so dialogs are best driven with keyboard shortcuts and
 function keys. The `debug` command needs no special Hatari build, but
 its output appears only in the log, not in the Hatari window.
 
+### Checkbox and radio-button regression checks
+
+`fix_objs()` converts resource `G_BOX` objects marked `CROSSED` to
+`G_USERDEF`, including in GCC builds. The callbacks use the original
+`USERIMG` checkbox and round radio-button bitmaps; `SELECTED` remains
+the stored value. Do not replace this with drawing over AES-selected boxes:
+that changes the artwork and draws outside AES's mouse-cursor protection.
+
+In Hatari, open Settings with Ctrl+C and a module setup dialog with radio
+buttons (for example A3D). Check box clicks, label clicks, Alt shortcuts,
+and selecting another radio button. Click a box and move the pointer away:
+there should be no stale pixels. Also check press-drag-release and redraw
+after moving or uncovering the dialog. Repeat in monochrome and colour
+modes to exercise both high- and low-height bitmaps.
+
 ## bench.py — TT performance benchmark with CPU profile
 
 `tools/bench.py [TAG]` runs the fixed benchmark scenario (record + play

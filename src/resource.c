@@ -358,9 +358,9 @@ GLOBAL VOID fix_objs (OBJECT *tree, BOOLEAN is_dialog)
           radio_blk.ub_parm  = ob->ob_spec.index;
           ob->ob_y          += y_radio;
           ob->ob_height      = h_radio;
-#if MSDOS | FLEXOS | DR_C | LATTICE_C | MW_C | TURBO_C
+#if MSDOS | FLEXOS | DR_C | LATTICE_C | MW_C | TURBO_C | GNU_C
           ob->ob_type        = G_USERDEF;
-          ob->ob_spec.index  = (LONG)&radio_blk;
+          ob->ob_spec.userblk = &radio_blk;
 #endif
         } /* if */
         else                                            /* checkbox */
@@ -368,9 +368,9 @@ GLOBAL VOID fix_objs (OBJECT *tree, BOOLEAN is_dialog)
           check_blk.ub_parm  = ob->ob_spec.index;
           ob->ob_y          += y_check;
           ob->ob_height      = h_check;
-#if MSDOS | FLEXOS | DR_C | LATTICE_C | MW_C | TURBO_C
+#if MSDOS | FLEXOS | DR_C | LATTICE_C | MW_C | TURBO_C | GNU_C
           ob->ob_type        = G_USERDEF;
-          ob->ob_spec.index  = (LONG)&check_blk;
+          ob->ob_spec.userblk = &check_blk;
 #endif
         } /* else */
       } /* if */

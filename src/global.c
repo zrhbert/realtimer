@@ -17,9 +17,6 @@
 */
 
 GLOBAL WORD hndl_alert _((WORD alert_id));    /* prototype from dialog.h, which isn't included here */
-GLOBAL VOID objc_draw_cb    _((OBJECT *tree, WORD start, WORD depth, WORD x, WORD y, WORD w, WORD h));
-GLOBAL WORD checkbox_target _((OBJECT *tree, WORD obj));
-GLOBAL WORD checkbox_click  _((OBJECT *tree, WORD box, WORD *list));
 
 #if UNIX
 #if PCC
@@ -890,7 +887,7 @@ GLOBAL WORD hndl_dial (OBJECT *tree,
   *ok = opendial (tree, grow_shrink, size, screenp, bufferp);
   form_center (tree, &r.x, &r.y, &r.w, &r.h);           /* Mitte berechnen */
 
-  objc_draw_cb (tree, ROOT, MAX_DEPTH, r.x, r.y, r.w, r.h); /* Zeichnen */
+  objc_draw (tree, ROOT, MAX_DEPTH, r.x, r.y, r.w, r.h); /* Zeichnen */
   draw_oblines (tree);
 
   show_mouse ();                                        /* Maus ist beim Scrolling zweimal versteckt */
@@ -967,7 +964,6 @@ GLOBAL WORD formdo (OBJECT *tree, WORD start)
   UWORD   kr;
   MKINFO  mk;
   BOOLEAN check;
-  WORD    cbox;
 
   wind_update (BEG_UPDATE);
   wind_update (BEG_MCTRL);
@@ -1032,6 +1028,7 @@ GLOBAL WORD formdo (OBJECT *tree, WORD start)
         if (prev != NIL)
           if ((OB_TYPE (tree, prev) == G_USERDEF) &&
               (OB_FLAGS (tree, prev) & SELECTABLE) &&
+              ! is_state (tree, prev, DISABLED) &&
               (OB_TYPE (tree, next_obj) == G_STRING))
           {
             next_obj = prev;
@@ -1046,21 +1043,7 @@ GLOBAL WORD formdo (OBJECT *tree, WORD start)
                (OB_TYPE (tree, next_obj + 1) == G_FBOXTEXT) ||
                (OB_TYPE (tree, next_obj + 1) == G_BOXTEXT))) next_obj++;
 
-        cbox = check ? NIL : checkbox_target (tree, next_obj);
-
-        if (cbox != NIL)        /* Checkbox/Radio-Kaestchen: ohne AES schalten und zeichnen */
-        {
-          WORD list [64], n, k;
-
-          n = checkbox_click (tree, cbox, list);
-          for (k = 0; k < n; k++)
-            objc_draw_cb (tree, list [k], MAX_DEPTH, desk.x, desk.y, desk.w, desk.h);
-          evnt_button (0x0001, 0x0001, 0x0000, &mx, &my, &mb, &ks);
-          cont     = TRUE;
-          next_obj = 0;
-        } /* if */
-        else
-          cont = form_button (tree, next_obj, br, &next_obj);
+        cont = form_button (tree, next_obj, br, &next_obj);
 
         if (check)              /* In benutzerdefinierte Checkbox geklickt */
         {
@@ -1377,188 +1360,6 @@ GLOBAL WORD check_alt (OBJECT *tree, MKINFO *mk)
 } /* check_alt */
 
 /*****************************************************************************/
-
-/*****************************************************************************/
-/* Checkbox- und Radio-Kaestchen                                             */
-/*                                                                           */
-/* Die Kaestchen sind kleine SELECTABLE G_BOX-Objekte, deren Wert im         */
-/* SELECTED-Status steht. AES zeichnet ein SELECTED-G_BOX in Umkehrdarstel-  */
-/* lung, also als schwarzes Rechteck (und ein CROSSED-Status kommt als       */
-/* weisses Kreuz darueber). Gewuenscht ist ein hohles Kaestchen mit X.       */
-/*                                                                           */
-/* Deshalb zeichnet objc_draw_cb() die Kaestchen in zwei Schritten: waehrend */
-/* AES zeichnet, sind SELECTED und CROSSED zeitweise geloescht (AES sieht    */
-/* nur ein hohles Kaestchen, es entsteht nie ein schwarzes Rechteck, auch    */
-/* nicht kurzzeitig); danach wird der Status wiederhergestellt und das X     */
-/* selbst gezeichnet. Klicks auf ein Kaestchen oder seine Beschriftung       */
-/* behandelt checkbox_click() ohne AES form_button, das sonst das Kaestchen  */
-/* selbst (schwarz) neu zeichnen wuerde.                                     */
-/*****************************************************************************/
-
-#define MAX_CHECKBOXES 512
-
-LOCAL WORD  cb_list  [MAX_CHECKBOXES];  /* Kaestchen im gerade gezeichneten Baum */
-LOCAL UWORD cb_state [MAX_CHECKBOXES];  /* deren urspruenglicher Status */
-LOCAL WORD  cb_count;
-
-LOCAL BOOLEAN is_check_box (OBJECT *tree, WORD obj)
-
-{
-  return (((tree [obj].ob_type & 0xFF) == G_BOX) &&
-          is_flags (tree, obj, SELECTABLE) &&
-          ! is_flags (tree, obj, HIDETREE) &&
-          (tree [obj].ob_width  <= 3 * gl_wbox) &&
-          (tree [obj].ob_height <= gl_hbox + 2));
-} /* is_check_box */
-
-LOCAL VOID cb_collect (OBJECT *tree, WORD obj, WORD depth)
-
-{
-  WORD child;
-
-  if (is_check_box (tree, obj) && (cb_count < MAX_CHECKBOXES))
-  {
-    cb_list [cb_count]  = obj;
-    cb_state [cb_count] = tree [obj].ob_state;
-    cb_count++;
-    tree [obj].ob_state &= ~ (SELECTED | CROSSED);  /* AES soll ein hohles Kaestchen sehen */
-  } /* if */
-
-  if ((depth > 0) && (tree [obj].ob_head != NIL))
-  {
-    child = tree [obj].ob_head;
-
-    while ((child != obj) && (child != NIL))
-    {
-      cb_collect (tree, child, depth - 1);
-      child = tree [child].ob_next;
-    } /* while */
-  } /* if */
-} /* cb_collect */
-
-LOCAL VOID cb_cross (OBJECT *tree, WORD obj)
-
-{
-  WORD xy [4];
-  RECT rect;
-
-  objc_rect (tree, obj, &rect, FALSE);
-
-  line_default (vdi_handle);
-  vswr_mode (vdi_handle, MD_REPLACE);
-  vsl_type (vdi_handle, SOLID);
-  vsl_width (vdi_handle, 1);
-  vsl_color (vdi_handle, BLACK);
-
-  xy [0] = rect.x + 1;          xy [1] = rect.y + 1;
-  xy [2] = rect.x + rect.w - 2; xy [3] = rect.y + rect.h - 2;
-  v_pline (vdi_handle, 2, xy);
-  xy [0] = rect.x + rect.w - 2; xy [1] = rect.y + 1;
-  xy [2] = rect.x + 1;          xy [3] = rect.y + rect.h - 2;
-  v_pline (vdi_handle, 2, xy);
-} /* cb_cross */
-
-GLOBAL VOID objc_draw_cb (OBJECT *tree, WORD start, WORD depth, WORD x, WORD y, WORD w, WORD h)
-
-{
-  WORD i, pxy [4];
-
-  cb_count = 0;
-  cb_collect (tree, start, depth);
-
-  objc_draw (tree, start, depth, x, y, w, h);
-
-  if (cb_count > 0)
-  {
-    pxy [0] = x;         pxy [1] = y;         /* gleicher Clip wie objc_draw */
-    pxy [2] = x + w - 1; pxy [3] = y + h - 1;
-    vs_clip (vdi_handle, TRUE, pxy);
-
-    for (i = 0; i < cb_count; i++)
-    {
-      tree [cb_list [i]].ob_state = cb_state [i];
-      if (cb_state [i] & SELECTED) cb_cross (tree, cb_list [i]);
-    } /* for */
-  } /* if */
-} /* objc_draw_cb */
-
-/* Kaestchen, das ein Klick auf obj betrifft (obj selbst oder das davor
-   stehende Kaestchen, wenn obj dessen Beschriftung ist), sonst NIL */
-
-GLOBAL WORD checkbox_target (OBJECT *tree, WORD obj)
-
-{
-  WORD box = NIL;
-
-  if (obj == NIL) return (NIL);
-
-  if (is_check_box (tree, obj))
-    box = obj;
-  else
-    if ((obj > ROOT) && (OB_TYPE (tree, obj) == G_STRING) && is_check_box (tree, obj - 1))
-      box = obj - 1;
-
-  if (box != NIL)
-    if (is_state (tree, box, DISABLED) || is_flags (tree, box, EXIT | TOUCHEXIT))
-      box = NIL;
-
-  return (box);
-} /* checkbox_target */
-
-LOCAL WORD find_parent (OBJECT *tree, WORD obj)
-
-{
-  WORD next;
-
-  while ((next = tree [obj].ob_next) != NIL)
-  {
-    if (tree [next].ob_tail == obj) return (next);
-    obj = next;
-  } /* while */
-
-  return (NIL);
-} /* find_parent */
-
-/* Kaestchen anklicken: Checkbox umschalten bzw. Radio-Knopf waehlen (und die
-   anderen Radio-Knoepfe der Gruppe abwaehlen). In list (mind. 64 Eintraege)
-   kommen die Objekte, deren Zustand sich geaendert hat und die neu gezeichnet
-   werden muessen; Rueckgabe: Anzahl */
-
-GLOBAL WORD checkbox_click (OBJECT *tree, WORD box, WORD *list)
-
-{
-  WORD n = 0, parent, child;
-
-  if (is_flags (tree, box, RBUTTON))
-  {
-    if (is_state (tree, box, SELECTED)) return (0);   /* schon gewaehlt */
-
-    parent = find_parent (tree, box);
-
-    if (parent != NIL)
-    {
-      child = tree [parent].ob_head;
-
-      while ((child != parent) && (child != NIL) && (n < 62))
-      {
-        if ((child != box) && is_flags (tree, child, RBUTTON) && is_state (tree, child, SELECTED))
-        {
-          undo_state (tree, child, SELECTED);
-          list [n++] = child;
-        } /* if */
-
-        child = tree [child].ob_next;
-      } /* while */
-    } /* if */
-
-    do_state (tree, box, SELECTED);
-  } /* if */
-  else
-    flip_state (tree, box, SELECTED);
-
-  list [n++] = box;
-  return (n);
-} /* checkbox_click */
 
 GLOBAL VOID draw_oblines (OBJECT *tree)
 

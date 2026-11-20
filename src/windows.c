@@ -852,7 +852,7 @@ GLOBAL VOID draw_window (WINDOWP window)
       r = window->scroll;
       if (rc_intersect (&clip, &r))     /* Objekt nur auf Scrollbereich zeichnen */
       {
-        objc_draw_cb (window->object, ROOT, MAX_DEPTH, r.x, r.y, r.w, r.h);
+        objc_draw (window->object, ROOT, MAX_DEPTH, r.x, r.y, r.w, r.h);
         draw_oblines (window->object);
       } /* if */
     } /* if */
@@ -1654,7 +1654,7 @@ GLOBAL VOID click_window (WINDOWP window, MKINFO *mk)
 
 {
   BOOLEAN cont, changed, check;
-  WORD    next, prev, cbox;
+  WORD    next, prev;
   UWORD   slctd1, slctd2;
   OBJECT  *obj;
   WORD    pos, i, wbox;
@@ -1714,6 +1714,7 @@ GLOBAL VOID click_window (WINDOWP window, MKINFO *mk)
           if (prev != NIL)
             if ((OB_TYPE (window->object, prev) == G_USERDEF) &&
                 (OB_FLAGS (window->object, prev) & SELECTABLE) &&
+                ! is_state (window->object, prev, DISABLED) &&
                 (OB_TYPE (window->object, next) == G_STRING))
             {
               window->exit_obj = next = prev;
@@ -1733,28 +1734,10 @@ GLOBAL VOID click_window (WINDOWP window, MKINFO *mk)
               mk->mox += window->object [next].ob_width - 1;
             } /* if, if */
 
-          /* Checkbox/Radio-Kaestchen (oder deren Beschriftung): ohne AES
-             form_button schalten, das das Kaestchen sonst schwarz zeichnet */
-          cbox = check ? NIL : checkbox_target (window->object, next);
-          if (cbox != NIL) window->exit_obj = next = cbox;
-
           obj     = &window->object [next];
           slctd1  = obj->ob_state & SELECTED;
-
-          if (cbox != NIL)
-          {
-            WORD list [64], n, k;
-
-            n = checkbox_click (window->object, cbox, list);
-            for (k = 0; k < n; k++) draw_object (window, list [k]);
-            cont = TRUE;
-            next = 0;
-          } /* if */
-          else
-          {
-            cont    = form_button (window->object, next, mk->breturn, &next);
-            next   &= 0x7FFF;
-          } /* else */
+          cont    = form_button (window->object, next, mk->breturn, &next);
+          next   &= 0x7FFF;
 
           if (check)           /* In benutzerdefinierte Checkbox geklickt */
           {
@@ -2290,7 +2273,7 @@ GLOBAL VOID draw_object (WINDOWP window, WORD obj)
             save = clip;
             rc_intersect (&desk, &r);	/* geändert: Damit übergroße Boxen gez. wd. könnnen. BD */
             set_clip (TRUE, &r);
-            objc_draw_cb (window->object, obj, MAX_DEPTH, r.x, r.y, r.w, r.h);
+            objc_draw (window->object, obj, MAX_DEPTH, r.x, r.y, r.w, r.h);
             if (obj == ROOT)
 	            /* Änderung BD */
 	            draw_oblines (window->object);
