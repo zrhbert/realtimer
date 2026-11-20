@@ -613,7 +613,8 @@ LOCAL BOOL KeyCheckObject (DISPOBJP dispobj, MKINFO *mk)
 	OBJECTSTATP	status = &dispobj->status->object;
 	LONG			x;
 		
-	if (mk->scan_code == status->key)
+	/* Ctrl/Alt combinations belong to the menu (e.g. Alt+C = Einstellungen) */
+	if ((mk->scan_code == status->key) && ! (mk->ctrl || mk->alt))
 	{
 		x = get_checkbox (window->object, status->object);
 		/* Invert variable value */
@@ -634,7 +635,7 @@ LOCAL BOOL KeyPushObject (DISPOBJP dispobj, MKINFO *mk)
 	OBJECTSTATP	status = &dispobj->status->object;
 	LONG			x;
 		
-	if (mk->scan_code == status->key)
+	if ((mk->scan_code == status->key) && ! (mk->ctrl || mk->alt))
 	{
 		set_checkbox (window->object, status->object, TRUE);
 		dispobj->new = TRUE;
