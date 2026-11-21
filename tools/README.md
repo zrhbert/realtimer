@@ -62,9 +62,13 @@ bundled `etos512us.img`.
 
 The transport bar buttons need the mouse, so the TRA window also reacts
 to **Ctrl+Space** (play / stop) and **Ctrl+R** (record on / off), which
-the tool can send: `key ctrl+space`. Playback needs MidiShare, which the
-program loads itself from `MIDSHARE/MIDSHARE.PRG` next to the PRG at
-start-up; without that folder the sequencer engine stays idle.
+the tool can send: `key ctrl+space`. The internal MIDI kernel supplies the
+playback clock; a resident MidiShare program is not required.
+
+The transport's **C** shortcut toggles the Atari speaker click. It sounds
+while playing at 120 BPM in 4/4, with a higher first beat. The click uses
+the system PSG sound sequence, so it can interrupt other PSG sounds. Modal
+dialogs that stop timer events pause the click; missed beats are not replayed.
 
 ### Limits
 
@@ -87,6 +91,20 @@ and selecting another radio button. Click a box and move the pointer away:
 there should be no stale pixels. Also check press-drag-release and redraw
 after moving or uncovering the dialog. Repeat in monochrome and colour
 modes to exercise both high- and low-height bitmaps.
+
+### Module help
+
+Module help requires the optional PC_HELP accessory. Without it, a help
+request displays one unavailable-help message. The bundled module help
+trees contain placeholder text and are not used as a fallback.
+
+## Regression tests
+
+Run `make test TOOLCHAIN=/path/to/cross-mint` to build and execute the
+variable-dispatch, synchronized PUF position, transport-click, CMI setup,
+and help-dispatch/message checks in a headless Hatari ST. The tests need
+Python 3, Hatari, and the SDK's ST EmuTOS image; set `ATARIST_TOOLS` if
+the SDK cannot be found automatically.
 
 ## bench.py — TT performance benchmark with CPU profile
 

@@ -115,7 +115,7 @@ RTM_UNUSED_SRCS = \
 
 OBJS = $(patsubst src/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
-.PHONY: all clean st
+.PHONY: all clean st test
 
 all: $(TARGET) $(TARGET_DEBUG)
 
@@ -126,6 +126,24 @@ all: $(TARGET) $(TARGET_DEBUG)
 ST_BUILD_DIR = build-st
 st:
 	$(MAKE) CPU= BUILD_DIR=$(ST_BUILD_DIR) TARGET=rt5st.prg TARGET_DEBUG=rt5strun.prg
+
+# Run focused regressions on a plain ST, independently of the TT ROM.
+test:
+	$(MAKE) CPU= BUILD_DIR=$(ST_BUILD_DIR) $(ST_BUILD_DIR)/regtest.prg
+	python3 tools/test_regressions.py $(ST_BUILD_DIR)/regtest.prg
+
+TEST_SRCS = tests/main.c tests/var.c tests/puf.c tests/tra.c tests/cmi.c \
+	tests/menu.c tests/help.c
+TEST_OBJS = $(patsubst tests/%.c,$(BUILD_DIR)/test-%.o,$(TEST_SRCS))
+TEST_APP_OBJS = $(filter-out $(BUILD_DIR)/gemain.o $(BUILD_DIR)/var.o \
+	$(BUILD_DIR)/puf.o $(BUILD_DIR)/tra.o $(BUILD_DIR)/cmi.o $(BUILD_DIR)/menu.o \
+	$(BUILD_DIR)/realtspc.o,$(OBJS))
+
+$(BUILD_DIR)/regtest.prg: $(TEST_OBJS) $(TEST_APP_OBJS)
+	$(CC) $^ $(LDFLAGS) -o $@
+
+$(BUILD_DIR)/test-%.o: tests/%.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJS)
 	$(info Linking $(TARGET))
@@ -138,6 +156,7 @@ $(TARGET_DEBUG): $(TARGET)
 
 # header dependencies recorded by -MMD
 -include $(OBJS:.o=.d)
+-include $(TEST_OBJS:.o=.d)
 
 $(BUILD_DIR)/%.o: src/%.c | $(BUILD_DIR)
 	$(info Compiling $<)

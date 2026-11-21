@@ -2269,11 +2269,9 @@ GLOBAL VOID timer_all (LONG milli)
   {
     window = windows [i];
 
-    /* Zeitablauf berücksichtigen,
-    	 Timer aktivieren nur wenn Fenster offen oder 
-    	 PUF Fenster */
-    if (window->milli != 0 && 
-    		((window->opened > 0) || (window->class == CLASS_PUF)))
+    /* Zeitablauf bei offenen Fenstern sowie fuer PUF und TRA im Hintergrund. */
+    if (window->milli != 0 &&
+        ((window->opened > 0) || (window->class == CLASS_PUF) || (window->class == CLASS_TRA)))
     {
       window->count += milli;
       

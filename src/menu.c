@@ -858,7 +858,8 @@ GLOBAL VOID hndl_menu (WINDOWP window, WORD title, WORD item)
 				{
 					if(rtmmodule->help != 0)
 					{
-						ok = (rtmmodule->help) (rtmmodule);
+						(rtmmodule->help) (rtmmodule);
+						ok = TRUE;	/* Module help reports its own failure. */
 					} /* if */
 				} /* if */
 				/*

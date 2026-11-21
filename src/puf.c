@@ -701,7 +701,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 		case RTM_POSIT:
 			if (status->sync)
 			{
-				position(module, status->posit);    /* find actual position */
+				position(module, posit);    /* find actual position */
 				module->reset (module);
 				status->new	  		= TRUE;
 				window->milli = 1;
@@ -710,7 +710,7 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 		case RTM_CONT:
 			if (status->sync)
 			{
-				position(module, status->posit);    /* find actual position */
+				position(module, posit);    /* find actual position */
 				status->play = TRUE;
 				status->new	  = TRUE;
 				window->milli = 1;

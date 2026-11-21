@@ -118,6 +118,7 @@ PRIVATE OBJECT *cmi_info;
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
 PRIVATE CONST STRING module_name = "CMI";		/* Name, für Extension etc. */
+PRIVATE BOOLEAN sending_setup = FALSE;
 
 /****** FUNCTIONS ************************************************************/
 
@@ -249,6 +250,7 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 	STAT_P	status = module->status;
 	WORD 		*input = module->actual->setup->input;
 	WORD		signal;
+	BOOLEAN	was_sending_setup = sending_setup;
 			
 	/* Numerierung der Channels, Ports und Tracks intern ab 0 .. */
 	/* Zulässigkeit der Port-Anwahl überprüfen */
@@ -260,7 +262,10 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 			status->port2 = 0;
 	} /* if */
 
+	/* Variable updates are delivered synchronously, including back to CMI. */
+	sending_setup = TRUE;
 	send_variable(VAR_SET_CMI, module->actual->number);
+	sending_setup = was_sending_setup;
 	send_variable(VAR_CMI_CHANNEL1, status->channel1);
 	send_variable(VAR_CMI_CHANNEL2, status->channel2);
 	send_variable(VAR_CMI_PORT1, status->port1);
@@ -307,7 +312,8 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			switch (variable)
 			{
 				case VAR_SET_CMI:
-					module->set_setnr(module, value);
+					if (!sending_setup || value != module->actual->number)
+						module->set_setnr(module, value);
 					break;
 			} /* switch */
 			break;

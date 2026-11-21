@@ -1027,17 +1027,16 @@ GLOBAL BOOLEAN showhelp_obj (WINDOWP window, WORD icon)
 			ret = help_rtm (name);
 		else
 		{
-			ret = help_obj(window->module);
+			module = window->module;
+			if (module) ret = help_rtm (module->object_name);
 		} /* else */
 	} /* if */
-	if (!ret) hndl_alert (ERR_NOHELP);
 	return (ret);
 } /* showhelp_obj */
 
 GLOBAL BOOLEAN help_obj (RTMCLASSP module)
 {
-	STRING		name;
-    BOOLEAN		ret = FALSE;
+	BOOLEAN		ret = FALSE;
 	
 	if (module)
 	{
@@ -1046,6 +1045,7 @@ GLOBAL BOOLEAN help_obj (RTMCLASSP module)
 		else
 			ret = help_rtm (module->object_name);
 	} /* if */
+	if (!ret) hndl_alert (ERR_NOHELP);
 	return (ret);
 } /* help_obj */
 
@@ -1275,6 +1275,7 @@ GLOBAL BOOLEAN term_modules (VOID)
 	WINDOWP window;
 
 	save_infos_obj ();					/* Einstellungen sichern, solange die Module noch leben */
+	term_msh ();						/* Stop interrupts before destroying their modules. */
 	
 	for (i = 0; i < max_rtmmodules; i++)         	/* Untersuche alle Module */
 	{

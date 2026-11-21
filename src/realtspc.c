@@ -867,8 +867,7 @@ LOCAL BOOLEAN key_save (WINDOWP window, MKINFO *mk)
 LOCAL BOOLEAN help_save (WINDOWP window, WORD icon)
 
 {
-	help_rtm ("SPEICHERN");
-	return (TRUE);
+	return help_rtm ("SPEICHERN");
 } /* help_save */
 
 /*****************************************************************************/
@@ -964,7 +963,7 @@ LOCAL VOID click_login (WINDOWP window, MKINFO *mk)
 			draw_object (window, ROOT);
 			break;
 		case LOGHELP   :
-			help_login (NULL, NIL);
+			if (!help_login (NULL, NIL)) hndl_alert (ERR_NOHELP);
 			undo_state (window->object, window->exit_obj, SELECTED);
 			draw_object (window, window->exit_obj);
 			break;
@@ -997,8 +996,7 @@ LOCAL BOOLEAN key_login (WINDOWP window, MKINFO  *mk)
 
 LOCAL BOOLEAN help_login (WINDOWP window, WORD icon)
 {
-	help_rtm ("LOGIN");
-	return (TRUE);
+	return help_rtm ("LOGIN");
 } /* help_login */
 
 /*****************************************************************************/
@@ -1221,46 +1219,29 @@ GLOBAL VOID UpdateTimeField (WINDOWP window, WORD obj, LONG value)
 
 GLOBAL BOOLEAN help_rtm (char *KeyWord  )
 {
-	INT		msg_buff[8], acc_id;
-	BOOLEAN	ok = TRUE;
+	WORD		msg_buff[8] = {0}, acc_id;
 	static STRING help_key;		/* Speichert dauerhaft den Helptext 
 											für ACC-Zugriff */
+	UBYTE		*key_ptr = help_key;
 	CHAR		*c;
 	INT		i;
-		
+
+	if (!KeyWord) return FALSE;
 	acc_id = appl_find (AC_NAME);
 
-	if( acc_id < 0 )
-	{	/* non, therefore no help available */
-		form_alert( 1, "[3][|" AC_NAME "|not found.][ OK ]" );
-		ok = FALSE;
-	}
-	else
-	{
-		if (KeyWord)
-		{
-			for (i = 0; KeyWord[i] == ' '; i++); 	/* Space überspringen */
-			strcpy (help_key, KeyWord+i);		/* Name kopieren */
-			c = strrchr (help_key, ' ');		/* Hinteres Space	suchen */
-			if (c) *c = 0;							/* String abschneiden */
-			
-			msg_buff[0] = AC_HELP;					/* magic message number 	*/
-			msg_buff[1] = gl_apid;					/* my own id				*/
-			msg_buff[2] = 0;							/* no more than 16 bytes	*/
-			*(char **)&msg_buff[3] = help_key;	/* the Key Word			*/
+	if (acc_id < 0) return FALSE;
+
+	for (i = 0; KeyWord[i] == ' '; i++); 	/* Space überspringen */
+	strcpy (help_key, KeyWord+i);		/* Name kopieren */
+	c = strrchr (help_key, ' ');		/* Hinteres Space	suchen */
+	if (c) *c = 0;							/* String abschneiden */
 	
-			ok &= appl_write( acc_id, 16, msg_buff );  /* write message			*/
-#if false
-			/* wait for reply */
-			do
-			{
-				evnt_mesag( msg_buff );
-			} while ( msg_buff[0] != AC_REPLY );
-#endif
-		
-		} /* if */
-	} /* else */
-	return ok;
+	msg_buff[0] = AC_HELP;					/* magic message number 	*/
+	msg_buff[1] = gl_apid;					/* my own id				*/
+	msg_buff[2] = 0;							/* no more than 16 bytes	*/
+	memcpy (&msg_buff[3], &key_ptr, sizeof (key_ptr));	/* the Key Word */
+
+	return appl_write (acc_id, 16, msg_buff);
 } /* help */
 
 GLOBAL VOID update_ptext (WINDOWP window, WORD object, INT newval, INT oldval, STRING format, BOOLEAN force_draw)

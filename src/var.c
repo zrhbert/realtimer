@@ -57,7 +57,6 @@
 #define MOD_RSC_NAME "VAR_MOD.RSC"		/* Name der Resource-Datei */
 
 #define MAXSETUPS			201L			/* Anzahl der VAR-Setups */
-#define MAXITERATIONS   4				/* Max. Tiefe der Update-Rekursion */
 #define NO_REFNUM		-1
 
 #define Timestamp() msh_available ? MidiGetTime() : clock ()
@@ -105,7 +104,6 @@ PRIVATE OBJECT *var_desk;
 PRIVATE OBJECT *var_text;
 PRIVATE OBJECT *var_info;
 
-PRIVATE WORD		iterations;	/* Anzahl Iterationen für VAR-Update */
 PRIVATE WORD		instance_count = 0;			/* Anzahl der RTM Instanzen */
 PRIVATE CONST WORD max_instances = 1;			/* Max Anzahl Instanzen */
 PRIVATE CONST STRING module_name = "VAR";		/* Name, für Extension etc. */
@@ -402,7 +400,6 @@ GLOBAL VOID	update_var		(RTMCLASSP module, UWORD variable, LONG value, BOOL rese
 	MSG_SET_VAR	message, *msg = &message;
 	RTMCLASSP	mod;
 
-	iterations = 0;
 	/* Sicherheitsabfrage */
 	if (variable < MAXSYSVARS && value >= var->min && value <= var->max)
 	{
@@ -436,24 +433,10 @@ GLOBAL VOID	update_var		(RTMCLASSP module, UWORD variable, LONG value, BOOL rese
 				} /* if mod */
 				
 				/* Prüfen, ob sich Wert verändert hat, z.B. durch minmaxsetup */
-#if true
 				if (var->value != value)
 					return;	/* Sofort beenden, weil rekursiv aufgerufen und schon geändert! */
 				else
 					element = element->next;	/* Nächstes Element */
-#else
-				if (var->value != value && iterations < MAXITERATIONS )
-				{
-					/* Neuen Wert übernehmen */
-					SetValueVar (var, value);
-					msg->value = value;
-					/* Liste noch einmal durcharbeiten */
-					element = header->next;
-					iterations++;
-				} /* if modified */
-				else
-					element = element->next;	/* Nächstes Element */
-#endif
 			} /* while */
 			
 			/* Evtl. interne Systemvariable anspringen (oder andere VAR) */

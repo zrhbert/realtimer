@@ -81,6 +81,7 @@ V 1.00, 17.04.93
 
 #include "var.h"
 #include <msh_unit.h>		/* Deklarationen für MidiShare Library */
+#include <mint/osbind.h>
 #include "msh.h"
 
 #include "export.h"
@@ -110,7 +111,9 @@ V 1.00, 17.04.93
 #define MAXMODULES 10						/* Max. Anz. Instanzen */
 #define MAXSETUPS 0
 
-enum DTaskTypes {TRADTaskReset, TRADTaskBeepLo, TRADTaskBeepHi};	/* Delayed Task Typen */
+#define CLICK_BEAT_MS       500L		/* 120 BPM */
+#define CLICK_BEATS_PER_BAR 4
+#define CLICK_MAX_LATE_MS   50L
 
 enum RECEIVE_MTC_SYNC
 	{
@@ -134,13 +137,13 @@ enum RECEIVE_MC_SYNC
 typedef	struct status *STAT_P;
 typedef	struct status
 {
-	UINT	play		: 1	;	/* PLAY gedrückt */
+	volatile UINT	play		: 1	;	/* PLAY gedrückt */
 	UINT	record	: 1	;	/* RECORD gedrückt */
 	UINT	ffwd		: 1	;	/* >> gedrückt */
 	UINT	rew		: 1	;	/* << gedrückt */
 	UINT	cycle		: 1	;	/* Cycle-Modus an/aus*/
 	UINT	master	: 1	;	/* Master-Track an/aus */
-	UINT	click		: 1	;	/* Click an/aus */
+	volatile UINT	click		: 1	;	/* Click an/aus */
 	UINT	sync_in	: 1	;	/* Sync input an/aus */
 	UINT	sync_out	: 1	;	/* Sync output an/aus */
 	UINT	locked	: 1	;	/* Sync eingelockt */
@@ -151,10 +154,14 @@ typedef	struct status
 	UINT	big_puf_sync	: 1	;	/* BIG + PUF synchron mitlaufen */
 	LONG	leftloc;				/* Linker Locator */
 	LONG	rightloc;			/* Rechter Locator */
-	LONG	posit;				/* SMPTE Zeit	*/
-	INT	click_freq;			/* Click-Frequenz */	
-	INT	click_duration;	/* Click-Zeit	*/
-	INT	click_counter;		/* Zähler */
+	volatile LONG posit;			/* SMPTE Zeit */
+	volatile LONG position_time;		/* MidiGetTime at the last position update */
+	volatile ULONG play_generation;
+	volatile ULONG click_generation;
+	ULONG click_seen_generation;
+	LONG click_next_beat;
+	BOOLEAN click_scheduled;
+	volatile BOOLEAN play_error;
 	TFilter	filter;			/* Midi-In-Filter	*/
 	BOOLEAN new;				/* komplett neu zeichnen */
 	BOOL snd_mtc;				/* Flag ob MTC Senden an */
@@ -239,7 +246,6 @@ INT 		 frameval[] = { 24, 25, 30, 30, 100 };
 /* MidiShare Funktionen */
 MSH_RCVALARM_PROTO (receive_evts_tra);
 MSH_TASK_PROTO (play_task_tra);
-MSH_TASK_PROTO (delayed_task_tra);
 MSH_APPLALARM_PROTO (receive_alarm_tra);
 MSH_TASK_PROTO (sync_send_mtc);
 MSH_TASK_PROTO (sync_receive_mtc);
@@ -252,7 +258,8 @@ PRIVATE VOID 	send_cont		(LONG posit);
 PRIVATE VOID 	send_stop		(LONG posit);
 PRIVATE VOID	send_record			_((BOOLEAN flag));
 
-PRIVATE VOID	Beep (RTMCLASSP module, BOOL high);
+PRIVATE VOID	restore_click_sound (BOOLEAN stop);
+PRIVATE VOID	service_click (RTMCLASSP module);
 
 PRIVATE VOID create_displayobs (WINDOWP window);
 
@@ -629,7 +636,7 @@ MSH_TASK_CALLBACK (sync_receive_mtc, date, refNum, a1, a2, delay)
 			}
 			/* Play Task aufrufen, wenn es wieder Zeit ist. */
 			else if (status->mtc_time - posit > QUANT)
-				MSH_TASK_FN (play_task_tra) (posit, refNum, 0L, 0L, 0L);
+				MSH_TASK_FN (play_task_tra) (posit, refNum, (LONG)status->play_generation, 0L, 0L);
 
 		} /* RCV_MTC_SYNC */
 		
@@ -814,7 +821,6 @@ MSH_RCVALARM_CALLBACK (receive_evts_tra, refNum)
 			case typeRTMStop:
 				status->posit 			= get_posit((MidiSTPtr)event);
 				status->play			= FALSE;
-				status->click_counter  = 0;
 				window->milli			= 1;
 				if (status->sync_in)
 				{
@@ -946,17 +952,27 @@ MSH_TASK_CALLBACK (play_task_tra, date, refNum, a1, a2, a3)
 		das Fenster einzublenden */
 
 	MidiEvPtr	myTask;
-	RTMCLASSP	module = modulep[refNum];
-	STAT_P		status = module->status;
-	WINDOWP		window = module->window;
-	REG LONG		left 	= status->leftloc;
-	REG LONG		right	= status->rightloc;
+	RTMCLASSP	module;
+	STAT_P		status;
+	WINDOWP		window;
+	REG LONG		left, right;
 	REG LONG		posit;
-		
+
+	if (refNum <= 0 || refNum >= MAXMSAPPLS || !(module = modulep[refNum]))
+		return;
+	status = module->status;
+	window = module->window;
+	/* Ignore tasks left over from an earlier play/stop cycle. */
+	if (!window || !status->play || (ULONG)a1 != status->play_generation)
+		return;
+	left = status->leftloc;
+	right = status->rightloc;
+
 	window->milli = 1; /* Updaten */
 
 	/* Zeit weiterzählen */
 	status->posit += QUANT;
+	status->position_time = MidiGetTime ();
 
 	posit = status->posit;
 
@@ -979,57 +995,140 @@ MSH_TASK_CALLBACK (play_task_tra, date, refNum, a1, a2, a3)
 	if (status->play)
 	{
 		if (!status->sync_in)
-			myTask = MidiTask(play_task_tra, MidiGetTime() + QUANT, refNum, 0, 0, 0);
-
-		if (status->click)
 		{
-			if ((status->posit % 1000) == 0)
-				myTask = MidiTask(delayed_task_tra, MidiGetTime(), refNum, (LONG)TRADTaskBeepHi, 0, 0);
-			else
-				myTask = MidiTask(delayed_task_tra, MidiGetTime(), refNum, (LONG)TRADTaskBeepLo, 0, 0);
-		} /* if click */
+			myTask = MidiTask(play_task_tra, MidiGetTime() + QUANT, refNum, a1, 0, 0);
+			if (!myTask)
+			{
+				status->play_error = TRUE;
+				window->milli = 1;
+			} /* if */
+		} /* if */
 	} /* if play */
 
 	send_variable(VAR_SMPTE, posit);
 } /* play_task_tra */
 
-MSH_TASK_CALLBACK (delayed_task_tra, date, refNum, a1, a2, a3)
+/* The sound table must outlive Dosound(), which consumes it asynchronously. */
+PRIVATE UBYTE click_sound[] =
 {
-	/* Wird aufgerufen, um nicht Echtzeitfähige Funktionen auszuführen */
-	RTMCLASSP	module 	= modulep[refNum];
-	WORD action = (WORD)a1;
+	0, 0, 1, 0, 8, 12, 0xff, 1, 8, 0, 0xff, 0
+};
+PRIVATE UBYTE click_saved_low, click_saved_high, click_saved_mixer, click_saved_volume;
+PRIVATE BOOLEAN click_sound_active = FALSE;
 
-	switch (action)
-	{
-		case TRADTaskReset:
-			module->reset (module);
-			break;
-		case TRADTaskBeepLo:
-			Beep (module, FALSE);
-			break;
-		case TRADTaskBeepHi:
-			Beep (module, TRUE);
-			break;
-	} /* switch */
-} /* delayed_task_tra */
-
-PRIVATE VOID	Beep (RTMCLASSP module, BOOL high)
+PRIVATE VOID restore_click_sound (BOOLEAN stop)
 {
-	STAT_P		status = module->status;
-	/* Piepser */
-	vs_mute(phys_handle, MUTE_DISABLE);
-	
-	/* Tiefer Ton jede Sekunde */
-	if (high)
+	ULONG playing;
+	ULONG start = (ULONG)click_sound;
+	WORD mixer;
+
+	if (!click_sound_active) return;
+	playing = (ULONG)Dosound (DS_INQUIRE);
+	if (playing >= start && playing <= start + sizeof (click_sound))
 	{
-		/* Bconout (2, BEL); */
-		v_sound( vdi_handle, status->click_freq*2, status->click_duration );
+		if (!stop) return;
+		Dosound (0L);
 	} /* if */
 	else
 	{
-		v_sound( vdi_handle, status->click_freq, status->click_duration );
+		/* Do not overwrite another sound which has taken over channel A. */
+		if (playing != 0
+		    || (Giaccess (0, PSG_AVOLUME) & 0x1f) != 0
+		    || (Giaccess (0, PSG_APITCHLOW) & 0xff) != click_sound[1]
+		    || (Giaccess (0, PSG_APITCHHIGH) & 0x0f) != click_sound[3]
+		    || (Giaccess (0, PSG_MODE) & (PSG_ENABLEA | PSG_NOISEA)) != PSG_NOISEA)
+		{
+			click_sound_active = FALSE;
+			return;
+		} /* if */
 	} /* else */
-} /* Beep */
+
+	Giaccess (0, 0x80 | PSG_AVOLUME);
+	Giaccess (click_saved_low, 0x80 | PSG_APITCHLOW);
+	Giaccess (click_saved_high, 0x80 | PSG_APITCHHIGH);
+	/* Preserve changes to the other channels made while the click sounded. */
+	mixer = Giaccess (0, PSG_MODE);
+	mixer = (mixer & ~(PSG_ENABLEA | PSG_NOISEA))
+	      | (click_saved_mixer & (PSG_ENABLEA | PSG_NOISEA));
+	Giaccess (mixer, 0x80 | PSG_MODE);
+	Giaccess (click_saved_volume, 0x80 | PSG_AVOLUME);
+	click_sound_active = FALSE;
+} /* restore_click_sound */
+
+PRIVATE VOID play_click_sound (BOOL high)
+{
+	WORD mixer;
+
+	restore_click_sound (TRUE);
+	click_saved_low = (UBYTE)Giaccess (0, PSG_APITCHLOW);
+	click_saved_high = (UBYTE)Giaccess (0, PSG_APITCHHIGH);
+	click_saved_mixer = (UBYTE)Giaccess (0, PSG_MODE);
+	click_saved_volume = (UBYTE)Giaccess (0, PSG_AVOLUME);
+	mixer = click_saved_mixer;
+	click_sound[1] = high ? 0x9c : 0x38;
+	click_sound[3] = high ? 0x00 : 0x01;
+	Giaccess (0, 0x80 | PSG_AVOLUME);
+	Giaccess ((mixer & ~PSG_ENABLEA) | PSG_NOISEA, 0x80 | PSG_MODE);
+	click_sound_active = TRUE;
+	Dosound (click_sound);
+} /* play_click_sound */
+
+PRIVATE VOID advance_generation (volatile ULONG *generation)
+{
+	/* Messages may arrive in the timer interrupt as well as in the main loop. */
+	__asm__ volatile ("addq.l #1,%0" : "+m" (*generation) : : "cc");
+} /* advance_generation */
+
+PRIVATE VOID service_click (RTMCLASSP module)
+{
+	STAT_P status = module->status;
+	ULONG generation;
+	LONG position, position_time, elapsed, current, remainder, beat;
+
+	if (!status->play || !status->click)
+	{
+		status->click_scheduled = FALSE;
+		restore_click_sound (TRUE);
+		return;
+	} /* if */
+
+	restore_click_sound (FALSE);
+
+	/* A position update can interrupt the main loop between these reads. */
+	do
+	{
+		generation = status->click_generation;
+		position = status->posit;
+		position_time = status->position_time;
+	} while (generation != status->click_generation || position != status->posit);
+
+	if (!status->click_scheduled || generation != status->click_seen_generation)
+	{
+		remainder = position % CLICK_BEAT_MS;
+		if (remainder < 0) remainder += CLICK_BEAT_MS;
+		status->click_next_beat = position + (remainder ? CLICK_BEAT_MS - remainder : 0);
+		status->click_seen_generation = generation;
+		status->click_scheduled = TRUE;
+	} /* if */
+
+	elapsed = (LONG)((ULONG)MidiGetTime () - (ULONG)position_time);
+	if (elapsed < 0) elapsed = 0;
+	if (elapsed > QUANT) elapsed = QUANT;
+	current = position + elapsed;
+
+	if (current >= status->click_next_beat)
+	{
+		remainder = current % CLICK_BEAT_MS;
+		if (remainder < 0) remainder += CLICK_BEAT_MS;
+		beat = current - remainder;
+		/* Do not play a burst of old clicks after a modal dialog or stall. */
+		if (remainder <= CLICK_MAX_LATE_MS && status->play && status->click
+		    && generation == status->click_generation)
+			play_click_sound ((beat / CLICK_BEAT_MS) % CLICK_BEATS_PER_BAR == 0);
+		status->click_next_beat = beat + CLICK_BEAT_MS;
+	} /* if */
+
+} /* service_click */
 
 /*****************************************************************************/
 
@@ -1058,13 +1157,20 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 	{
 		case RTM_POSIT:
 			status->posit 			= posit;
+			status->position_time = MidiGetTime ();
+			advance_generation (&status->click_generation);
 			send_variable(VAR_SMPTE, status->posit);
 			window->milli			= 1;
 			break;
 		case RTM_CONT:
+			advance_generation (&status->play_generation);
 			status->posit 			= posit;
+			status->position_time = MidiGetTime ();
 			status->play			= TRUE;
-			myTask = MidiTask(play_task_tra, MidiGetTime() + QUANT, refNum, 0, 0, 0);
+			advance_generation (&status->click_generation);
+			myTask = MidiTask(play_task_tra, MidiGetTime() + QUANT, refNum,
+			                  (LONG)status->play_generation, 0, 0);
+			if (!myTask) status->play_error = TRUE;
 			if (status->sync_in)
 			{
 			}
@@ -1076,9 +1182,10 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			window->milli			= 1;
 			break;
 		case RTM_STOP:
+			advance_generation (&status->play_generation);
 			status->posit 			= posit;
 			status->play			= FALSE;
-			status->click_counter  = 0;
+			advance_generation (&status->click_generation);
 			window->milli			= 1;
 			if (status->sync_in)
 			{
@@ -1092,6 +1199,13 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 		case SET_VAR:			/* Record ein/ausschalten */
 			switch (variable)
 			{
+				case VAR_TRA_CLICK:
+					if (status->click != (value != 0))
+					{
+						status->click = value != 0;
+						advance_generation (&status->click_generation);
+					} /* if */
+					break;
 				case VAR_PUF_PLAY:
 					status->puf_sync	= (BOOLEAN)value;
 					status->new	  = TRUE;
@@ -1429,6 +1543,16 @@ PRIVATE VOID wi_timer_mod (WINDOWP window)
 	WORD			refNum = (WORD)module->special;
 	BOOLEAN		new = status->new || (window->flags & WI_JUNK);
 	WORD			msec;
+
+	if (status->play_error)
+	{
+		status->play_error = FALSE;
+		if (status->play) send_variable (VAR_TRA_STOP, TRUE);
+		restore_click_sound (TRUE);
+		hndl_alert (ERR_MIDISHAREFULL);
+	} /* if */
+
+	service_click (module);
 	
 	/* Sicherheitshalber */
 	status->new = new;
@@ -1439,6 +1563,10 @@ PRIVATE VOID wi_timer_mod (WINDOWP window)
 	
 	/* Aufruf von Hand */
 	window->finished (window);
+	if (status->play && status->click)
+		window->milli = 1;
+	else
+		restore_click_sound (TRUE);
 } /* wi_timer_mod */
 
 /*****************************************************************************/
@@ -1709,11 +1837,6 @@ PRIVATE RTMCLASSP create (VOID)
 		status = module->status;
 		mem_set(status, 0, (UWORD)sizeof(STATUS));
 
-		/* Click Setup */
-		status->click_freq 		= 400;
-		status->click_duration 	= 2;
-		status->click_counter  	= 0;
-
 		/* Setup-Strukturen initialisieren */
 		mem_set(module->standard, 0, (UWORD) sizeof(SETUP));
 		
@@ -1745,6 +1868,7 @@ PRIVATE RTMCLASSP create (VOID)
 		add_rcv(VAR_SYNC_OUT_PORTS, module);	/* Message einklinken */
 		add_rcv(VAR_TRA_PLAY, module);	/* Message einklinken */
 		add_rcv(VAR_TRA_STOP, module);	/* Message einklinken */
+		add_rcv(VAR_TRA_CLICK, module);	/* Message einklinken */
 		add_rcv(VAR_TRA_FFWD, module);	/* Message einklinken */
 		add_rcv(VAR_TRA_REW, module);		/* Message einklinken */
 		add_rcv(VAR_RECORD,   module);	/* Message einklinken */
@@ -1781,6 +1905,8 @@ PRIVATE RTMCLASSP create (VOID)
 PUBLIC VOID destroy_mod (RTMCLASSP module)
 {
 	INT	refNum;
+
+	restore_click_sound (TRUE);
 	
 	if (msh_available)
 	{
@@ -1955,6 +2081,7 @@ PUBLIC BOOLEAN term_mod (VOID)
 {
 	BOOLEAN	ok = TRUE;
 
+	restore_click_sound (TRUE);
 	ok &= term_rsc_tra ();
 	return (ok);
 } /* term_mod */
