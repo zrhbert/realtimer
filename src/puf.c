@@ -1259,7 +1259,7 @@ PRIVATE VOID dsetup (WINDOWP refwindow)
 	WINDOWP window;
 	WORD    ret;
 	
-	window = search_window (CLASS_DIALOG, SRCH_ANY, PUF_SETUP);
+	window = search_window_object (CLASS_DIALOG, SRCH_ANY, puf_setup);
 	
 	if (window == NULL)
 	{
@@ -1282,9 +1282,10 @@ PRIVATE VOID dsetup (WINDOWP refwindow)
 			module->set_edit (module);
 			module->set_dbox (module);
 			undo_state (window->object, PUFHELP, DISABLED);
+
+			if (! open_window (window)) hndl_alert (ERR_NOOPEN);
 		} /* if */
-		
-		if (! open_dialog (PUF_SETUP)) hndl_alert (ERR_NOOPEN);
+		else top_window(window);
 	
 	} /* if */
 } /* dsetup */

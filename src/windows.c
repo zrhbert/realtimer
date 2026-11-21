@@ -119,6 +119,7 @@ LOCAL BOOLEAN in_listbox   _((LISTBOX *list));
 LOCAL WORD    item2obj     _((LISTBOX *list, WORD item));
 LOCAL WORD    obj2item     _((LISTBOX *list, WORD obj));
 LOCAL VOID    snap_object  _((WINDOWP window, RECT *new, WORD mode));
+LOCAL VOID    clamp_window_rect _((RECT *rect));
 LOCAL VOID    hndl_mscroll _((WINDOWP window, WORD obj, WORD breturn));
 LOCAL VOID    set_menu     _((BOOLEAN enable));
 LOCAL VOID    fix_menu     _((WINDOWP window));
@@ -149,6 +150,29 @@ GLOBAL WINDOWP search_window (WORD class, WORD mode, WORD icon)
 
   return (NULL);
 } /* search_window */
+
+/*****************************************************************************/
+/* Suche Fenster anhand des Objektbaums                                      */
+/*****************************************************************************/
+
+GLOBAL WINDOWP search_window_object (WORD class, WORD mode, OBJECT *object)
+
+{
+  REG WORD    slot;
+  REG WINDOWP window;
+
+  for (slot = 0; slot < top; slot++)
+  {
+    window = windows [slot];
+
+    if ((class == NIL) || (class == window->class))
+      if (((window->opened == 0) && (mode & SRCH_CLOSED)) ||
+          ((window->opened > 0) && (mode & SRCH_OPENED)))
+        if (window->object == object) return (window);
+  } /* for */
+
+  return (NULL);
+} /* search_window_object */
 
 /*****************************************************************************/
 /* Suche Fenster von Fenster-Handle                                          */
@@ -492,6 +516,33 @@ GLOBAL WINDOWP create_window (UWORD kind, WORD class)
 } /* create_window */
 
 /*****************************************************************************/
+/* Begrenze Fenster auf den Desktopbereich                                    */
+/*****************************************************************************/
+
+LOCAL VOID clamp_window_rect (RECT *rect)
+
+{
+  LONG right, bottom;
+
+  right  = (LONG)desk.x + desk.w;
+  bottom = (LONG)desk.y + desk.h;
+
+  if (rect->w >= desk.w)
+    rect->x = desk.x;
+  else if (rect->x < desk.x)
+    rect->x = desk.x;
+  else if ((LONG)rect->x + rect->w > right)
+    rect->x = (WORD)(right - rect->w);
+
+  if (rect->h >= desk.h)
+    rect->y = desk.y;
+  else if (rect->y < desk.y)
+    rect->y = desk.y;
+  else if ((LONG)rect->y + rect->h > bottom)
+    rect->y = (WORD)(bottom - rect->h);
+} /* clamp_window_rect */
+
+/*****************************************************************************/
 /* Lösche Fenster                                                            */
 /*****************************************************************************/
 
@@ -567,6 +618,7 @@ GLOBAL BOOLEAN open_window (WINDOWP window)
 {
   WORD    wh, i;
   RECT    r;
+  WORD    dx, dy;
   WORD    xy [4];
   WORD    newtop;
   WINDOWP untopped;
@@ -580,6 +632,22 @@ GLOBAL BOOLEAN open_window (WINDOWP window)
 
     if (window->opened == 0)
     {
+      if (window->class != DESK)
+      {
+        wind_calc (WC_BORDER, window->kind,
+                   window->work.x, window->work.y, window->work.w, window->work.h,
+                   &r.x, &r.y, &r.w, &r.h);
+        dx = r.x;
+        dy = r.y;
+        clamp_window_rect (&r);
+        dx = r.x - dx;
+        dy = r.y - dy;
+        window->work.x += dx;
+        window->work.y += dy;
+        window->scroll.x += dx;
+        window->scroll.y += dy;
+      } /* if */
+
       if (window->class == DESK)
         wh = DESK;
       else
@@ -1516,6 +1584,7 @@ GLOBAL VOID snap_window (WINDOWP window, RECT *new, WORD mode)
 
     if (window->snap != NULL) (*window->snap) (window, new, mode);
     snap_object (window, new, mode);
+    clamp_window_rect (new);
   } /* if */
 } /* snap_window */
 

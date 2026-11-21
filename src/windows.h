@@ -165,6 +165,7 @@ GLOBAL SET     sel_objs;        /* Menge selektierter Objekte */
 /* ***** FUNCTIONS ************************************************************/
 
 GLOBAL WINDOWP search_window  _((WORD class, WORD mode, WORD icon));
+GLOBAL WINDOWP search_window_object _((WORD class, WORD mode, OBJECT *object));
 GLOBAL WINDOWP find_window    _((WORD wh));
 GLOBAL WINDOWP find_top       _((VOID));
 GLOBAL BOOLEAN is_top         _((WINDOWP window));
