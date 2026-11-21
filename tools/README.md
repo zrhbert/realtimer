@@ -124,11 +124,13 @@ trees contain placeholder text and are not used as a fallback.
 ## Regression tests
 
 Run `make test TOOLCHAIN=/path/to/cross-mint` to build and execute the
-variable-dispatch, synchronized PUF position, transport-click, CMI setup,
-CMO routing, 3D projection, initialization-window lifetime, and
-help-dispatch/message checks in a headless Hatari ST. The tests need Python
-3, Hatari, and the SDK's ST EmuTOS image; set `ATARIST_TOOLS` if the SDK
-cannot be found automatically.
+variable-dispatch, synchronized PUF position, transport-click, CMI and LFO
+setup, CMO routing, 3D projection, initialization-window lifetime,
+help-dispatch/message, and MIDI timer keyboard-interrupt checks in a
+headless Hatari ST. The timer check requests an IKBD clock response during
+a scheduled callback and verifies that the reply arrives before it ends.
+The tests need Python 3, Hatari, and the SDK's ST EmuTOS image; set
+`ATARIST_TOOLS` if the SDK cannot be found automatically.
 
 Run `make test-tt TOOLCHAIN=/path/to/cross-mint` to run the same regressions
 with the TT build and test floating-point state across MIDI timer interrupts.

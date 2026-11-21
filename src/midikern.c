@@ -604,10 +604,10 @@ void mk_timer_tick (void)
 		mk_service ();
 } /* mk_timer_tick */
 
-/* Interrupt entry: full register save, switch to the private stack (the
-	system supervisor stack is small and the tasks need real stack room),
-	call the C handler, end-of-interrupt for MFP Timer A. Timer A cannot
-	re-enter itself (same IPL), so one saved stack pointer suffices.
+/* Interrupt entry: save registers and use a private stack for the tasks.
+	Mask Timer A and acknowledge it before lowering the CPU interrupt level,
+	so keyboard/MIDI interrupts can run during long callbacks without Timer A
+	re-entering and overwriting the saved stack pointer.
 	FSAVE also preserves an interrupted FPU operation; a null frame has
 	no floating-point registers to save. Run the callback with the default
 	FPU control mode, not a temporary rounding mode from interrupted code. */
@@ -630,7 +630,11 @@ __asm__ (
 	"fmove.l #0,%fpcr\n\t"
 	"move.l %a0,-(%sp)\n\t"
 #endif
+	"bclr #5,0xfffffa13\n\t"
+	"bclr #5,0xfffffa0f\n\t"
+	"move.w #0x2500,%sr\n\t"
 	"jsr mk_timer_tick\n\t"
+	"move.w #0x2600,%sr\n\t"
 #if defined(__HAVE_68881__)
 	"move.l (%sp)+,%a0\n\t"
 	"tst.b (%a0)\n\t"
@@ -642,7 +646,7 @@ __asm__ (
 #endif
 	"move.l mk_saved_sp,%sp\n\t"
 	"movem.l (%sp)+,%d0-%d7/%a0-%a6\n\t"
-	"bclr #5,0xfffffa0f\n\t"
+	"bset #5,0xfffffa13\n\t"
 	"rte\n");
 extern void mk_timer_isr (void);
 

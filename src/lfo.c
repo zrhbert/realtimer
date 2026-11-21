@@ -200,6 +200,7 @@ typedef struct status
 	WORD			var_values[MAXSETVARS];	/* Systemvariablen */
 	WORD			ctrl_out_port;			/* Ausgabe-Port für Controller */
 	WORD			ctrl_out_ch;			/* Ausgabe-Kanal für Controller */
+	BOOLEAN		sending_setup;
 } STATUS;
 
 typedef struct status *STAT_P;	
@@ -888,10 +889,14 @@ PRIVATE VOID    send_messages	(RTMCLASSP module)
 	STATQSINGLE	*q, *quelle = status->quelle; /* Zeiger auf ersten Quell-Status */
 	STATZSINGLE	*z, *ziel = status->ziel; 		/* Zeiger auf ersten Ziel-Status */
 	WORD 			lfo, signal, x=0;
+	BOOLEAN		was_sending_setup = status->sending_setup;
 
 	send_variable(VAR_LFA_UMK, 	status->umkehr);
 	send_variable(VAR_LFA_PAUSE,	status->pause);
+	/* Variable updates are delivered synchronously, including back to LFO. */
+	status->sending_setup = TRUE;
 	send_variable(VAR_SET_LFA, 	module->actual->number);
+	status->sending_setup = was_sending_setup;
 	
 	q = quelle;
 	for (lfo = 0; lfo < MAXLFOS; lfo++)
@@ -1131,7 +1136,8 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			switch (variable)
 			{
 				case VAR_SET_LFA:	
-					module->set_setnr(module, value);
+					if (!status->sending_setup || value != module->actual->number)
+						module->set_setnr(module, value);
 					break;
 				case VAR_PROP_LFA:
 					module->status->prop = (WORD)value;
@@ -1569,6 +1575,7 @@ PRIVATE	RTMCLASSP create (VOID)
 		module->edited->setup		= (SET_P)mem_alloc(sizeof(SETUP));
 		module->status 				= (STATUS *)mem_alloc (sizeof(STATUS));
 		module->stat_alt 				= (STATUS *)mem_alloc (sizeof(STATUS));
+		module->status->sending_setup = FALSE;
 		module->load					= load_obj;
 		module->save					= save_obj;
 		module->import					= import;
