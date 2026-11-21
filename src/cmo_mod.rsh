@@ -1382,10 +1382,10 @@ static OBJECT rs_object[] =
   NONE, DISABLED, (LONG)"  Perspektive    \007P ",
   0x0000, 0x0002, 0x0014, 0x0001,
   MCMOCHANNEL16,       -1,       -1, G_STRING  ,   /* Object 43 MCMOCHANNEL15 */
-  NONE, NORMAL, (LONG)"  Midi Ch 15     \0075 ",
+  NONE, NORMAL, (LONG)"  CM System 2    \0075 ",
   0x0000, 0x0003, 0x0014, 0x0001,
         39,       -1,       -1, G_STRING  ,   /* Object 44 MCMOCHANNEL16 */
-  LASTOB, NORMAL, (LONG)"  Midi Ch 16     \0076 ",
+  LASTOB, NORMAL, (LONG)"  CM System 1    \0076 ",
   0x0000, 0x0004, 0x0014, 0x0001,
   
   /******** Tree 1 CMO_HELP ****************************************************/

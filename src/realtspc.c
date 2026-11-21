@@ -561,6 +561,7 @@ LOCAL VOID timer_daktstat (WINDOWP window)
 		if (status->close) /* Schliessen ? */
 		{
 			close_window(window);
+			window->special = 0;
 			mem_free ((VOID*)status);
 		} /* if */
 	} /* if */

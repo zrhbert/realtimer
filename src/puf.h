@@ -19,6 +19,7 @@
 /****** FUNCTIONS ************************************************************/
 
 GLOBAL BOOLEAN 	init_puf  		_((VOID));
+GLOBAL VOID		puf_refresh_output	_((VOID));
 
 #endif /* __PUF__ */
 

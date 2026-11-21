@@ -35,13 +35,13 @@ V 0.02 28.08.94
 #include "global.h"
 #include "windows.h"
 #include "xrsrc.h"
-#include "math.h"
 
 #include "realtim5.h"
 #include "cmo_mod.h"
 #include "realtspc.h"
 #include "dispobj.h"
 #include "var.h"
+#include "puf.h"
 
 #include "errors.h"
 #include "desktop.h"
@@ -76,48 +76,10 @@ V 0.02 28.08.94
 #define MOD_RSC_NAME "CMO_MOD.RSC"		/* Name der Resource-Datei */
 
 #define MAXSETUPS 100l					/* Anzahl der CMO-Setups */
-#define KOORV (FBREIT2/MAXKOOR)			/* Verhältnis von 3D-Koordinaten zu 
-														RTM-Koordinaten */
-enum koor_states 
-{USED, NEW, FREE};		/* Zustand der Koordinaten in den
-														zwei Gruppen */
-
-/* Sound-Ausgabe */
-#define MAXOUTPUTS 8
-#define ADRSTROBE 0xFA0000l		/* ROM4 Adresse = Offset für faddresse[1][1] */
-#define DATSTROBE 0xFB0000l		/* ROM3 Adresse = Offset für vaddresse[0] */
-
-/* Sound-Koordinaten */
-#define FBREITE	126
-#define FBREIT2	(FBREITE/2)
-#define FEINH 		(FBREITE/3)
-#define FEIN2 		(FBREITE/6)
-#define FBKUBIK 	2000376L /* FBREITE ^3 */
-#define KOFFSET 	(FBREIT2/2)
-#define KOEFF		50
-
-/* Grafik */
-#if false
-#define Sinq(x) sinus[x%360]
-#define Cosq(x) sinus[(x+270)%360]
-#endif
-#define Sqrt(x) sqrt_array[(x)>>1]
-
-#define MUSTER1 0x5555 /*&X0101010101010101*/
-#define MUSTER2 0xAAAA /*&X1010101010101010*/
-#define MUSTER3 0xFFFF /*&X1111111111111111*/
-#define MUSTER4 0x4444 /*&X0100010001000100*/
-
-#define PUNKTEN 	0x9999
-#define STRICHELN 	0x3333
-#define STRICH 		0xffff
-#define M (-FEIN2)
-#define P FEIN2
+#define CMO_CHANNELS 2
 
 /* Umwandlung von MIDI-Format auf interne Koordinatendarstellung */
 #define MIDI_TO_INTERN(koor) (koor - 64)
-
-#define PercentToMaster(percent) (percent*255/MAXPERCENT)
 
 /****** TYPES ****************************************************************/
 
@@ -126,15 +88,8 @@ typedef struct status
 {
 	BOOLEAN	new;							/* Zwang zum Neuzeichnen */
 	BOOLEAN	reset_flag;					/* Parameter wurden zurueckgesetzt */
-	KOOR_SINGLE	koor[MAXINPUTS];		/* Aktuelle Koordinaten der Inputs */
-	BOOL		kneu[MAXINPUTS];			/* TRUE, wenn Koordinate sich geändert hat */
-	BOOLEAN	fader_neu[MAXINPUTS];	/* Fader müssen upgedated werden */
-	BOOLEAN	master_neu[MAXINPUTS];	/* Master müssen upgedated werden */
-	UWORD		fader[MAXINPUTS][MAXOUTPUTS];		/* Level für Fader */
-	UWORD		master[MAXOUTPUTS];		/* Level für Master-Fader */
-	BOOLEAN	kreisen[MAXINPUTS];		/* Rotation an/aus pro Kanal*/
-	WORD		kreis_pos[MAXINPUTS];	/* Winkel-Positionen der Rotationen */
-	WORD		kreis_radius[MAXINPUTS];	/* Radius der Rotationen */
+	KOOR_SINGLE	koor[CMO_CHANNELS][MAXINPUTS];
+	BOOL		kneu[CMO_CHANNELS][MAXINPUTS];
 	WINDOWP		refwindow;
 	RTMCLASSP	refmodule;				/* Das Bezugsmodul */
 	TFilter	filter;						/* Midi-In-Filter	*/
@@ -152,7 +107,7 @@ typedef struct setup
 				distanz,						/* Distanz */
 				persp;						/* Perspektive */
 	WORD		master;						/* Master-Level */
-	WORD		midi_channel;				/* Midi-Kanal für eingehende Daten */
+	WORD		midi_channel;				/* 16: system 1, 15: system 2 (legacy setup encoding) */
 	BOOLEAN	innenraum;					/* Nur Innenraum anzeigen */
 	BOOLEAN	pfeile;						/* Pfeile anzeigen */
 } SETUP;	/* Enthält alle Parameter einer kompletten CMO-Einstellung */
@@ -169,47 +124,12 @@ PRIVATE OBJECT *cmo_text;
 PRIVATE OBJECT *cmo_info;
 PRIVATE OBJECT *cmo_raum;
 
-PRIVATE INT	xk [FBREITE+1] [FBREITE+1];
-PRIVATE INT	yk [FBREITE+1] [FBREITE+1];
-PRIVATE FLOAT	vx= 0.55,		/* Default-Werte für Grafikausgabe */
-			vy=-0.50,		/* Verzerrung x/y/z */
-			vz= 0.20,
-			persp=0.0012,	/* Perspektive */
-			zoom=2.0;		/* Größe */
-
-LOCAL LONG	maxsqrt = (1+3*(FBREIT2*FBREIT2))/2;
-LOCAL WORD	*sqrt_array;		/* Wurzel Array */
-LOCAL WORD	v_factor;
-LOCAL int	kennlinie[256] = 
-{
-	  0,  31,  53,  87, 109, 114, 118, 121, 124, 126, 129, 131, 133, 135, 136, 138, 139, 140,
-	142, 143, 144, 145, 147, 147, 149, 150, 150, 151, 152, 153, 154, 154, 155, 156, 157, 157,
-	158, 158, 159, 160, 160, 161, 161, 162, 163, 163, 164, 164, 165, 165, 167, 167, 168, 168,
-	169, 169, 169, 170, 170, 171, 171, 172, 172, 172, 173, 174, 174, 174, 175, 175, 176, 176,
-	176, 177, 177, 177, 178, 178, 178, 179, 179, 179, 180, 180, 181, 181, 181, 182, 182, 182,
-	183, 183, 183, 184, 184, 184, 186, 186, 186, 187, 187, 187, 188, 188, 188, 189, 189, 189,
-	189, 190, 190, 190, 191, 191, 191, 192, 192, 192, 193, 193, 193, 194, 194, 194, 194, 195,
-	195, 195, 195, 196, 196, 196, 197, 197, 197, 198, 198, 198, 198, 199, 199, 199, 200, 200,
-	200, 201, 201, 201, 201, 202, 202, 202, 203, 203, 203, 203, 204, 204, 204, 205, 205, 204,
-	205, 205, 205, 206, 206, 206, 207, 207, 207, 208, 208, 208, 209, 209, 209, 209, 210, 210,
-	210, 211, 211, 211, 212, 212, 212, 213, 213, 214, 214, 214, 215, 215, 216, 216, 217, 217,
-	217, 218, 218, 218, 219, 219, 219, 220, 220, 220, 220, 221, 221, 222, 222, 222, 223, 223,
-	224, 224, 225, 225, 226, 226, 227, 227, 228, 229, 229, 230, 230, 231, 231, 232, 233, 233,
-	234, 234, 234, 235, 236, 237, 238, 238, 239, 240, 241, 242, 243, 244, 245, 247, 248, 249,
-	251, 252, 254, 255
-};
-
-LOCAL BYTE	*faddress[MAXINPUTS][MAXOUTPUTS];	/* Hardware-Adressen für Input-Fader */
-LOCAL BYTE	*maddress[MAXOUTPUTS];					/* Hardware-Adressen für Master */
-LOCAL BYTE	*vaddress[2000];							/* Hardware-Adressen Volume-Werte */
-LOCAL WORD	sinus[360];									/* Sinus-Werte für Sinq() */
-
 PRIVATE WORD		instance_count = 0;			/* Anzahl der Instanzen */
 PRIVATE CONST WORD max_instances = 2;			/* Max Anzahl Instanzen */
-PRIVATE CONST STRING module_name = "CMO";		/* Name, für Extension etc. */
+PRIVATE CHAR module_name[] = "CMO";			/* Name, für Extension etc. */
+PRIVATE BOOLEAN sending_setup = FALSE;
 
 PRIVATE RTMCLASSP	modulep[MAXMSAPPLS];		/* Zeiger auf Modul-Strukturen */
-PRIVATE WORD		refNums[3];					/* Referenznummern */
 /****** FUNCTIONS ************************************************************/
 
 PRIVATE VOID		dsetup			_((WINDOWP refwindow));
@@ -220,84 +140,79 @@ PUBLIC BOOLEAN		set_setnr_setup	_((RTMCLASSP module, LONG setupnr));
 
 PRIVATE BOOLEAN	init_rsc			_((VOID));
 PRIVATE BOOLEAN	term_rsc			_((VOID));
-PRIVATE BOOLEAN	init_koor_cmo	_((VOID));
-
-PRIVATE VOID		kreisen			_((RTMCLASSP module));
-PRIVATE VOID		update			(RTMCLASSP module, BOOLEAN force);
-PRIVATE VOID		update_single	(RTMCLASSP module, BOOLEAN force, WORD input);
-PRIVATE VOID		set_input		(RTMCLASSP module, WORD input);
-PRIVATE VOID		fader_calc		_((RTMCLASSP module, WORD input));
-PRIVATE VOID		set_fader		_((RTMCLASSP module, WORD input,  WORD output));
-PRIVATE VOID		set_master		_((RTMCLASSP module, WORD output));
-PRIVATE VOID		init_fader		_((VOID));
 
 PRIVATE WORD ComputeNumDO (WINDOWP window);
 PRIVATE VOID ComputeWorkDO (WINDOWP window, WORD obj_num, RECT *work);
 PRIVATE VOID create_displayobs (WINDOWP window);
+PRIVATE VOID init_standard (RTMCLASSP module, WORD instance);
 
 /* MidiShare Funktionen */
 MSH_RCVALARM_PROTO (receive_evts_cmo);
 MSH_APPLALARM_PROTO (receive_alarm_cmo);
 PRIVATE VOID		InstallFilter				_((SHORT refNum));
-PRIVATE WORD		init_midishare 			_((VOID));
+PRIVATE WORD		init_midishare 			_((RTMCLASSP module));
 
 /*****************************************************************************/
 
 MSH_RCVALARM_CALLBACK (receive_evts_cmo, refNum)
 {
 	MidiEvPtr	event;
-	LONG 			n;
-	INT 			r;
-	MidiEvPtr	myTask;
 	RTMCLASSP	module = modulep[refNum];
 	SET_P			akt = module->actual->setup;
 	STAT_P		status = module->status;
-	KOOR_SINGLE	*koor, *k;
+	KOOR_SINGLE	*koor;
 	WINDOWP		window = module->window;
-	WORD			signal, channel, type;
+	WORD			signal, channel, port, type, bank;
 	UBYTE 		pitch, value;
 	
-	r = refNum;
 	/* Bis die Warteschlange leer ist, nicht nach vorher gezaehlter Anzahl: der Alarm kann
 	   waehrend MidiSendIm() erneut aufgerufen werden, dann stimmt der Zaehler nicht mehr
 	   und MidiGetEv() liefert NULL. */
-	while ((event = MidiGetEv (r)) != NULL)
+	while ((event = MidiGetEv (refNum)) != NULL)
 	{
 		switch (EvType(event))
 		{
 			case typeKeyOn:
 			case typeNote:
 				channel = (WORD) Chan(event);
-				if (channel == akt->midi_channel - 1)
+				port = (UBYTE) Port(event);
+				pitch = (UBYTE) Pitch(event);
+				value = (UBYTE) Vel(event);
+				if (pitch < 128 && value < 128)
 				{
-					pitch = Pitch(event);
-					value	= Vel(event);
-					
 					/* Signal = bits 2 - 7 */
 					signal = pitch>>2;
 					/* X,Y,Z,Vol = bits 0 und 1 */
 					type = pitch & 3;
-	
-					koor = &status->koor[signal];
-					switch (type)
+					for (bank = 0; bank < CMO_CHANNELS; bank++)
 					{
-						case 0: /* X */
-							koor->koor.x = MIDI_TO_INTERN(value);
-							break;
-						case 1: /* Y */
-							koor->koor.y = MIDI_TO_INTERN(value);
-							break;
-						case 2: /* Z */
-							koor->koor.z = MIDI_TO_INTERN(value);
-							break;
-						case 3: /* Vol */
-							koor->volume = value;
-							break;
-					} /* switch koor */
-					status->kneu[signal] = TRUE;
-					update_single(module, signal, TRUE);
-					window->milli = 1;
-				} /* if midi_channel */
+						UWORD channel_var = bank ? VAR_CMI_CHANNEL1 : VAR_CMI_CHANNEL2;
+						UWORD port_var = bank ? VAR_CMI_PORT1 : VAR_CMI_PORT2;
+						if (channel != var_get_value(var_module, channel_var) ||
+						    port != var_get_value(var_module, port_var))
+							continue;
+
+						koor = &status->koor[bank][signal];
+						switch (type)
+						{
+							case 0: /* X */
+								koor->koor.x = MIDI_TO_INTERN(value);
+								break;
+							case 1: /* Y */
+								koor->koor.y = MIDI_TO_INTERN(value);
+								break;
+							case 2: /* Z */
+								koor->koor.z = MIDI_TO_INTERN(value);
+								break;
+							case 3: /* Vol */
+								koor->volume = value;
+								break;
+						} /* switch koor */
+						status->kneu[bank][signal] = TRUE;
+						if (window && bank == (akt->midi_channel == 15 ? 0 : 1))
+							window->milli = 1;
+					} /* for bank */
+				} /* if valid CMO event */
 				break;
 			case typeStop:
 				module->reset(module);
@@ -352,196 +267,15 @@ PRIVATE VOID InstallFilter (WORD refNum)
 	register		int i;
 
 	for (i = 0; i<256; i++)
-	{ 										
-		AcceptBit(filter->evType,i);		/* accepte tous les types d'événements	*/
 		AcceptBit(filter->port,i);		/* en provenance de tous les ports		*/
-	} /* for */
-											
-	for (i = 0; i<16; i++)
-		AcceptBit(filter->channel,i);	/* et sur tous les canaux Midi		*/
+	AcceptBit(filter->evType, typeKeyOn);
+	AcceptBit(filter->evType, typeNote);
+	AcceptBit(filter->evType, typeStop);
+	for (i = 0; i < 16; i++)
+		AcceptBit(filter->channel,i);
 		
 	MidiSetFilter( refNum, filter );   /* installe le filtre				*/
 } /* InstallFilter */
-
-/**** Steuer-Funktionen *******************************************************/
-
-PRIVATE	VOID kreisen (RTMCLASSP module)
-{
-	STAT_P	status = module->status;
-	KOOR_SINGLE	*koor = status->koor, *k;
-	WORD		*pos = status->kreis_pos;
-	WORD		*radius = status->kreis_radius;
-	WORD		input;
-	
-	k = koor;
-	for(input = 0; input < MAXINPUTS; input++)
-	{
-		if (status->kreisen[input])
-		{
-			*pos = *pos++ % 360;
-			k->koor.x = *radius * Sinq(*pos * (6 + input)) / 100;
-			k->koor.y = 0;
-			k->koor.z = *radius * Cosq(*pos * (6 + input)) / 100;
-			k->volume = 254;
-			k++;
-		} /* if */
-	} /* for */
-
-	update (module, FALSE);
-} /* kreisen */
-
-PRIVATE	VOID master	(RTMCLASSP module, UWORD volume)
-{
-	STAT_P	status = module->status;
-	UWORD		*master = status->master;
-	WORD		output, value;
-	SET_P		akt = module->actual->setup;
-	
-	akt->master = min(MAXPERCENT, volume);
-	value = PercentToMaster(volume);
-	for (output = 0; output < MAXOUTPUTS; output++)
-	{
-		*master++ = value;
-		set_master (module, output);
-	} /* for */
-	send_messages (module);
-} /* master */
-
-PRIVATE	VOID update	(RTMCLASSP module, BOOLEAN force)
-{
-	WORD input;
-	SET_P		akt = module->actual->setup;
-	
-	for (input = 0; input < MAXINPUTS; input++)
-		update_single (module, force, input);
-		
-	master (module, akt->master);
-} /* update */
-
-PRIVATE	VOID fader_calc	(RTMCLASSP module, WORD input)
-{
-	/* Fader-Position eines Inputs berechnen */
-	STAT_P		status = module->status;
-	KOOR_SINGLE	*koor = &status->koor[input];
-	LONG 	x = (INT) koor->koor.x,
-			y = (INT) koor->koor.y,
-			z = (INT) koor->koor.z,
-			rechts	= max(0,  x + KOFFSET),
-			links 	= max(0, -x + KOFFSET),
-			oben		= max(0,  y + KOFFSET),
-			unten 	= max(0, -y + KOFFSET),
-			hinten	= max(0,  z + KOFFSET),
-			vorne 	= max(0, -z + KOFFSET);
-	register UWORD *valp = status->fader[input];	/* Zeiger auf Fader-Werte */
-
-	/* Vol in C: 0 ..127 , in Basic-Version 0 ..254 */
-	LONG	vk = KOEFF*2*koor->volume*(FBREIT2-Sqrt((x*x)+(y*y)+(z*z)))/FBREIT2; 	/* Volume-Berechnung */
-	if (vk > 0) 
-		vk = (vk*vk) / (KOEFF * 255);
-	
-	if (vk >= KOEFF * 255)
-		vk = KOEFF * 255;
-	else if (vk < 0)
-		vk=0;
-	
-	/* Hier werden die Faderwerte berechnet und gespeichert */
-		
-	*valp++ = (WORD) ((vk * links		* unten	* vorne	) / FBKUBIK);
-	*valp++ = (WORD) ((vk * rechts	* unten	* vorne	) / FBKUBIK);
-	*valp++ = (WORD) ((vk * rechts	* unten	* hinten	) / FBKUBIK);
-	*valp++ = (WORD) ((vk * links		* unten	* hinten	) / FBKUBIK);
-
-	*valp++ = (WORD) ((vk * links		* oben	* vorne	) / FBKUBIK);
-	*valp++ = (WORD) ((vk * rechts	* oben	* vorne	) / FBKUBIK);
-	*valp++ = (WORD) ((vk * rechts	* oben	* hinten	) / FBKUBIK);
-	*valp++ = (WORD) ((vk * links		* oben	* hinten	) / FBKUBIK);
-
-} /* fader_calc */
-
-PRIVATE	VOID update_single	(RTMCLASSP module, BOOLEAN recompute, WORD input)
-{
-	STAT_P		status 		= module->status;
-	STAT_P		stat_alt 	= module->stat_alt;
-	KOOR_SINGLE	*koor 		= &status->koor[input];
-	KOOR_SINGLE	*koor_alt 	= &stat_alt->koor[input];
-	BOOLEAN 		set = recompute;
-	BOOLEAN		*fader_neu 	= &status->fader_neu[input];
-	
-	if (*fader_neu == FALSE || recompute)
-	{
-		/* Fader-Positionen neu berechnen */
-		fader_calc (module, input);
-		/*
-		set |= koor->koor.x != koor_alt->koor.x;
-		set |= koor->koor.y != koor_alt->koor.y;
-		set |= koor->koor.z != koor_alt->koor.z;
-		set |= koor->volume != koor_alt->volume;
-		*/
-		*fader_neu = FALSE;
-	} /* if */
-	set_input (module, input);
-
-} /* update_single */
-
-PRIVATE	VOID set_input (RTMCLASSP module, WORD input)
-{
-	/* Einen ganzen Input an die Hardware übegeben */
-	volatile WORD peek;
-	UWORD *valp, *value = module->status->fader[input];
-	WORD *hardw_fader_adr;
-	/* AdSpeed8(); */
-		
-	valp = value;
-	hardw_fader_adr = (WORD *)faddress[input][0];
-	
-	peek = *hardw_fader_adr++;		/* Peek(faddress[input][0] */
-	peek = *vaddress[*valp++];			/* Peek(vaddress[value[input][0] */
-
-	peek = *hardw_fader_adr++;		/* Peek(faddress[input][1] */
-	peek = *vaddress[*valp++];			/* Peek(vaddress[value[input][1] */
-
-	peek = *hardw_fader_adr++;		/* Peek(faddress[input][2] */
-	peek = *vaddress[*valp++];			/* Peek(vaddress[value[input][2] */
-
-	peek = *hardw_fader_adr++;		/* Peek(faddress[input][3] */
-	peek = *vaddress[*valp++];			/* Peek(vaddress[value[input][3] */
-
-	peek = *hardw_fader_adr++;		/* Peek(faddress[input][4] */
-	peek = *vaddress[*valp++];			/* Peek(vaddress[value[input][4] */
-
-	peek = *hardw_fader_adr++;		/* Peek(faddress[input][5] */
-	peek = *vaddress[*valp++];			/* Peek(vaddress[value[input][5] */
-
-	peek = *hardw_fader_adr++;		/* Peek(faddress[input][6] */
-	peek = *vaddress[*valp++];			/* Peek(vaddress[value[input][6] */
-
-	peek = *hardw_fader_adr++;		/* Peek(faddress[input][7] */
-	peek = *vaddress[*valp++];			/* Peek(vaddress[value[input][7] */
-
-	/* AdSpeed16(); */
-
-	/* activity-Anzeige : */
-	/* activity(); */
-} /* set_input */
-
-PRIVATE VOID set_master (RTMCLASSP module, WORD output)
-{
-	VOLATILE BYTE peek;
-	WORD		value = module->status->master[output];
-
-	peek = *maddress[output];
-	peek = *vaddress[value];
-
-} /* set_master */
-
-PRIVATE	VOID set_fader (RTMCLASSP module, WORD input,  WORD output)
-{
-	VOLATILE BYTE peek;
-	WORD		value = module->status->fader[input][output];
-
-	peek = *faddress[input][output];
-	peek = *vaddress[value];
-} /* set_fader */
 
 /*****************************************************************************/
 PRIVATE VOID    get_dbox	(RTMCLASSP module)
@@ -619,22 +353,18 @@ PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 
 PUBLIC VOID		reset	(RTMCLASSP module)
 {
-	/* Zurücksetzen von Werten */
 	STAT_P	status = module->status;
 	WINDOWP	window = module->window;
-	KOOR_SINGLE	*koor = status->koor, *k;
-	WORD		input;
+	WORD		bank, input;
 	
-	k = status->koor;
-	for (input = 0; input < MAXINPUTS; input++)
+	for (bank = 0; bank < CMO_CHANNELS; bank++)
 	{
-		k->koor.x = 0;
-		k->koor.y = 0;
-		k->koor.z = 0;
-		k->volume = 0;
-		k++;
-	} /* for input */
-	update (module, FALSE);
+		for (input = 0; input < MAXINPUTS; input++)
+		{
+			mem_set (&status->koor[bank][input], 0, (UWORD)sizeof(KOOR_SINGLE));
+			status->kneu[bank][input] = TRUE;
+		} /* for input */
+	} /* for bank */
 
 	status->reset_flag = TRUE;
 	status->new = TRUE;
@@ -659,10 +389,8 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 			switch (variable)
 			{
 				case VAR_SET_CMO:
-					module->set_setnr(module, value);
-					break;
-				case VAR_CM_MASTER1:
-					master (module, value);
+					if (!sending_setup || value != module->actual->number)
+						module->set_setnr(module, value);
 					break;
 			} /* switch */
 			break;
@@ -671,10 +399,12 @@ PUBLIC VOID		message	(RTMCLASSP module, WORD type, VOID *msg)
 
 PUBLIC VOID    send_messages	(RTMCLASSP module)
 {
-	STAT_P	status = module->status;
-	SET_P			akt = module->actual->setup;
+	SET_P		akt = module->actual->setup;
+	BOOLEAN	was_sending_setup = sending_setup;
 
+	sending_setup = TRUE;
 	send_variable(VAR_SET_CMO, module->actual->number);
+	sending_setup = was_sending_setup;
 	if (akt->midi_channel == 16)
 		send_variable(VAR_CM_MASTER1, module->actual->setup->master);
 	else
@@ -776,7 +506,7 @@ PRIVATE VOID dsetup (WINDOWP refwindow)
 	WINDOWP		window;
 	WORD			ret;
 	
-	window = search_window (CLASS_DIALOG, SRCH_CLOSED, CLASS_CMO);
+	window = search_window_object (CLASS_DIALOG, SRCH_ANY, cmo_setup);
 	
 	if (window == NULL)
 	{
@@ -797,17 +527,18 @@ PRIVATE VOID dsetup (WINDOWP refwindow)
 			module->set_edit (module);
 			module->set_dbox (module);
 			undo_state (window->object, CMOHELP, DISABLED);
+
+			if (! open_window (window)) hndl_alert (ERR_NOOPEN);
 		} /* if */
 		else
-			window->opened = 1;
-		
-		if (! open_window (window)) hndl_alert (ERR_NOOPEN);
+			top_window (window);
 	
 	} /* if */
 } /* dsetup */
 
 PRIVATE RTMCLASSP define_setup (WINDOWP window, RTMCLASSP refmodule)
 {
+	static RTMCLASS setup_module;
 	RTMCLASSP module = NULL;
 
 	if (window != NULL)
@@ -816,8 +547,7 @@ PRIVATE RTMCLASSP define_setup (WINDOWP window, RTMCLASSP refmodule)
 		window->key      = wi_key_obj;
 		window->showinfo = info_mod;
 		window->showhelp = showhelp_obj;
-		module = create_module(module_name, instance_count);
-		/* Informationen kopieren */
+		module = &setup_module;
 		mem_move (module, refmodule, (UWORD)sizeof (RTMCLASS));
 		module->object_type	= MODULE_OTHER;
 		module->send_messages	= send_messages_setup;
@@ -859,9 +589,6 @@ PUBLIC BOOLEAN	set_setnr_setup	(RTMCLASSP module, LONG setupnr)
 PRIVATE VOID update_menu_mod (WINDOWP window)
 {
 	SET_P		akt = Akt(window);
-	STAT_P	status = Status(window);
-	BOOL		kreisen = FALSE;
-	WORD		input;
 	
 	/* Modus */
 	menu_check(cmo_menu, MCMOMONO, akt->grafikmodus == MONO);
@@ -881,11 +608,6 @@ PRIVATE VOID update_menu_mod (WINDOWP window)
 	menu_check(cmo_menu, MCMOKREISFORM, akt->raumform == KREISFORM);
 	menu_check(cmo_menu, MCMOQUADROPHON, akt->raumform == QUADROPHON);
 
-	/* Aktionen */
-	for(input = 0; input < MAXINPUTS; input++)
-		kreisen |= 	status->kreisen[input];
-
-	menu_check(cmo_menu, MCMOKREISEN, kreisen);
 	menu_check(cmo_menu, MCMOCHANNEL15, akt->midi_channel == 15);
 	menu_check(cmo_menu, MCMOCHANNEL16, akt->midi_channel == 16);
 
@@ -963,33 +685,12 @@ PRIVATE VOID handle_menu_mod (WINDOWP window, WORD title, WORD item)
 				break;
 		} /* switch */
 		status->new = TRUE;
+		break;
 
 		case MCMOACTIONS: switch (item)
 		{
-			case MCMOKREISEN	:
-				kreisen(module);
-				break;
 			case MCMORESET	:
 				module->reset (module);
-				break;
-			case MCMOMASTERINC:
-				master (module, akt->master + 1);
-				window->milli = 1;
-				break;
-			case MCMOMASTERDEC:
-				master (module, akt->master - 1);
-				window->milli = 1;
-				break;
-			case MCMOMASTERDIV:
-				master (module, akt->master/2);
-				window->milli = 1;
-				break;
-			case MCMOMASTERMUL:
-				if (akt->master == 0)
-					master (module, 1);
-				else
-					master (module, akt->master*2);
-				window->milli = 1;
 				break;
 		} /* switch */
 	} /* switch */
@@ -1006,9 +707,6 @@ PRIVATE BOOLEAN wi_key_mod (WINDOWP window, MKINFO *mk)
 
 {
 	RTMCLASSP	module = Module(window);
-	WORD			refNum = (WORD)module->special;
-	STAT_P		status = module->status;
-	SET_P			akt = Akt(window);
 	BOOLEAN		ok = FALSE;
 	
 	switch (mk->scan_code)
@@ -1017,29 +715,6 @@ PRIVATE BOOLEAN wi_key_mod (WINDOWP window, MKINFO *mk)
 			module->reset(module);
 			ok = TRUE;
 			break;
-		default:
-			switch (mk->ascii_code)
-			{
-				case '+':
-					master (module, akt->master + 1);
-					window->milli = 1;
-					break;
-				case '-':
-					master (module, akt->master - 1);
-					window->milli = 1;
-					break;
-				case '/':
-					master (module, akt->master/2);
-					window->milli = 1;
-					break;
-				case '*':
-					if (akt->master == 0)
-						master (module, 1);
-					else
-						master (module, akt->master*2);
-					window->milli = 1;
-					break;
-			} /* switch */
 	} /* switch */
 
 	ok |= (menu_key (window, mk));
@@ -1076,9 +751,11 @@ PRIVATE VOID wi_start_mod (WINDOWP window)
 	DISPOBJP	dispobj = NULL;
 	LIST_P	header, element;
 	BOOLEAN	new = status->new || (window->flags & WI_JUNK);
+	BOOLEAN	reset_pending = status->reset_flag;
 	BOOLEAN	newkoor = FALSE;
-	KOOR_SINGLE	*koor = status->koor, *koor_s;
-	BOOL		*kneu = status->kneu;
+	WORD		bank = akt->midi_channel == 15 ? 0 : 1;
+	KOOR_SINGLE	*koor = status->koor[bank], *koor_s;
+	BOOL		*kneu = status->kneu[bank];
 	POINT_3D	*point;
 	POS_3D	position;
 	WORD		index, x, base_signal = 0, num_signals, num_objs, rows, cols, obj_count = 0;
@@ -1087,6 +764,23 @@ PRIVATE VOID wi_start_mod (WINDOWP window)
 	RECT		work, a;
 	
 	status->new = new;
+	status->reset_flag = FALSE;
+
+	if (new)
+	{
+		STRING title;
+		WORD first_input = bank == 0 ? 33 : 1;
+
+		snprintf ((char *)title, sizeof (title), " %s  CM %d (%d-%d) ",
+		          (char *)module->object_name, bank == 0 ? 2 : 1,
+		          first_input, first_input + MAXINPUTS - 1);
+		if (strcmp ((char *)window->name, (char *)title) != 0)
+		{
+			strcpy ((char *)window->name, (char *)title);
+			if (window->opened > 0)
+				wind_set_str (window->handle, WF_NAME, window->name);
+		}
+	}
 	
 	/* Anzahl der Objekte berechnen */
 	num_objs = ComputeNumDO (window);
@@ -1158,12 +852,13 @@ PRIVATE VOID wi_start_mod (WINDOWP window)
 			spacestatus = (SPACESTATP) dispobj->status;
 			for (signal = 0; signal < num_signals; signal++)
 			{
-				if (kneu[signal+base_signal])
+				if (new || kneu[signal+base_signal])
 				{
+					kneu[signal+base_signal] = FALSE;
 					koor_s = &koor[signal+base_signal];
-					spacestatus->position[signal].x = koor_s->koor.x;
-					spacestatus->position[signal].y = koor_s->koor.y;
-					spacestatus->position[signal].z = koor_s->koor.z;
+					spacestatus->position[signal].x = (LONG)koor_s->koor.x * MAXDOKOOR / MAXKOOR;
+					spacestatus->position[signal].y = (LONG)koor_s->koor.y * MAXDOKOOR / MAXKOOR;
+					spacestatus->position[signal].z = (LONG)koor_s->koor.z * MAXDOKOOR / MAXKOOR;
 					spacestatus->volume[signal]     = koor_s->volume;
 					spacestatus->kneu = TRUE;
 				} /* if kneu */
@@ -1176,13 +871,11 @@ PRIVATE VOID wi_start_mod (WINDOWP window)
 		} /* if obj_nr < num_objs */
 
 
+		if (reset_pending && dispobj->reset)
+			dispobj->reset (dispobj);
 		obj_nr++;
 		element = list_next(element);
 	} /* while */
-
-		if (status->reset_flag)
-			if (dispobj->reset) (*dispobj->reset) (dispobj);
-	status->reset_flag = FALSE;	
 
 } /* wi_start_mod */
 
@@ -1234,9 +927,9 @@ PRIVATE VOID wi_snap_mod (WINDOWP window, RECT *new, WORD mode)
 
 PRIVATE VOID wi_timer_mod (WINDOWP window)
 {
-	redraw_window(window, &window->scroll);
 	window->milli = 0; 			/* keine Timer-Funktion mehr bis
 										zur nächsten Änderung */
+	redraw_window(window, &window->scroll);
 } /* wi_timer_mod */
 
 /*****************************************************************************/
@@ -1436,15 +1129,6 @@ PRIVATE VOID create_displayobs (WINDOWP window)
 		list_insert(window->dispobjs, list_new_el (dispobj));
 	} /* for */
 
-	/* Text-Objekte müssen immer nach den Grafiken kommen */
-	a.x = 1 * w;
-	a.y = 0;
-	a.h = h;
-
-	strcpy (s, "Master: %ld ");
-	a.w = w * (WORD)strlen(s);
-	CrtTextDOInsert (window, 0, 0, &a, VAR_CM_MASTER1, s);
-
 	status->num_spaces = num_displayobs;
 } /* create_displayobs */
 
@@ -1462,8 +1146,14 @@ PUBLIC BOOLEAN open_mod (WORD icon)
 	/* Wenn nicht gefunden */
 	if (window == NULL)
 	{
-		if (create()>0)	/* Neue Instanz */
+		if (instance_count < max_instances && create() != NULL)
 			window = search_window (CLASS_CMO, SRCH_CLOSED, icon);
+		else if (instance_count >= max_instances)
+		{
+			window = search_window (CLASS_CMO, SRCH_OPENED, icon);
+			if (window) top_window (window);
+			return window != NULL;
+		}
 	} /* if */
 	
 	ok = window != NULL;
@@ -1519,12 +1209,26 @@ PUBLIC BOOLEAN info_mod (WINDOWP window, WORD icon)
 } /* info_cmo */
 
 /*****************************************************************************/
+PRIVATE VOID init_standard (RTMCLASSP module, WORD instance)
+{
+	SET_P standard = module->standard;
+
+	mem_set (standard, 0, (UWORD)sizeof (SETUP));
+	standard->grafikmodus = MONO;
+	standard->raumform = WUERFEL;
+	standard->innenraum = TRUE;
+	standard->master = 100;
+	standard->midi_channel = instance == 0 ? 16 : 15;
+	standard->rot_x = 30;
+	standard->rot_y = 20;
+	standard->rot_z = 200;
+} /* init_standard */
+
 PRIVATE	RTMCLASSP create (VOID)
 {
 	RTMCLASSP 	module;
 	WINDOWP		window;
 	STAT_P		status;
-	SET_P			standard;
 	FILE			*fp;
 	WORD			signal;
 	LIST_P		list;
@@ -1560,10 +1264,6 @@ PRIVATE	RTMCLASSP create (VOID)
 		module->destroy			= destroy_obj;
 		module->test				= test_obj;
 	
-		module->file_pointer			= mem_alloc (sizeof (FILE));
-		mem_set((VOID*)module->file_pointer, 0, (UWORD)sizeof(FILE));
-		module->import_pointer		= mem_alloc (sizeof (FILE));
-		mem_set((VOID*)module->import_pointer, 0, (UWORD)sizeof(FILE));
 		module->setup_length			= sizeof(SETUP);
 		module->location				= SETUPS_EXTERN;
 		module->ram_modified 		= FALSE;
@@ -1571,6 +1271,7 @@ PRIVATE	RTMCLASSP create (VOID)
 		module->standard				= (SET_P)mem_alloc(sizeof(SETUP));
 		module->actual->setup		= (SET_P)mem_alloc(sizeof(SETUP));
 		module->edited->setup		= (SET_P)mem_alloc(sizeof(SETUP));
+		module->edited->modified	= FALSE;
 		module->status 				= (STATUS *)mem_alloc (sizeof(STATUS));
 		module->stat_alt 				= (STATUS *)mem_alloc (sizeof(STATUS));
 		module->load					= load_obj;
@@ -1609,18 +1310,7 @@ PRIVATE	RTMCLASSP create (VOID)
 		mem_set(status, 0, (UWORD) sizeof(STATUS));
 				
 		/* Setup-Strukturen initialisieren */
-		standard = module->standard;
-		mem_set(standard, 0, (UWORD) sizeof(SETUP));
-		standard->grafikmodus	= MONO;
-		standard->raumform		= WUERFEL;
-		standard->innenraum		= TRUE;
-		standard->master			= 100;
-		standard->midi_channel	= 16;
-
-		/* Fluchtpunkt */
-		standard->rot_x			= 30;
-		standard->rot_y			= 20;
-		standard->rot_z			= 200;
+		init_standard (module, instance_count);
 		
 		/* Initialisierung auf erstes Setup */
 		module->set_setnr(module, 0);		
@@ -1636,72 +1326,19 @@ PRIVATE	RTMCLASSP create (VOID)
 		module->status->refwindow = window;	
 
 		/* Bei Midishare anmelden */
-		refNum				= init_midishare();
+		refNum				= init_midishare(module);
 		module->special	= (LONG) refNum;
-		modulep[refNum]	= module;
-		if (refNum>0)
-			InstallFilter(refNum);									/* Midi-Input-Filter einbauen */	
 
 		/* Display-Objekte einklinken */
 		create_displayobs (window);
 
 		add_rcv(VAR_SET_CMO,  module);	/* Message einklinken */
 		var_set_max(var_module, VAR_SET_CMO, MAXSETUPS);
+		instance_count++;
 	} /* if */
 	daktstatus("Initialisierung CMO", "Ende");
 	return module;
 } /* create */
-
-/*****************************************************************************/
-/* Initialisieren des Moduls                                                 */
-/*****************************************************************************/
-
-PRIVATE	VOID init_fader (VOID)
-{
-	INT 	x, input, output;
-	LONG	i;
-	
-	for(x = 0; x < 2000; x++)
-	{
-		vaddress[x] = (BYTE *)(0xfb0000L + 510);		/* DATSTROBE + Maximum */
-	} /* for */
-
-	for(x = 0; x < 256; x++)
-	{
-		vaddress[x] = (BYTE *)(0xfb0000L + kennlinie[x]*2);	/* Jetzt echte Werte */
-		vaddress[x+1] = (BYTE *)vaddress[x];
-	} /* for */
-	
-	/* Adressen der Input-Fader */
-	for(input = 0; input < MAXINPUTS; input++)
-	{
-		for(output = 0; output < MAXOUTPUTS; output++)
-			faddress[input][output] = (BYTE *)(ADRSTROBE + 2 * (0x100 + MAXOUTPUTS * input + output));
-	} /* for */
-
-	/* Adressen der Master-Fader */
-	for(output = 0; output < MAXOUTPUTS; output++)
-		maddress[output] = (BYTE *)(ADRSTROBE + 2 * output);
-
-	for(x = 0; x < 360; x++)
-	{
-		sinus[x] = 100 * sin((double) x / 360 * 2 * M_PI);
-		/*printf("\033HSinus(%d)=%d\n",x,sinq(x));*/
-	} /* for */
-
-	daktstatus (" CMO Initialisierung", "Wurzel-Array-Berechnung ...");
-	sqrt_array = (WORD*) mem_alloc (maxsqrt * sizeof (WORD));
-	for(i = 0; i < maxsqrt; i++)
-	{
-		if( i % (maxsqrt/10)== 0)
-					set_daktstat((WORD)(i * 100 / maxsqrt));
-		sqrt_array[i] = (WORD)sqrt((double)(i<<1));
-	} /* for */
-	set_daktstat(100);
-	close_daktstat();
-
-	v_factor = sqrt((double)(3 * FEIN2 * FEIN2)) * 10;
-} /* init_fader */
 
 /*****************************************************************************/
 
@@ -1775,7 +1412,19 @@ for (i = 0; i < NUM_OBS; i++)
 	
 	do_flags (cmo_setup, CMOCANCEL, UNDO_FLAG);
 	do_flags (cmo_setup, CMOHELP, HELP_FLAG);
-	
+
+	/* The original ROM-port mixer and the unfinished preset actions are unavailable. */
+	menu_enable (cmo_menu, MCMOMASTERDIV, FALSE);
+	menu_enable (cmo_menu, MCMOMASTERDEC, FALSE);
+	menu_enable (cmo_menu, MCMOMASTERINC, FALSE);
+	menu_enable (cmo_menu, MCMOMASTERMUL, FALSE);
+	menu_enable (cmo_menu, MCMOKREISEN, FALSE);
+	menu_enable (cmo_menu, MCMOPRESSTEREO, FALSE);
+	menu_enable (cmo_menu, MCMOPRESOKTO, FALSE);
+	menu_enable (cmo_menu, MCMOPERSPEKTIVE, FALSE);
+	do_state (cmo_setup, CMOMASTERLEVEL, DISABLED);
+	undo_flags (cmo_setup, CMOMASTERLEVEL, EDITABLE);
+
 	menu_enable(menu, MCMO, TRUE);
 
 	return (TRUE);
@@ -1803,7 +1452,7 @@ PRIVATE BOOLEAN term_rsc (VOID)
 /* MidiShare initialisieren                                                  */
 /*****************************************************************************/
 
-PRIVATE WORD init_midishare (VOID)
+PRIVATE WORD init_midishare (RTMCLASSP module)
 {
 	SHORT		ref, refNum = 0;			/* temporäre Referenznummer */
 	STRING	s;
@@ -1812,7 +1461,7 @@ PRIVATE WORD init_midishare (VOID)
 	{
 		if (MidiShare())
 		{
-			if (instance_count <= max_instances)
+			if (instance_count < max_instances)
 			{
 				if (instance_count == 0)
 					sprintf (s, "CMO");
@@ -1834,12 +1483,13 @@ PRIVATE WORD init_midishare (VOID)
 	
 		if (refNum > 0)							/* Prüfen ob alles klar */
 		{
-			instance_count++;
-			refNums[instance_count] = refNum;				/* Merken für term_mod */
+			modulep[refNum] = module;
+			InstallFilter(refNum);
 			MidiSetRcvAlarm (refNum, receive_evts_cmo);	/* Interrupt-Handler */		
 			MidiSetApplAlarm (refNum, receive_alarm_cmo);	/* Alarm-Handler */
 			/* An alle anschließen */
 			try_all_connect (refNum);
+			puf_refresh_output ();
 		} /* else */
 	} /* if */
 	
@@ -1856,7 +1506,6 @@ GLOBAL BOOLEAN init_cmo (VOID)
 	BOOLEAN	ok = TRUE;
 
 	ok &= init_rsc ();
-	init_fader ();
 	instance_count = load_create_infos (create, module_name, max_instances);
 
 	return (ok);

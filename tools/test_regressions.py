@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the Atari regression executable in a headless Hatari ST."""
+"""Run the Atari regression executable in a headless Hatari ST or TT."""
 
 import argparse
 import os
@@ -18,7 +18,8 @@ def main():
     parser.add_argument("prg", help="68000 regression executable")
     parser.add_argument("--sdk", default=hc.DEFAULT_SDK)
     parser.add_argument("--hatari", help="Hatari executable")
-    parser.add_argument("--tos", help="ST TOS image")
+    parser.add_argument("--tos", help="TOS image")
+    parser.add_argument("--machine", choices=["st", "tt"], default="st")
     parser.add_argument("--timeout", type=int, default=30)
     options = parser.parse_args()
 
@@ -30,11 +31,14 @@ def main():
         result = root / "RESULT.TXT"
         log = root / "hatari.log"
         shutil.copyfile(options.prg, program)
+        machine_opts = ("--machine tt --cpulevel 3 --cpuclock 32 --fpu 68882"
+                        if options.machine == "tt"
+                        else "--machine st --cpulevel 0 --cpuclock 8 --tos-res high")
         args = argparse.Namespace(
             prg=str(program), sdk=options.sdk, hatari=options.hatari,
-            tos=options.tos, machine="st", color=False, zoom=None, fast=True,
+            tos=options.tos, machine=options.machine, color=False, zoom=None, fast=True,
             debugger=False,
-            hatari_opts="--machine st --cpulevel 0 --cpuclock 8 --tos-res high",
+            hatari_opts=machine_opts,
             screenshot_dir=str(root), log=str(log),
             socket="/tmp/realtimer-test-%d.sock" % os.getpid(),
             connect_timeout=30, verbose=False)

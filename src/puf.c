@@ -844,6 +844,12 @@ PRIVATE BOOLEAN midi_out_puf (RTMCLASSP module, PUF_INF *akt, PUF_INF *alt, BOOL
 	return (ret);
 } /* midi_out_puf */
 
+GLOBAL VOID puf_refresh_output (VOID)
+{
+	if (puf_module && puf_module->status)
+		puf_module->status->new = TRUE;
+} /* puf_refresh_output */
+
 PRIVATE BOOLEAN send_stop (RTMCLASSP module)
 {
 	/* Midi-Stop Nachricht senden */
@@ -1756,8 +1762,6 @@ PUBLIC VOID destroy_mod (RTMCLASSP module)
 	mem_free (status->koors_p);
 	mem_free (status->tracks_p);
 	mem_free (status->vols_p);
-
-	mem_free (status->locator);
 #endif
 
 	set_daktstat(100);
@@ -1938,9 +1942,7 @@ PRIVATE VOID init_events (RTMCLASSP module)
 	header->event.volumes	= &volumes[0];	/* Zeiger auf zugehörigen VOL_ALL Block */
 #endif
 
-	/* Array reservieren für zehn Locator */
-	locator = (PUFEVP *) mem_alloc(10 * sizeof(PUFEVP));
-	
+	/* Die Locator sind bereits Teil der Status-Struktur. */
 	for (x = 0; x < 10; x++)
 	{
 		locator[x] = header;
@@ -1973,7 +1975,6 @@ PRIVATE VOID init_events (RTMCLASSP module)
 	set_daktstat(100);
 	status->max_events	= event;
 	status->header			= header;		/* Zeiger auf Header-Event übernehmen */
-	*status->locator		= *locator;		/* Zeiger auf Locator-Array übernehmen */
 	close_daktstat();
 } /* init_events */
 

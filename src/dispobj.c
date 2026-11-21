@@ -1507,6 +1507,8 @@ LOCAL VOID	DeleteSpace	(DISPOBJP dispobj)
 
 	if (!status->shared_persp)
 	{
+		mem_free (status->xwin);
+		mem_free (status->ywin);
 		mem_free (status->xpersp);
 		mem_free (status->ypersp);
 		mem_free (status->xzoff);
@@ -1942,13 +1944,14 @@ LOCAL VOID FinishSpace (DISPOBJP dispobj)
 LOCAL  VOID Project3D (DISPOBJP dispobj, POS_3DP point, POINT_2DP proj)
 {
 	SPACESTATP	status = &dispobj->status->space;
-	WORD			xz, yz, *x = &proj->x, *y = &proj->y;
+	LONG			xz, yz;
+	WORD			*x = &proj->x, *y = &proj->y;
 	RECT			*work = &dispobj->work;
 	WORD			xmin = work->x;
 	WORD			ymin = work->y;
 	WORD			xmax = xmin + work->w;
 	WORD			ymax = ymin + work->h;
-	WORD			z = point->z + DMAXDOKOOR;
+	WORD			z = max (-DMAXDOKOOR, min (DMAXDOKOOR - 1, point->z)) + DMAXDOKOOR;
 	
 	/* Verschiebung von X und Y durch Z */
 	xz = point->x + status->xzoff[z];
@@ -1966,6 +1969,8 @@ LOCAL  VOID Project3D (DISPOBJP dispobj, POS_3DP point, POINT_2DP proj)
 		yz *= 3;
 	}
 
+	xz = max (-DMAXDOKOOR, min (DMAXDOKOOR - 1, xz));
+	yz = max (-DMAXDOKOOR, min (DMAXDOKOOR - 1, yz));
 	*x = status->xoffset + status->xwin[xz+DMAXDOKOOR];
 	*y = status->yoffset + status->ywin[yz+DMAXDOKOOR];
 

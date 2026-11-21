@@ -87,6 +87,7 @@ SRCS += $(RTM_BASE_SRCS)
 RTM_OPT_SRCS = \
 	src/a3d.c \
 	src/cmi.c \
+	src/cmo.c \
 	src/eff.c \
 	src/gen.c \
 	src/gmi.c \
@@ -106,7 +107,6 @@ RTM_OPT_SRCS = \
 SRCS += $(RTM_OPT_SRCS)
 
 RTM_UNUSED_SRCS = \
-	src/cmo.c \
 	src/pow.c \
 	src/big.c \
 	src/ed4.c 
@@ -115,7 +115,7 @@ RTM_UNUSED_SRCS = \
 
 OBJS = $(patsubst src/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
-.PHONY: all clean st test
+.PHONY: all clean st test test-tt
 
 all: $(TARGET) $(TARGET_DEBUG)
 
@@ -132,12 +132,17 @@ test:
 	$(MAKE) CPU= BUILD_DIR=$(ST_BUILD_DIR) $(ST_BUILD_DIR)/regtest.prg
 	python3 tools/test_regressions.py $(ST_BUILD_DIR)/regtest.prg
 
+# Exercise native FPU interrupt handling on the TT build as well.
+test-tt:
+	$(MAKE) CPU=-m68020-60 BUILD_DIR=build build/regtest.prg
+	python3 tools/test_regressions.py build/regtest.prg --machine tt
+
 TEST_SRCS = tests/main.c tests/var.c tests/puf.c tests/tra.c tests/cmi.c \
-	tests/menu.c tests/help.c
+	tests/cmo.c tests/dispobj.c tests/menu.c tests/help.c
 TEST_OBJS = $(patsubst tests/%.c,$(BUILD_DIR)/test-%.o,$(TEST_SRCS))
 TEST_APP_OBJS = $(filter-out $(BUILD_DIR)/gemain.o $(BUILD_DIR)/var.o \
 	$(BUILD_DIR)/puf.o $(BUILD_DIR)/tra.o $(BUILD_DIR)/cmi.o $(BUILD_DIR)/menu.o \
-	$(BUILD_DIR)/realtspc.o,$(OBJS))
+	$(BUILD_DIR)/cmo.o $(BUILD_DIR)/dispobj.o $(BUILD_DIR)/realtspc.o,$(OBJS))
 
 $(BUILD_DIR)/regtest.prg: $(TEST_OBJS) $(TEST_APP_OBJS)
 	$(CC) $^ $(LDFLAGS) -o $@

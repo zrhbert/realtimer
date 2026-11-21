@@ -691,7 +691,7 @@ GLOBAL VOID rtm_record	 (SHORT refnum, BOOLEAN flag)
 	send_variable(VAR_RECORD, flag);
 } /* rtm_record */
 
-GLOBAL SHORT try_name_connect	 (SHORT refnum, STRING name)
+GLOBAL SHORT try_name_connect	 (SHORT refnum, CONST CHAR *name)
 {
 	SHORT 	ref;
 	
@@ -741,7 +741,9 @@ GLOBAL BOOLEAN try_all_connect	 (SHORT refnum)
 	if (refcmo > 0)
 		refcmo = try_num_connect (refnum, refcmo);
 	if ( !refcmo )
-		refbig = try_name_connect (refnum, "CMO");
+		refcmo = try_name_connect (refnum, "CMO");
+	/* A second overview can monitor the other Cybermove channel. */
+	try_name_connect (refnum, "CMO 2");
 	return ret;
 } /* try_all_connect */
 

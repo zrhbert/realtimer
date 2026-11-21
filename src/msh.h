@@ -143,7 +143,7 @@ GLOBAL VOID rtm_stop				(SHORT refNum, LONG time);
 GLOBAL VOID rtm_record			(SHORT refNum, BOOLEAN flag);
 GLOBAL VOID rtm_cycleset		(SHORT refNum, LONG start, LONG stop);
 GLOBAL VOID rtm_cycleonoff 	(SHORT refNum, BOOLEAN flag);
-GLOBAL SHORT try_name_connect	 (SHORT refnum, STRING name);
+GLOBAL SHORT try_name_connect	 (SHORT refnum, CONST CHAR *name);
 GLOBAL SHORT try_num_connect 	(SHORT refNum, SHORT ref);
 GLOBAL BOOL	try_all_connect	(SHORT refNum);
 

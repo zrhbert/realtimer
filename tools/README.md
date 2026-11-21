@@ -70,6 +70,29 @@ while playing at 120 BPM in 4/4, with a higher first beat. The click uses
 the system PSG sound sequence, so it can interrupt other PSG sounds. Modal
 dialogs that stop timer events pause the click; missed beats are not replayed.
 
+### CMO position overview
+
+Open **Output > CMO Cybermove Output** or the CMO desktop icon. Each window
+shows the 32 inputs of the selected system; use **Optionen > CM System 1/2**
+to choose inputs 1-32 or 33-64. The first window defaults to System 1 and
+the second to System 2; each title identifies its current input range.
+The line below each cube shows volume; zero volume appears as a dot.
+The display follows the MIDI channel and port configured in CMI. If both
+systems use the same channel and port, their events are indistinguishable
+and appear in both views. A window opened during playback receives a fresh
+position update on the next PUF tick. This refresh also resends the current
+PUF positions to its connected MIDI outputs once.
+
+KOO lists the current CMI assignment for signals 1-8, while playback uses
+the assignments recorded in PUF. Signal 0 is the lead position and has no
+CMI output. Select **Optionen > nur Innenraum** to toggle the zoomed-in view.
+CMO resets its positions when the transport stops; KOO retains its last values.
+
+CMO is an overview only: the original ROM-port mixer output is disabled,
+as are its master controls and unfinished preset actions. Numbered setups
+require an existing CMO setup file; without one, the default setup is still
+available but numbered setup operations report a missing file.
+
 ### Limits
 
 Hatari's control socket cannot move the mouse pointer, only press buttons
@@ -102,9 +125,13 @@ trees contain placeholder text and are not used as a fallback.
 
 Run `make test TOOLCHAIN=/path/to/cross-mint` to build and execute the
 variable-dispatch, synchronized PUF position, transport-click, CMI setup,
-and help-dispatch/message checks in a headless Hatari ST. The tests need
-Python 3, Hatari, and the SDK's ST EmuTOS image; set `ATARIST_TOOLS` if
-the SDK cannot be found automatically.
+CMO routing, 3D projection, initialization-window lifetime, and
+help-dispatch/message checks in a headless Hatari ST. The tests need Python
+3, Hatari, and the SDK's ST EmuTOS image; set `ATARIST_TOOLS` if the SDK
+cannot be found automatically.
+
+Run `make test-tt TOOLCHAIN=/path/to/cross-mint` to run the same regressions
+with the TT build and test floating-point state across MIDI timer interrupts.
 
 ## bench.py — TT performance benchmark with CPU profile
 

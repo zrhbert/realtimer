@@ -607,7 +607,10 @@ void mk_timer_tick (void)
 /* Interrupt entry: full register save, switch to the private stack (the
 	system supervisor stack is small and the tasks need real stack room),
 	call the C handler, end-of-interrupt for MFP Timer A. Timer A cannot
-	re-enter itself (same IPL), so one saved stack pointer suffices. */
+	re-enter itself (same IPL), so one saved stack pointer suffices.
+	FSAVE also preserves an interrupted FPU operation; a null frame has
+	no floating-point registers to save. Run the callback with the default
+	FPU control mode, not a temporary rounding mode from interrupted code. */
 __asm__ (
 	".text\n\t.even\n"
 	".globl mk_timer_isr\n"
@@ -615,7 +618,28 @@ __asm__ (
 	"movem.l %d0-%d7/%a0-%a6,-(%sp)\n\t"
 	"move.l %sp,mk_saved_sp\n\t"
 	"lea mk_irq_stack+" MK_STR (MK_IRQ_STACK) "-4,%sp\n\t"
+#if defined(__HAVE_68881__)
+	/* Only the version byte is defined in a null FSAVE frame. */
+	"fsave -(%sp)\n\t"
+	"move.l %sp,%a0\n\t"
+	"tst.b (%a0)\n\t"
+	"beq.s 1f\n\t"
+	"fmovem.l %fpcr/%fpsr/%fpiar,-(%sp)\n\t"
+	"fmovem.x %fp0-%fp7,-(%sp)\n"
+	"1:\n\t"
+	"fmove.l #0,%fpcr\n\t"
+	"move.l %a0,-(%sp)\n\t"
+#endif
 	"jsr mk_timer_tick\n\t"
+#if defined(__HAVE_68881__)
+	"move.l (%sp)+,%a0\n\t"
+	"tst.b (%a0)\n\t"
+	"beq.s 2f\n\t"
+	"fmovem.x (%sp)+,%fp0-%fp7\n\t"
+	"fmovem.l (%sp)+,%fpcr/%fpsr/%fpiar\n"
+	"2:\n\t"
+	"frestore (%sp)+\n\t"
+#endif
 	"move.l mk_saved_sp,%sp\n\t"
 	"movem.l (%sp)+,%d0-%d7/%a0-%a6\n\t"
 	"bclr #5,0xfffffa0f\n\t"

@@ -7,11 +7,19 @@ static short test_appl_write (short id, short length, void *message);
 #undef appl_write
 #define appl_find(name) test_appl_find (name)
 #define appl_write(id, length, message) test_appl_write (id, length, message)
+#define close_window test_help_close_window
 #include "../src/realtspc.c"
 
 static short accessory_available, write_succeeds;
 static short writes, destination, message_length;
+static int status_closes;
 static WORD words[8];
+
+VOID test_help_close_window (WINDOWP window)
+{
+	status_closes++;
+	window->opened = 0;
+}
 
 static short test_appl_find (const char *name)
 {
@@ -31,7 +39,35 @@ int test_help (FILE *out)
 {
 	WORD old_apid = gl_apid;
 	char *keyword;
+	WINDOW status_window = {0};
+	AKTSTATUS *status;
 	int failures = 0;
+
+	status = malloc (sizeof (*status));
+	if (!status)
+	{
+		fputs ("FAIL allocating initialization status\n", out);
+		failures++;
+	}
+	else
+	{
+		status_window.special = (LONG)status;
+		status_window.opened = 1;
+		status->close = FALSE;
+		timer_daktstat (&status_window);
+		if (status_closes || status_window.special != (LONG)status)
+		{
+			fputs ("FAIL keeping an active initialization status\n", out);
+			failures++;
+		}
+		status->close = TRUE;
+		timer_daktstat (&status_window);
+		if (status_closes != 1 || status_window.opened || status_window.special)
+		{
+			fputs ("FAIL releasing the closed initialization status\n", out);
+			failures++;
+		}
+	}
 
 	gl_apid = 42;
 	if (help_rtm ("CMI") || writes != 0)
