@@ -1121,7 +1121,6 @@ GLOBAL LONG ClickSetupField (WINDOWP window, WORD object, MKINFO *mk)
 			dzahl (&x, mk->mox, mk->moy, " Zahl ");
 		*/
 		module->set_nr (window, x);
-		draw_object (window, ROOT);
 	} /* else */
 	return x;
 } /* ClickSetupField */

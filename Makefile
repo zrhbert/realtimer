@@ -137,12 +137,12 @@ test-tt:
 	$(MAKE) CPU=-m68020-60 BUILD_DIR=build build/regtest.prg
 	python3 tools/test_regressions.py build/regtest.prg --machine tt
 
-TEST_SRCS = tests/main.c tests/var.c tests/puf.c tests/tra.c tests/cmi.c tests/lfo.c \
+TEST_SRCS = tests/main.c tests/var.c tests/puf.c tests/tra.c tests/cmi.c tests/lfo.c tests/objects.c \
 	tests/cmo.c tests/dispobj.c tests/menu.c tests/help.c tests/midikern.c
 TEST_OBJS = $(patsubst tests/%.c,$(BUILD_DIR)/test-%.o,$(TEST_SRCS))
 TEST_APP_OBJS = $(filter-out $(BUILD_DIR)/gemain.o $(BUILD_DIR)/var.o \
 	$(BUILD_DIR)/puf.o $(BUILD_DIR)/tra.o $(BUILD_DIR)/cmi.o $(BUILD_DIR)/lfo.o $(BUILD_DIR)/menu.o \
-	$(BUILD_DIR)/cmo.o $(BUILD_DIR)/dispobj.o $(BUILD_DIR)/realtspc.o,$(OBJS))
+	$(BUILD_DIR)/cmo.o $(BUILD_DIR)/dispobj.o $(BUILD_DIR)/objects.o $(BUILD_DIR)/realtspc.o,$(OBJS))
 
 $(BUILD_DIR)/regtest.prg: $(TEST_OBJS) $(TEST_APP_OBJS)
 	$(CC) $^ $(LDFLAGS) -o $@

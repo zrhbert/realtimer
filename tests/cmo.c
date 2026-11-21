@@ -1,6 +1,10 @@
 #define update_var test_cmo_update_var
 #define var_get_value test_cmo_var_get_value
 #define hndl_alert test_cmo_hndl_alert
+#define redraw_window test_cmo_redraw_window
+#define draw_dispobjs test_cmo_draw_dispobjs
+#define hide_mouse test_cmo_hide_mouse
+#define show_mouse test_cmo_show_mouse
 #include "../src/cmo.c"
 
 static STATUS states[2];
@@ -15,6 +19,9 @@ static int loads, echoes, inject_external, alert_count, display_resets;
 static LONG last_loaded;
 static WORD last_alert;
 static WORD cmo_channels[2] = {14, 15}, cmo_ports[2] = {0, 0};
+static SHORT redraw_source;
+static int redraw_inject, redraw_injected, redraw_count, incremental_count;
+static int mouse_hidden, unprotected_draw;
 
 #if defined(__HAVE_68881__)
 static volatile WORD fpu_task_done;
@@ -281,6 +288,151 @@ static BOOLEAN send_note (SHORT source, WORD type, WORD channel, WORD port,
 	return TRUE;
 }
 
+VOID test_cmo_redraw_window (WINDOWP window, CONST RECT *area)
+{
+	redraw_count++;
+}
+
+VOID test_cmo_hide_mouse (VOID)
+{
+	mouse_hidden++;
+}
+
+VOID test_cmo_show_mouse (VOID)
+{
+	mouse_hidden--;
+}
+
+VOID test_cmo_draw_dispobjs (WINDOWP window)
+{
+	incremental_count++;
+	if (!mouse_hidden) unprotected_draw++;
+	if (redraw_inject)
+	{
+		redraw_inject = FALSE;
+		redraw_injected = send_note (redraw_source, typeKeyOn, 15, 0, 108, 100);
+	}
+}
+
+static int test_redraw_scheduling (FILE *out, SHORT source)
+{
+	int failures = 0;
+
+	windows[0].milli = windows[1].milli = 0;
+	if (!send_note (source, typeKeyOn, 15, 0, 108, 65))
+	{
+		fputs ("FAIL allocating CMO redraw scheduling event\n", out);
+		return 1;
+	}
+	if (windows[0].milli != MILLI || windows[1].milli != 0)
+	{
+		fputs ("FAIL CMO MIDI redraw did not use the bounded interval\n", out);
+		failures++;
+	}
+
+	windows[0].milli = 0;
+	states[0].kneu[1][27] = FALSE;
+	if (!send_note (source, typeKeyOn, 15, 0, 108, 65))
+	{
+		fputs ("FAIL allocating unchanged CMO MIDI event\n", out);
+		return failures + 1;
+	}
+	if (windows[0].milli != 0 || states[0].kneu[1][27])
+	{
+		fputs ("FAIL unchanged CMO MIDI event scheduled a redraw\n", out);
+		failures++;
+	}
+
+	windows[0].milli = MILLI;
+	windows[0].count = 70;
+	if (!send_note (source, typeKeyOn, 15, 0, 108, 70))
+	{
+		fputs ("FAIL allocating repeated CMO MIDI event\n", out);
+		return failures + 1;
+	}
+	if (windows[0].milli != MILLI || windows[0].count != 70 ||
+	    states[0].koor[1][27].koor.x != 6)
+	{
+		fputs ("FAIL repeated CMO MIDI event changed the pending deadline\n", out);
+		failures++;
+	}
+
+	windows[0].milli = 1;
+	if (!send_note (source, typeKeyOn, 15, 0, 108, 71))
+	{
+		fputs ("FAIL allocating urgent CMO redraw event\n", out);
+		return failures + 1;
+	}
+	if (windows[0].milli != 1)
+	{
+		fputs ("FAIL CMO MIDI event delayed an urgent redraw\n", out);
+		failures++;
+	}
+
+	windows[0].milli = 0;
+	apply (&modules[0], NULL);
+	if (windows[0].milli != 0)
+	{
+		fputs ("FAIL CMO apply scheduled a redraw without MIDI changes\n", out);
+		failures++;
+	}
+	windows[0].milli = 1;
+	apply (&modules[0], NULL);
+	if (windows[0].milli != 1)
+	{
+		fputs ("FAIL CMO apply delayed an urgent redraw\n", out);
+		failures++;
+	}
+
+	windows[0].milli = MILLI;
+	redraw_source = source;
+	redraw_count = incremental_count = redraw_injected = 0;
+	mouse_hidden = unprotected_draw = 0;
+	states[0].new = states[0].reset_flag = FALSE;
+	redraw_inject = TRUE;
+	wi_timer_mod (&windows[0]);
+	if (redraw_count != 0 || incremental_count != 1 || !redraw_injected ||
+	    mouse_hidden || unprotected_draw || windows[0].milli != MILLI ||
+	    !states[0].kneu[1][27] || states[0].koor[1][27].koor.x != 36)
+	{
+		fputs ("FAIL CMO incremental redraw or update during redraw\n", out);
+		failures++;
+	}
+	wi_start_mod (&windows[0]);
+	if (display_states[27].space.position[0].x != 57 ||
+	    states[0].kneu[1][27])
+	{
+		fputs ("FAIL CMO did not display the latest deferred position\n", out);
+		failures++;
+	}
+	wi_timer_mod (&windows[0]);
+	if (windows[0].milli != 0)
+	{
+		fputs ("FAIL CMO redraw timer did not stop when idle\n", out);
+		failures++;
+	}
+	states[0].new = TRUE;
+	wi_timer_mod (&windows[0]);
+	if (redraw_count != 1 || incremental_count != 2)
+	{
+		fputs ("FAIL CMO full redraw after display invalidation\n", out);
+		failures++;
+	}
+	states[0].new = FALSE;
+	states[0].reset_flag = TRUE;
+	wi_timer_mod (&windows[0]);
+	windows[0].flags |= WI_JUNK;
+	states[0].reset_flag = FALSE;
+	wi_timer_mod (&windows[0]);
+	windows[0].flags &= ~WI_JUNK;
+	if (redraw_count != 3 || incremental_count != 2)
+	{
+		fputs ("FAIL CMO full redraw after reset or window exposure\n", out);
+		failures++;
+	}
+	return failures;
+}
+
 static int test_puf_to_cmo (FILE *out, SHORT source, SHORT *second_ref)
 {
 	KOOR_ALL coordinates = {0}, previous_coordinates = {0};
@@ -333,7 +485,7 @@ static int test_puf_to_cmo (FILE *out, SHORT source, SHORT *second_ref)
 		    states[i].koor[1][0].koor.x != -19 ||
 		    states[i].koor[1][0].volume != 90 ||
 		    states[i].koor[1][4].koor.x != 0 ||
-		    windows[i].milli != 1)
+		    windows[i].milli != MILLI)
 		{
 			fputs ("FAIL PUF positions routed to both CMO instances\n", out);
 			failures++;
@@ -444,6 +596,7 @@ int test_cmo (FILE *out)
 #endif
 	failures += test_puf_to_cmo (out, source, &refs[1]);
 	if (refs[1] <= 0) goto cleanup;
+	failures += test_redraw_scheduling (out, source);
 	for (i = 0; i < 2; i++)
 	{
 		mem_set (states[i].koor, 0, (UWORD)sizeof (states[i].koor));
@@ -475,7 +628,7 @@ int test_cmo (FILE *out)
 			break;
 		}
 	}
-	if (windows[0].milli != 1 || windows[1].milli != 0)
+	if (windows[0].milli != MILLI || windows[1].milli != 0)
 	{
 		fputs ("FAIL CMO scheduled redraw for the wrong channel\n", out);
 		failures++;
@@ -491,7 +644,7 @@ int test_cmo (FILE *out)
 	}
 	if (states[0].koor[0][0].koor.x != -47 ||
 	    states[1].koor[0][0].koor.x != -47 ||
-	    windows[0].milli != 0 || windows[1].milli != 1)
+	    windows[0].milli != 0 || windows[1].milli != MILLI)
 	{
 		fputs ("FAIL CMO inactive-channel cache or MIDI channel filter\n", out);
 		failures++;
@@ -510,7 +663,7 @@ int test_cmo (FILE *out)
 	}
 	if (states[0].koor[1][5].koor.x != 63 ||
 	    states[1].koor[1][5].koor.x != 63 ||
-	    windows[0].milli != 1 || windows[1].milli != 0)
+	    windows[0].milli != MILLI || windows[1].milli != 0)
 	{
 		fputs ("FAIL CMO followed reconfigured CMI channel and port\n", out);
 		failures++;
@@ -528,7 +681,7 @@ int test_cmo (FILE *out)
 	for (i = 0; i < 2; i++)
 	{
 		if (states[i].koor[0][10].koor.x != 35 ||
-		    states[i].koor[1][10].koor.x != 35 || windows[i].milli != 1)
+		    states[i].koor[1][10].koor.x != 35 || windows[i].milli != MILLI)
 		{
 			fputs ("FAIL CMO handled indistinguishable CMI systems\n", out);
 			failures++;

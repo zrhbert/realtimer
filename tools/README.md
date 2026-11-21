@@ -77,6 +77,9 @@ shows the 32 inputs of the selected system; use **Optionen > CM System 1/2**
 to choose inputs 1-32 or 33-64. The first window defaults to System 1 and
 the second to System 2; each title identifies its current input range.
 The line below each cube shows volume; zero volume appears as a dot.
+MIDI position updates are coalesced on the 100 ms window timer, displaying
+the latest values. Ordinary updates redraw only changed display objects;
+resizing, changing views, and resets still request an immediate full refresh.
 The display follows the MIDI channel and port configured in CMI. If both
 systems use the same channel and port, their events are indistinguishable
 and appear in both views. A window opened during playback receives a fresh
@@ -115,6 +118,12 @@ there should be no stale pixels. Also check press-drag-release and redraw
 after moving or uncovering the dialog. Repeat in monochrome and colour
 modes to exercise both high- and low-height bitmaps.
 
+### Setup-dialog refresh
+
+Changing a setup redraws changed fields and combines adjacent dirty regions,
+while preserving the drawing order of overlapping borders and backgrounds.
+Changes to the object tree's layout fall back to a full redraw.
+
 ### Module help
 
 Module help requires the optional PC_HELP accessory. Without it, a help
@@ -129,6 +138,9 @@ setup, CMO routing, 3D projection, initialization-window lifetime,
 help-dispatch/message, and MIDI timer keyboard-interrupt checks in a
 headless Hatari ST. The timer check requests an IKBD clock response during
 a scheduled callback and verifies that the reply arrives before it ends.
+CMO checks cover redraw coalescing, urgent redraws, and updates received
+while a redraw is in progress. Setup checks cover changed and unchanged
+fields, adjacent regions, button release, and layout-change fallback.
 The tests need Python 3, Hatari, and the SDK's ST EmuTOS image; set
 `ATARIST_TOOLS` if the SDK cannot be found automatically.
 

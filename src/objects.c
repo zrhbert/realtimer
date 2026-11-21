@@ -98,6 +98,18 @@ typedef struct status
 	VOID *dummy;
 } STATUS;			/* Dummy Definition */
 
+enum { DIALOG_UNCHANGED, DIALOG_DIRECT, DIALOG_REGION };
+
+typedef struct
+{
+	OBJECT object;
+	TEDINFO ted;
+	CHAR *text;
+	RECT area;
+	BOOL has_ted;
+	WORD redraw;
+} DIALOG_SNAPSHOT;
+
 /****** VARIABLES ************************************************************/
 
 /****** FUNCTIONS ************************************************************/
@@ -105,6 +117,190 @@ LOCAL WORD find_moduleslot	_((RTMCLASSP module));
 LOCAL VOID box 				_((WINDOWP window, BOOLEAN grow));
 
 /****** FUNCTIONS ************************************************************/
+PRIVATE TEDINFO *dialog_ted (CONST OBJECT *object)
+{
+	switch (object->ob_type & 0xff)
+	{
+		case G_TEXT:
+		case G_BOXTEXT:
+		case G_FTEXT:
+		case G_FBOXTEXT:
+			return object->ob_spec.tedinfo;
+		default:
+			return NULL;
+	}
+}
+
+PRIVATE CHAR *dialog_text (CONST OBJECT *object)
+{
+	TEDINFO *ted = dialog_ted (object);
+
+	if (ted) return ted->te_ptext;
+	switch (object->ob_type & 0xff)
+	{
+		case G_STRING:
+		case G_BUTTON:
+		case G_TITLE:
+			return object->ob_spec.free_string;
+		default:
+			return NULL;
+	}
+}
+
+PRIVATE BOOL merge_setup_areas (RECT *area, CONST RECT *other)
+{
+	if ((area->y == other->y && area->h == other->h &&
+	     (LONG)area->x <= (LONG)other->x + other->w &&
+	     (LONG)other->x <= (LONG)area->x + area->w) ||
+	    (area->x == other->x && area->w == other->w &&
+	     (LONG)area->y <= (LONG)other->y + other->h &&
+	     (LONG)other->y <= (LONG)area->y + area->h))
+	{
+		rc_union (other, area);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+PRIVATE VOID update_setup_dialog (RTMCLASSP module)
+{
+	WINDOWP window = Window(module);
+	OBJECT *tree = window ? window->object : NULL;
+	DIALOG_SNAPSHOT *snapshot = NULL;
+	TEDINFO *ted;
+	CHAR *text, *next;
+	LONG size;
+	WORD last = NIL, i, j;
+	BOOL full_redraw = FALSE, changed;
+	RECT area;
+
+	if (window && window->opened > 0 && tree)
+	{
+		last = find_flags (tree, ROOT, LASTOB);
+		size = (LONG)(last + 1) * sizeof (*snapshot);
+		for (i = 0; i <= last; i++)
+		{
+			if (tree[i].ob_flags & INDIRECT) full_redraw = TRUE;
+			else if ((text = dialog_text (&tree[i])) != NULL)
+				size += strlen (text) + 1;
+		}
+		if (!full_redraw) snapshot = mem_alloc (size);
+		if (snapshot)
+		{
+			next = (CHAR *)(snapshot + last + 1);
+			for (i = 0; i <= last; i++)
+			{
+				snapshot[i].object = tree[i];
+				snapshot[i].redraw = DIALOG_UNCHANGED;
+				ted = dialog_ted (&tree[i]);
+				snapshot[i].has_ted = ted != NULL;
+				if (ted) snapshot[i].ted = *ted;
+				text = dialog_text (&tree[i]);
+				snapshot[i].text = NULL;
+				if (text)
+				{
+					snapshot[i].text = next;
+					strcpy (next, text);
+					next += strlen (text) + 1;
+				}
+			}
+		}
+		else
+			full_redraw = TRUE;
+	}
+
+	/* Compare the final state: setters may temporarily clear and reselect controls. */
+	if (module->set_edit) module->set_edit (module);
+	if (module->set_dbox) module->set_dbox (module);
+
+	if (snapshot && window->object != tree) full_redraw = TRUE;
+	if (snapshot && !full_redraw)
+	{
+		for (i = 0; i <= last; i++)
+		{
+			OBJECT *old = &snapshot[i].object, *now = &tree[i];
+			if (old->ob_next != now->ob_next || old->ob_head != now->ob_head ||
+			    old->ob_tail != now->ob_tail || old->ob_type != now->ob_type ||
+			    old->ob_flags != now->ob_flags || old->ob_x != now->ob_x ||
+			    old->ob_y != now->ob_y || old->ob_width != now->ob_width ||
+			    old->ob_height != now->ob_height)
+			{
+				full_redraw = TRUE;
+				break;
+			}
+		}
+	}
+	if (snapshot && !full_redraw)
+	{
+		for (i = 0; i <= last; i++)
+		{
+			OBJECT *old = &snapshot[i].object, *now = &tree[i];
+			ted = dialog_ted (now);
+			text = dialog_text (now);
+			changed = old->ob_state != now->ob_state ||
+			          old->ob_spec.index != now->ob_spec.index ||
+			          snapshot[i].has_ted != (ted != NULL) ||
+			          (ted && snapshot[i].has_ted &&
+			           memcmp (&snapshot[i].ted, ted, sizeof (*ted)) != 0) ||
+			          (snapshot[i].text == NULL) != (text == NULL) ||
+			          (snapshot[i].text && text && strcmp (snapshot[i].text, text) != 0);
+			if (!changed) continue;
+			if (i == ROOT)
+			{
+				full_redraw = TRUE;
+				break;
+			}
+			/* Restore backgrounds and overlapping borders in tree order. */
+			if (OB_TYPE (tree, i) == G_ICON || OB_TYPE (tree, i) == G_CICON ||
+			    OB_TYPE (tree, i) == G_IMAGE || OB_TYPE (tree, i) == G_STRING ||
+			    OB_TYPE (tree, i) == G_TITLE || OB_TYPE (tree, i) == G_BOXTEXT ||
+			    OB_TYPE (tree, i) == G_FBOXTEXT ||
+			    ((OB_TYPE (tree, i) == G_TEXT || OB_TYPE (tree, i) == G_FTEXT) &&
+			     ted && (!snapshot[i].has_ted || !(ted->te_color & 0x80) ||
+			             !(snapshot[i].ted.te_color & 0x80))))
+			{
+				get_border (window, i, &area);
+				for (j = 0; j < i; j++)
+					if (snapshot[j].redraw == DIALOG_REGION &&
+					    merge_setup_areas (&area, &snapshot[j].area))
+					{
+						snapshot[j].redraw = DIALOG_UNCHANGED;
+						j = NIL;
+					}
+				snapshot[i].area = area;
+				snapshot[i].redraw = DIALOG_REGION;
+			}
+			else
+				snapshot[i].redraw = DIALOG_DIRECT;
+		}
+	}
+	if (full_redraw) draw_object (window, ROOT);
+	else if (snapshot)
+	{
+		for (i = 0; i <= last; i++)
+			if (snapshot[i].redraw == DIALOG_DIRECT)
+				draw_object (window, i);
+		for (i = 0; i <= last; i++)
+			if (snapshot[i].redraw == DIALOG_REGION)
+				redraw_window (window, &snapshot[i].area);
+	}
+	if (snapshot) mem_free (snapshot);
+}
+
+PRIVATE VOID release_setup_button (WINDOWP window)
+{
+	WORD object = window->exit_obj;
+	BOOL selected = is_state (window->object, object, SELECTED);
+	RECT area;
+
+	undo_state (window->object, object, SELECTED);
+	if (selected)
+	{
+		get_border (window, object, &area);
+		redraw_window (window, &area);
+	}
+}
+
 GLOBAL VOID    get_edit_obj	(RTMCLASSP module)
 {
 	ED_P		actual = module->actual;
@@ -206,7 +402,6 @@ GLOBAL BOOLEAN	set_setnr_obj	(RTMCLASSP module, LONG setupnr)
 	LONG	position, file_pos;
 	VOID	*akt = actual->setup;
 	BOOLEAN	ok = TRUE;
-	WINDOWP	window = Window(module);
 	
 	if (setupnr>0)
 	{
@@ -274,9 +469,7 @@ GLOBAL BOOLEAN	set_setnr_obj	(RTMCLASSP module, LONG setupnr)
 		/* Editor updaten */
 		if (update_edit)
 		{
-			if (module->set_edit) module->set_edit (module);
-			if (module->set_dbox) module->set_dbox (module);
-			draw_object(window, ROOT);
+			update_setup_dialog (module);
 		} /* if update_edit */
 				
 		if (module->send_messages) module->send_messages(module);
@@ -291,13 +484,11 @@ GLOBAL VOID set_nr_obj (WINDOWP window, LONG setupnr)
 	ED_P	edited = module->edited;
 	BOOL	update_edit = edited->modified;
 	
-	undo_state (window->object, window->exit_obj, SELECTED);
+	release_setup_button (window);
 	module->set_setnr(module, setupnr);
 	if (update_edit)
 	{
-		module->set_edit(module);
-		module->set_dbox(module);
-		draw_object(window, ROOT);
+		update_setup_dialog (module);
 	}
 } /* set_nr_obj */
 
@@ -306,7 +497,7 @@ GLOBAL VOID set_store_obj (WINDOWP window, LONG setupnr)
 	RTMCLASSP	module = window->module;
 	STRING		title;
 	
-	undo_state (window->object, window->exit_obj, SELECTED);
+	release_setup_button (window);
 
 	sprintf (title, "%s-Setup", module->object_name); 
 	dzahl(&setupnr, window->work.x + window->object[window->exit_obj].ob_x, window->work.y + window->object[window->exit_obj].ob_y, title);
@@ -315,9 +506,7 @@ GLOBAL VOID set_store_obj (WINDOWP window, LONG setupnr)
 	module->get_edit(module);
 	module->get_setnr(module, setupnr);
 	module->set_setnr(module, setupnr);
-	module->set_edit(module);
-	module->set_dbox(module);
-	draw_object(window, ROOT);
+	update_setup_dialog (module);
 } /* set_store_obj */
 
 GLOBAL VOID set_recall_obj (WINDOWP window, LONG setupnr)
@@ -325,28 +514,24 @@ GLOBAL VOID set_recall_obj (WINDOWP window, LONG setupnr)
 	RTMCLASSP	module = window->module;
 	STRING		title;
 	
-	undo_state (window->object, window->exit_obj, SELECTED);
+	release_setup_button (window);
 
 	sprintf (title, "%s-Setup", module->object_name); 
 	dzahl(&setupnr, window->work.x + window->object[window->exit_obj].ob_x, window->work.y + window->object[window->exit_obj].ob_y, title);
 
 	module->set_setnr(module, setupnr);
-	module->set_edit(module);
-	module->set_dbox(module);
-	draw_object(window, ROOT);
+	update_setup_dialog (module);
 } /* set_recall_obj */
 
 GLOBAL VOID set_ok_obj (WINDOWP window)
 {
 	RTMCLASSP	module = window->module;
 
-	undo_state (window->object, window->exit_obj, SELECTED);
+	release_setup_button (window);
 
 	module->get_dbox(module);
 	module->get_edit(module);
-	module->set_edit(module);
-	module->set_dbox(module);
-	draw_object(window, ROOT);
+	update_setup_dialog (module);
 	window->flags |= WI_DLCLOSE;
 } /* set_ok_obj */
 
@@ -366,12 +551,10 @@ GLOBAL VOID set_standard_obj (WINDOWP window)
 {
 	RTMCLASSP	module = window->module;
 
-	undo_state (window->object, window->exit_obj, SELECTED);
+	release_setup_button (window);
 
 	module->set_setnr(module, 0);
-	module->set_edit(module);
-	module->set_dbox(module);
-	draw_object(window, ROOT);
+	update_setup_dialog (module);
 } /* set_standard_obj */
 
 GLOBAL BOOLEAN	load_obj	(RTMCLASSP module, STR128 filename, BOOLEAN fileselect)

@@ -5,6 +5,7 @@ int test_puf (FILE *out);
 int test_tra (FILE *out);
 int test_cmi (FILE *out);
 int test_lfo (FILE *out);
+int test_objects (FILE *out);
 int test_cmo (FILE *out);
 int test_dispobj (FILE *out);
 int test_menu (FILE *out);
@@ -22,6 +23,7 @@ int main (void)
 	failures += test_tra (out);
 	failures += test_cmi (out);
 	failures += test_lfo (out);
+	failures += test_objects (out);
 	failures += test_cmo (out);
 	failures += test_dispobj (out);
 	failures += test_menu (out);

@@ -154,6 +154,12 @@ PRIVATE WORD		init_midishare 			_((RTMCLASSP module));
 
 /*****************************************************************************/
 
+PRIVATE VOID schedule_update (WINDOWP window)
+{
+	/* Coalesce MIDI updates without delaying an already pending redraw. */
+	if (window && window->milli == 0) window->milli = MILLI;
+}
+
 MSH_RCVALARM_CALLBACK (receive_evts_cmo, refNum)
 {
 	MidiEvPtr	event;
@@ -161,6 +167,7 @@ MSH_RCVALARM_CALLBACK (receive_evts_cmo, refNum)
 	SET_P			akt = module->actual->setup;
 	STAT_P		status = module->status;
 	KOOR_SINGLE	*koor;
+	KOOR_SINGLE	previous;
 	WINDOWP		window = module->window;
 	WORD			signal, channel, port, type, bank;
 	UBYTE 		pitch, value;
@@ -193,6 +200,7 @@ MSH_RCVALARM_CALLBACK (receive_evts_cmo, refNum)
 							continue;
 
 						koor = &status->koor[bank][signal];
+						previous = *koor;
 						switch (type)
 						{
 							case 0: /* X */
@@ -208,9 +216,12 @@ MSH_RCVALARM_CALLBACK (receive_evts_cmo, refNum)
 								koor->volume = value;
 								break;
 						} /* switch koor */
-						status->kneu[bank][signal] = TRUE;
-						if (window && bank == (akt->midi_channel == 15 ? 0 : 1))
-							window->milli = 1;
+						if (memcmp (&previous, koor, sizeof (previous)) != 0)
+						{
+							status->kneu[bank][signal] = TRUE;
+							if (bank == (akt->midi_channel == 15 ? 0 : 1))
+								schedule_update (window);
+						}
 					} /* for bank */
 				} /* if valid CMO event */
 				break;
@@ -342,12 +353,6 @@ PRIVATE VOID    set_dbox	(RTMCLASSP module)
 
 PUBLIC PUF_INF *apply	(RTMCLASSP module, PUF_INF *event)
 {
-	WINDOWP	window = module->window;
-	STAT_P	status = module->status;
-	WORD		signal;
-		
-	window->milli = 1; 	/* Update so schnell wie möglich */
-
 	return event;
 } /* apply */
 
@@ -927,9 +932,19 @@ PRIVATE VOID wi_snap_mod (WINDOWP window, RECT *new, WORD mode)
 
 PRIVATE VOID wi_timer_mod (WINDOWP window)
 {
+	STAT_P status = Status(window);
+
 	window->milli = 0; 			/* keine Timer-Funktion mehr bis
 										zur nächsten Änderung */
-	redraw_window(window, &window->scroll);
+	if (status->new || status->reset_flag || (window->flags & WI_JUNK))
+		redraw_window(window, &window->scroll);
+	else
+	{
+		hide_mouse ();
+		wi_start_mod (window);
+		draw_dispobjs (window);
+		show_mouse ();
+	}
 } /* wi_timer_mod */
 
 /*****************************************************************************/

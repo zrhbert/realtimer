@@ -1807,6 +1807,8 @@ LOCAL VOID DrawSpace (DISPOBJP dispobj)
 	WORD			x;
 	STRING		s;	
 	
+	if (!new && !status->kneu) return;
+
 	if (new)
 	{
 		clr_area (&dispobj->work);
