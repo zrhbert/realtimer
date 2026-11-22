@@ -1418,6 +1418,32 @@ static WORD RSIB13DATA[] =
   0x0000, 0x0000, 0x0000, 0x0000
 };
 
+static WORD RSIB14MASK[] =
+{
+  0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
+  0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
+  0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
+  0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
+  0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
+  0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
+  0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF,
+  0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF
+};
+
+static WORD RSIB14DATA[] =
+{
+  0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+  0x3FFF, 0xFE10, 0x2008, 0x0210, 0x2008, 0x0210,
+  0x2008, 0x0210, 0x2008, 0x0210, 0x2008, 0x0210,
+  0x2008, 0x0210, 0x2008, 0x02FE, 0x2008, 0x0210,
+  0x2008, 0x0210, 0x2008, 0x0210, 0x3FFF, 0xFE10,
+  0x2008, 0x0210, 0x2008, 0x0210, 0x2008, 0x0210,
+  0x2008, 0x0210, 0x2008, 0x0210, 0x2008, 0x0210,
+  0x2008, 0x0210, 0x2008, 0x0210, 0x2008, 0x0210,
+  0x3FFF, 0xFE10, 0x0000, 0x0000, 0x0000, 0x0000,
+  0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+};
+
 static ICONBLK rs_iconblk[] =
 { RSIB0MASK, RSIB0DATA, "A3D Anzeige", 0x1000|'\0',
     0,   0,  20,   0,  32,  30,   0,  32,  72,   8,
@@ -1446,7 +1472,9 @@ static ICONBLK rs_iconblk[] =
   RSIB12MASK, RSIB12DATA, "4 Tetraeder", 0x1000|'\0',
     0,   0,   4,   0,  64,  46,   0,  46,  72,   8,
   RSIB13MASK, RSIB13DATA, "16 Ch doppel", 0x1000|'\0',
-    0,   0,   4,   0,  64,  46,   0,  46,  72,   8
+    0,   0,   4,   0,  64,  46,   0,  46,  72,   8,
+  RSIB14MASK, RSIB14DATA, "Drauf XZ", 0x1000|'\0',
+    0,   0,  20,   0,  32,  30,   0,  32,  72,   8
 };
 
 static OBJECT rs_object[] =
@@ -1497,9 +1525,9 @@ static OBJECT rs_object[] =
         10,       -1,       -1, G_STRING  ,   /* Object 14 MA3DOKTO */
   NONE, NORMAL, (LONG)"  Okto    \0078 ",
   0x0000, 0x0003, 0x000D, 0x0001,
-        30,       16, MA3DKREISFORM, G_BOX     ,   /* Object 15  */
+        30,       16, MA3DDRAUFSICHT, G_BOX     ,   /* Object 15  */
   NONE, NORMAL, (LONG)0x00FF1000L,
-  0x000F, 0x0000, 0x001C, 0x000E,
+  0x000F, 0x0000, 0x001C, 0x000F,
   MA3DTETRAEDER,       -1,       -1, G_STRING  ,   /* Object 16  */
   NONE, DISABLED, (LONG)"--- 3D ---------------------",
   0x0000, 0x0000, 0x001C, 0x0001,
@@ -1539,21 +1567,27 @@ static OBJECT rs_object[] =
   MA3DKREISFORM,       -1,       -1, G_STRING  ,   /* Object 28 MA3DQUADROPHON */
   NONE, NORMAL, (LONG)"  4 Ch Quadrophon           ",
   0x0000, 0x000C, 0x001C, 0x0001,
-        15,       -1,       -1, G_STRING  ,   /* Object 29 MA3DKREISFORM */
+  MA3DDRAUFSICHT,       -1,       -1, G_STRING  ,   /* Object 29 MA3DKREISFORM */
   NONE, NORMAL, (LONG)"  8 Ch Kreisform            ",
   0x0000, 0x000D, 0x001C, 0x0001,
-         7, MA3DSETUPS, MA3DPERSPEKTIVE, G_BOX     ,   /* Object 30  */
+         7, MA3DSETUPS, MA3DSIGNALNUMMERN, G_BOX     ,   /* Object 30  */
   NONE, NORMAL, (LONG)0x00FF1000L,
-  0x0019, 0x0000, 0x0010, 0x0003,
+  0x0019, 0x0000, 0x0011, 0x0004,
   MA3DINNENRAUM,       -1,       -1, G_STRING  ,   /* Object 31 MA3DSETUPS */
   NONE, NORMAL, (LONG)"  Setups     \007S ",
-  0x0000, 0x0000, 0x0010, 0x0001,
+  0x0000, 0x0000, 0x0011, 0x0001,
   MA3DPERSPEKTIVE,       -1,       -1, G_STRING  ,   /* Object 32 MA3DINNENRAUM */
   NONE, NORMAL, (LONG)"  nur Innenraum ",
-  0x0000, 0x0001, 0x0010, 0x0001,
-        30,       -1,       -1, G_STRING  ,   /* Object 33 MA3DPERSPEKTIVE */
-  LASTOB, NORMAL, (LONG)"  Perspektive   ",
-  0x0000, 0x0002, 0x0010, 0x0001,
+  0x0000, 0x0001, 0x0011, 0x0001,
+  MA3DSIGNALNUMMERN,    -1,       -1, G_STRING  ,   /* Object 33 MA3DPERSPEKTIVE */
+  NONE, NORMAL, (LONG)"  Perspektive   ",
+  0x0000, 0x0002, 0x0011, 0x0001,
+        15,       -1,       -1, G_STRING  ,   /* Object 34 MA3DDRAUFSICHT */
+  NONE, NORMAL, (LONG)"  Draufsicht X/Z            ",
+  0x0000, 0x000E, 0x001C, 0x0001,
+        30,       -1,       -1, G_STRING  ,   /* Object 35 MA3DSIGNALNUMMERN */
+  LASTOB, NORMAL, (LONG)"  Signalnummern  ",
+  0x0000, 0x0003, 0x0011, 0x0001,
   
   /******** Tree 1 A3D_HELP ****************************************************/
         -1,        1,       13, G_BOX     |0x4000,   /* Object 0  */
@@ -1961,9 +1995,9 @@ static OBJECT rs_object[] =
   0x0014, 0x0013, 0x0012, 0x0002,
   
   /******** Tree 7 A3D_RAUM ****************************************************/
-        -1, RAUMTETRAEDER, RAUMWUERFELDOPP, G_BOX     ,   /* Object 0  */
+        -1, RAUMTETRAEDER, RAUMDRAUFSICHT, G_BOX     ,   /* Object 0  */
   NONE, NORMAL, (LONG)0x00FE1100L,
-  0x0000, 0x0000, 0x001E, 0x0010,
+  0x0000, 0x0000, 0x001E, 0x0014,
   RAUMSECHSKANAL,       -1,       -1, G_ICON    ,   /* Object 1 RAUMTETRAEDER */
   SELECTABLE|EXIT, NORMAL, (LONG)&rs_iconblk[2],
   0x0001, 0x0000, 0x0009, 0x0603,
@@ -1997,18 +2031,21 @@ static OBJECT rs_object[] =
   RAUMWUERFELDOPP,       -1,       -1, G_ICON    ,   /* Object 11  */
   SELECTABLE|EXIT, NORMAL, (LONG)&rs_iconblk[12],
   0x040A, 0x0000, 0x0009, 0x0603,
-         0,       -1,       -1, G_ICON    ,   /* Object 12 RAUMWUERFELDOPP */
-  SELECTABLE|EXIT|LASTOB, NORMAL, (LONG)&rs_iconblk[13],
-  0x0014, 0x0008, 0x0009, 0x0603
+  RAUMDRAUFSICHT,       -1,       -1, G_ICON    ,   /* Object 12 RAUMWUERFELDOPP */
+  SELECTABLE|EXIT, NORMAL, (LONG)&rs_iconblk[13],
+  0x0014, 0x0008, 0x0009, 0x0603,
+         0,       -1,       -1, G_ICON    ,   /* Object 13 RAUMDRAUFSICHT */
+  SELECTABLE|EXIT|LASTOB, NORMAL, (LONG)&rs_iconblk[14],
+  0x040A, 0x0010, 0x0009, 0x0603
 };
 
 static OBJECT *rs_trindex[] =
 { &rs_object[0],   /* Tree  0 A3D_MENU */
-  &rs_object[34],   /* Tree  1 A3D_HELP */
-  &rs_object[48],   /* Tree  2 A3D_DESK */
-  &rs_object[50],   /* Tree  3 A3D_SETUP */
-  &rs_object[134],   /* Tree  4 A3D_TEXT */
-  &rs_object[140],   /* Tree  5 A3D_INFO */
-  &rs_object[151],   /* Tree  6 A3D_SHELP */
-  &rs_object[165]    /* Tree  7 A3D_RAUM */
+  &rs_object[36],   /* Tree  1 A3D_HELP */
+  &rs_object[50],   /* Tree  2 A3D_DESK */
+  &rs_object[52],   /* Tree  3 A3D_SETUP */
+  &rs_object[136],   /* Tree  4 A3D_TEXT */
+  &rs_object[142],   /* Tree  5 A3D_INFO */
+  &rs_object[153],   /* Tree  6 A3D_SHELP */
+  &rs_object[167]    /* Tree  7 A3D_RAUM */
 };

@@ -172,7 +172,9 @@ enum raumform {
 	WUERFELDOPP,
 	QUADROPHON,
 	KREISFORM,
-	NumSpaceForms
+	NumSpaceForms,
+	/* 10 and 11 are existing A3D popup entries. */
+	DRAUFSICHT = 12
 };
 
 /* Modi fÅr Space */

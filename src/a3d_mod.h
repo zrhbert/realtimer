@@ -21,9 +21,11 @@
 #define MA3DWUERFELDIAGO 26  /* STRING in Baum A3D_MENU */
 #define MA3DQUADROPHON 28  /* STRING in Baum A3D_MENU */
 #define MA3DKREISFORM 29  /* STRING in Baum A3D_MENU */
+#define MA3DDRAUFSICHT 34  /* STRING in Baum A3D_MENU */
 #define MA3DSETUPS 31  /* STRING in Baum A3D_MENU */
 #define MA3DINNENRAUM 32  /* STRING in Baum A3D_MENU */
 #define MA3DPERSPEKTIVE 33  /* STRING in Baum A3D_MENU */
+#define MA3DSIGNALNUMMERN 35  /* STRING in Baum A3D_MENU */
 
 #define A3D_HELP 1   /* Formular/Dialog */
 
@@ -100,3 +102,4 @@
 #define RAUMKREISFORM 9   /* ICON in Baum A3D_RAUM */
 #define RAUMQUADRO 10  /* ICON in Baum A3D_RAUM */
 #define RAUMWUERFELDOPP 12  /* ICON in Baum A3D_RAUM */
+#define RAUMDRAUFSICHT 13  /* ICON in Baum A3D_RAUM */

@@ -1,8 +1,10 @@
 #include <stdio.h>
 
+int test_global (FILE *out);
 int test_var (FILE *out);
 int test_puf (FILE *out);
 int test_tra (FILE *out);
+int test_a3d (FILE *out);
 int test_cmi (FILE *out);
 int test_lfo (FILE *out);
 int test_objects (FILE *out);
@@ -18,9 +20,11 @@ int main (void)
 	int failures;
 
 	if (!out) return 1;
-	failures = test_var (out);
+	failures = test_global (out);
+	failures += test_var (out);
 	failures += test_puf (out);
 	failures += test_tra (out);
+	failures += test_a3d (out);
 	failures += test_cmi (out);
 	failures += test_lfo (out);
 	failures += test_objects (out);

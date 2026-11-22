@@ -320,6 +320,7 @@ GLOBAL WORD    hndl_dial    _((OBJECT *tree, WORD def, BOOLEAN grow_shrink, BOOL
 GLOBAL WORD    formdo       _((OBJECT *tree, WORD start));
 GLOBAL VOID    blink        _((OBJECT *tree, WORD obj, WORD blinkrate));
 GLOBAL WORD    popup_menu   _((OBJECT *tree, WORD obj, WORD x, WORD y, WORD center_obj, BOOLEAN relative, WORD bmsk));
+GLOBAL WORD    popup_menu_guarded _((OBJECT *tree, WORD obj, WORD x, WORD y, WORD center_obj, BOOLEAN relative, WORD bmsk));
 GLOBAL BOOLEAN is_menu_key  _((OBJECT *menu, MKINFO *mk, WORD *title, WORD *item));
 GLOBAL WORD    check_alt    _((OBJECT *tree, MKINFO *mk));
 GLOBAL VOID    draw_oblines _((OBJECT *object));

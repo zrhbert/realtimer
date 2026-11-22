@@ -1706,7 +1706,9 @@ LOCAL BOOL	SetTypeSpace	(DISPOBJP dispobj, INT id, INT type)
 	{
 		case DOTypeSpaceForm:
 			/* Zeiger auf Polygon einsetzen */
-			status->spaceform = &spaceform[type][status->inside];
+			status->form = type;
+			if (type != DRAUFSICHT)
+				status->spaceform = &spaceform[type][status->inside];
 			ok = TRUE;
 			dispobj->new = TRUE;
 			break;
@@ -1796,9 +1798,424 @@ LOCAL VOID ResetSpace (DISPOBJP dispobj)
 LOCAL VOID TextDefaultSpace (DISPOBJP dispobj)
 {
 	SPACESTATP	status = &dispobj->status->space;
-
 	SetVdiTextState (status->fontsize);
 } /* TextDefaultSpace */
+
+typedef struct
+{
+	RECT plot;
+	WORD gauge_x, char_width, text_height;
+	BOOL labels;
+} TOP_LAYOUT;
+
+LOCAL BOOL top_layout (DISPOBJP dispobj, TOP_LAYOUT *layout)
+{
+	RECT *work = &dispobj->work;
+	SPACESTATP status = &dispobj->status->space;
+	WORD side, width, height, gauge_width;
+
+	layout->char_width = status->fontsize == 6 ? 6 : gl_wchar;
+	layout->text_height = status->fontsize == 6 ? 8 : gl_hchar + 2;
+	layout->labels = TRUE;
+	gauge_width = 7 + MAXSIGNALS * layout->char_width;
+	width = work->w - gauge_width - 16;
+	height = work->h - 2 * layout->text_height - 8;
+	side = min (width, height);
+	/* Reserve enough rows to separate all signal labels, even in a cluster. */
+	if (side < max (MAXSIGNALS * layout->text_height + 2,
+	                (MAXSIGNALS - 1) * layout->char_width + 4))
+	{
+		layout->labels = FALSE;
+		layout->text_height = 0;
+		gauge_width = 8;
+		width = work->w - gauge_width - 16;
+		height = work->h - 8;
+		side = min (width, height);
+	}
+	if (side < 8) return FALSE;
+
+	layout->plot.x = work->x + (work->w - side - gauge_width - 8) / 2;
+	layout->plot.y = work->y + (work->h - side) / 2;
+	layout->plot.w = layout->plot.h = side;
+	layout->gauge_x = layout->plot.x + side + 8;
+	return TRUE;
+}
+
+LOCAL WORD top_coordinate (FLOAT value, WORD start, WORD extent,
+                           BOOL reverse, BOOL inside)
+{
+	LONG coordinate = (LONG)value;
+
+	if (inside) coordinate *= 3;
+	coordinate = max (-MAXDOKOOR, min (MAXDOKOOR, coordinate));
+	if (reverse) coordinate = -coordinate;
+	return start + 3 + ((coordinate + MAXDOKOOR) * (extent - 7) + MAXDOKOOR) /
+	                   (2 * MAXDOKOOR);
+}
+
+LOCAL VOID top_line (WORD x1, WORD y1, WORD x2, WORD y2)
+{
+	WORD points[4];
+
+	points[0] = x1;
+	points[1] = y1;
+	points[2] = x2;
+	points[3] = y2;
+	v_pline (vdi_handle, 2, points);
+}
+
+LOCAL BOOL top_visible (SPACESTATP status, WORD signal)
+{
+	return status->crosshair[signal] || (signal > 0 && status->display[signal]);
+}
+
+LOCAL BOOL top_changed (SPACESTATP status)
+{
+	WORD signal;
+
+	for (signal = 0; signal < MAXSIGNALS; signal++)
+		if (top_visible (status, signal) &&
+		    (status->position[signal].x != status->pos_alt[signal].x ||
+		     status->position[signal].y != status->pos_alt[signal].y ||
+		     status->position[signal].z != status->pos_alt[signal].z))
+			return TRUE;
+	return FALSE;
+}
+
+LOCAL BOOL top_label_crosses_vertical (SPACESTATP status, CONST WORD *x,
+                                        WORD left, WORD width)
+{
+	WORD signal;
+
+	for (signal = 0; signal < MAXSIGNALS; signal++)
+		if (status->crosshair[signal] &&
+		    x[signal] >= left - 1 && x[signal] <= left + width)
+			return TRUE;
+	return FALSE;
+}
+
+LOCAL VOID top_place_label (CONST TOP_LAYOUT *layout, SPACESTATP status,
+                            CONST WORD *x, CONST WORD *z, WORD signal, WORD length,
+                            CONST RECT *placed, WORD placed_count, RECT *label)
+{
+	CONST RECT *plot = &layout->plot;
+	WORD row, rows, other, y, desired, distance, best_distance, pass;
+	WORD preferred, candidate, candidate_x, best_x, best_x_distance;
+	BOOL overlaps;
+
+	label->w = length * layout->char_width;
+	label->h = layout->text_height;
+	label->y = plot->y + 1;
+	if (x[signal] + 4 + label->w < plot->x + plot->w)
+		preferred = x[signal] + 4;
+	else
+		preferred = max (plot->x + 1, x[signal] - 4 - label->w);
+
+	best_x = preferred;
+	best_x_distance = top_label_crosses_vertical (status, x, preferred, label->w) ?
+	                  32767 : 0;
+	for (other = 0; other < MAXSIGNALS; other++)
+		if (status->crosshair[other])
+			for (candidate = 0; candidate < 2; candidate++)
+			{
+				candidate_x = candidate ? x[other] + 2 : x[other] - label->w - 1;
+				if (candidate_x < plot->x + 1 ||
+				    candidate_x + label->w >= plot->x + plot->w ||
+				    top_label_crosses_vertical (status, x, candidate_x, label->w))
+					continue;
+				distance = candidate_x > preferred ? candidate_x - preferred :
+				                                      preferred - candidate_x;
+				if (distance < best_x_distance)
+				{
+					best_x = candidate_x;
+					best_x_distance = distance;
+				}
+			}
+	label->x = best_x;
+	desired = max (plot->y + 1, min (z[signal] + 3, plot->y + plot->h - 1 - label->h));
+	rows = (plot->h - 2) / label->h;
+
+	/* Prefer avoiding all marks; keep labels separated even in a tight plot. */
+	for (pass = 0; pass < 3; pass++)
+	{
+		best_distance = 32767;
+		for (row = 0; row < rows; row++)
+		{
+			y = plot->y + 1 + row * label->h;
+			overlaps = FALSE;
+			for (other = 0; other < placed_count; other++)
+				if (y == placed[other].y &&
+				    label->x < placed[other].x + placed[other].w + 1 &&
+				    label->x + label->w + 1 > placed[other].x)
+					overlaps = TRUE;
+			for (other = 0; other < MAXSIGNALS; other++)
+				if (((pass == 1 && other == signal) ||
+				     (!pass && status->display[other] && other > 0)) &&
+				    label->x <= x[other] + 2 && label->x + label->w > x[other] - 2 &&
+				    y <= z[other] + 2 && y + label->h > z[other] - 2)
+					overlaps = TRUE;
+				else if (!pass && status->crosshair[other] &&
+				         z[other] >= y - 1 && z[other] <= y + label->h)
+					overlaps = TRUE;
+			distance = y > desired ? y - desired : desired - y;
+			if (!overlaps && distance < best_distance)
+			{
+				label->y = y;
+				best_distance = distance;
+			}
+		}
+		if (best_distance != 32767) break;
+	}
+}
+
+LOCAL VOID top_raster_line (WORD x, WORD z, WORD end_x, WORD end_z,
+                            BOOL include_ends);
+
+LOCAL VOID top_label_leader (WORD x, WORD z, CONST RECT *label)
+{
+	WORD start_x = x, start_y = z, end_x = x, end_y = z;
+
+	if (x < label->x)
+	{
+		start_x += 3;
+		end_x = label->x - 1;
+	}
+	else if (x >= label->x + label->w)
+	{
+		start_x -= 3;
+		end_x = label->x + label->w;
+	}
+	if (z < label->y)
+	{
+		start_y += 3;
+		end_y = label->y - 1;
+	}
+	else if (z >= label->y + label->h)
+	{
+		start_y -= 3;
+		end_y = label->y + label->h;
+	}
+	top_raster_line (start_x, start_y, end_x, end_y, TRUE);
+}
+
+/* VDI clips a polyline before rasterizing it, which can change its pixels
+   between clipped XOR updates and full redraws. Clip the rasterized dots instead. */
+LOCAL VOID top_raster_line (WORD x, WORD z, WORD end_x, WORD end_z,
+                            BOOL include_ends)
+{
+	WORD points[128], count = 0;
+	LONG dx = end_x - (LONG)x, dz = end_z - (LONG)z;
+	WORD sx = dx < 0 ? -1 : 1, sz = dz < 0 ? -1 : 1;
+	LONG error, step;
+
+	dx = dx * sx;
+	dz = -dz * sz;
+	error = dx + dz;
+	if (include_ends)
+	{
+		points[0] = x;
+		points[1] = z;
+		count = 1;
+	}
+	while (x != end_x || z != end_z)
+	{
+		step = 2 * error;
+		if (step >= dz) { error += dz; x += sx; }
+		if (step <= dx) { error += dx; z += sz; }
+		/* The endpoints are already marked by the signal diamonds. */
+		if (!include_ends && x == end_x && z == end_z) break;
+		points[2 * count] = x;
+		points[2 * count + 1] = z;
+		if (++count == 64)
+		{
+			v_pmarker (vdi_handle, count, points);
+			count = 0;
+		}
+	}
+	if (count) v_pmarker (vdi_handle, count, points);
+}
+
+LOCAL VOID top_connections (SPACESTATP status, CONST WORD *x, CONST WORD *z)
+{
+	WORD group_size, signal, prior, a, b;
+	WORD from[MAXSIGNALS - 2], to[MAXSIGNALS - 2], count = 0;
+
+	if (status->line_draw == stereo) group_size = 2;
+	else if (status->line_draw == quadro || status->line_draw == okto) group_size = 4;
+	else return;
+
+	for (signal = 1; signal < MAXSIGNALS - 1; signal++)
+	{
+		if (signal % group_size == 0 ||
+		    !status->display[signal] || !status->display[signal + 1])
+			continue;
+		a = signal;
+		b = signal + 1;
+		if (x[a] > x[b] || (x[a] == x[b] && z[a] > z[b]))
+		{
+			a = signal + 1;
+			b = signal;
+		}
+		if (x[a] == x[b] && z[a] == z[b]) continue;
+		for (prior = 0; prior < count; prior++)
+			if (x[a] == x[from[prior]] && z[a] == z[from[prior]] &&
+			    x[b] == x[to[prior]] && z[b] == z[to[prior]])
+				break;
+		if (prior == count)
+		{
+			from[count] = a;
+			to[count++] = b;
+		}
+	}
+	for (prior = 0; prior < count; prior++)
+		top_raster_line (x[from[prior]], z[from[prior]], x[to[prior]], z[to[prior]], FALSE);
+}
+
+LOCAL VOID top_overlay (DISPOBJP dispobj, CONST TOP_LAYOUT *layout, POS_3DP position)
+{
+	SPACESTATP status = &dispobj->status->space;
+	CONST RECT *plot = &layout->plot;
+	RECT labels[MAXSIGNALS - 1];
+	WORD x[MAXSIGNALS], z[MAXSIGNALS], y[MAXSIGNALS];
+	WORD signal, other, count, label_y, label_count = 0;
+	WORD diamond[16];
+	CHAR label[MAXSIGNALS + 1];
+	BOOL duplicate;
+	BOOL numbers = layout->labels && status->numbers;
+
+	for (signal = 0; signal < MAXSIGNALS; signal++)
+	{
+		x[signal] = top_coordinate (position[signal].x, plot->x, plot->w,
+		                            FALSE, status->inside);
+		z[signal] = top_coordinate (position[signal].z, plot->y, plot->h,
+		                            TRUE, status->inside);
+		y[signal] = top_coordinate (position[signal].y, plot->y, plot->h,
+		                            TRUE, status->inside);
+	}
+
+	for (signal = 0; signal < MAXSIGNALS; signal++)
+		if (status->crosshair[signal])
+		{
+			duplicate = FALSE;
+			for (other = 0; other < signal; other++)
+				if (status->crosshair[other] && x[other] == x[signal])
+					duplicate = TRUE;
+			if (!duplicate)
+				top_line (x[signal], plot->y + 1, x[signal], plot->y + plot->h - 2);
+
+			duplicate = FALSE;
+			for (other = 0; other < signal; other++)
+				if (status->crosshair[other] && z[other] == z[signal])
+					duplicate = TRUE;
+			if (!duplicate)
+				top_line (plot->x + 1, z[signal], plot->x + plot->w - 2, z[signal]);
+		}
+
+	top_connections (status, x, z);
+	for (signal = 1; signal < MAXSIGNALS; signal++)
+		if (status->display[signal])
+		{
+			duplicate = FALSE;
+			for (other = 1; other < signal; other++)
+				if (status->display[other] && x[other] == x[signal] &&
+				    z[other] == z[signal])
+					duplicate = TRUE;
+			if (duplicate) continue;
+
+			diamond[0]  = x[signal];     diamond[1]  = z[signal] - 2;
+			diamond[2]  = x[signal] + 1; diamond[3]  = z[signal] - 1;
+			diamond[4]  = x[signal] + 2; diamond[5]  = z[signal];
+			diamond[6]  = x[signal] + 1; diamond[7]  = z[signal] + 1;
+			diamond[8]  = x[signal];     diamond[9]  = z[signal] + 2;
+			diamond[10] = x[signal] - 1; diamond[11] = z[signal] + 1;
+			diamond[12] = x[signal] - 2; diamond[13] = z[signal];
+			diamond[14] = x[signal] - 1; diamond[15] = z[signal] - 1;
+			v_pmarker (vdi_handle, 8, diamond);
+
+			if (numbers)
+			{
+				count = 0;
+				for (other = signal; other < MAXSIGNALS; other++)
+					if (status->display[other] && x[other] == x[signal] &&
+					    z[other] == z[signal])
+						label[count++] = '0' + other;
+				label[count] = '\0';
+				top_place_label (layout, status, x, z, signal, count,
+				                 labels, label_count, &labels[label_count]);
+				if (status->line_draw != mono)
+					top_label_leader (x[signal], z[signal], &labels[label_count]);
+				v_gtext (vdi_handle, labels[label_count].x, labels[label_count].y, label);
+				label_count++;
+			}
+		}
+
+	for (signal = 0; signal < MAXSIGNALS; signal++)
+		if (top_visible (status, signal))
+		{
+			duplicate = FALSE;
+			for (other = 0; other < signal; other++)
+				if (top_visible (status, other) && y[other] == y[signal])
+					duplicate = TRUE;
+			if (!duplicate)
+				top_line (layout->gauge_x - 3, y[signal],
+				          layout->gauge_x + 3, y[signal]);
+			if (numbers)
+			{
+				label[0] = '0' + signal;
+				label[1] = '\0';
+				label_y = max (plot->y, min (y[signal] - layout->text_height / 2,
+				               plot->y + plot->h - layout->text_height));
+				v_gtext (vdi_handle, layout->gauge_x + 6 + signal * layout->char_width,
+				         label_y, label);
+			}
+		}
+}
+
+LOCAL VOID DrawTopSpace (DISPOBJP dispobj)
+{
+	SPACESTATP status = &dispobj->status->space;
+	TOP_LAYOUT layout;
+	WORD border[10], right, bottom;
+	BOOL new = dispobj->new;
+
+	if (!new && !top_changed (status)) return;
+	if (new) clr_area (&dispobj->work);
+	if (!top_layout (dispobj, &layout)) return;
+
+	InvalidVdiTextState ();
+	dispobj->text_default (dispobj);
+	vsl_color (vdi_handle, BLACK);
+	vsl_ends (vdi_handle, SQUARED, SQUARED);
+	vsl_type (vdi_handle, SOLID);
+	vsl_width (vdi_handle, 1);
+	vsm_type (vdi_handle, 1);
+	vsm_height (vdi_handle, 1);
+	vsm_color (vdi_handle, BLACK);
+
+	if (new)
+	{
+		vswr_mode (vdi_handle, MD_REPLACE);
+		right = layout.plot.x + layout.plot.w - 1;
+		bottom = layout.plot.y + layout.plot.h - 1;
+		border[0] = layout.plot.x; border[1] = layout.plot.y;
+		border[2] = right;         border[3] = layout.plot.y;
+		border[4] = right;         border[5] = bottom;
+		border[6] = layout.plot.x; border[7] = bottom;
+		border[8] = border[0];    border[9] = border[1];
+		v_pline (vdi_handle, 5, border);
+		top_line (layout.gauge_x, layout.plot.y, layout.gauge_x, bottom);
+		if (layout.labels)
+		{
+			v_gtext (vdi_handle, layout.plot.x, layout.plot.y - layout.text_height, "Z");
+			v_gtext (vdi_handle, right - layout.char_width, bottom + 2, "X");
+			v_gtext (vdi_handle, layout.gauge_x, layout.plot.y - layout.text_height, "Y");
+		}
+	}
+
+	vswr_mode (vdi_handle, MD_XOR);
+	if (!new) top_overlay (dispobj, &layout, status->pos_alt);
+	top_overlay (dispobj, &layout, status->position);
+}
 
 LOCAL VOID DrawSpace (DISPOBJP dispobj)
 {
@@ -1808,6 +2225,11 @@ LOCAL VOID DrawSpace (DISPOBJP dispobj)
 	STRING		s;	
 	
 	if (!new && !status->kneu) return;
+	if (status->form == DRAUFSICHT)
+	{
+		DrawTopSpace (dispobj);
+		return;
+	}
 
 	if (new)
 	{

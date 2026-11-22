@@ -1086,20 +1086,21 @@ GLOBAL VOID blink (OBJECT *tree, WORD obj, WORD blinkrate)
 
 /*****************************************************************************/
 
-GLOBAL WORD popup_menu (OBJECT *tree,
-                        WORD obj,
-                        WORD x,
-                        WORD y,
-                        WORD center_obj,
-                        BOOLEAN relative,
-                        WORD bmsk)
+LOCAL WORD popup_menu_impl (OBJECT *tree,
+                            WORD obj,
+                            WORD x,
+                            WORD y,
+                            WORD center_obj,
+                            BOOLEAN relative,
+                            WORD bmsk,
+                            BOOLEAN guard_initial)
 
 {
   MFDB    screen, buffer;
   OBJECT  *objp;
-  WORD    item, founditem, olditem;
+  WORD    item, founditem, olditem, initial_item, target;
   WORD    mox, moy, mobutton, mokstate;
-  BOOLEAN leave;
+  BOOLEAN leave, allow_initial;
   WORD    xold, yold;
   WORD    xdiff, ydiff;
   RECT    r, box;
@@ -1158,9 +1159,12 @@ GLOBAL WORD popup_menu (OBJECT *tree,
 
   olditem   = NIL;
   founditem = item = objc_find (tree, obj, MAX_DEPTH, mox, moy); /* In Menü ? */
+  initial_item = founditem;
+  allow_initial = !guard_initial || !relative || center_obj == NIL || founditem == center_obj;
 
   if (item != NIL)
     if (is_state (tree, item, DISABLED) || ! is_flags (tree, item, SELECTABLE)) item = NIL;
+  if (!allow_initial) item = NIL;
 
   if (item != NIL) do_state (tree, item, SELECTED);
 
@@ -1172,7 +1176,12 @@ GLOBAL WORD popup_menu (OBJECT *tree,
 
   do
   {
-    if (founditem != NIL)                       /* In Menüeintrag */
+    if (guard_initial && founditem == obj)
+    {
+      leave = TRUE;
+      xywh2rect (mox, moy, 1, 1, &r);
+    } /* if */
+    else if (founditem != NIL)                  /* In Menüeintrag */
     {
       leave = TRUE;
       objc_rect (tree, founditem, &r, FALSE);
@@ -1190,10 +1199,18 @@ GLOBAL WORD popup_menu (OBJECT *tree,
                         NULL, 0,
                         &mox, &moy, &ret, &ret, &uret, &ret);
 
-	if (objc_find (tree, obj, MAX_DEPTH, mox, moy))
-	{ /* geändert: Nix tun, wenn Maus auf Hintergrundobjekt zeigt */
+	target = objc_find (tree, obj, MAX_DEPTH, mox, moy);
+	if (!allow_initial && target != initial_item) allow_initial = TRUE;
+
+	if (target || (guard_initial && target == obj))
+	{
 	    olditem   = item;
-		 founditem = item = objc_find (tree, obj, MAX_DEPTH, mox, moy);
+		 founditem = target;
+		 item = (guard_initial && target == obj) ? NIL : target;
+
+		 /* A popup shifted onto the screen may initially put another item under
+		    the pointer. Require leaving it before it can be selected. */
+		 if (!allow_initial) item = NIL;
 		
 		 if (item != NIL)
 		   if (is_state (tree, item, DISABLED) || ! is_flags (tree, item, SELECTABLE)) item = NIL;
@@ -1222,7 +1239,21 @@ GLOBAL WORD popup_menu (OBJECT *tree,
   objp->ob_y = yold;
 
   return (item);
+} /* popup_menu_impl */
+
+GLOBAL WORD popup_menu (OBJECT *tree, WORD obj, WORD x, WORD y,
+                        WORD center_obj, BOOLEAN relative, WORD bmsk)
+
+{
+  return popup_menu_impl (tree, obj, x, y, center_obj, relative, bmsk, FALSE);
 } /* popup_menu */
+
+GLOBAL WORD popup_menu_guarded (OBJECT *tree, WORD obj, WORD x, WORD y,
+                                WORD center_obj, BOOLEAN relative, WORD bmsk)
+
+{
+  return popup_menu_impl (tree, obj, x, y, center_obj, relative, bmsk, TRUE);
+} /* popup_menu_guarded */
 
 /*****************************************************************************/
 

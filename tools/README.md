@@ -70,6 +70,25 @@ while playing at 120 BPM in 4/4, with a higher first beat. The click uses
 the system PSG sound sequence, so it can interrupt other PSG sounds. Modal
 dialogs that stop timer events pause the click; missed beats are not replayed.
 
+### A3D top view
+
+Open **Output > A3D Anzeige**, then select **Raumform > Draufsicht X/Z**.
+The same view is available from the Raumform icon in the A3D setup dialog
+and can be stored in a numbered setup. The plot shows X increasing to the
+right and Z increasing upwards; the gauge to its right shows Y increasing
+upwards. Signal 0 is the lead position. The setup's **Fadenk.** switches
+select crosshairs, and **Linie** enables the markers for signals 1-8. In
+**Modus**, Mono shows only individual markers; Stereo connects 1-2, 3-4,
+5-6, and 7-8; Quadro and Okto connect 1-2-3-4 and 5-6-7-8. A disabled
+**Linie** breaks the connection at that signal. Connections are drawn only
+in the X/Z plot. The Y gauge still marks signals enabled by either switch.
+
+**Optionen > Signalnummern** toggles the signal numbers in both areas for
+the current A3D window. Coincident markers share a label, and very small
+windows omit numbers automatically. **nur Innenraum** zooms by three and
+clamps positions at the plot and gauge boundaries. Rotation and perspective
+affect the 3D forms, not this fixed top view.
+
 ### CMO position overview
 
 Open **Output > CMO Cybermove Output** or the CMO desktop icon. Each window
@@ -133,11 +152,12 @@ trees contain placeholder text and are not used as a fallback.
 ## Regression tests
 
 Run `make test TOOLCHAIN=/path/to/cross-mint` to build and execute the
-variable-dispatch, synchronized PUF position, transport-click, CMI and LFO
-setup, CMO routing, 3D projection, initialization-window lifetime,
-help-dispatch/message, and MIDI timer keyboard-interrupt checks in a
-headless Hatari ST. The timer check requests an IKBD clock response during
-a scheduled callback and verifies that the reply arrives before it ends.
+variable-dispatch, synchronized PUF position, transport-click, A3D view
+selection and redraw, CMI and LFO setup, CMO routing, 3D projection,
+initialization-window lifetime, help-dispatch/message, and MIDI timer
+keyboard-interrupt checks in a headless Hatari ST. The timer check requests
+an IKBD clock response during a scheduled callback and verifies that the
+reply arrives before it ends.
 CMO checks cover redraw coalescing, urgent redraws, and updates received
 while a redraw is in progress. Setup checks cover changed and unchanged
 fields, adjacent regions, button release, and layout-change fallback.

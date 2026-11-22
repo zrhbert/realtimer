@@ -106,6 +106,7 @@ typedef struct status
 	WORD		koor_stat2;	/* Momentaner Zustand dieser Gruppe */
 	BOOLEAN	new;			/* Zwang zum Neuzeichnen */
 	BOOLEAN	reset_flag;	/* Parameter wurden zurueckgesetzt */
+	BOOLEAN	hide_top_numbers;
 	WINDOWP		refwindow;
 	RTMCLASSP	refmodule;
 } STATUS;
@@ -380,7 +381,7 @@ LOCAL VOID click_setup (WINDOWP window, MKINFO *mk)
 					break;
 				case A3DRAUMFORM:	
 					i = ed->raumform +1;
-					item = popup_menu (a3d_raum, ROOT, 0, 0, i, TRUE, mk->momask);
+					item = popup_menu_guarded (a3d_raum, ROOT, 0, 0, i, TRUE, mk->momask);
 					if ((item != NIL) && (item != i))
 					{
 						ed->raumform = item-1;
@@ -495,12 +496,15 @@ PUBLIC BOOLEAN	set_setnr_setup	(RTMCLASSP module, LONG setupnr)
 PRIVATE VOID update_menu_mod (WINDOWP window)
 {
 	SET_P		akt = Akt(window);
+	STAT_P		status = Status(window);
 
 	menu_check(a3d_menu, MA3DMONO, akt->modus == MONO);
 	menu_check(a3d_menu, MA3DSTEREO, akt->modus == STEREO);
 	menu_check(a3d_menu, MA3DQUADRO, akt->modus == QUADRO);
 	menu_check(a3d_menu, MA3DOKTO, akt->modus == OKTO);
 	menu_check(a3d_menu, MA3DINNENRAUM, akt->innenraum);
+	menu_check(a3d_menu, MA3DSIGNALNUMMERN, !status->hide_top_numbers);
+	menu_ienable(a3d_menu, MA3DSIGNALNUMMERN, akt->raumform == DRAUFSICHT);
 
 	menu_check(a3d_menu, MA3DTETRAEDER, akt->raumform == TETRAEDER);
 	menu_check(a3d_menu, MA3DSECHSKANAL, akt->raumform == SECHSKANAL);
@@ -512,6 +516,7 @@ PRIVATE VOID update_menu_mod (WINDOWP window)
 	menu_check(a3d_menu, MA3DWUERFELDOPP, akt->raumform == WUERFELDOPP);
 	menu_check(a3d_menu, MA3DKREISFORM, akt->raumform == KREISFORM);
 	menu_check(a3d_menu, MA3DQUADROPHON, akt->raumform == QUADROPHON);
+	menu_check(a3d_menu, MA3DDRAUFSICHT, akt->raumform == DRAUFSICHT);
 } /* update_menu_mod */
 
 /*****************************************************************************/
@@ -555,6 +560,7 @@ PRIVATE VOID handle_menu_mod (WINDOWP window, WORD title, WORD item)
 			case MA3DWUERFELDOPP:	akt->raumform = WUERFELDOPP;	break;
 			case MA3DQUADROPHON:		akt->raumform = QUADROPHON;	break;
 			case MA3DKREISFORM:		akt->raumform = KREISFORM;		break;
+			case MA3DDRAUFSICHT:		akt->raumform = DRAUFSICHT;	break;
 		} /* switch */
 		status->new = TRUE;
 		window->milli = 1;
@@ -569,6 +575,13 @@ PRIVATE VOID handle_menu_mod (WINDOWP window, WORD title, WORD item)
 				window->milli = 1;
 				break;
 			case MA3DPERSPEKTIVE 	:
+				break;
+			case MA3DSIGNALNUMMERN:
+				if (akt->raumform == DRAUFSICHT)
+				{
+					status->hide_top_numbers = !status->hide_top_numbers;
+					window->milli = 1;
+				}
 				break;
 		} /* switch */
 		status->new = TRUE;
@@ -646,6 +659,8 @@ PRIVATE VOID wi_start_mod (WINDOWP window)
 			dispobj->new	= TRUE;
 			dispobj->set_uni  (dispobj, DOUniSpaceInside, akt->innenraum);
 			dispobj->set_uni  (dispobj, DOUniSpaceArrows, akt->pfeile);
+			dispobj->set_uni  (dispobj, DOUniSpaceNumbers,
+			                   akt->raumform != DRAUFSICHT || !status->hide_top_numbers);
 			dispobj->set_type (dispobj, DOTypeSpaceForm, akt->raumform);
 			dispobj->set_type (dispobj, DOTypeSpaceMode, akt->modus);
 			dispobj->set_work (dispobj, &window->scroll);
@@ -726,6 +741,7 @@ PRIVATE VOID wi_timer_mod (WINDOWP window)
 	RTMCLASSP	module = Module(window);
 	STAT_P		status = module->status;
 
+	window->milli = 0; /* Updates during drawing must be able to rearm the timer. */
 	if (status->new)
 		redraw_window(window, &window->scroll);	/* voller Neuaufbau */
 	else
@@ -733,9 +749,11 @@ PRIVATE VOID wi_timer_mod (WINDOWP window)
 			XOR-Marken selbst nach; die Fenster-Maschinerie von
 			redraw_window (wind_update, Maus, Menuezeile, alle Hooks)
 			ist dafuer unnoetig. */
+	{
+		hide_mouse ();
 		draw_dispobjs (window);
-	window->milli = 0; 			/* keine Timer-Funktion mehr bis
-										zur nächsten Änderung */
+		show_mouse ();
+	}
 } /* wi_timer_mod */
 
 /*****************************************************************************/
