@@ -718,7 +718,7 @@ GLOBAL VOID updt_menu (WINDOWP window)
 
 {
   WORD    i;
-  SET     after;
+  ULONG   after, changed;
   LONGSTR s;
   WINDOWP top;
   BOOLEAN ccp;
@@ -740,23 +740,21 @@ GLOBAL VOID updt_menu (WINDOWP window)
     menu_enable (menu, MLOADFNT, gdos_ok () && ! fonts_loaded);
     menu_enable (menu, MUNLOADF, gdos_ok () && fonts_loaded);
 */
-    setclr (after);
+    /* Die Funktionstasten belegen nur Bit 0..9 von menus [0]; ein Wort
+       statt ganzer SET-Operationen hält den Abgleich pro Timer-Ereignis billig */
+    for (i = 0, after = 0; i < 10; i++)
+      if ((funcmenus [i].item != 0) &&
+          ! (menu [funcmenus [i].title].ob_state & DISABLED) &&
+          ! (menu [funcmenus [i].item].ob_state & DISABLED))
+        after |= 1L << i;
 
-    for (i = 0; i < 10; i++)
-      if ((funcmenus [i].item == 0) ||
-          is_state (menu, funcmenus [i].title, DISABLED) ||
-          is_state (menu, funcmenus [i].item, DISABLED))
-        setexcl (after, i);
-      else
-        setincl (after, i);
+    changed = menus [0] ^ after;
 
-    setxor (menus, after);
-
-    if (! setcmp (menus, NULL))         /* Es hat sich etwas geändert */
+    if (changed != 0)                   /* Es hat sich etwas geändert */
     {
       for (i = 0, *s = EOS; i < 10; i++)
       {
-        if (setin (after, i)) strcat (s, freetext [FM1 + i].ob_spec.free_string);
+        if (after & (1L << i)) strcat (s, freetext [FM1 + i].ob_spec.free_string);
         strcat (s, ",");
       } /* for */
 
@@ -764,12 +762,12 @@ GLOBAL VOID updt_menu (WINDOWP window)
       hide_mouse ();
 
       for (i = 0; i < 10; i++)
-        if (setin (menus, i)) draw_key (i + 1);
+        if (changed & (1L << i)) draw_key (i + 1);
 
       show_mouse ();
     } /* if */
 
-    setcpy (menus, after);
+    menus [0] = after;
   } /* if */
 
   updtmenu = TRUE;      /* Menüs immer auf neuesten Stand bringen */

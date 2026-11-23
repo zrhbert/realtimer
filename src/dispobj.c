@@ -681,8 +681,10 @@ LOCAL VOID StartTimeObject (DISPOBJP dispobj)
 		RecalcWorkObject (dispobj);
 		
 		/* Einsetzen des Textes */
-		SetPTime (object, obj, dispobj->var_value[0]);
+		status->changed = SetPTime (object, obj, dispobj->var_value[0]);
 	} /* if */
+	else
+		status->changed = 0;
 } /* StartTimeObject */
 
 LOCAL VOID StartCheckObject (DISPOBJP dispobj)
@@ -712,11 +714,31 @@ LOCAL VOID DrawObject (DISPOBJP dispobj)
 LOCAL VOID TimerObject (DISPOBJP dispobj)
 {
 	OBJECTSTATP	status = &dispobj->status->object;
+	RECT			area, r;
+	WORD			i;
 
 	/* Werte auffrischen und ggf. neuen Text ins Objekt einsetzen */
 	if (dispobj->start) dispobj->start (dispobj);
 
-	if (dispobj->new)
+	/* Laufende Zeitanzeige: nur die Felder mit geaendertem Text neu
+		zeichnen (meist nur die Millisekunden), ueber das Elternobjekt
+		geclippt, damit dessen Hintergrund korrekt bleibt. Ohne geaenderten
+		Text (z.B. nach Reset) wird das ganze Objekt gezeichnet. */
+	if (dispobj->new && dispobj->start == StartTimeObject
+		&& status->changed != 0)
+	{
+		area.w = 0;
+		for (i = 1; i <= 4; i++)
+			if (status->changed & (1 << i))
+			{
+				objc_rect (dispobj->parent->object, status->object + i, &r, TRUE);
+				if (area.w == 0) area = r;
+				else rc_union (&r, &area);
+			} /* if, for */
+		draw_object_area (dispobj->parent, status->object, &area);
+		if (dispobj->finished) dispobj->finished (dispobj);
+	} /* if */
+	else if (dispobj->new)
 	{
 		/* Nur dieses eine Objekt zeichnen. Der fruehere Umweg ueber
 			redraw_window() lief fuer jede einzelne Wertaenderung durch

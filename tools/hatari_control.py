@@ -145,7 +145,7 @@ class Session:
                "--screenshot-dir", self.shots, "--screenshot-format", "png", "--crop", "yes",
                "--control-socket", self.sock_path]
         if a.machine == "tt":
-            cmd += ["--machine", "tt", "--ttram", "0", "--memsize", "14"]
+            cmd += ["--machine", "tt", "--ttram", "20", "--addr24", "off", "--memsize", "14"]
             cmd += ["--tos-res", "ttmed"] if a.color else ["--mono"]
         else:
             cmd += ["--memsize", "4"]

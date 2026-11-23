@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "shirazMcp": {
+      "type": "stdio",
+      "command": "/Users/bertramd/Documents/Development/ShirazMCP/target/release/shiraz-mcp",
+      "args": [],
+      "env": {
+        "SHIRAZMCP_HATARI": "/Users/bertramd/Documents/Development/Hatari/hatari-shiraz/hatari",
+        "SHIRAZMCP_TOS": "/Users/bertramd/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img",
+        "SHIRAZMCP_WORKDIR": "/Users/bertramd/Documents/Development/Hatari/realtimer/build/shiraz-mcp",
+        "SHIRAZMCP_FAST_FORWARD": "0",
+        "HOME": "/Users/bertramd/Documents/Development/Hatari/realtimer/build/shiraz-mcp"
+      },
+      "tools": ["*"]
+    }
+  }
+}

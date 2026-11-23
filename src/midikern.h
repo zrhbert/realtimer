@@ -19,7 +19,9 @@ typedef void (*MkTaskPtr)      (long date, short refNum, long a1, long a2, long 
 typedef void (*MkRcvAlarmPtr)  (short refNum);
 typedef void (*MkApplAlarmPtr) (short refNum, long code);
 
-/* Kernel lifecycle (called from init_msh/term_msh) */
+/* Kernel lifecycle (called from init_msh/term_msh). Timer A runs at 1 kHz
+	when tasks/input need service and about 100 Hz while idle; MIDI output is
+	driven by the ACIA transmit interrupt. */
 short MidiInternalStart (void);
 void  MidiInternalStop  (void);
 

@@ -335,7 +335,7 @@ GLOBAL VOID SetPWord3 (OBJECT *tree, WORD obj, CONST WORD value);
 GLOBAL VOID SetPWord3N (OBJECT *tree, WORD obj, CONST WORD value);
 GLOBAL VOID SetPLong (OBJECT *tree, WORD obj, CONST LONG value);
 GLOBAL VOID SetPLongN (OBJECT *tree, WORD obj, CONST LONG value);
-GLOBAL VOID SetPTime (OBJECT *tree, WORD obj, CONST LONG value);
+GLOBAL UWORD SetPTime (OBJECT *tree, WORD obj, CONST LONG value);
 GLOBAL VOID SetPFloat (OBJECT *tree, WORD obj, CONST FLOAT value);
 #define SetPText(tree, obj, text) set_ptext(tree, obj, text)
 

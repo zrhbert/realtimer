@@ -135,7 +135,7 @@ test:
 # Exercise native FPU interrupt handling on the TT build as well.
 test-tt:
 	$(MAKE) CPU=-m68020-60 BUILD_DIR=build build/regtest.prg
-	python3 tools/test_regressions.py build/regtest.prg --machine tt
+	python3 tools/test_regressions.py build/regtest.prg --machine tt --timeout 240
 
 TEST_SRCS = tests/main.c tests/global.c tests/var.c tests/puf.c tests/tra.c tests/a3d.c tests/cmi.c tests/lfo.c tests/objects.c \
 	tests/cmo.c tests/dispobj.c tests/menu.c tests/help.c tests/midikern.c

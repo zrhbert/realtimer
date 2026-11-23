@@ -388,8 +388,14 @@ PRIVATE VOID wi_finished_mod (WINDOWP window)
 
 PRIVATE VOID wi_timer_mod (WINDOWP window)
 {
+	STAT_P	status = Status(window);
 
-	redraw_window(window, &window->scroll);
+	/* Voller Neuaufbau nur bei neuem Setup oder zerstoertem Inhalt; sonst
+		nur die Texte mit geaendertem Wert (meist gar nichts). */
+	if (status->new || (window->flags & WI_JUNK))
+		redraw_window(window, &window->scroll);
+	else
+		update_dispobjs (window);
 	/* Gelegentlich updaten */
 	window->milli = MILLI;
 

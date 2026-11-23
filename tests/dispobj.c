@@ -573,6 +573,78 @@ static int test_cmo_redraw (FILE *out)
 	return failures ? 1 : 0;
 }
 
+static DISPOBJP drawn_object;
+static int start_calls, draw_calls, finish_calls;
+
+static VOID stub_start (DISPOBJP dispobj)
+{
+	start_calls++;
+}
+
+static VOID stub_draw (DISPOBJP dispobj)
+{
+	draw_calls++;
+	drawn_object = dispobj;
+}
+
+static VOID stub_finish (DISPOBJP dispobj)
+{
+	finish_calls++;
+	dispobj->new = FALSE;
+}
+
+static int test_update_dispobjs (FILE *out)
+{
+	static WINDOW window;
+	static DISPOBJ unchanged, changed;
+	WORD work_in[11], work_out[57], width, height, cell_width, cell_height, i;
+	BOOLEAN drew;
+	int failures = 0;
+
+	if (appl_init () < 0)
+	{
+		fputs ("FAIL initializing AES for display update test\n", out);
+		return 1;
+	}
+	vdi_handle = graf_handle (&width, &height, &cell_width, &cell_height);
+	for (i = 0; i < 10; i++) work_in[i] = 1;
+	work_in[10] = RC;
+	v_opnvwk (work_in, &vdi_handle, work_out);
+
+	window.opened = 1;
+	window.handle = DESK;
+	xywh2rect (64, 64, 64, 64, &window.scroll);
+	window.dispobjs = list_create ();
+	unchanged.start = changed.start = stub_start;
+	unchanged.draw = changed.draw = stub_draw;
+	unchanged.finished = changed.finished = stub_finish;
+	list_rear_insert (window.dispobjs, list_new_el ((KEYTYPE) &unchanged));
+	list_rear_insert (window.dispobjs, list_new_el ((KEYTYPE) &changed));
+
+	drew = update_dispobjs (&window);
+	if (drew || start_calls != 2 || draw_calls != 0 || finish_calls != 0)
+	{
+		fprintf (out, "FAIL unchanged display update drew=%d start=%d draw=%d finish=%d\n",
+			drew, start_calls, draw_calls, finish_calls);
+		failures++;
+	}
+
+	changed.new = TRUE;
+	drew = update_dispobjs (&window);
+	if (!drew || draw_calls == 0 || drawn_object != &changed || finish_calls != 1
+		|| changed.new || unchanged.new)
+	{
+		fprintf (out, "FAIL changed display update drew=%d draw=%d finish=%d\n",
+			drew, draw_calls, finish_calls);
+		failures++;
+	}
+
+	list_destroy (window.dispobjs);
+	if (vdi_handle) v_clsvwk (vdi_handle);
+	appl_exit ();
+	return failures;
+}
+
 int test_dispobj (FILE *out)
 {
 	static WORD xwin[800], ywin[800], xpersp[800], ypersp[800];
@@ -620,5 +692,6 @@ int test_dispobj (FILE *out)
 		fputs ("FAIL clipping depth before perspective lookup\n", out);
 		failures++;
 	}
-	return failures + test_cmo_redraw (out) + test_top_view (out);
+	return failures + test_cmo_redraw (out) + test_top_view (out)
+		+ test_update_dispobjs (out);
 }

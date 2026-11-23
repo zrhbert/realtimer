@@ -8,7 +8,7 @@
 /* slaving) is not supported; the sync calls report internal sync.          */
 /*                                                                           */
 /* Services                                                                  */
-/*   - millisecond timebase (MFP Timer A at ~1 kHz, drift-compensated)      */
+/*   - millisecond timebase (MFP Timer A at ~1 kHz while active, 100 Hz idle) */
 /*   - MidiTask scheduler running at interrupt level on a private stack     */
 /*     (the small system supervisor stack overflowed with earlier tasks)    */
 /*   - deferred tasks (MidiDTask) executed from the main loop               */
@@ -16,7 +16,7 @@
 /*   - event routing between the in-process clients (TRA/VAR/PUF/...) with  */
 /*     MidiShare connection and filter semantics                            */
 /*   - physical MIDI out/in on the ACIA 6850 at $FFFC04/06 (port 0); the    */
-/*     input hooks the system midivec and parses bytes into events          */
+/*     output uses its transmit interrupt and input hooks the system midivec */
 /*                                                                           */
 /* Concurrency: the program runs in user mode and cannot mask interrupts,  */
 /* so a busy/pending discipline is used instead. Every API call brackets    */
@@ -28,6 +28,7 @@
 /*                                                                           */
 /*****************************************************************************/
 
+#include <stddef.h>
 #include <string.h>
 #include <mint/osbind.h>
 
@@ -50,9 +51,18 @@
 /* MFP Timer A: 2457600 / 10 / 246 = 999.024 Hz. The ~0.0976% shortfall is
 	almost exactly 1/1024, so every 1024th tick advances the clock by 2 ms. */
 #define MK_TIMER_CTRL 2            /* prescaler /10                         */
+#define MK_TIMER_CTRL_IDLE 6       /* prescaler /100                        */
 #define MK_TIMER_DATA 246
 #define MK_MFP_TIMER_A 13          /* MFP interrupt number for Jenabint     */
 #define MK_VEC_TIMER_A 0x4D        /* exception vector number (0x134/4)     */
+#define MK_MFP_TACR (*(volatile unsigned char *) 0xFFFFFA19UL)
+#define MK_MFP_TADR (*(volatile unsigned char *) 0xFFFFFA1FUL)
+
+/* Standard Atari MIDI ACIA setup: Rx interrupt, /16 clock, 8N1. */
+#define MK_ACIA_CTRL_RX  0x95
+#define MK_ACIA_CTRL_TX  0xB5
+#define MK_ACIA_IRQ       0x80
+#define MK_ACIA_TX_IRQ_ENABLED 0x20
 
 /****** HARDWARE *************************************************************/
 
@@ -104,20 +114,26 @@ static long    mk_freecount;
 
 static MKAPP   mk_app [MK_APPS];
 
-static volatile long  mk_time;          /* milliseconds since start         */
-static unsigned short mk_tickmod;       /* drift compensation counter       */
+/* Not static where the timer interrupt's assembly fast path reads them. */
+volatile long         mk_time;          /* milliseconds since start         */
+unsigned short        mk_tickmod;       /* drift compensation counter       */
+volatile short        mk_timer_slow;
 
-static volatile short mk_busy;          /* main context inside the kernel   */
+volatile short        mk_busy;          /* main context inside the kernel   */
 static volatile short mk_pending;       /* ISR deferred its service work    */
+static volatile short mk_irq_depth;
 static Boolean        mk_inited;
 
-static MidiEvPtr      mk_tasks;         /* pending MidiTasks, sorted by date */
+MidiEvPtr             mk_tasks;         /* pending MidiTasks, sorted by date */
 
 /* MIDI out/in byte rings (single producer/single consumer each) */
 static volatile unsigned char  mk_tx [MK_TXLEN];
-static volatile unsigned short mk_txw, mk_txr;
+volatile unsigned short        mk_txw, mk_txr;
 static volatile unsigned char  mk_rx [MK_RXLEN];
-static volatile unsigned short mk_rxw, mk_rxr;
+volatile unsigned short        mk_rxw, mk_rxr;
+static volatile short mk_tx_irq_enabled;
+
+_Static_assert (offsetof (TMidiEv, date) == 4, "ISR fast path reads date at 4");
 
 /* MIDI input parser state */
 static unsigned char mk_in_status;      /* running status                   */
@@ -128,6 +144,7 @@ static MidiEvPtr     mk_in_sysex;       /* sysex being accumulated          */
 /* saved system state */
 static long  mk_old_timer_vec;
 static void *mk_old_midivec;
+static long (*mk_old_midisys) (void);
 static _KBDVECS *mk_kbdvecs;
 
 /* referenced from the assembly stubs */
@@ -135,6 +152,11 @@ long          mk_saved_sp;
 unsigned char mk_irq_stack [MK_IRQ_STACK];
 
 static void mk_service (void);
+static void mk_set_timer_rate_sup (short slow);
+static void mk_update_timer_rate_sup (void);
+static long mk_set_timer_fast_sup (void);
+static long mk_kick_tx_sup (void);
+static long mk_stop_tx_sup (void);
 
 /****** ATOMIC BRACKETS ******************************************************/
 
@@ -291,14 +313,93 @@ static void mk_tx_put (unsigned char b)
 	mk_txw++;
 } /* mk_tx_put */
 
-static void mk_drain_tx (void)
+static void mk_set_timer_rate_sup (short slow)
 {
-	while (mk_txr != mk_txw && (ACIA_MIDI_CTRL & ACIA_TDRE))
+	short sr;
+
+	__asm__ volatile ("move.w %%sr,%0\n\tori.w #0x0600,%%sr"
+	                  : "=d" (sr) : : "cc", "memory");
+	if (slow && (mk_busy || mk_pending || mk_tasks ||
+	             mk_rxr != mk_rxw))
+		slow = FALSE;
+	if (mk_timer_slow != slow)
 	{
-		ACIA_MIDI_DATA = mk_tx [mk_txr & (MK_TXLEN - 1)];
-		mk_txr++;
-	} /* while */
-} /* mk_drain_tx */
+		MK_MFP_TACR = 0;              /* stop Timer A while changing its divisor */
+		MK_MFP_TADR = MK_TIMER_DATA;
+		MK_MFP_TACR = slow ? MK_TIMER_CTRL_IDLE : MK_TIMER_CTRL;
+		mk_timer_slow = slow;
+	} /* if */
+	__asm__ volatile ("move.w %0,%%sr" : : "d" (sr) : "cc", "memory");
+} /* mk_set_timer_rate_sup */
+
+static void mk_update_timer_rate_sup (void)
+{
+	short slow = !mk_busy && !mk_pending && !mk_tasks &&
+	             mk_rxr == mk_rxw;
+	mk_set_timer_rate_sup (slow);
+} /* mk_update_timer_rate_sup */
+
+static long mk_set_timer_fast_sup (void)
+{
+	mk_set_timer_rate_sup (FALSE);
+	return 0;
+} /* mk_set_timer_fast_sup */
+
+static long mk_kick_tx_sup (void)
+{
+	if (mk_txr != mk_txw && !mk_tx_irq_enabled)
+	{
+		mk_tx_irq_enabled = TRUE;
+		ACIA_MIDI_CTRL = MK_ACIA_CTRL_TX;
+	} /* if */
+	return 0;
+} /* mk_kick_tx_sup */
+
+static void mk_kick_tx (void)
+{
+	if (mk_txr == mk_txw) return;
+	if (mk_irq_depth)
+		mk_kick_tx_sup ();
+	else
+		Supexec (mk_kick_tx_sup);
+} /* mk_kick_tx */
+
+static long mk_stop_tx_sup (void)
+{
+	mk_tx_irq_enabled = FALSE;
+	ACIA_MIDI_CTRL = MK_ACIA_CTRL_RX;
+	return 0;
+} /* mk_stop_tx_sup */
+
+/* The system ACIA handler calls midisys for both MIDI and IKBD interrupts.
+   Service one transmit-ready byte, then chain the original routine so MIDI
+   input and keyboard data keep using the OS's normal handling. */
+static long mk_midisys (void)
+{
+	unsigned char status;
+
+	mk_irq_depth++;
+	status = ACIA_MIDI_CTRL;
+	if (mk_tx_irq_enabled && (status & (MK_ACIA_IRQ | ACIA_TDRE)) ==
+	                         (MK_ACIA_IRQ | ACIA_TDRE))
+	{
+		if (mk_txr != mk_txw)
+		{
+			ACIA_MIDI_DATA = mk_tx [mk_txr & (MK_TXLEN - 1)];
+			mk_txr++;
+		} /* if */
+		if (mk_txr == mk_txw)
+		{
+			mk_tx_irq_enabled = FALSE;
+			ACIA_MIDI_CTRL = MK_ACIA_CTRL_RX;
+		} /* if */
+	} /* if */
+
+	if (mk_old_midisys) mk_old_midisys ();
+	mk_update_timer_rate_sup ();
+	mk_irq_depth--;
+	return 0;
+} /* mk_midisys */
 
 static void mk_wire_out (MidiEvPtr e)
 {
@@ -577,31 +678,27 @@ static void mk_run_tasks (void)
 
 static void mk_service (void)
 {
-	/* No mk_drain_tx() here: mk_service also runs in user mode (deferred
-		work in mk_leave) and the ACIA may only be touched in supervisor
-		mode. The timer interrupt drains the ring every millisecond. */
+	/* mk_service also runs in user mode (deferred work in mk_leave); ACIA
+		transmit is handled separately by the system's MIDI interrupt. */
 	mk_run_tasks ();
 	mk_parse_input ();
 } /* mk_service */
 
 /****** TIMER INTERRUPT ******************************************************/
 
-/* C part of the Timer A interrupt, entered on the private stack. */
+/* C part of the Timer A interrupt, entered on the private stack after the
+	assembly entry has advanced mk_time and found work to do. */
 void mk_timer_tick (void)
 {
-	mk_time++;
-	if (++mk_tickmod >= 1024)                /* 999.024 Hz -> add the lost ms */
-	{
-		mk_tickmod = 0;
-		mk_time++;
-	} /* if */
-
-	mk_drain_tx ();                          /* byte rings are always safe   */
+	mk_irq_depth++;
 
 	if (mk_busy)
 		mk_pending = 1;                      /* main is inside: defer        */
 	else
 		mk_service ();
+
+	mk_update_timer_rate_sup ();
+	mk_irq_depth--;
 } /* mk_timer_tick */
 
 /* Interrupt entry: save registers and use a private stack for the tasks.
@@ -610,11 +707,53 @@ void mk_timer_tick (void)
 	re-entering and overwriting the saved stack pointer.
 	FSAVE also preserves an interrupted FPU operation; a null frame has
 	no floating-point registers to save. Run the callback with the default
-	FPU control mode, not a temporary rounding mode from interrupted code. */
+	FPU control mode, not a temporary rounding mode from interrupted code.
+	Most ticks have nothing to do: while active the clock is advanced first
+	(999.024 Hz, every 1024th tick adds the lost ms), and idle Timer A runs
+	at about 100 Hz. The interrupt returns without the register, FPU and
+	stack switch unless MIDI input or a scheduled task needs service. */
 __asm__ (
 	".text\n\t.even\n"
 	".globl mk_timer_isr\n"
 	"mk_timer_isr:\n\t"
+	"tst.w mk_timer_slow\n\t"
+	"beq.s 7f\n\t"
+	"add.l #10,mk_time\n\t"
+	"bra.s 8f\n"
+	"7:\n\t"
+	"addq.l #1,mk_time\n"
+	"8:\n\t"
+	"addq.w #1,mk_tickmod\n\t"
+	"cmp.w #1024,mk_tickmod\n\t"
+	"bcs.s 3f\n\t"
+	"clr.w mk_tickmod\n\t"
+	"addq.l #1,mk_time\n"
+	"3:\n\t"
+	"tst.w mk_busy\n\t"
+	"bne.s 4f\n\t"
+	"move.l %d0,-(%sp)\n\t"
+	"move.w mk_rxr,%d0\n\t"
+	"cmp.w mk_rxw,%d0\n\t"
+	"bne.s 5f\n\t"
+	"move.l mk_tasks,%d0\n\t"
+	"beq.s 9f\n\t"
+	"move.l %a0,-(%sp)\n\t"
+	"move.l %d0,%a0\n\t"
+	"move.l 4(%a0),%d0\n\t"                 /* mk_tasks->date */
+	"move.l (%sp)+,%a0\n\t"
+	"cmp.l mk_time,%d0\n\t"
+	"bls.s 5f\n\t"
+	"bra.s 6f\n"
+	"9:\n\t"
+	"tst.w mk_timer_slow\n\t"
+	"beq.s 5f\n"
+	"6:\n\t"
+	"move.l (%sp)+,%d0\n\t"
+	"bclr #5,0xfffffa0f\n\t"
+	"rte\n"
+	"5:\n\t"
+	"move.l (%sp)+,%d0\n"
+	"4:\n\t"
 	"movem.l %d0-%d7/%a0-%a6,-(%sp)\n\t"
 	"move.l %sp,mk_saved_sp\n\t"
 	"lea mk_irq_stack+" MK_STR (MK_IRQ_STACK) "-4,%sp\n\t"
@@ -658,6 +797,7 @@ void mk_midi_in_byte (long b)
 	{
 		mk_rx [mk_rxw & (MK_RXLEN - 1)] = (unsigned char) b;
 		mk_rxw++;
+		mk_set_timer_rate_sup (FALSE);
 	} /* if */
 } /* mk_midi_in_byte */
 
@@ -877,6 +1017,7 @@ void MidiSendIm (short refNum, void *ev)
 	mk_enter ();
 	mk_deliver (refNum, e);
 	mk_leave ();
+	mk_kick_tx ();
 } /* MidiSendIm */
 
 long MidiCountEvs (short refNum)
@@ -957,6 +1098,13 @@ MidiEvPtr MidiTask (MkTaskPtr proc, long date, short refNum, long a1, long a2, l
 		} /* else */
 	} /* if */
 	mk_leave ();
+	if (t)
+	{
+		if (mk_irq_depth)
+			mk_set_timer_fast_sup ();
+		else if (mk_timer_slow)
+			Supexec (mk_set_timer_fast_sup);
+	} /* if */
 	return t;
 } /* MidiTask */
 
@@ -1079,18 +1227,25 @@ short MidiInternalStart (void)
 	strcpy (mk_app [0].name, "MidiShare");
 
 	mk_time = 0;
+	mk_tickmod = 0;
+	mk_timer_slow = FALSE;
 	mk_tasks = NULL;
 	mk_busy = mk_pending = 0;
+	mk_irq_depth = 0;
+	mk_tx_irq_enabled = FALSE;
 	mk_txw = mk_txr = mk_rxw = mk_rxr = 0;
 	mk_in_status = 0; mk_in_have = mk_in_need = 0; mk_in_sysex = NULL;
 
 	/* MIDI input: hook the system midivec */
 	mk_kbdvecs = Kbdvbase ();
 	mk_old_midivec = (void *) mk_kbdvecs->midivec;
+	mk_old_midisys = mk_kbdvecs->midisys;
 	mk_kbdvecs->midivec = (void (*) (void)) mk_midivec;
+	mk_kbdvecs->midisys = mk_midisys;
 
 	/* timebase: MFP Timer A at ~1 kHz */
 	Supexec (mk_install_sup);
+	Supexec (mk_stop_tx_sup);
 	Xbtimer (0 /* Timer A */, MK_TIMER_CTRL, MK_TIMER_DATA, mk_timer_isr);
 	Jenabint (MK_MFP_TIMER_A);
 
@@ -1107,9 +1262,13 @@ static long mk_remove_sup (void)
 void MidiInternalStop (void)
 {
 	if (!mk_inited) return;
+	Supexec (mk_stop_tx_sup);
 	Jdisint (MK_MFP_TIMER_A);
 	Supexec (mk_remove_sup);
 	if (mk_kbdvecs)
+	{
 		mk_kbdvecs->midivec = (void (*) (void)) mk_old_midivec;
+		mk_kbdvecs->midisys = mk_old_midisys;
+	} /* if */
 	mk_inited = FALSE;
 } /* MidiInternalStop */

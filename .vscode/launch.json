@@ -105,7 +105,7 @@
             "osx": {
                 "miDebuggerPath": "${config:realtimer.atariSdk}/opt/cross-mint/bin/m68k-atari-mintelf-gdb",
                 "debugServerPath": "${config:realtimer.atariSdk}/hatari/Hatari.app/Contents/MacOS/Hatari",
-                "debugServerArgs": "--tos \"/Users/bertramd/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img\" --confirm-quit no --sound off --machine tt --ttram 0 --memsize 14 --mono --fast-forward yes --parse \"${config:realtimer.atariSdk}/hatari/db.ini\" \"${workspaceFolder}/rt5run.prg\""
+                "debugServerArgs": "--tos \"/Users/bertramd/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img\" --confirm-quit no --sound off --machine tt --ttram 20 --addr24 off --memsize 14 --mono --fast-forward yes --parse \"${config:realtimer.atariSdk}/hatari/db.ini\" \"${workspaceFolder}/rt5run.prg\""
             },
             "linux": {
                 "miDebuggerPath": "${config:realtimer.atariSdk}/opt/cross-mint/bin/m68k-atari-mintelf-gdb",
@@ -146,7 +146,7 @@
             "osx": {
                 "miDebuggerPath": "${config:realtimer.atariSdk}/opt/cross-mint/bin/m68k-atari-mintelf-gdb",
                 "debugServerPath": "${config:realtimer.atariSdk}/hatari/Hatari.app/Contents/MacOS/Hatari",
-                "debugServerArgs": "--tos \"/Users/bertramd/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img\" --confirm-quit no --sound off --machine tt --ttram 0 --memsize 14 --tos-res ttmed --fast-forward yes --parse \"${config:realtimer.atariSdk}/hatari/db.ini\" \"${workspaceFolder}/rt5run.prg\""
+                "debugServerArgs": "--tos \"/Users/bertramd/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img\" --confirm-quit no --sound off --machine tt --ttram 20 --addr24 off --memsize 14 --tos-res ttmed --fast-forward yes --parse \"${config:realtimer.atariSdk}/hatari/db.ini\" \"${workspaceFolder}/rt5run.prg\""
             },
             "linux": {
                 "miDebuggerPath": "${config:realtimer.atariSdk}/opt/cross-mint/bin/m68k-atari-mintelf-gdb",

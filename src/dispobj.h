@@ -201,6 +201,7 @@ typedef struct objectstatus{
 	WORD		object;	/* Nummer des Objektes im Baum */
 	STRING	text;		/* Merker fÅr den fertigen String */
 	CHAR		key;		/* Taste fÅr Bedienung des Objekts */
+	UWORD		changed;	/* Zeitobjekt: Bit n = Feld obj + n neu */
 } OBJECTSTATUS;
 
 typedef struct barstatus *BARSTATP;

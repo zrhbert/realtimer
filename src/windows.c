@@ -998,6 +998,70 @@ GLOBAL VOID draw_dispobjs (WINDOWP window)
 } /* draw_dispobjs */
 
 /*****************************************************************************/
+/* Geaenderte Display-Objekte zeichnen, sonst nichts tun                     */
+/*                                                                           */
+/* Fuer Fenster, deren Display-Objekte nur bei gesetztem new zeichnen (Text, */
+/* GEM-Objekte): ohne geaenderten Wert entfallen Rechteckliste und Maus.     */
+/* Liefert TRUE, wenn etwas gezeichnet wurde.                                */
+/*****************************************************************************/
+
+GLOBAL BOOLEAN update_dispobjs (WINDOWP window)
+
+{
+  WORD    wh;
+  RECT    r1, r2;
+	LIST_P	header, element;
+	DISPOBJP	dispobj;
+	BOOLEAN	changed = FALSE;
+
+  if ((window == NULL) || (window->opened <= 0)) return FALSE;
+
+	header = window->dispobjs;
+	element = list_next(header);
+	while (element != header) {
+		dispobj = (DISPOBJP) element->key;
+		if (dispobj->start) (*dispobj->start) (dispobj);
+		if (dispobj->new) changed = TRUE;
+		element = list_next(element);
+	} /* while */
+
+	if (! changed) return FALSE;
+
+  InvalidVdiTextState ();
+  hide_mouse ();
+
+  r2 = window->scroll;
+  wh = window->handle;
+  wind_get (wh, WF_FIRSTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
+
+  while ((r1.w != 0) && (r1.h != 0))
+  {
+    if (rc_intersect (&r2, &r1))
+    {
+      set_clip (TRUE, &r1);
+			element = list_next(header);
+			while (element != header) {
+				dispobj = (DISPOBJP) element->key;
+				if (dispobj->new && dispobj->draw) (*dispobj->draw) (dispobj);
+				element = list_next(element);
+			} /* while */
+    } /* if */
+
+    wind_get (wh, WF_NEXTXYWH, &r1.x, &r1.y, &r1.w, &r1.h);
+  } /* while */
+
+	element = list_next(header);
+	while (element != header) {
+		dispobj = (DISPOBJP) element->key;
+		if (dispobj->new && dispobj->finished) (*dispobj->finished) (dispobj);
+		element = list_next(element);
+	} /* while */
+
+  show_mouse ();
+  return TRUE;
+} /* update_dispobjs */
+
+/*****************************************************************************/
 /* Suche und zeichne überlagernde Rechtecke von Fenstern                     */
 /*****************************************************************************/
 
@@ -2308,6 +2372,16 @@ GLOBAL VOID get_border (WINDOWP window, WORD obj, RECT *border)
 GLOBAL VOID draw_object (WINDOWP window, WORD obj)
 
 {
+  draw_object_area (window, obj, NULL);
+} /* draw_object */
+
+/*****************************************************************************/
+
+/* Like draw_object, but only the part of obj inside area (screen coords),
+   e.g. the changed fields of a time display drawn through their parent. */
+GLOBAL VOID draw_object_area (WINDOWP window, WORD obj, CONST RECT *area)
+
+{
   WORD    wh, ret;
   RECT    r, border, save;
   BOOLEAN cursor;
@@ -2330,9 +2404,11 @@ GLOBAL VOID draw_object (WINDOWP window, WORD obj)
       wh = window->handle;
 
       get_border (window, obj, &border);
+      if ((area != NULL) && ! rc_intersect (area, &border))
+        border.w = border.h = 0;
       wind_get (wh, WF_FIRSTXYWH, &r.x, &r.y, &r.w, &r.h);
 
-      while ((r.w != 0) && (r.h != 0))
+      while ((r.w != 0) && (r.h != 0) && (border.w != 0))
       {
         if (rc_intersect (&border, &r))
           if (rc_intersect (&window->scroll, &r))
@@ -2354,7 +2430,7 @@ GLOBAL VOID draw_object (WINDOWP window, WORD obj)
 
       if (cursor) edit_object (window, 0, EDINIT);
     } /* if, if */
-} /* draw_object */
+} /* draw_object_area */
 
 /*****************************************************************************/
 

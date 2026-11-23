@@ -1,5 +1,31 @@
 # tools
 
+## ShirazMCP — Hatari debugging in VS Code
+
+The workspace's `.mcp.json` registers ShirazMCP for Copilot sessions in VS
+Code. It expects the release build of ShirazMCP, a local Hatari build, and the
+TT EmuTOS image at the paths in that file. The local Hatari build uses the
+Atari ST Dev SDK's SDL and PNG frameworks; the SDK's own Hatari executable
+did not enter the debugger correctly during testing. Adjust the absolute paths
+if they are installed elsewhere. Do not use `${HOME}` in these paths: the
+server's `HOME` is overridden to isolate Hatari's configuration, and MCP path
+expansion can use that overridden value. In a trusted workspace, open **Chat: Open
+Customizations > MCP Servers** to manage the server. Ask Copilot to use the
+`shirazMcp` `status` tool to check the connection; before starting Hatari,
+the state should be `stopped`.
+
+The server stores its Hatari configuration, logs and screenshots in
+`build/shiraz-mcp/`, separately from the user's normal Hatari configuration.
+Only one ShirazMCP Hatari session should use this directory at a time.
+Starting the server does not boot Realtimer: call `start` with an isolated
+copy of a Realtimer drive, including its program, resources and setups. For
+example, use `machine: "tt"`, `memsize_mb: 14`, `tt_ram_mb: 20`, `addr24: false`,
+`cpu_level: 3`, `cpu_clock: 32`, `fpu: "68882"`, `monitor: "mono"`,
+`gemdos_drive: "C"`, `harddrive` set to the copied drive, and
+`auto_run: "realtim5.prg"`. Use a copy so that the emulated program cannot
+change the working tree's setup files. Hatari may take time to reach the
+application after `start` returns. Stop the MCP session when finished.
+
 ## hatari_control.py — drive Realtimer in Hatari without touching its window
 
 An optional debugging aid. It launches Hatari the same way the VS Code

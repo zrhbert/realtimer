@@ -142,6 +142,30 @@ LOCAL BOOLEAN	term_rsc_realtspc _((VOID));
 
 /*** Zeit-Gruppen ***********************************************************/
 
+/* Like sprintf (s, "%*d", width, value), without the printf machinery:
+	the transport display formats its time fields several times a second. */
+LOCAL VOID format_field (STRING s, WORD value, WORD width)
+{
+	CHAR	digits [6];
+	WORD	n = 0, i = 0;
+
+	if (value < 0)
+	{
+		sprintf (s, "%*d", width, value);
+		return;
+	} /* if */
+
+	do
+	{
+		digits [n++] = (CHAR) ('0' + value % 10);
+		value /= 10;
+	} while (value != 0);
+
+	while (width-- > n) s [i++] = ' ';
+	while (n > 0) s [i++] = digits [--n];
+	s [i] = EOS;
+} /* format_field */
+
 LOCAL VOID time_strings (STRING hours, STRING minutes, STRING seconds, STRING milli, LONG time)
 {
 	/* Wandelt einen Long-Wert für die Anzahl der Millisekunden */
@@ -151,23 +175,23 @@ LOCAL VOID time_strings (STRING hours, STRING minutes, STRING seconds, STRING mi
 	
 	temp = time /1000;						/* Millisekunden abschneiden */
 	ll = (WORD) (time - temp*1000);			/* ms merken */
-	sprintf(milli, "%3d", ll);
+	format_field (milli, ll, 3);
 
 	time /= 1000;
 	temp /= 60;
 	ss = (WORD) (time - temp*60);
-	sprintf(seconds, "%2d", ss);
+	format_field (seconds, ss, 2);
 
 	time /= 60;
 	temp /= 60;
 	mm = (WORD) (time - temp*60);
-	sprintf(minutes, "%2d", mm);
+	format_field (minutes, mm, 2);
 
 	time /= 60;
 	temp /= 24;
 	hh = (WORD) (time - temp*24);
 	time /= 24;
-	sprintf(hours, "%2d", hh);
+	format_field (hours, hh, 2);
 
 } /* time_strings */
 
@@ -349,18 +373,25 @@ GLOBAL VOID SetPWord3N (OBJECT *tree, WORD obj, CONST WORD value)
 	set_ptext (tree, obj, s);
 } /* SetPWord3N */
 
-GLOBAL VOID SetPTime (OBJECT *tree, WORD obj, CONST LONG value)
+GLOBAL UWORD SetPTime (OBJECT *tree, WORD obj, CONST LONG value)
 {
+	/* Liefert Bit i gesetzt, wenn das Feld obj + i neu eingesetzt wurde */
 	STRING 	s;
-	STRING	hours, minutes, seconds, milli;
+	STRING	fields [4];
+	UWORD		changed = 0;
+	WORD		i;
 
-	time_strings (hours, minutes, seconds, milli, value);
+	time_strings (fields [0], fields [1], fields [2], fields [3], value);
 
 	/* Nur neu einsetzen, wenn verändert */
-	if (strcmp (GetPText(tree, obj + 1, s), hours)   != 0) SetPText (tree, obj + 1, hours);
-	if (strcmp (GetPText(tree, obj + 2, s), minutes) != 0) SetPText (tree, obj + 2, minutes);
-	if (strcmp (GetPText(tree, obj + 3, s), seconds) != 0) SetPText (tree, obj + 3, seconds);
-	if (strcmp (GetPText(tree, obj + 4, s), milli)   != 0) SetPText (tree, obj + 4, milli);
+	for (i = 0; i < 4; i++)
+		if (strcmp (GetPText(tree, obj + 1 + i, s), fields [i]) != 0)
+		{
+			SetPText (tree, obj + 1 + i, fields [i]);
+			changed |= 1 << (i + 1);
+		} /* if */
+
+	return changed;
 } /* SetPTime */
 
 GLOBAL VOID SetPLong (OBJECT *tree, WORD obj, CONST LONG value)

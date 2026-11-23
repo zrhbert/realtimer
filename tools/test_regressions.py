@@ -25,6 +25,11 @@ def main():
 
     os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
     os.environ.setdefault("SDL_AUDIODRIVER", "dummy")
+    # Hatari reads the user's saved config from $HOME (on macOS under
+    # Library/Application Support); a saved SCSI boot image or hard disk
+    # setup there keeps the regression program from starting.
+    home = tempfile.mkdtemp(prefix="realtimer-hatari-home-")
+    os.environ["HOME"] = home
     with tempfile.TemporaryDirectory(prefix="realtimer-tests-") as directory:
         root = Path(directory)
         program = root / "REGTEST.PRG"
@@ -76,4 +81,13 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    original_home = os.environ.get("HOME")
+    try:
+        status = main()
+    finally:
+        if original_home is not None:
+            temp_home = os.environ.get("HOME")
+            os.environ["HOME"] = original_home
+            if temp_home and temp_home != original_home:
+                shutil.rmtree(temp_home, ignore_errors=True)
+    sys.exit(status)

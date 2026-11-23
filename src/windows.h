@@ -182,6 +182,7 @@ GLOBAL VOID    close_top      _((VOID));
 GLOBAL VOID    close_all      _((BOOLEAN delete, BOOLEAN close_desk));
 GLOBAL VOID    draw_window    _((WINDOWP window));
 GLOBAL VOID    draw_dispobjs  _((WINDOWP window));
+GLOBAL BOOLEAN update_dispobjs _((WINDOWP window));
 GLOBAL VOID    redraw_window  _((WINDOWP window, CONST RECT *area));
 GLOBAL VOID    top_window     _((WINDOWP window));
 GLOBAL VOID    untop_window   _((WINDOWP window));
@@ -205,6 +206,7 @@ GLOBAL VOID    timer_all      _((LONG milli));
 
 GLOBAL VOID    get_border     _((WINDOWP window, WORD obj, RECT *border));
 GLOBAL VOID    draw_object    _((WINDOWP window, WORD obj));
+GLOBAL VOID    draw_object_area _((WINDOWP window, WORD obj, CONST RECT *area));
 GLOBAL VOID    set_cursor     _((WINDOWP window, WORD obj, WORD inx));
 GLOBAL VOID    drag_boxes     _((WORD num_objs, CONST RECT *boxes, WINDOWP inv_window, SET inv_objs, RECT *diff, CONST RECT *bound, WORD x_raster, WORD y_raster));
 GLOBAL VOID    draw_listobj   _((LISTBOX *list, WORD obj, BOOLEAN flip));
