@@ -9,6 +9,8 @@
 /*                                                                           */
 /* Services                                                                  */
 /*   - millisecond timebase (MFP Timer A at ~1 kHz while active, 100 Hz idle) */
+/*     ARAnyM never runs Timer A: there Timer C is raised to ~1 kHz instead */
+/*     and the TOS 200 Hz handler is chained on every fifth tick            */
 /*   - MidiTask scheduler running at interrupt level on a private stack     */
 /*     (the small system supervisor stack overflowed with earlier tasks)    */
 /*   - deferred tasks (MidiDTask) executed from the main loop               */
@@ -57,6 +59,18 @@
 #define MK_VEC_TIMER_A 0x4D        /* exception vector number (0x134/4)     */
 #define MK_MFP_TACR (*(volatile unsigned char *) 0xFFFFFA19UL)
 #define MK_MFP_TADR (*(volatile unsigned char *) 0xFFFFFA1FUL)
+
+/* ARAnyM fallback: its MFP only raises Timer C, at the programmed rate, and
+	queues every elapsed period of host time. A rate between 500 and 1000 Hz
+	makes each Timer C interrupt one host millisecond: 2457600 / 64 / 39. */
+#define MK_MCH_ARANYM 0x00050000L
+#define MK_VEC_TIMER_C 0x45        /* exception vector number (0x114/4)     */
+#define MK_MFP_TCDCR (*(volatile unsigned char *) 0xFFFFFA1DUL)
+#define MK_MFP_TCDR  (*(volatile unsigned char *) 0xFFFFFA23UL)
+#define MK_TIMERC_CTRL 0x50        /* prescaler /64 in the upper nibble     */
+#define MK_TIMERC_DATA 39
+#define MK_TIMERC_TOS_DATA 192     /* the system's 200 Hz                    */
+#define MK_TIMERC_TOS_DIV 5        /* 1 ms ticks per system 5 ms tick        */
 
 /* Standard Atari MIDI ACIA setup: Rx interrupt, /16 clock, 8N1. */
 #define MK_ACIA_CTRL_RX  0x95
@@ -143,6 +157,10 @@ static MidiEvPtr     mk_in_sysex;       /* sysex being accumulated          */
 
 /* saved system state */
 static long  mk_old_timer_vec;
+static Boolean mk_timerc_mode;          /* ARAnyM: Timer C drives the clock */
+long         mk_old_timerc_vec;         /* chained by mk_timerc_isr         */
+unsigned short mk_timerc_div;
+static unsigned char mk_old_tcdcr;
 static void *mk_old_midivec;
 static long (*mk_old_midisys) (void);
 static _KBDVECS *mk_kbdvecs;
@@ -317,6 +335,7 @@ static void mk_set_timer_rate_sup (short slow)
 {
 	short sr;
 
+	if (mk_timerc_mode) return;          /* Timer C keeps its 1 ms rate      */
 	__asm__ volatile ("move.w %%sr,%0\n\tori.w #0x0600,%%sr"
 	                  : "=d" (sr) : : "cc", "memory");
 	if (slow && (mk_busy || mk_pending || mk_tasks ||
@@ -347,6 +366,21 @@ static long mk_set_timer_fast_sup (void)
 
 static long mk_kick_tx_sup (void)
 {
+	if (mk_timerc_mode)
+	{
+		/* ARAnyM's ACIA is always ready and never raises a transmit
+			interrupt: send the ring now. IPL 6 keeps this single-reader. */
+		short sr;
+		__asm__ volatile ("move.w %%sr,%0\n\tori.w #0x0600,%%sr"
+		                  : "=d" (sr) : : "cc", "memory");
+		while (mk_txr != mk_txw && (ACIA_MIDI_CTRL & ACIA_TDRE))
+		{
+			ACIA_MIDI_DATA = mk_tx [mk_txr & (MK_TXLEN - 1)];
+			mk_txr++;
+		} /* while */
+		__asm__ volatile ("move.w %0,%%sr" : : "d" (sr) : "cc", "memory");
+		return 0;
+	} /* if */
 	if (mk_txr != mk_txw && !mk_tx_irq_enabled)
 	{
 		mk_tx_irq_enabled = TRUE;
@@ -701,17 +735,89 @@ void mk_timer_tick (void)
 	mk_irq_depth--;
 } /* mk_timer_tick */
 
-/* Interrupt entry: save registers and use a private stack for the tasks.
-	Mask Timer A and acknowledge it before lowering the CPU interrupt level,
-	so keyboard/MIDI interrupts can run during long callbacks without Timer A
-	re-entering and overwriting the saved stack pointer.
+#if defined(__HAVE_68881__)
+/* Only the version byte is defined in a null FSAVE frame. */
+#define MK_ISR_FSAVE \
+	"fsave -(%sp)\n\t" \
+	"move.l %sp,%a0\n\t" \
+	"tst.b (%a0)\n\t" \
+	"beq.s 1f\n\t" \
+	"fmovem.l %fpcr/%fpsr/%fpiar,-(%sp)\n\t" \
+	"fmovem.x %fp0-%fp7,-(%sp)\n" \
+	"1:\n\t" \
+	"fmove.l #0,%fpcr\n\t" \
+	"move.l %a0,-(%sp)\n\t"
+#define MK_ISR_FRESTORE \
+	"move.l (%sp)+,%a0\n\t" \
+	"tst.b (%a0)\n\t" \
+	"beq.s 2f\n\t" \
+	"fmovem.x (%sp)+,%fp0-%fp7\n\t" \
+	"fmovem.l (%sp)+,%fpcr/%fpsr/%fpiar\n" \
+	"2:\n\t" \
+	"frestore (%sp)+\n\t"
+#else
+#define MK_ISR_FSAVE
+#define MK_ISR_FRESTORE
+#endif
+
+/* Interrupt tail shared by the Timer A and Timer C entries, from label 3.
+	Both timers use bit 5 of their MFP in-service (isr) and mask (imr)
+	registers; idle is the code for a tick with nothing to do, which either
+	branches to 5 or falls through to return at 6.
+	The tail saves registers and uses a private stack for the tasks.
+	It masks the timer and acknowledges it before lowering the CPU interrupt
+	level, so keyboard/MIDI interrupts can run during long callbacks without
+	the timer re-entering and overwriting the saved stack pointer.
 	FSAVE also preserves an interrupted FPU operation; a null frame has
 	no floating-point registers to save. Run the callback with the default
 	FPU control mode, not a temporary rounding mode from interrupted code.
-	Most ticks have nothing to do: while active the clock is advanced first
-	(999.024 Hz, every 1024th tick adds the lost ms), and idle Timer A runs
-	at about 100 Hz. The interrupt returns without the register, FPU and
-	stack switch unless MIDI input or a scheduled task needs service. */
+	The interrupt returns without the register, FPU and stack switch unless
+	MIDI input or a scheduled task needs service. */
+#define MK_ISR_TAIL(isr, imr, idle) \
+	"3:\n\t" \
+	"tst.w mk_busy\n\t" \
+	"bne.s 4f\n\t" \
+	"move.l %d0,-(%sp)\n\t" \
+	"move.w mk_rxr,%d0\n\t" \
+	"cmp.w mk_rxw,%d0\n\t" \
+	"bne.s 5f\n\t" \
+	"move.l mk_tasks,%d0\n\t" \
+	"beq.s 9f\n\t" \
+	"move.l %a0,-(%sp)\n\t" \
+	"move.l %d0,%a0\n\t" \
+	"move.l 4(%a0),%d0\n\t"                 /* mk_tasks->date */ \
+	"move.l (%sp)+,%a0\n\t" \
+	"cmp.l mk_time,%d0\n\t" \
+	"bhi.s 6f\n\t" \
+	"bra.s 5f\n" \
+	"9:\n" \
+	idle \
+	"6:\n\t" \
+	"move.l (%sp)+,%d0\n\t" \
+	"bclr #5," isr "\n\t" \
+	"rte\n" \
+	"5:\n\t" \
+	"move.l (%sp)+,%d0\n" \
+	"4:\n\t" \
+	"movem.l %d0-%d7/%a0-%a6,-(%sp)\n\t" \
+	"move.l %sp,mk_saved_sp\n\t" \
+	"lea mk_irq_stack+" MK_STR (MK_IRQ_STACK) "-4,%sp\n\t" \
+	MK_ISR_FSAVE \
+	"bclr #5," imr "\n\t" \
+	"bclr #5," isr "\n\t" \
+	"move.w #0x2500,%sr\n\t" \
+	"jsr mk_timer_tick\n\t" \
+	"move.w #0x2600,%sr\n\t" \
+	MK_ISR_FRESTORE \
+	"move.l mk_saved_sp,%sp\n\t" \
+	"movem.l (%sp)+,%d0-%d7/%a0-%a6\n\t" \
+	"bset #5," imr "\n\t" \
+	"rte\n"
+
+/* Timer A entry. Most ticks have nothing to do: while active the clock is
+	advanced first (999.024 Hz, every 1024th tick adds the lost ms), and
+	idle Timer A runs at about 100 Hz. An idle tick at the active rate takes
+	the full path, so mk_timer_tick can switch to the idle rate. */
 __asm__ (
 	".text\n\t.even\n"
 	".globl mk_timer_isr\n"
@@ -728,66 +834,29 @@ __asm__ (
 	"bcs.s 3f\n\t"
 	"clr.w mk_tickmod\n\t"
 	"addq.l #1,mk_time\n"
-	"3:\n\t"
-	"tst.w mk_busy\n\t"
-	"bne.s 4f\n\t"
-	"move.l %d0,-(%sp)\n\t"
-	"move.w mk_rxr,%d0\n\t"
-	"cmp.w mk_rxw,%d0\n\t"
-	"bne.s 5f\n\t"
-	"move.l mk_tasks,%d0\n\t"
-	"beq.s 9f\n\t"
-	"move.l %a0,-(%sp)\n\t"
-	"move.l %d0,%a0\n\t"
-	"move.l 4(%a0),%d0\n\t"                 /* mk_tasks->date */
-	"move.l (%sp)+,%a0\n\t"
-	"cmp.l mk_time,%d0\n\t"
-	"bls.s 5f\n\t"
-	"bra.s 6f\n"
-	"9:\n\t"
-	"tst.w mk_timer_slow\n\t"
-	"beq.s 5f\n"
-	"6:\n\t"
-	"move.l (%sp)+,%d0\n\t"
-	"bclr #5,0xfffffa0f\n\t"
-	"rte\n"
-	"5:\n\t"
-	"move.l (%sp)+,%d0\n"
-	"4:\n\t"
-	"movem.l %d0-%d7/%a0-%a6,-(%sp)\n\t"
-	"move.l %sp,mk_saved_sp\n\t"
-	"lea mk_irq_stack+" MK_STR (MK_IRQ_STACK) "-4,%sp\n\t"
-#if defined(__HAVE_68881__)
-	/* Only the version byte is defined in a null FSAVE frame. */
-	"fsave -(%sp)\n\t"
-	"move.l %sp,%a0\n\t"
-	"tst.b (%a0)\n\t"
-	"beq.s 1f\n\t"
-	"fmovem.l %fpcr/%fpsr/%fpiar,-(%sp)\n\t"
-	"fmovem.x %fp0-%fp7,-(%sp)\n"
-	"1:\n\t"
-	"fmove.l #0,%fpcr\n\t"
-	"move.l %a0,-(%sp)\n\t"
-#endif
-	"bclr #5,0xfffffa13\n\t"
-	"bclr #5,0xfffffa0f\n\t"
-	"move.w #0x2500,%sr\n\t"
-	"jsr mk_timer_tick\n\t"
-	"move.w #0x2600,%sr\n\t"
-#if defined(__HAVE_68881__)
-	"move.l (%sp)+,%a0\n\t"
-	"tst.b (%a0)\n\t"
-	"beq.s 2f\n\t"
-	"fmovem.x (%sp)+,%fp0-%fp7\n\t"
-	"fmovem.l (%sp)+,%fpcr/%fpsr/%fpiar\n"
-	"2:\n\t"
-	"frestore (%sp)+\n\t"
-#endif
-	"move.l mk_saved_sp,%sp\n\t"
-	"movem.l (%sp)+,%d0-%d7/%a0-%a6\n\t"
-	"bset #5,0xfffffa13\n\t"
-	"rte\n");
+	MK_ISR_TAIL ("0xfffffa0f", "0xfffffa13",
+	             "\ttst.w mk_timer_slow\n\t" "beq.s 5f\n"));
 extern void mk_timer_isr (void);
+
+/* Timer C entry for ARAnyM: one tick per host millisecond, with no idle
+	rate. Every fifth tick first runs the system's 200 Hz handler through
+	a format-0 exception frame (ARAnyM is always a 68040); that handler
+	acknowledges Timer C itself and returns here with RTE. */
+__asm__ (
+	".text\n\t.even\n"
+	".globl mk_timerc_isr\n"
+	"mk_timerc_isr:\n\t"
+	"addq.l #1,mk_time\n\t"
+	"subq.w #1,mk_timerc_div\n\t"
+	"bne.s 3f\n\t"
+	"move.w #" MK_STR (MK_TIMERC_TOS_DIV) ",mk_timerc_div\n\t"
+	"move.w #0x0114,-(%sp)\n\t"
+	"pea 3f(%pc)\n\t"
+	"move.w %sr,-(%sp)\n\t"
+	"move.l mk_old_timerc_vec,-(%sp)\n\t"
+	"rts\n"
+	MK_ISR_TAIL ("0xfffffa11", "0xfffffa15", ""));
+extern void mk_timerc_isr (void);
 
 /* midivec hook: the system keyboard/MIDI interrupt calls this with the
 	received byte in d0. Push it into the ring; parsing happens later. */
@@ -1203,9 +1272,47 @@ long MidiGetExtTime (void)
 
 static long mk_install_sup (void)
 {
+	long *jar = *(long **) 0x5A0L;
+
 	mk_old_timer_vec = *(volatile long *) (MK_VEC_TIMER_A * 4L);
+	mk_timerc_mode = FALSE;
+	for (; jar && jar [0]; jar += 2)
+		if (jar [0] == 0x5F4D4348L)          /* '_MCH' */
+		{
+			mk_timerc_mode = (jar [1] == MK_MCH_ARANYM);
+			break;
+		} /* if */
 	return 0;
 } /* mk_install_sup */
+
+static long mk_install_timerc_sup (void)
+{
+	short sr;
+
+	__asm__ volatile ("move.w %%sr,%0\n\tori.w #0x0700,%%sr"
+	                  : "=d" (sr) : : "cc", "memory");
+	mk_old_timerc_vec = *(volatile long *) (MK_VEC_TIMER_C * 4L);
+	mk_timerc_div = MK_TIMERC_TOS_DIV;
+	*(volatile long *) (MK_VEC_TIMER_C * 4L) = (long) mk_timerc_isr;
+	mk_old_tcdcr = MK_MFP_TCDCR;
+	MK_MFP_TCDR = MK_TIMERC_DATA;
+	MK_MFP_TCDCR = (unsigned char) (MK_TIMERC_CTRL | (mk_old_tcdcr & 0x0F));
+	__asm__ volatile ("move.w %0,%%sr" : : "d" (sr) : "cc", "memory");
+	return 0;
+} /* mk_install_timerc_sup */
+
+static long mk_remove_timerc_sup (void)
+{
+	short sr;
+
+	__asm__ volatile ("move.w %%sr,%0\n\tori.w #0x0700,%%sr"
+	                  : "=d" (sr) : : "cc", "memory");
+	MK_MFP_TCDR = MK_TIMERC_TOS_DATA;
+	MK_MFP_TCDCR = mk_old_tcdcr;
+	*(volatile long *) (MK_VEC_TIMER_C * 4L) = mk_old_timerc_vec;
+	__asm__ volatile ("move.w %0,%%sr" : : "d" (sr) : "cc", "memory");
+	return 0;
+} /* mk_remove_timerc_sup */
 
 short MidiInternalStart (void)
 {
@@ -1243,11 +1350,16 @@ short MidiInternalStart (void)
 	mk_kbdvecs->midivec = (void (*) (void)) mk_midivec;
 	mk_kbdvecs->midisys = mk_midisys;
 
-	/* timebase: MFP Timer A at ~1 kHz */
+	/* timebase: MFP Timer A at ~1 kHz, or Timer C on ARAnyM */
 	Supexec (mk_install_sup);
 	Supexec (mk_stop_tx_sup);
-	Xbtimer (0 /* Timer A */, MK_TIMER_CTRL, MK_TIMER_DATA, mk_timer_isr);
-	Jenabint (MK_MFP_TIMER_A);
+	if (mk_timerc_mode)
+		Supexec (mk_install_timerc_sup);
+	else
+	{
+		Xbtimer (0 /* Timer A */, MK_TIMER_CTRL, MK_TIMER_DATA, mk_timer_isr);
+		Jenabint (MK_MFP_TIMER_A);
+	} /* else */
 
 	mk_inited = TRUE;
 	return TRUE;
@@ -1263,8 +1375,13 @@ void MidiInternalStop (void)
 {
 	if (!mk_inited) return;
 	Supexec (mk_stop_tx_sup);
-	Jdisint (MK_MFP_TIMER_A);
-	Supexec (mk_remove_sup);
+	if (mk_timerc_mode)
+		Supexec (mk_remove_timerc_sup);
+	else
+	{
+		Jdisint (MK_MFP_TIMER_A);
+		Supexec (mk_remove_sup);
+	} /* else */
 	if (mk_kbdvecs)
 	{
 		mk_kbdvecs->midivec = (void (*) (void)) mk_old_midivec;

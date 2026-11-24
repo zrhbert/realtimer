@@ -16,3 +16,7 @@ build-*/
 midisave
 
 tools/__pycache__/
+
+# Realtimer rewrites these at runtime with drive letters and window positions
+INFOS/*.INF
+.DS_Store

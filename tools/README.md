@@ -26,6 +26,68 @@ example, use `machine: "tt"`, `memsize_mb: 14`, `tt_ram_mb: 20`, `addr24: false`
 change the working tree's setup files. Hatari may take time to reach the
 application after `start` returns. Stop the MCP session when finished.
 
+## aranym_run.py — run Realtimer in MacAranym
+
+Builds Realtimer (unless `--no-build`), updates a FAT16 disk image and starts
+MacAranym (ARAnyM 1.1.0 for macOS, found in `/Applications`) with EmuTOS and
+a generated configuration. Everything lives in `build/aranym/`: `config`,
+`drive_c.img` (64 MB, IDE0, boot drive C:), `aranym.log` (ARAnyM output,
+including NatFeats `NF_STDERR`) and `midi-out.bin` (raw MIDI output). Your
+own ARAnyM configuration in `~/Documents/aranym_files` is not changed.
+MacAranym still keeps its NVRAM there.
+
+    python3 tools/aranym_run.py              # make, sync, run
+    python3 tools/aranym_run.py --no-build   # run the current realtim5.prg
+    python3 tools/aranym_run.py --reset      # recreate the image
+    python3 tools/aranym_run.py --sync-only  # update the image only
+
+The sync only copies from the working tree to the image. It copies the
+program and resources every time. It copies `SETUPS` and `INFOS` only when it
+creates the image, so setups saved in the emulator survive later runs; use
+`--reset` to discard them. `--prg` runs another program as
+`C:\REALTIM5.PRG`. `--fast-ram` sets FastRAM in MB, `--emutos` selects a
+different ROM, and `--app` selects a different MacAranym bundle.
+
+Screen size: EmuTOS itself only offers 640×480 on ARAnyM. By default the
+launcher therefore also installs fVDI with ARAnyM's NatFeat screen driver
+(`AUTO\FVDI.PRG`, `GEMSYS\ARANYM.SYS` and a generated `FVDI.SYS`). The screen
+then fills the Mac's usable screen area: the main display's size minus the
+menu bar, the Dock and the window title bar, rounded down to multiples of 16.
+The window opens at the top left. Use `--screen 1600x1000` for a fixed size
+or `--screen vga` for EmuTOS's 640×480 mono mode without fVDI. The driver
+has no monochrome mode, so the large screen uses 256 colours. The fVDI files
+are copied from `--drivers` (default `~/Documents/aranym_files/drive_c`,
+which has `auto/fvdi.prg` and `gemsys/aranym.sys`); without them the
+launcher falls back to 640×480.
+
+Running from the workspace: with `--hostfs`, Realtimer runs from the working
+tree instead of from a copy, like the GEMDOS drive under Hatari:
+
+    python3 tools/aranym_run.py --hostfs
+
+EmuTOS cannot read host folders itself, so the image remains the boot drive
+C:. It gets BetaDOS and ARAnyM's `hostfs.dos` in `AUTO` (also from
+`--drivers`) and an `AUTO\BDCONFIG.SYS` that mounts ARAnyM's `[HOSTFS] H`
+(the workspace) as drive H:. The desktop then starts `H:\REALTIM5.PRG`. A new
+build is used at the next start without syncing, and `--prg` must name a
+file inside the workspace. Realtimer keeps its setup files open for writing
+and saves to `SETUPS` and `INFOS` in the working tree. Only the clipboard
+(`C:\CLIPBRD`) stays on the image. Without `--hostfs`, the launcher removes
+BetaDOS from the image again.
+
+Notes:
+
+- `[IDE0] ByteSwap = Yes` is needed for this PC-format image. With `No`,
+  ARAnyM emulates the Falcon's byte-swapped IDE bus. EmuTOS then mounts the
+  drive, but cannot read files from it.
+- The EmuTOS AES only searches the first 300 bytes of `EMUDESK.INF` for the
+  autorun line, so the launcher puts `#Z 01 C:\REALTIM5.PRG@` first.
+- ARAnyM does not implement MFP Timer A. Under ARAnyM (`_MCH` = Falcon
+  emulator) the MIDI kernel uses a 1 kHz Timer C clock instead, and calls
+  the TOS 200 Hz handler on every fifth tick.
+- There is no MIDI input. MIDI output goes to `midi-out.bin`.
+- Cmd+Q quits, Cmd+, opens the setup, and Shift+Cmd+M releases the mouse.
+
 ## hatari_control.py — drive Realtimer in Hatari without touching its window
 
 An optional debugging aid. It launches Hatari the same way the VS Code
@@ -177,7 +239,7 @@ trees contain placeholder text and are not used as a fallback.
 
 ## Regression tests
 
-Run `make test TOOLCHAIN=/path/to/cross-mint` to build and execute the
+Run `make test` to build and execute the
 variable-dispatch, synchronized PUF position, transport-click, A3D view
 selection and redraw, CMI and LFO setup, CMO routing, 3D projection,
 initialization-window lifetime, help-dispatch/message, and MIDI timer
@@ -190,7 +252,13 @@ fields, adjacent regions, button release, and layout-change fallback.
 The tests need Python 3, Hatari, and the SDK's ST EmuTOS image; set
 `ATARIST_TOOLS` if the SDK cannot be found automatically.
 
-Run `make test-tt TOOLCHAIN=/path/to/cross-mint` to run the same regressions
+The Makefile uses `/opt/cross-mint` when installed, otherwise the compiler in
+the Atari ST Dev extension through `~/.atari-sdk`. `tools/atari_sdk_link.sh`
+points that per-machine link at the installed SDK matching the Mac's CPU (x64
+on Intel, arm64 on Apple Silicon), so the iCloud-shared checkout builds on
+both. Pass `TOOLCHAIN=/path/to/cross-mint` to use another compiler.
+
+Run `make test-tt` to run the same regressions
 with the TT build and test floating-point state across MIDI timer interrupts.
 
 ## bench.py — TT performance benchmark with CPU profile
