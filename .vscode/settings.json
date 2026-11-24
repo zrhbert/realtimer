@@ -1,16 +1,17 @@
 {
     "atariSTDev.activate": true,
     // The extension rewrites atariSTDev.path and the terminal env on every
-    // activation with its own (version-specific) install path. Everything of
-    // ours resolves the SDK through realtimer.atariSdk instead: a stable
-    // symlink that tools/atari_sdk_link.sh points at the newest installed
-    // extension before every build, so nothing breaks on extension updates.
-    "realtimer.atariSdk": "/Users/bertramd/Documents/Development/Hatari/atari-sdk",
-    "atariSTDev.path": "/Users/bertramd/Documents/Development/Hatari/atari-sdk",
+    // activation with its own (version- and CPU-specific) install path.
+    // Everything of ours resolves the SDK through realtimer.atariSdk instead:
+    // a per-machine symlink outside the iCloud-synced Documents folder that
+    // tools/atari_sdk_link.sh points at the newest installed extension built
+    // for this Mac's CPU (x64 or arm64) before every build.
+    "realtimer.atariSdk": "/Users/bertramd/.atari-sdk",
+    "atariSTDev.path": "/Users/bertramd/.atari-sdk",
     "realtimer.magicOnLinuxPath": "/Users/bertramd/Documents/Development/magiclinux/build/magic-on-linux",
     "terminal.integrated.env.osx": {
-        "PATH": "/opt/cross-mint/bin:/Users/bertramd/Documents/Development/Hatari/atari-sdk/bin:/Users/bertramd/Documents/Development/Hatari/atari-sdk/opt/cross-mint/bin:/Users/bertramd/Documents/Development/Hatari/atari-sdk/opt/cross-mint/m68k-atari-mintelf/bin:${env:PATH}",
-        "ATARIST_TOOLS": "/Users/bertramd/Documents/Development/Hatari/atari-sdk"
+        "PATH": "/opt/cross-mint/bin:/Users/bertramd/.atari-sdk/bin:/Users/bertramd/.atari-sdk/opt/cross-mint/bin:/Users/bertramd/.atari-sdk/opt/cross-mint/m68k-atari-mintelf/bin:${env:PATH}",
+        "ATARIST_TOOLS": "/Users/bertramd/.atari-sdk"
     },
     "[m68k]": {
         "editor.rulers": []

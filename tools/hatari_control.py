@@ -48,18 +48,22 @@ import time
 HERE = os.path.dirname(os.path.abspath(__file__))
 WORKSPACE = os.path.dirname(HERE)
 def _find_sdk():
-    """The Atari ST Dev SDK: the stable symlink maintained by
-    tools/atari_sdk_link.sh if it exists, else the most recently
-    installed extension (by mtime, robust against version strings)."""
-    import glob
-    link = os.path.expanduser("~/Documents/Development/Hatari/atari-sdk")
-    if os.path.isdir(link):
-        return link
-    cands = glob.glob(os.path.expanduser(
-        "~/.vscode/extensions/dgis.atari-st-dev-*/sdk/darwin"))
-    return max(cands, key=os.path.getmtime) if cands else ""
+    """The Atari ST Dev SDK: the per-machine ~/.atari-sdk link maintained by
+    tools/atari_sdk_link.sh (x64 or arm64 to match this Mac), refreshed here
+    so a fresh checkout works before the first build. ATARIST_TOOLS is only
+    a fallback: the extension stores it in the shared workspace file, so it
+    can name the other Mac's SDK, which does not exist on this one."""
+    try:
+        sdk = subprocess.run(["sh", os.path.join(HERE, "atari_sdk_link.sh"), "--print"],
+                             capture_output=True, text=True).stdout.strip()
+    except OSError:
+        sdk = ""
+    if sdk and os.path.isdir(sdk):
+        return sdk
+    env = os.environ.get("ATARIST_TOOLS", "")
+    return env if os.path.isdir(env) else ""
 
-DEFAULT_SDK = os.environ.get("ATARIST_TOOLS", "") or _find_sdk()
+DEFAULT_SDK = _find_sdk()
 TT_TOS = os.path.expanduser(
     "~/Documents/Development/Hatari/ROM/EMUTOS/emutos-1024k-1.4/etos1024k.img")
 

@@ -2,13 +2,20 @@ ifdef OS
 	WINDOWS = 1
 endif
 
-# Cross toolchain prefix. Defaults to the standalone universal (x86_64/arm64)
-# GCC 15 m68k-atari-mintelf toolchain from tho-otto.m68k.eu installed in
-# /opt/cross-mint. To build with the compiler bundled in the VS Code
-# extension instead (x86_64 only, needs Rosetta on Apple Silicon):
-#   make TOOLCHAIN=$(SDK)/opt/cross-mint
-SDK ?= /Users/bertramd/.vscode/extensions/dgis.atari-st-dev-0.2.1/sdk/darwin
+# Cross toolchain prefix. Prefers the standalone universal (x86_64/arm64)
+# GCC 15 m68k-atari-mintelf toolchain from tho-otto.m68k.eu in /opt/cross-mint
+# when it is installed. Otherwise uses the compiler bundled with the VS Code
+# Atari ST Dev extension, through the per-machine ~/.atari-sdk link that
+# tools/atari_sdk_link.sh points at the x64 or arm64 SDK matching this Mac.
+# Override either with e.g. "make TOOLCHAIN=/path/to/cross-mint".
+ifeq ($(origin ATARI_SDK),undefined)
+ATARI_SDK := $(shell sh tools/atari_sdk_link.sh --print)
+endif
+ifeq ($(wildcard /opt/cross-mint/bin/m68k-atari-mintelf-gcc),)
+TOOLCHAIN ?= $(ATARI_SDK)/opt/cross-mint
+else
 TOOLCHAIN ?= /opt/cross-mint
+endif
 CC = $(TOOLCHAIN)/bin/m68k-atari-mintelf-gcc
 OBJCOPY = $(TOOLCHAIN)/bin/m68k-atari-mintelf-objcopy
 SDK_ROOT = $(TOOLCHAIN)/m68k-atari-mintelf/sys-root

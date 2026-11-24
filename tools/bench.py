@@ -50,7 +50,9 @@ import hatari_control as hc
 VBL_WINDOW = int(os.environ.get("BENCH_VBL_WINDOW", "4200"))  # ~59 s TT mono
 BOOT_SECS = 25               # EmuTOS boot + program start, at fast-forward
 SETTLE_SECS = 5              # transport running before measurement starts
-NM = "/opt/cross-mint/bin/m68k-atari-mintelf-nm"
+NM = next((p for p in ("/opt/cross-mint/bin/m68k-atari-mintelf-nm",
+                       os.path.join(hc.DEFAULT_SDK, "opt/cross-mint/bin/m68k-atari-mintelf-nm"))
+           if os.path.exists(p)), "m68k-atari-mintelf-nm")
 
 DUMP_INI = """\
 profile stats
